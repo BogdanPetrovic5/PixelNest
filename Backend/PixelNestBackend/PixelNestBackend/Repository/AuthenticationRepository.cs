@@ -28,6 +28,10 @@ namespace PixelNestBackend.Repository
             return _context.SaveChanges() > 0;
 
         }
+        public bool IsRegistered(User user)
+        {
+            return _context.Users.Any(u =>u.Email ==  user.Email);
+        }
 
   
     }
