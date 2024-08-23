@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "DLlEPzef9ndiGQ7mDty65kYHYySw73g3vtEjJ1EMO2Nin0es3yZt6ddgOdN2tZz481ZtP9ne0QctUisbSf04/g==",
+  "dgSpecHash": "vDa7rqrABJY2twhTqPrlvOhTFdd0vXIrsa6WhjkdTBPoKtwP5OFpc7VN2wtkM2GZxPVq/wgJ2jb/oR5ZJfZxsQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\PixelNestBackend.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Bogdan\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\Bogdan\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Bogdan\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\Bogdan\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
