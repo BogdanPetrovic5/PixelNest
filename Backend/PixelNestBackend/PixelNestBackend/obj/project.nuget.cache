@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "vDa7rqrABJY2twhTqPrlvOhTFdd0vXIrsa6WhjkdTBPoKtwP5OFpc7VN2wtkM2GZxPVq/wgJ2jb/oR5ZJfZxsQ==",
+  "dgSpecHash": "TLZvCNeICvyir70EPg6za/4okNwhdHt8yP08ME/+bMxYirc9AYQAdQBEFadhGY2m4yxHMVWIwh/21hmL2M95Dw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\PixelNestBackend.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\Bogdan\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Bogdan\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\Bogdan\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\Bogdan\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.33\\microsoft.aspnetcore.authentication.jwtbearer.6.0.33.nupkg.sha512",
     "C:\\Users\\Bogdan\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\Bogdan\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Bogdan\\.nuget\\packages\\microsoft.data.sqlclient\\5.1.5\\microsoft.data.sqlclient.5.1.5.nupkg.sha512",

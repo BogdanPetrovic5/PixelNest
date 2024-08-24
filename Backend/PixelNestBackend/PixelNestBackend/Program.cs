@@ -6,6 +6,12 @@ using PixelNestBackend.Interfaces;
 using PixelNestBackend.Mappers;
 using PixelNestBackend.Repository;
 using PixelNestBackend.Services;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using PixelNestBackend.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +25,7 @@ builder.Services.AddScoped<PasswordEncoder>();
 builder.Services.AddScoped<PasswordHasher<string>>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<TokenGenerator>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -39,6 +46,27 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+            ClockSkew = TimeSpan.Zero
+        };
+    }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {
+        options.LoginPath = "/Get Started";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

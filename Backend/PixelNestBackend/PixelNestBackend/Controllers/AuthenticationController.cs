@@ -57,6 +57,22 @@ namespace PixelNestBackend.Controllers
 
             return BadRequest();
         }
+        [HttpPost("Login")]
+        public IActionResult Login([FromBody]LoginDto loginDto)
+        {
+            var response = _authenticationRepository.Login(loginDto);
+            if (response.IsSuccessful)
+            {
+                return Ok(new
+                {
+                    Response = response.Response,
+                    Token = response.Token
+                    
+                });
+
+            }
+            return NotFound(new { Response = response.Response });
+        }
 
     }
 }

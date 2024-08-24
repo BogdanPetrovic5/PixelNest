@@ -87,3 +87,4 @@ C:\Users\Bogdan\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\obj\
 C:\Users\Bogdan\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\obj\Debug\net6.0\ref\PixelNestBackend.dll
 C:\Users\Bogdan\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Bogdan\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\Bogdan\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
