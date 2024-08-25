@@ -10,9 +10,11 @@ import { FeaturesModule } from './features/module/features.module';
 import { SharedModule } from './shared/shared.module';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
+    
     
     // LandingPageComponent,
     // LoginPageComponent,
