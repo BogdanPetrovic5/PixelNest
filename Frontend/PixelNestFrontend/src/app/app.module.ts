@@ -5,13 +5,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { LandingPageComponent } from './features/components/landing-page/landing-page.component';
-import { LoginPageComponent } from './features/components/login-page/login-page.component';
-import { RegistrationPageComponent } from './features/components/registration-page/registration-page.component';
+
 import { FeaturesModule } from './features/module/features.module';
+import { SharedModule } from './shared/shared.module';
+
 
 @NgModule({
   declarations: [
     AppComponent,
+    
     // LandingPageComponent,
     // LoginPageComponent,
     // RegistrationPageComponent
@@ -19,7 +21,8 @@ import { FeaturesModule } from './features/module/features.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FeaturesModule
+    FeaturesModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

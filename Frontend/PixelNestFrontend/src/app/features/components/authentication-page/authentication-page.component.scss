@@ -1,0 +1,43 @@
+$BGCOLOR:#040F16;
+.container{
+    background-color: $BGCOLOR;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .content{
+        width: 90%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: center;
+        .form{
+            width: 40%;
+            height: 100%;
+            box-shadow: 17px 0px 15px 1px rgba(0,0,0,1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            app-register-form{
+                width: 80%;
+                height: 80%;
+            }
+        }
+        .background-image{
+            width: 60%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+         
+            img{
+                width:200%;
+                height: 100%;
+            }
+        }
+       
+    }
+}
