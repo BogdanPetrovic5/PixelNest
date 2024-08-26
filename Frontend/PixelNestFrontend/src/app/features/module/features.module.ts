@@ -7,7 +7,7 @@ import { LoginFormComponent } from '../components/authentication-page/login-form
 import { RegisterFormComponent } from '../components/authentication-page/register-form/register-form.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from 'src/app/app-routing.module';
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -20,7 +20,8 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
   imports: [
     CommonModule,
     SharedModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

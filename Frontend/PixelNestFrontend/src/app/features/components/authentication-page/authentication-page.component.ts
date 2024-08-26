@@ -13,13 +13,7 @@ export class AuthenticationPageComponent implements OnInit{
   constructor(private _route:ActivatedRoute){}
 
   ngOnInit():void{
-    // this.setUpSubscriptions()
+   
   }
-  // setUpSubscriptions(){
-  //   this.subscriptions.push(
-  //     this._route.queryParams.subscribe(params =>{
-  //       this.defaultRoute = +params['route'] || 'Register'
-  //     })
-  //   )
-  // }
+
 }

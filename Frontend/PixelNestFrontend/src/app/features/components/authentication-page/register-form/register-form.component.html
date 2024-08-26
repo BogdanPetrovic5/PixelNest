@@ -1,12 +1,12 @@
-<div class="form-wrap">
+<div class="form-wrap animate__animated animate__flipInY" >
     <div class="form-wrap-content">
         <img src="/assets/images/PixelNestLogo.png" alt="">
         <div class="wrap">
             <h1>Create an account: </h1>
             <p>Let's get started</p>
-            <form class="inputs">
+            <form class="inputs" [formGroup] = "registerForm" (ngSubmit) = "register()">
                 <div class="form-control">
-                    <input required="" type="value">
+                    <input required="" type="value" formControlName="Firstname">
                     <label>
                         <span style="transition-delay:400ms">F</span>
                         <span style="transition-delay:350ms">i</span>
@@ -20,7 +20,7 @@
                     </label>
                 </div>
                 <div class="form-control">
-                    <input required="" type="value">
+                    <input required="" type="value" formControlName="Lastname">
                     <label>
                         <span style="transition-delay:350ms">L</span>
                         <span style="transition-delay:300ms">a</span>
@@ -33,7 +33,7 @@
                     </label>
                 </div>
                 <div class="form-control">
-                    <input required="" type="value">
+                    <input required="" type="value" formControlName="Username">
                     <label>
                         <span style="transition-delay:350ms">U</span>
                         <span style="transition-delay:300ms">s</span>
@@ -46,7 +46,7 @@
                     </label>
                 </div>
                 <div class="form-control">
-                    <input required="" type="value">
+                    <input required="" type="value" formControlName="Email">
                     <label>
                         <span style="transition-delay:200ms">E</span>
                         <span style="transition-delay:150ms">m</span>
@@ -57,7 +57,7 @@
                     </label>
                 </div>
                 <div class="form-control">
-                    <input required="" type="password">
+                    <input required="" type="password" formControlName="Password">
                     <label>
                         <span style="transition-delay:350ms">P</span>
                         <span style="transition-delay:300ms">a</span>
@@ -69,7 +69,7 @@
                         <span style="transition-delay:0ms">d</span>
                     </label>
                 </div>
-                <button ><h1>REGISTER</h1></button>
+                <button type="submit"><h1>REGISTER</h1></button>
                 <p (click)="navigateToLogin()">Already Have An Account? Log in!</p>
             </form>
         </div>
