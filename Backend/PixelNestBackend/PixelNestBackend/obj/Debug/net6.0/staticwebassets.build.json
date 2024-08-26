@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "gsSkPSNVY0w20AFDXeEHhSaOHF9q8yqvb0Unl9fnx/Y=",
+  "Hash": "ILY/gIdzPCYcwW0xqd1CkzsDM/eySYzJ58GCfxx86Tw=",
   "Source": "PixelNestBackend",
   "BasePath": "_content/PixelNestBackend",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "PixelNestBackend\\wwwroot",
+      "Source": "PixelNestBackend",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

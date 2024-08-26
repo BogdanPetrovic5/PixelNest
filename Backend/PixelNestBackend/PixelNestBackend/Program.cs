@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using PixelNestBackend.Security;
+using PixelNestBackend.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<PasswordEncoder>();
 builder.Services.AddScoped<PasswordHasher<string>>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<FolderGenerator>();
 builder.Services.AddScoped<TokenGenerator>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => {

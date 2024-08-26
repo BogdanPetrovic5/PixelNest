@@ -30,7 +30,7 @@ namespace PixelNestBackend.Controllers
         }
 
         [HttpPost("Register")]
-        public IActionResult Register([FromBody]RegisterDto registerDto)
+        public IActionResult Register(RegisterDto registerDto)
         {
             if (registerDto == null)
             {
@@ -57,6 +57,7 @@ namespace PixelNestBackend.Controllers
 
             return BadRequest();
         }
+
         [HttpPost("Login")]
         public IActionResult Login([FromBody]LoginDto loginDto)
         {
