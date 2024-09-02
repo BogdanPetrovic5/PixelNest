@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PixelNestBackend.Dto;
 
 namespace PixelNestBackend.Interfaces
 {
     public interface IPostRepository
     {
-        bool ShareNewPost(string email);
+       Task<bool> ShareNewPost(PostDto postDto);
     }
 }

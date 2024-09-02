@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
 
 namespace PixelNestBackend.Controllers
@@ -16,14 +17,14 @@ namespace PixelNestBackend.Controllers
         }
 
         [HttpPost("ShareNewPost")]
-        public IActionResult ShareNewPost(string email)
+        public async Task<IActionResult> ShareNewPost([FromForm] PostDto postDto)
         {
-            var result = _postRepository.ShareNewPost(email);
+            var result = await _postRepository.ShareNewPost(postDto);
             if (result)
             {
-                return Ok();
+                return Ok("Post was successfully added to your Nest feed!");
             }
-            return BadRequest();
+            return BadRequest("There was an error with publishing the post!");
         }
     }
 }
