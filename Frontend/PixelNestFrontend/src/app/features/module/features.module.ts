@@ -8,6 +8,7 @@ import { RegisterFormComponent } from '../components/authentication-page/registe
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DashboardModule } from '../components/dashboard/dashboard.module';
 
 
 @NgModule({
@@ -15,13 +16,16 @@ import { ReactiveFormsModule } from '@angular/forms';
     LandingPageComponent,
     AuthenticationPageComponent,
     LoginFormComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+   
   ],
   imports: [
     CommonModule,
     SharedModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DashboardModule
+    
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

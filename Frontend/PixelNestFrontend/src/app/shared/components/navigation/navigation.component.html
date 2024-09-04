@@ -1,0 +1,55 @@
+<div class="navigation-container">
+    <div class="content">
+        <div class="logo">
+            <img src="./assets/images/PixelNestLogo.png" alt="">
+        </div>
+        <div class="profile">
+            <div class="profile-img">
+                <img src="./assets/images/user.png" alt="">
+            </div>
+            <h1>John Doe</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur iusto laudantium </p>
+            <div class="stats">
+                <h1>
+                    31
+                    <p>posts</p>
+                </h1>
+                <h1>
+                    345
+                    <p>followers</p>
+                </h1>
+                <h1>
+                    415
+                    <p>following</p>
+                </h1>
+            </div>
+            
+        </div>
+        <div class="hr"></div>
+        <div class="navigation">
+            <div class="feed nav-sec"(click)="changeTab(1)" [ngClass]="{'selected':selectedTab == 1}"><img src="./assets/images/home.png"><p>Feed</p></div>
+            <div class="messages nav-sec"(click)="changeTab(2)"  [ngClass]="{'selected':selectedTab == 2}"><img src="./assets/images/chatbubble.png"><p>Messages</p></div>
+            <div class="notifications nav-sec" (click)="changeTab(3)" [ngClass]="{'selected':selectedTab == 3}"><img src="./assets/images/notification.png"><p>Notifications</p></div>
+            <div class="notifications nav-sec" (click)="changeTab(4)" [ngClass]="{'selected':selectedTab == 4}"><img src="./assets/images/plus.png"><p>Create</p></div>
+        </div>
+        <div class="hr"></div>
+        <div class="recent-news">
+            <h1 class="recent-news-title">Recent news!</h1>
+            <div class="recent-news-sec">
+                <img src="./assets/images/user.png" alt="">
+                <div class="sec-description">
+                    <h1>Taylor Swift</h1>
+                    <p>Liked you post.</p>
+                </div>
+            </div>
+            <div class="recent-news-sec">
+                <img src="./assets/images/user.png" alt="">
+                <div class="sec-description">
+                    <h1>Michael Anderson</h1>
+                    <p>Sarted following you.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

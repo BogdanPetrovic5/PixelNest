@@ -1,0 +1,117 @@
+$POSTBG:#0D181C;
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+  
+    width: 100%;
+    
+    background-color: $POSTBG;
+    border-radius: 25px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .content{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .basic-info{
+            display: flex;
+            height: 100px;
+            flex-direction: row;
+            gap: 10px;
+            justify-content: left;
+            align-items: center;
+            width: 90%;
+            img{
+                width: 50px;
+                height: 50px;
+    
+            }
+            .info{
+                display: flex;
+                flex-direction: column;
+                font-size: 25px;
+                h1, p{
+                    margin: 0;
+                }
+                h1{
+                    color: $PCOLOR;
+                    font-size: 0.9em;
+                    font-family: $HFONT;
+                }
+                p{
+                    color: $PCOLOR;
+                    font-size: 0.5em;
+                    font-family: $PFONT;
+                    font-weight: 300;
+                    opacity: 0.6;
+                    margin-top: 5px;
+                    display: flex;
+                    flex-direction: row;
+                    gap: 5px;
+                    justify-content: center;
+                    align-items: center;
+                    span{
+                        color: $PFONT;
+                        font-size: 1.4em;
+                    }
+                }
+            }
+        }
+        .image-holder{
+            width: 90%;
+            
+            height: 450px;
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 25px;
+            }
+        }
+        .description{
+            width: 90%;
+            font-size: 25px;
+            p{
+                font-size: 0.7em;
+                font-weight: 300;
+                font-family: $PFONT;
+                color: $PCOLOR;
+            }
+        }
+        .hl{
+            width: 90%;
+            height: 1px;
+            background-color: rgb(82, 82, 82);
+            opacity: .3;
+            border-radius: 5px;
+        }
+        .post-options{
+            display: flex;
+            flex-direction: row;
+            width: 90%;
+            justify-content: space-between;
+   
+            margin-top: 20px;
+            margin-bottom: 20px;
+            .basic{
+                display: flex;
+                flex-direction: row;
+               gap: 20px;
+            }
+            .option img{
+                width: 25px;
+                height: 25px;
+                
+            }
+        }
+    }
+    
+}

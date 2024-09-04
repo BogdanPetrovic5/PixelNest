@@ -1,0 +1,33 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(315deg, rgba(4,15,22,1) 0%, rgba(12,23,29,1) 100%);
+    .navigation{
+        width: 20%;
+        height: 100vh;
+    }
+    .content{
+        width: 70%;
+        height: 92vh;
+        border-radius: 15px;
+        border: 1px solid rgb(87, 87, 87);
+        display: flex;
+        flex-direction: row;
+        app-feed{
+            width: 70%;
+        }
+        .mess{
+            width: 20%;
+        }
+    }
+}

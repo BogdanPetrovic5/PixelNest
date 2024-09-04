@@ -4,10 +4,12 @@ import { LandingPageComponent } from './features/components/landing-page/landing
 import { AuthenticationPageComponent } from './features/components/authentication-page/authentication-page.component';
 import { LoginFormComponent } from './features/components/authentication-page/login-form/login-form.component';
 import { RegisterFormComponent } from './features/components/authentication-page/register-form/register-form.component';
+import { FeedComponent } from './features/components/dashboard/feed/feed.component';
+import { DashboardComponent } from './features/components/dashboard/dashboard.component';
 
 
 const routes: Routes = [
-  {path:'',redirectTo:"/Get Started", pathMatch:'full'},
+  {path:'',redirectTo:"/Dashboard", pathMatch:'full'},
   {path:"Get Started", component:LandingPageComponent},
   {
     path:"Authentication", 
@@ -18,7 +20,15 @@ const routes: Routes = [
       { path: 'Login', component: LoginFormComponent }
     ]
   },
+  {
+    path:"Dashboard", 
+    component:DashboardComponent,
+    children: [
+      { path: '', redirectTo: 'Feed', pathMatch: 'full' },
+      { path: 'Feed', component: FeedComponent },
 
+    ]
+  },
   {path:"**", redirectTo:"/Get Started"}
 ];
 
