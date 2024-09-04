@@ -1,0 +1,163 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373aa1;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.452);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .content{
+        width: 55%;
+        height: 70%;
+        background-color: $TABCOLOR;
+        border-radius: 25px;
+        position: relative;
+    
+        .header{
+            font-size: 25px;
+            width: 100%;
+            height: 40px;
+            border-bottom: 1px solid #484f53;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            h1{
+                font-size: 0.6em;
+                font-weight: 500;
+                color: $PCOLOR;
+                font-family: $PFONT;
+                margin: 0;
+
+            }
+        }
+        .post{
+
+            height: calc(100% - 40px);
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+            .image{
+                width: 70%;
+                height: 100%;
+                border-right: 1px solid #484f53;;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                img{
+                    border-bottom-left-radius: 25px;
+                  
+                }
+                .open-image{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 20px;
+                    div{
+                        position: relative;
+                        font-size: 25px;
+                        cursor: pointer;
+                        width: fit-content;
+                        input{
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            opacity:  0;
+                            display: none;
+                        }
+                        button{
+                            padding: 5px 30px; 
+                            border-radius: 10px;
+                            border: none;
+                            outline: none;
+                            font-size: 0.6em;
+                            background-color: #64A3B9;
+                            font-family: $HFONT;
+                            font-weight: 400;
+                            cursor: pointer;
+
+                        }
+                    }
+                    
+                }
+                img{
+                    width: 80px;
+                    height: 80px;
+                }
+            }
+            .post-options{
+                width: 30%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                font-size: 25px;
+                position: relative;
+                span.caption{
+                    position: absolute;
+                    color: white;
+                    font-family: $PFONT;
+                    font-size: 0.6em;
+                    font-weight: 300;
+                    left: 10px;
+                    opacity: 0.4;
+                    
+                }
+                .description{
+                    color: white;
+                    width: calc(100% - 10px);
+                    border-bottom:1px solid #484f53;;
+                    display: flex;
+                    max-width: calc(100% - 10px); 
+                    height: 100px;
+                    max-height: 100px;
+                    outline: none;
+                    padding: 5px;
+                    overflow-y: auto;
+                    word-break: break-word;  /* Ensure long words break */
+                    word-wrap: break-word;   /* Wrap text to the next line */
+                    font-size: 0.6em;
+                    white-space: pre-wrap;   
+                    position: relative;
+                   
+                }
+                span{
+                    margin-top: 5px;
+                    margin-right: 5px;
+                    color:#b9b9b9;;;
+                    font-weight: 300;
+                    font-family: $PFONT;
+                    font-size: 0.6em;
+                }
+                .options{
+                    margin-top: 30px;
+                    width: 100%;
+                    
+                }
+                button{
+                    width: 90%;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    font-size: 0.6em;
+                    border-radius: 15px;
+                    background-color: #01BAEF;
+                    border: none;
+                    outline: none;
+                    align-self: center;
+                }
+            }
+          
+        }
+    }
+}

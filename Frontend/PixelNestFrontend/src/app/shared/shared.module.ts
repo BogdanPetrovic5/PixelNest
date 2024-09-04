@@ -6,7 +6,6 @@ import { BannerComponent } from './components/banner/banner.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { PostComponent } from './components/post/post.component';
 
-
 @NgModule({
   declarations: [
     BannerComponent,
@@ -18,7 +17,8 @@ import { PostComponent } from './components/post/post.component';
   ],
   exports: [
     NavigationComponent,
-    PostComponent
+    PostComponent,
+    
 
   ]
 })
