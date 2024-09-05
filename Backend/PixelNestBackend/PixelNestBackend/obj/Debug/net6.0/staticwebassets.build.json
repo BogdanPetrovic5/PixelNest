@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ILY/gIdzPCYcwW0xqd1CkzsDM/eySYzJ58GCfxx86Tw=",
+  "Hash": "tONdJGU1Q9D9Euq/vDQFWsQo0Q08P7Bbh81YZoZOhvw=",
   "Source": "PixelNestBackend",
   "BasePath": "_content/PixelNestBackend",
   "Mode": "Default",
@@ -15,5 +15,23 @@
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\2\\Altja_jõgi_Lahemaal.jpg",
+      "SourceId": "PixelNestBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "RelativePath": "Photos/Bogdan1/2/Altja_jõgi_Lahemaal.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\2\\Altja_jõgi_Lahemaal.jpg"
+    }
+  ]
 }

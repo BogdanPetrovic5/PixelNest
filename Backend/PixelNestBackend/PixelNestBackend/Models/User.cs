@@ -16,6 +16,8 @@ namespace PixelNestBackend.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public int TotalLikes { get; set; }
+        public int Followers { get; set; }
+        public int Following { get; set; }
         public int TotalPosts { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }
