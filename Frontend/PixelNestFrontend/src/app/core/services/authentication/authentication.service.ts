@@ -23,11 +23,12 @@ export class AuthenticationService {
   login(formGroup:any):Observable<any>{
     const url = `${environment.apiUrl}/api/Authentication/Login`;
     return this._httpClient.post<any>(url, formGroup).pipe(
-      tap(response=> this.storeToken(response.token))
+      tap(response=> this._storeUsername(response.username))
     )
   }
-
-  storeToken(token:string){
-    this._userSessionService.setToken(token)
+  
+  private _storeUsername(username:string){
+    console.log(username)
+    this._userSessionService.setUsername(username)
   }
 }

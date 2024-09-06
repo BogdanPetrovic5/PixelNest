@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 
 @Component({
   selector: 'app-new-post',
@@ -13,12 +14,22 @@ export class NewPostComponent implements OnInit{
   isCaption:boolean = true;
 
   imageSrc: string | ArrayBuffer | null = null;
-  ngOnInit(): void {
-   
+
+  constructor(private _dashboardStateMenagment:DashboardStateService){
+
   }
+  ngOnInit(): void {
+    
+  }
+
+  closeCreateNewPost(){
+    this._dashboardStateMenagment.setIsTabSelected(false)
+  }
+
   hideCaption(){
     this.isCaption = !this.isCaption;
   }
+
   showCaption(){
     this.isCaption = !this.isCaption
   }

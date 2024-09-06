@@ -7,8 +7,8 @@ import { CookieService } from 'ngx-cookie-service';
 export class UserSessionService {
 
   constructor(private _cookieService:CookieService) { }
-  
-  setToken(token:string){
-    this._cookieService.set("jwtToken", token);
+  setUsername(username:string){
+    this._cookieService.set("username", username);
   }
+
 }

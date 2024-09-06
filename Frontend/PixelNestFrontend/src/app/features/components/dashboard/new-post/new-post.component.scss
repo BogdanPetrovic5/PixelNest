@@ -159,5 +159,15 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
           
         }
+
+        .close{
+            font-size: 0.9em;
+            font-family: $PFONT;
+            color: $PCOLOR;
+            position: absolute;
+            right: 20px;
+            cursor: pointer;
+            bottom: 10px;
+        }
     }
 }
