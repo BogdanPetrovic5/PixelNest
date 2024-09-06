@@ -64,10 +64,19 @@ namespace PixelNestBackend.Controllers
             var response = _authenticationRepository.Login(loginDto);
             if (response.IsSuccessful)
             {
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.Now.AddHours(1)
+                };
+                Response.Cookies.Append("jwtToken", response.Token, cookieOptions);
                 return Ok(new
                 {
                     Response = response.Response,
-                    Token = response.Token
+                    IsSuccessful = response.IsSuccessful,
+                    Username = response.Username
                     
                 });
 

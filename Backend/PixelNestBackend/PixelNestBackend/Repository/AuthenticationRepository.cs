@@ -52,20 +52,26 @@ namespace PixelNestBackend.Repository
             {
                 using(SqlCommand command = new SqlCommand(emailQuery, connection))
                 {
-                   command.Parameters.AddWithValue("@Email", loginDto.Email);
+                    command.Parameters.AddWithValue("@Email", loginDto.Email);
                     connection.Open();
                    using(SqlDataReader reader = command.ExecuteReader())
                    {
                         if (reader.Read())
                         {
                             string hashedPassword = reader["Password"].ToString();
+                            string username = reader["Username"].ToString();
+                            Console.WriteLine(username);
                             bool passwordCheck = _passwordEncoder.VerifyPassword(loginDto.Password, hashedPassword);
                             if(passwordCheck)
                             {
                                 string token = _tokenGenerator.GenerateToken(loginDto.Email);
+
+                              
+                               
                                 return new LoginResponse { 
                                     Response = "Succesfull",
                                     Token = token,
+                                    Username = username,
                                     IsSuccessful = true
                                     
                                 };
