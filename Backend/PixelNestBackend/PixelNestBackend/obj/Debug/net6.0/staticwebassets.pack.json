@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\Photos\\Bogdan1\\2\\Altja_jõgi_Lahemaal.jpg"
     },
     {
+      "Id": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\3\\rachel-davis-tn2rBnvIl9I-unsplash.jpg",
+      "PackagePath": "staticwebassets\\Photos\\Bogdan1\\3\\rachel-davis-tn2rBnvIl9I-unsplash.jpg"
+    },
+    {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.PixelNestBackend.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

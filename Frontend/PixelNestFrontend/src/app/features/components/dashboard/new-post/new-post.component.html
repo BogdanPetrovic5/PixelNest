@@ -20,7 +20,7 @@
             </div>
             <div class="post-options">
                 <span class="caption" *ngIf="isCaption">Write caption...</span>
-                <div tabindex="0" class="description" contenteditable="true" aria-placeholder="description" (input)="updateCharCount($event)" (focus)="hideCaption()" (blur)="showCaption()">
+                <div tabindex="0" class="description" contenteditable="true" aria-placeholder="description" (input)="updateCharCount($event)" (focus)="hideCaption()" (blur)="showCaption()" #descriptionDiv>
                    
                 </div>
                 <span>
@@ -31,7 +31,7 @@
 
                     </div>
                 </div>
-                <button>
+                <button (click)="sharePost()">
                     Share
                 </button>
             </div>

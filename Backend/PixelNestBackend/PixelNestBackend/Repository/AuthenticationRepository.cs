@@ -60,7 +60,7 @@ namespace PixelNestBackend.Repository
                         {
                             string hashedPassword = reader["Password"].ToString();
                             string username = reader["Username"].ToString();
-                            Console.WriteLine(username);
+                        
                             bool passwordCheck = _passwordEncoder.VerifyPassword(loginDto.Password, hashedPassword);
                             if(passwordCheck)
                             {

@@ -67,10 +67,13 @@ namespace PixelNestBackend.Controllers
                 var cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTime.Now.AddHours(1)
+                    Expires = DateTime.Now.AddMinutes(30)
+                    /*    SameSite = SameSiteMode.None,
+       ,
+                        Domain = "localhost",
+                        Path = "/"*/
                 };
+             
                 Response.Cookies.Append("jwtToken", response.Token, cookieOptions);
                 return Ok(new
                 {

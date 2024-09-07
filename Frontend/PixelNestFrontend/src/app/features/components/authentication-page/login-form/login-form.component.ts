@@ -29,10 +29,10 @@ export class LoginFormComponent {
   login(){
     const loginFormValues = this.loginForm.value;
     this._authService.login(loginFormValues).subscribe((response) =>{
-        
-      },(error:HttpErrorResponse)=>{
+      this._router.navigate(["/Dashboard"])
+    },(error:HttpErrorResponse)=>{
         console.log(error)
-      }
+    }
   
     )
   }

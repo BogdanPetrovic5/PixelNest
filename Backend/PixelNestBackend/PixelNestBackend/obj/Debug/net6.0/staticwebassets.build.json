@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "tONdJGU1Q9D9Euq/vDQFWsQo0Q08P7Bbh81YZoZOhvw=",
+  "Hash": "0JkuJEX0H/776zQO2lPAGV3voX51BN2FG4zOUhdinjE=",
   "Source": "PixelNestBackend",
   "BasePath": "_content/PixelNestBackend",
   "Mode": "Default",
@@ -32,6 +32,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\2\\Altja_jõgi_Lahemaal.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\3\\rachel-davis-tn2rBnvIl9I-unsplash.jpg",
+      "SourceId": "PixelNestBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "RelativePath": "Photos/Bogdan1/3/rachel-davis-tn2rBnvIl9I-unsplash.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\3\\rachel-davis-tn2rBnvIl9I-unsplash.jpg"
     }
   ]
 }

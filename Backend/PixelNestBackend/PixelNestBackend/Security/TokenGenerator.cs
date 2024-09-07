@@ -22,7 +22,7 @@ namespace PixelNestBackend.Security
 
             var token = new JwtSecurityToken(
                     _configuration["Jwt:Issuer"],
-                    _configuration["Jwt:Audiance"],
+                    _configuration["Jwt:Audience"],
                     claims,
                     expires: DateTime.Now.AddMinutes(15),
                     signingCredentials: credentials
