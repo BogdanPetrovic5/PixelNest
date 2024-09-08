@@ -11,8 +11,12 @@ export class PostService {
   constructor(private _httpClient:HttpClient) { }
 
   createNewPost(body:any):Observable<any>{
-   
     const url = `${environment.apiUrl}/api/Post/ShareNewPost`
     return this._httpClient.post<any>(url, body);
+  }
+
+  getPosts():Observable<any>{
+    const url = `${environment.apiUrl}/api/Post/GetPosts`
+    return this._httpClient.get<any>(url)
   }
 }
