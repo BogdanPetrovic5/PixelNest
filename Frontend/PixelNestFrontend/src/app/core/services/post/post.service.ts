@@ -13,6 +13,6 @@ export class PostService {
   createNewPost(body:any):Observable<any>{
    
     const url = `${environment.apiUrl}/api/Post/ShareNewPost`
-    return this._httpClient.post<any>(url, body, {withCredentials:true});
+    return this._httpClient.post<any>(url, body);
   }
 }

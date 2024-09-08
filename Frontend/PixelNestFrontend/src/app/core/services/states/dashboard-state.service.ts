@@ -8,6 +8,7 @@ export class DashboardStateService {
   private NewPostTabSubject = new BehaviorSubject<boolean | null>(false);
   newPostTab$ = this.NewPostTabSubject.asObservable()
 
+
   constructor() { }
 
   setIsTabSelected(isSelected:boolean | null){

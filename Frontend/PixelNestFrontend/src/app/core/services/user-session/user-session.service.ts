@@ -7,7 +7,9 @@ import { CookieService } from 'ngx-cookie-service';
 export class UserSessionService {
 
   constructor(private _cookieService:CookieService) { }
-
+  clearCookies(){
+    this._cookieService.deleteAll();
+  }
   getUsername(){
     return this._cookieService.get("username");
   }

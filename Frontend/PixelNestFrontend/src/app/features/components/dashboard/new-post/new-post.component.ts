@@ -17,6 +17,10 @@ export class NewPostComponent implements OnInit{
   
   img:boolean = true;
   isCaption:boolean = true;
+  isShared:boolean = false;  
+  isError:boolean = false;
+  newPostForm:boolean = true
+
   selectedFiles:File[] = []
   imageSrc: string | ArrayBuffer | null = null;
   imageUrls: string[] = [];
@@ -38,9 +42,17 @@ export class NewPostComponent implements OnInit{
     const formData = this.appendToForm(text, username)
 
     this._postService.createNewPost(formData).subscribe((response) =>{
-      console.log(response.message)
+      this.newPostForm = false
+      this.isShared = true;
+      setTimeout(()=>{
+        this._dashboardStateMenagment.setIsTabSelected(false);
+      }, 1000)
     }, (error:HttpErrorResponse) =>{
-      console.log(error);
+      this.newPostForm = false
+      this.isError = true;
+      setTimeout(()=>{
+        this._dashboardStateMenagment.setIsTabSelected(false);
+      }, 1500)
     })
 
   }

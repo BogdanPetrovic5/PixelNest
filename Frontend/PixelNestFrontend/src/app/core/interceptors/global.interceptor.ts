@@ -14,7 +14,7 @@ export class GlobalInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const authorizationReq = request.clone({
-  
+      withCredentials:true
     })
     return next.handle(authorizationReq)
     
