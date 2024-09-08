@@ -21,18 +21,36 @@ namespace PixelNestBackend.Controllers
         [HttpPost("ShareNewPost")]
         public async Task<IActionResult> ShareNewPost([FromForm] PostDto postDto)
         {
-            var result = await _postRepository.ShareNewPost(postDto);
-            if (result)
+            try
             {
-                return Ok(new { message = "Post was successfully added to your Nest feed" });
+
+                var result = await _postRepository.ShareNewPost(postDto);
+                if (result)
+                {
+                    return Ok(new { message = "Post was successfully added to your Nest feed" });
+                }
+                return BadRequest(result);
+            }catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving posts.", error = ex.Message });
             }
-            return BadRequest("There was an error with publishing the post!");
+           
+          
         }
         [HttpGet("GetPosts")]
         public async Task<IActionResult> GetPosts(int page = 1, int maximumPosts = 16){
-            ICollection<Post> posts;
-            posts = await _postRepository.GetPosts();
-            return Ok(posts);
+            try
+            {
+                ICollection<Post> posts;
+                posts = await _postRepository.GetPosts();
+                if(posts == null && !posts.Any()) return NotFound(new { message = "No posts found"});
+                return Ok(posts);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving posts.", error = ex.Message });
+            }
+          
 
            
         }
