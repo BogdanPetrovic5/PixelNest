@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
+using PixelNestBackend.Models;
 using PixelNestBackend.Services;
 using PixelNestBackend.Utility;
 
@@ -74,6 +76,30 @@ namespace PixelNestBackend.Repository
                 }
             }
             return false;
+        }
+        public async Task<ICollection<Post>> GetPosts()
+        {
+            var posts = await _dataContext.Posts.Select(a => new Post
+            {
+                PostDescription = a.PostDescription,
+                OwnerUsername = a.OwnerUsername,
+                TotalComments = a.TotalComments,
+                TotalLikes = a.TotalLikes,
+                PostID = a.PostID,
+                ImagePaths = a.ImagePaths,
+                Comments = a.Comments.Select(c => new Comment
+                {
+                    CommentText = c.CommentText,
+                    TotalLikes = c.TotalLikes,
+                    UserID = c.UserID,
+                    Username = c.Username
+                }).ToList()
+
+            }).ToListAsync();
+            return posts;
+
+          
+
         }
     }
 }
