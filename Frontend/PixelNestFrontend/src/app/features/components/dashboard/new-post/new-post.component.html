@@ -7,7 +7,7 @@
         </div>
         <div class="post">
             <div class="image">
-                <img *ngIf="imageSrc" [src]="imageSrc" alt="Selected Image" style="width: 100%; height: 100%;" />
+                <img *ngIf="imageSrc" [src]="imageSrc" alt="Selected Image" style="width: 100%; height: 100%;" [ngStyle]="{'object-fit': objectFit}" />
                 <div class="open-image" *ngIf="img">
                     
                     <img src="./assets/images/add.png" alt="">
@@ -17,6 +17,9 @@
                         <button (click)="fileInput.click()"  >Select from computer</button>
                     </div>
                 </div>
+                <button class="image-display-variant" *ngIf="imageDisplay" (click)="toggleObjectFit()">
+                    <img src="./assets/images/expand-arrows.png" alt="">
+                </button>
             </div>
             <div class="post-options">
                 <span class="caption" *ngIf="isCaption">Write caption...</span>

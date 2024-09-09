@@ -54,9 +54,34 @@ $HFONT: "Roboto Condensed", sans-serif;
                 justify-content: center;
                 align-items: center;
                 overflow: hidden;
+                position: relative;
+                .image-display-variant{
+                    position: absolute;
+                    bottom: 5px;
+                    right: 5px;
+                    height: 70px;
+                    width: 70px;
+                    border-radius: 50%;
+                    border: none;
+                    outline: none;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    /* From https://css.glass */
+                    background: rgba(4, 15, 22, 0.29);
+                  
+                    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                    backdrop-filter: blur(10.5px);
+                    -webkit-backdrop-filter: blur(10.5px);
+                    img{
+                        width: 50px;
+                        height: 50px;
+                        transform: rotate(180deg);
+                    }
+                }
                 img{
                     border-bottom-left-radius: 25px;
-                    object-fit: contain;
+                    
                 }
                 .open-image{
                     display: flex;

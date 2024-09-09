@@ -6,7 +6,7 @@
                 <h1>
                    {{post.ownerUsername}} 
                 </h1>
-                <p>25 Aug at 15:56 <span class="material-symbols-outlined">
+                <p>{{formattedDate}}<span class="material-symbols-outlined">
                     location_on
                 </span> 
                 Los Angeles
@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="image-holder">
-            <img *ngIf="post.imagePaths.length > 0" src="http://localhost:7157/Photos/{{ post.imagePaths[0].path }}" alt="">
+            <img *ngIf="post.imagePaths.length > 0" src="http://localhost:7157/Photos/{{ post.imagePaths[0].path }}" loading="lazy" [ngStyle]="{'object-fit':post.imagePaths[0].photoDisplay}" alt="">
         </div>
        <div class="description">
             <p>{{post.postDescription}}</p>

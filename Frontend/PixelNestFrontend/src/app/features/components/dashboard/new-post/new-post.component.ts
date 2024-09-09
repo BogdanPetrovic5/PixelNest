@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
-
+import { ImageCompressorService } from 'src/app/uitility/image-compressor.service';
 @Component({
   selector: 'app-new-post',
   templateUrl: './new-post.component.html',
@@ -20,6 +20,9 @@ export class NewPostComponent implements OnInit{
   isShared:boolean = false;  
   isError:boolean = false;
   newPostForm:boolean = true
+  imageDisplay:boolean = false;
+  objectFit:string = 'cover';
+
 
   selectedFiles:File[] = []
   imageSrc: string | ArrayBuffer | null = null;
@@ -28,7 +31,8 @@ export class NewPostComponent implements OnInit{
   constructor(
     private _dashboardStateMenagment:DashboardStateService,
     private _userSessionService:UserSessionService,
-    private _postService:PostService
+    private _postService:PostService,
+    private _imageCompressorService:ImageCompressorService
   ){
 
   }
@@ -49,6 +53,7 @@ export class NewPostComponent implements OnInit{
       }, 1000)
     }, (error:HttpErrorResponse) =>{
       this.newPostForm = false
+      console.log(error)
       this.isError = true;
       setTimeout(()=>{
         this._dashboardStateMenagment.setIsTabSelected(false);
@@ -56,8 +61,10 @@ export class NewPostComponent implements OnInit{
     })
 
   }
-
-  onFileSelected(event: Event): void {
+  toggleObjectFit(): void {
+    this.objectFit = this.objectFit === 'cover' ? 'contain' : 'cover';
+  }
+  async onFileSelected(event: Event){
     const inputElement = event.target as HTMLInputElement;
     const files = inputElement.files;
 
@@ -67,27 +74,38 @@ export class NewPostComponent implements OnInit{
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        this.selectedFiles.push(file);
+        console.log(file.size / 1024)
+        try {
+ 
+          const compressedFile = await this._imageCompressorService.compressImage(file);
+          console.log(compressedFile.size / 1024)
+          
+          const reader = new FileReader();
+          reader.onload = (e: ProgressEvent<FileReader>) => {
+            if (e.target?.result) {
+              this.imageSrc = e.target.result as string;
+              this.img = false; 
+            }
+          };
 
+          reader.readAsDataURL(compressedFile);
+          this.selectedFiles.push(compressedFile);
+          this.imageDisplay = true
   
-        const reader = new FileReader();
-        reader.onload = (e: ProgressEvent<FileReader>) => {
-          if (e.target?.result) {
-            this.imageSrc = e.target.result as string
-            this.img = false
-          }
-        };
-        reader.readAsDataURL(file);
+          
+        
+        }catch (error) {
+          console.error('Error processing file:', error);
+        }
       }
     }
-  }
+  } 
 
   closeCreateNewPost(){
     this._dashboardStateMenagment.setIsTabSelected(false)
   }
 
   hideCaption(){
-
     this.isCaption = false
   }
 
@@ -129,6 +147,7 @@ export class NewPostComponent implements OnInit{
     const formData = new FormData()
     formData.append("PostDescription", description)
     formData.append("OwnerUsername", username);
+    formData.append("PhotoDisplay", this.objectFit);
     for (let i = 0; i < this.selectedFiles.length; i++) {
       formData.append("Photos", this.selectedFiles[i]);
     }

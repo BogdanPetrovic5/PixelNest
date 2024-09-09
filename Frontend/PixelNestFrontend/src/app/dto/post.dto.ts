@@ -6,11 +6,13 @@ export interface PostDto {
     totalComments: number;
     totalLikes: number;
     imagePaths: ImagePathDto[];
+    publishDate:Date;
     comments: CommentDto[];
 }
   
 export interface ImagePathDto {
     path: string;
+    photoDisplay:string;
 }
   
 export interface CommentDto {
