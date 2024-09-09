@@ -4,7 +4,7 @@
             <img src="./assets/images/user.png" alt="">
             <div class="info">
                 <h1>
-                   Johnny Five 
+                   {{post.ownerUsername}} 
                 </h1>
                 <p>25 Aug at 15:56 <span class="material-symbols-outlined">
                     location_on
@@ -15,10 +15,10 @@
             </div>
         </div>
         <div class="image-holder">
-            <img src="./assets/images/nature.jpg" alt="">
+            <img *ngIf="post.imagePaths.length > 0" src="http://localhost:7157/Photos/{{ post.imagePaths[0].path }}" alt="">
         </div>
        <div class="description">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae voluptatum ipsa magnam perspiciatis, error in architecto necessitatibus, eius neque expedita re</p>
+            <p>{{post.postDescription}}</p>
        </div>
        <div class="hl">
 

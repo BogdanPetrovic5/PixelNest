@@ -32,19 +32,8 @@ export class DashboardComponent implements OnInit{
         }
       })
     )
-    this.loadPosts()
+    
   }
 
-  loadPosts(){
-    this._postService.getPosts()
-    .pipe(
-      catchError((error:HttpErrorResponse)=>{
-        console.log(error)
-        return throwError(()=>error);
-      })
-    ).subscribe(response =>{
-      this.post = response
-      console.log(this.post);
-    })
-  }
+
 }
