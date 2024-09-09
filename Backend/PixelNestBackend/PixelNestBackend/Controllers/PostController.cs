@@ -44,7 +44,8 @@ namespace PixelNestBackend.Controllers
                 ICollection<Post> posts;
                 posts = await _postRepository.GetPosts();
                 if(posts == null && !posts.Any()) return NotFound(new { message = "No posts found"});
-                return Ok(posts);
+                var result  = posts.OrderByDescending(a => a.PublishDate);
+                return Ok(result);
             }
             catch(Exception ex)
             {

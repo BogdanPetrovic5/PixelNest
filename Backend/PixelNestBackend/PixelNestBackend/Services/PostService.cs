@@ -31,6 +31,7 @@ namespace PixelNestBackend.Services
                     var imagePaths = new ImagePath
                     {
                         PostID = postFolder,
+                        PhotoDisplay = postDto.PhotoDisplay,
                         Path = Path.Combine(postDto.OwnerUsername, postFolderID, fileName)
 
                     };

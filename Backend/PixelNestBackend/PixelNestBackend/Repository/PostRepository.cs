@@ -43,7 +43,7 @@ namespace PixelNestBackend.Repository
                 _folderGenerator.GenerateNewFolder(userFolderPath);
 
             }
-            string newPostQuery = "INSERT INTO Posts(UserID, OwnerUsername, PostDescription, TotalComments, TotalLikes) Values(@UserID, @OwnerUsername, @PostDescription, @TotalComments, @TotalLikes)";
+            string newPostQuery = "INSERT INTO Posts(UserID, OwnerUsername, PostDescription, TotalComments, TotalLikes, PublishDate) Values(@UserID, @OwnerUsername, @PostDescription, @TotalComments, @TotalLikes, GETDATE())";
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
             if(postDto.Photos != null)
             {
@@ -86,6 +86,7 @@ namespace PixelNestBackend.Repository
                 TotalComments = a.TotalComments,
                 TotalLikes = a.TotalLikes,
                 PostID = a.PostID,
+                PublishDate = a.PublishDate,
                 ImagePaths = a.ImagePaths,
                 Comments = a.Comments.Select(c => new Comment
                 {
