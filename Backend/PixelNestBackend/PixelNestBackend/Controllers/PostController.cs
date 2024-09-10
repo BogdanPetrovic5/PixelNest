@@ -51,9 +51,16 @@ namespace PixelNestBackend.Controllers
             {
                 return StatusCode(500, new { message = "An error occurred while retrieving posts.", error = ex.Message });
             }
-          
+        }
 
-           
+        [HttpPost("LikePost")]
+        public IActionResult LikePost(LikeDto likeDto)
+        {
+            bool result = _postRepository.LikePost(likeDto);
+            if (result)
+            {
+                return Ok();
+            } else return BadRequest();
         }
     }
 }

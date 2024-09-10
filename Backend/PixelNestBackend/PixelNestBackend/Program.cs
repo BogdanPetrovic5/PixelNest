@@ -29,6 +29,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<FolderGenerator>();
 builder.Services.AddScoped<UserUtility>();
+builder.Services.AddScoped<PostUtility>();
 builder.Services.AddScoped<TokenGenerator>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => {

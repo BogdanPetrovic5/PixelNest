@@ -18,12 +18,14 @@ namespace PixelNestBackend.Repository
         private readonly FolderGenerator _folderGenerator;
         private readonly IPostService _postService;
         private readonly UserUtility _userUtility;
+        private readonly PostUtility _postUtility;
         public PostRepository(
             DataContext dataContext,
             FolderGenerator folderGenerator,
             IConfiguration configuration,
             IPostService postService,
-            UserUtility userUtility
+            UserUtility userUtility,
+            PostUtility postUtility
             )
         {
             _dataContext = dataContext;
@@ -32,6 +34,8 @@ namespace PixelNestBackend.Repository
             _configuration = configuration;
             _postService = postService;
             _userUtility = userUtility;
+            _postUtility = postUtility;
+
         }
         public async Task<bool> ShareNewPost(PostDto postDto)
         {
@@ -102,5 +106,48 @@ namespace PixelNestBackend.Repository
           
 
         }
+        public bool LikePost(LikeDto likeDto)
+        {
+            int userID = _userUtility.GetUserID(likeDto.Username);
+            bool isLiked = _postUtility.FindDuplicate(likeDto.PostID, userID);
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            string query;
+            if (!isLiked)
+            {
+                query = "INSERT INTO LikedPosts (UserID, PostID, DateLiked) Values(@UserID, @PostID, GETDATE())";
+            }
+            else query = "DELETE FROM LikedPosts WHERE PostID = @PostID AND UserID = @UserID";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        connection.Open();
+                        command.Parameters.AddWithValue("@UserID", userID);
+                        command.Parameters.AddWithValue("@PostID", likeDto.PostID);
+                        int i = command.ExecuteNonQuery();
+                        if (i > 0)
+                        {
+                            return true;
+                        }
+                        else return false;
+                    }
+                }
+            }catch(SqlException ex)
+            {
+                Console.WriteLine("Sql related error: ", ex.Message);
+                return false;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("General error: ", ex.Message);
+                return false;
+            }
+           
+
+
+        } 
     }
 }

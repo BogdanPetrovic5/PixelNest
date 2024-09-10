@@ -14,10 +14,13 @@ namespace PixelNestBackend.Models
         public string PostDescription { get; set; }
         public int TotalComments { get; set; }
         public int TotalLikes { get; set; }
+
         public DateTime PublishDate { get; set; }
+        public User User { get; set; }
 
         public ICollection<ImagePath> ImagePaths { get; set; }
         public ICollection<Comment> Comments { get; set; }
-        public User User { get; set; }
+        public ICollection<LikedPosts> LikedPosts { get; set; }
+    
     }
 }

@@ -8,5 +8,7 @@ namespace PixelNestBackend.Interfaces
     {
         Task<bool> ShareNewPost(PostDto postDto);
         Task<ICollection<Post>> GetPosts();
+
+        bool LikePost(LikeDto likeDto);
     }
 }

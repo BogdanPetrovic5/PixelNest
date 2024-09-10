@@ -105,6 +105,11 @@ $HFONT: "Roboto Condensed", sans-serif;
             overflow: auto;
             -ms-overflow-style: none;  /* Internet Explorer 10+ */
             scrollbar-width: none; 
+            .posts-list{
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
         }
     }
 }

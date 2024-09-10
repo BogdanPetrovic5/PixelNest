@@ -12,12 +12,14 @@ namespace PixelNestBackend.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<ImagePath> ImagePaths { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<LikedPosts> LikedPosts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasKey(u => u.UserID);
             modelBuilder.Entity<Post>().HasKey(p => p.PostID);
             modelBuilder.Entity<ImagePath>().HasKey(p => p.PathID);
             modelBuilder.Entity<Comment>().HasKey(c => c.CommentID);
+            modelBuilder.Entity<LikedPosts>().HasKey(lp => new { lp.PostID, lp.UserID });
 
             modelBuilder.Entity<Post>()
                 .HasOne(user => user.User)
@@ -43,6 +45,17 @@ namespace PixelNestBackend.Data
                 .HasForeignKey(post => post.PostID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<LikedPosts>()
+                .HasOne(user => user.User)
+                .WithMany(likedPosts => likedPosts.LikedPosts)
+                .HasForeignKey(lp => lp.UserID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<LikedPosts>()
+                .HasOne(post => post.Post)
+                .WithMany(likedPosts => likedPosts.LikedPosts)
+                .HasForeignKey(lp => lp.PostID)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
