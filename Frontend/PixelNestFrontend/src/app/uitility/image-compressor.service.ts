@@ -17,8 +17,7 @@ export class ImageCompressorService {
       }
 
       try{
-         
-          const compressedBlob = await imageCompression(file, compressOptions);
+          const compressedBlob = await imageCompression(file, compressOptions); 
 
           const fileName = file.name;
           const compressedFile = new File([compressedBlob], fileName, {

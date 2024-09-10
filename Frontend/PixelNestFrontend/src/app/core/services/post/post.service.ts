@@ -19,4 +19,12 @@ export class PostService {
     const url = `${environment.apiUrl}/api/Post/GetPosts`
     return this._httpClient.get<any>(url)
   }
+
+  likePost(postID:number, username:string):Observable<any>{
+    const url = `${environment.apiUrl}/api/Post/LikePost`
+    return this._httpClient.post(url, {
+      PostID:postID,
+      Username:username
+    })
+  }
 }
