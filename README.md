@@ -11,8 +11,8 @@ Every user that wants to try this application will have two options, one is to m
 Registered users will have ability to create new posts, like, comment aswell as save posts that they like. 
 Also each user will be able to follow other users and chat with them.
 
-### For now in early stages users can only register, login, create and like posts.
+*For now in early stages users can only register, login, create and like posts.*
 
-Above given features are in plan and will be implemented in near future.
+Above given features are in plan and will be implemented in the near future.
 
 
