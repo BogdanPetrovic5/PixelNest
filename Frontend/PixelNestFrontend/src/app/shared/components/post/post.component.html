@@ -16,6 +16,7 @@
         </div>
         <div class="image-holder">
             <img *ngIf="post.imagePaths.length > 0" src="http://localhost:7157/Photos/{{ post.imagePaths[0].path }}" loading="lazy" [ngStyle]="{'object-fit':post.imagePaths[0].photoDisplay}" alt="">
+            
         </div>
        <div class="description">
             <p>{{post.postDescription}}</p>
@@ -28,6 +29,7 @@
                 <div class="option" (click)="likePost(post.postID)">
                     <img *ngIf="!isLiked" src="./assets/images/notLiked.png" alt="">
                     <img *ngIf="isLiked" src="./assets/images/liked.png" alt="">
+                    <p>{{likedByUsers.length}} Likes</p>
                 </div>
                 <div class="option">
                     <img src="./assets/images/comment.png" alt="">

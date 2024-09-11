@@ -105,12 +105,27 @@ $HFONT: "Roboto Condensed", sans-serif;
             .basic{
                 display: flex;
                 flex-direction: row;
-               gap: 20px;
+             
+               width: 80%;
             }
             .option img{
                 width: 25px;
                 height: 25px;
+                cursor: pointer;
+            }
+            .option{
+                font-size: 25px;
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                width: 20%;
                 
+                p{
+                    font-size: 0.5em;
+                    font-family: $PFONT;
+                    color: $PCOLOR;
+                    align-self: flex-end;
+                }
             }
         }
     }
