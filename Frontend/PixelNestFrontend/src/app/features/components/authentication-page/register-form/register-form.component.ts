@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 @Component({
   selector: 'app-register-form',
   templateUrl: './register-form.component.html',
@@ -13,7 +14,8 @@ export class RegisterFormComponent {
   constructor(
     private _router:Router,
     private _formBuilder:FormBuilder,
-    private _authService:AuthenticationService
+    private _authService:AuthenticationService,
+    private _authState:AuthStateService
   ){
     this.registerForm = this._formBuilder.group({
       Firstname: ['', Validators.required],
@@ -45,7 +47,10 @@ export class RegisterFormComponent {
   register(){
     const formValues = this.registerForm.value;
     this._authService.register(formValues).subscribe((response)=>{
-      console.log(response.message)
+      this._authState.setIsAuthSuccess(true)
+      setTimeout(() => {
+        this._authState.setIsAuthSuccess(false)
+      }, 1500);
     },(error:HttpErrorResponse) =>{
       console.log(error);
     })

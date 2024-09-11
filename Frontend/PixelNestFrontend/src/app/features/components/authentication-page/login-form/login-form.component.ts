@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 
 @Component({
   selector: 'app-login-form',
@@ -14,7 +15,8 @@ export class LoginFormComponent {
   constructor(
     private _router:Router,
     private _formBuilder:FormBuilder,
-    private _authService:AuthenticationService
+    private _authService:AuthenticationService,
+    private _authState:AuthStateService
   ){
     this.loginForm = this._formBuilder.group({
       Email:['', Validators.required],
@@ -29,7 +31,12 @@ export class LoginFormComponent {
   login(){
     const loginFormValues = this.loginForm.value;
     this._authService.login(loginFormValues).subscribe((response) =>{
-      this._router.navigate(["/Dashboard"])
+      this._authState.setIsAuthSuccess(true)
+      setTimeout(() => {
+        this._authState.setIsAuthSuccess(false)
+        this._router.navigate(["/Dashboard"])
+      }, 1500);
+     
     },(error:HttpErrorResponse)=>{
         console.log(error)
     }

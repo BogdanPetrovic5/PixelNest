@@ -10,10 +10,11 @@ export class ImageCompressorService {
 
   async compressImage(file:File):Promise<File>{
       const compressOptions ={
-        maxSizeMb:0.8,
+        maxSizeMb:0.5,
         maxWidthOrHeight:1080,
         useWebWorker:true,
-        fileType: 'image/jpeg'
+        fileType: 'image/jpeg',
+        initialQuality: 0.7
       }
 
       try{

@@ -41,9 +41,9 @@ export class NewPostComponent implements OnInit{
   }
  
   sharePost(){
-    const text = this.takeText()
+    const text = this._takeText()
     const username = this._userSessionService.getUsername();
-    const formData = this.appendToForm(text, username)
+    const formData = this._appendToForm(text, username)
 
     this._postService.createNewPost(formData).subscribe((response) =>{
       this.newPostForm = false
@@ -110,7 +110,7 @@ export class NewPostComponent implements OnInit{
   }
 
   showCaption(){
-    const text = this.takeText()
+    const text = this._takeText()
     if(text?.length == 0) this.isCaption = true
   }
 
@@ -121,7 +121,7 @@ export class NewPostComponent implements OnInit{
 
     if (content.length > this.maxChar) {
       element.innerText = content.substring(0, this.maxChar);
-      this.setCaretAtEnd(element);
+      this._setCaretAtEnd(element);
     
     } else {
       this.charCount = content.length;
@@ -130,7 +130,7 @@ export class NewPostComponent implements OnInit{
   }
 
  
-  private setCaretAtEnd(element: HTMLElement): void {
+  private _setCaretAtEnd(element: HTMLElement): void {
     const range = document.createRange();
     const selection = window.getSelection();
     range.selectNodeContents(element);
@@ -138,12 +138,12 @@ export class NewPostComponent implements OnInit{
     selection?.removeAllRanges();
     selection?.addRange(range);
   }
-  private takeText(){
+  private _takeText(){
     const description = this.descriptionDiv?.nativeElement
     const text = description?.innerHTML
     return text;
   }
-  private appendToForm(description:any, username:string):FormData{
+  private _appendToForm(description:any, username:string):FormData{
     const formData = new FormData()
     formData.append("PostDescription", description)
     formData.append("OwnerUsername", username);
