@@ -26,7 +26,8 @@
        <div class="post-options">
             <div class="basic">
                 <div class="option" (click)="likePost(post.postID)">
-                    <img src="./assets/images/notLiked.png" alt="">
+                    <img *ngIf="!isLiked" src="./assets/images/notLiked.png" alt="">
+                    <img *ngIf="isLiked" src="./assets/images/liked.png" alt="">
                 </div>
                 <div class="option">
                     <img src="./assets/images/comment.png" alt="">

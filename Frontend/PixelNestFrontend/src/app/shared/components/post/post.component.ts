@@ -14,6 +14,8 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
 export class PostComponent implements OnInit{
   @Input() post:any
   formattedDate:string = ""
+  username:string = ""
+  isLiked:boolean | null = null
   constructor(
     private _datePipe:DatePipe,
     private _postService:PostService,
@@ -23,21 +25,37 @@ export class PostComponent implements OnInit{
   }
 
   ngOnInit():void{
-    const date = this.post.publishDate;
-    const dateObject = new Date(date)
+    this.initilizeComponent();
+  }
 
-    if (isNaN(dateObject.getTime())) {
-      this.formattedDate = 'Invalid Date';
-    } else {
-      this.formattedDate = this._datePipe.transform(dateObject, 'd MMM \'at\' HH:mm') || 'Invalid Format';
-    }
+  initilizeComponent(){
+    this.username = this._userSession.getUsername();
+    this.formatDate()
+    this.checkIsLiked()
+  }
+  checkIsLiked(){
+    const foundUser = this.post.likedByUsers.find((user:any) => user.username === this.username);
+    if(foundUser) {
+      this.isLiked = true
+    }else this.isLiked = false
+  }
+  formatDate(){
+    const date = this.post.publishDate;
+      const dateObject = new Date(date)
+
+      if (isNaN(dateObject.getTime())) {
+        this.formattedDate = 'Invalid Date';
+      } else {
+        this.formattedDate = this._datePipe.transform(dateObject, 'd MMM \'at\' HH:mm') || 'Invalid Format';
+      }
   }
 
   likePost(postID:number){
-    let username = this._userSession.getUsername();
     
-    this._postService.likePost(postID, username).pipe(
+    
+    this._postService.likePost(postID, this.username).pipe(
       tap((response)=>{
+        this.isLiked = !this.isLiked
         console.log("Successfully liked the post")
       }),
       catchError((error:HttpErrorResponse)=>{
