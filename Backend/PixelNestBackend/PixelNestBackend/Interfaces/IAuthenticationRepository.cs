@@ -8,7 +8,8 @@ namespace PixelNestBackend.Interfaces
     public interface IAuthenticationRepository
     {
         bool Register(User registerDto);
-        bool IsRegistered(User registerDto);
+        bool IsEmailRegistered(User registerDto);
+        bool IsUsernameRegistered(User registerDto);
         LoginResponse Login(LoginDto loginDto);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PixelNestBackend.Dto;
 using PixelNestBackend.Models;
 
 namespace PixelNestBackend.Data
@@ -15,6 +16,7 @@ namespace PixelNestBackend.Data
         public DbSet<LikedPosts> LikedPosts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<LikeDto>().HasNoKey();
             modelBuilder.Entity<User>().HasKey(u => u.UserID);
             modelBuilder.Entity<Post>().HasKey(p => p.PostID);
             modelBuilder.Entity<ImagePath>().HasKey(p => p.PathID);

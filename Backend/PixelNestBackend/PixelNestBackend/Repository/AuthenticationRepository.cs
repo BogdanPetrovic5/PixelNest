@@ -39,11 +39,14 @@ namespace PixelNestBackend.Repository
             return _context.SaveChanges() > 0;
 
         }
-        public bool IsRegistered(User user)
+        public bool IsEmailRegistered(User user)
         {
             return _context.Users.Any(u =>u.Email ==  user.Email);
         }
-
+        public bool IsUsernameRegistered(User user)
+        {
+            return _context.Users.Any(u => u.Username == user.Username);
+        }
         public LoginResponse Login(LoginDto loginDto)
         {
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
@@ -66,8 +69,10 @@ namespace PixelNestBackend.Repository
                             {
                                 string token = _tokenGenerator.GenerateToken(loginDto.Email);
 
-                              
-                               
+
+                                reader.Close();
+                                reader.Dispose();
+                                connection.Close();
                                 return new LoginResponse { 
                                     Response = "Succesfull",
                                     Token = token,
@@ -77,12 +82,19 @@ namespace PixelNestBackend.Repository
                                 };
 
                             }
+                            reader.Close();
+                            reader.Dispose();
+                            connection.Close();
                             return new LoginResponse
                             {
                                 Response = "Password incorrect!",
                                 IsSuccessful = false
                             };
-                        } return new LoginResponse
+                        }
+                        reader.Close();
+                        reader.Dispose();
+                        connection.Close();
+                        return new LoginResponse
                           {
                             Response = "Email incorrect!",
                             IsSuccessful = false

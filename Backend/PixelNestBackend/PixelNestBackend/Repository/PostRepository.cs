@@ -68,7 +68,7 @@ namespace PixelNestBackend.Repository
                         {
                             int postID = Convert.ToInt32(getPostIDCommand.ExecuteScalar());
                             await _postService.StoreImages(postDto, userFolderPath, postID);
-
+                            connection.Close();
                             if (i > 0)
                             {
                                 return true;
@@ -98,10 +98,18 @@ namespace PixelNestBackend.Repository
                     TotalLikes = c.TotalLikes,
                     UserID = c.UserID,
                     Username = c.Username
+                }).ToList(),
+                LikedByUsers = a.LikedPosts.Select(l => new LikeDto {
+                    Username = l.Username
+
                 }).ToList()
 
+
             }).ToListAsync();
+
             return posts;
+
+          
 
           
 
@@ -114,7 +122,7 @@ namespace PixelNestBackend.Repository
             string query;
             if (!isLiked)
             {
-                query = "INSERT INTO LikedPosts (UserID, PostID, DateLiked) Values(@UserID, @PostID, GETDATE())";
+                query = "INSERT INTO LikedPosts (UserID, PostID, Username, DateLiked) Values(@UserID, @PostID, @Username, GETDATE())";
             }
             else query = "DELETE FROM LikedPosts WHERE PostID = @PostID AND UserID = @UserID";
 
@@ -127,9 +135,12 @@ namespace PixelNestBackend.Repository
                         connection.Open();
                         command.Parameters.AddWithValue("@UserID", userID);
                         command.Parameters.AddWithValue("@PostID", likeDto.PostID);
+                        command.Parameters.AddWithValue("@Username", likeDto.Username);
                         int i = command.ExecuteNonQuery();
+                        connection.Close();
                         if (i > 0)
                         {
+
                             return true;
                         }
                         else return false;
@@ -137,6 +148,7 @@ namespace PixelNestBackend.Repository
                 }
             }catch(SqlException ex)
             {
+
                 Console.WriteLine("Sql related error: ", ex.Message);
                 return false;
             }

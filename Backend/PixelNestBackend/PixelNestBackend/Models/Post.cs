@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using PixelNestBackend.Dto;
 
 namespace PixelNestBackend.Models
 {
@@ -10,17 +11,20 @@ namespace PixelNestBackend.Models
        
         public int PostID { get; set; }
         public int UserID { get; set; }
-        public string OwnerUsername { get; set; }
-        public string PostDescription { get; set; }
+        public string? OwnerUsername { get; set; }
+        public string? PostDescription { get; set; }
         public int TotalComments { get; set; }
         public int TotalLikes { get; set; }
 
         public DateTime PublishDate { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
+        [NotMapped]
+        public ICollection<LikeDto>? LikedByUsers { get; set; }
 
-        public ICollection<ImagePath> ImagePaths { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<LikedPosts> LikedPosts { get; set; }
+        public ICollection<ImagePath>? ImagePaths { get; set; }
+        public ICollection<Comment>? Comments { get; set; }
+        public ICollection<LikedPosts>? LikedPosts { get; set; }
+
     
     }
 }

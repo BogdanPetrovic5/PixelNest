@@ -26,5 +26,21 @@ namespace PixelNestBackend.Utility
             
             return userID;
         }
+        public string GetUserName(int userID)
+        {
+            
+            if (_dataContext != null)
+            {
+                var user = _dataContext.Users.FirstOrDefault(x => x.UserID == userID);
+                if (user != null)
+                {
+                    return user.Username;
+                }
+                
+
+            }
+            return null;
+
+        }
     }
 }

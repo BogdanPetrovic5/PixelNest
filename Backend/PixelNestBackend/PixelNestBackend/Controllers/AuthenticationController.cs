@@ -41,17 +41,31 @@ namespace PixelNestBackend.Controllers
                 user.Password = _passwordEncoder.EncodePassword(registerDto.Password);
                 user.TotalLikes = 0;
                 user.TotalPosts = 0;
-                bool isRegistered = _authenticationRepository.IsRegistered(user);
-                if (!isRegistered)
+
+                bool isEmailRegistered = _authenticationRepository.IsEmailRegistered(user);
+                bool isUsernameRegistered = _authenticationRepository.IsUsernameRegistered(user);
+
+             
+                if (isEmailRegistered && isUsernameRegistered)
                 {
-                    var result = _authenticationRepository.Register(user);
-                    if (result != null)
-                    {
-                        return Ok(new { Message = "User registered successfully." });
-                    }
-                    else BadRequest("User registration failed.");
+                    return BadRequest(new { message = "A user with this email and username is already registered."});
                 }
-                else return BadRequest("User with this email is already registered");
+                else if (isEmailRegistered)
+                {
+                    return BadRequest(new { message = "A user with this email is already registered." });
+                }
+                else if (isUsernameRegistered)
+                {
+                    return BadRequest(new { message = "A user with this username is already registered." });
+                }
+
+                var result = _authenticationRepository.Register(user);
+                if (result != null)
+                {
+                    return Ok(new { Message = "User registered successfully." });
+                }
+                else BadRequest("User registration failed.");
+          
                
             }
 
