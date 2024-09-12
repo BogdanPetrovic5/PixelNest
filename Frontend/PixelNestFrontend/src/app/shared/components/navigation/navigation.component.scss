@@ -17,6 +17,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         height: 90%;
         display: flex;
         flex-direction: column;
+        align-self: center;
         gap: 20px;
         align-items: center;
         .logo{
@@ -35,7 +36,7 @@ $HFONT: "Roboto Condensed", sans-serif;
             justify-content: center;
             align-items: center;
             font-size: 25px;
-            margin-top: 40px;
+            margin-top: 20px;
             .profile-img{
                 width: 70px;
                 height: 70px;
@@ -89,13 +90,13 @@ $HFONT: "Roboto Condensed", sans-serif;
 
 
                 img{
-                    width: 28px;
-                    height:28px;
+                    width: 24px;
+                    height:24px;
                 }
                 p{
                     font-family: $PFONT;
                     color:$PCOLOR;
-                    font-size: 0.7em;
+                    font-size: 0.6em;
                 }
             }
             .nav-sec:hover{
@@ -134,8 +135,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                 font-size: 25px;
               
                 img{
-                    width: 50px;
-                    height: 50px;
+                    width: 40px;
+                    height: 40px;
                 }
                 .sec-description{
                     font-size: 25px;
@@ -143,7 +144,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     flex-direction: column;
                     gap: 3px;
                     h1{
-                        font-size: 0.8em;
+                        font-size: 0.7em;
                         color: $PCOLOR;
                         margin: 0;
                         font-family: $HFONT;

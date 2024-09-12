@@ -25,7 +25,7 @@ export class AuthenticationPageComponent implements OnInit{
   ){}
 
   ngOnInit():void{
-    this._userSession.clearCookies()
+
 
     this.subscriptions.add(
       this._authState.isAuthSuccess$.subscribe(response=>{

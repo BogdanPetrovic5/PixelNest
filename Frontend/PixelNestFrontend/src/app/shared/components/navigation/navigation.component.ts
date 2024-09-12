@@ -1,4 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
@@ -12,7 +15,9 @@ export class NavigationComponent implements OnInit{
   public username:string | null = null
   constructor(
     private _dashboardStateMenagment:DashboardStateService,
-    private _userSessionService:UserSessionService
+    private _userSessionService:UserSessionService,
+    private _authService:AuthenticationService,
+    private _router:Router
   ){
 
   }
@@ -28,5 +33,16 @@ export class NavigationComponent implements OnInit{
 
   changeTab(tabIndex:number){
     this.selectedTab = tabIndex
+  }
+  logout(){
+    let email = this._userSessionService.getEmail();
+    this._authService.logout(email).subscribe(response =>{
+      
+      console.log(response)
+      this._router.navigate(["/Authentication/Login"])
+      this._userSessionService.clearCookies();
+    },(error:HttpErrorResponse)=>{
+      console.log(error)
+    })
   }
 }

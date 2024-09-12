@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "RhTm+lBM31DjgTtoolWyt3tL7dYnQ7JytX3qAYUFgaA=",
+  "Hash": "H8906L0pYtzltcV3AS0FXOaqpwYfygymuUB54VGOnVE=",
   "Source": "PixelNestBackend",
   "BasePath": "_content/PixelNestBackend",
   "Mode": "Default",
@@ -204,6 +204,40 @@
       "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\20\\charles-gaudreault-xXofYCc3hqc-unsplash.jpg"
     },
     {
+      "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\21\\alexander-redl-qo1pyCD02t4-unsplash.jpg",
+      "SourceId": "PixelNestBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "RelativePath": "Photos/Bogdan1/21/alexander-redl-qo1pyCD02t4-unsplash.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\21\\alexander-redl-qo1pyCD02t4-unsplash.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\23\\slika5.jpg",
+      "SourceId": "PixelNestBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "RelativePath": "Photos/Bogdan1/23/slika5.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\23\\slika5.jpg"
+    },
+    {
       "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\3\\rachel-davis-tn2rBnvIl9I-unsplash.jpg",
       "SourceId": "PixelNestBackend",
       "SourceType": "Discovered",
@@ -321,6 +355,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\9\\headway-5QgIuuBxKwM-unsplash.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\MichaelMike\\22\\blog1.jpg",
+      "SourceId": "PixelNestBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "RelativePath": "Photos/MichaelMike/22/blog1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Photos\\MichaelMike\\22\\blog1.jpg"
     }
   ]
 }

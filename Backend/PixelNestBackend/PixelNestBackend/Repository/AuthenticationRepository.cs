@@ -39,6 +39,12 @@ namespace PixelNestBackend.Repository
             return _context.SaveChanges() > 0;
 
         }
+
+        public string ReturnToken(string tokenParameter)
+        {
+            return _tokenGenerator.GenerateToken(tokenParameter);
+        }
+
         public bool IsEmailRegistered(User user)
         {
             return _context.Users.Any(u =>u.Email ==  user.Email);
@@ -63,7 +69,7 @@ namespace PixelNestBackend.Repository
                         {
                             string hashedPassword = reader["Password"].ToString();
                             string username = reader["Username"].ToString();
-                        
+                            string email = reader["Email"].ToString();
                             bool passwordCheck = _passwordEncoder.VerifyPassword(loginDto.Password, hashedPassword);
                             if(passwordCheck)
                             {
@@ -77,6 +83,7 @@ namespace PixelNestBackend.Repository
                                     Response = "Succesfull",
                                     Token = token,
                                     Username = username,
+                                    Email = email,
                                     IsSuccessful = true
                                     
                                 };

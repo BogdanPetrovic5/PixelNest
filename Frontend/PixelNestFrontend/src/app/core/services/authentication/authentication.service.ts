@@ -17,6 +17,12 @@ export class AuthenticationService {
   ngOnInit():void{
     
   }
+    logout(email:string):Observable<any>{
+    let url = `${environment.apiUrl}/api/Authentication/Logout`
+    return this._httpClient.post<any>(url, {
+      Email:email
+    }, {withCredentials:true});
+  }
   register(formGroup:any):Observable<any>{
     const url = `${environment.apiUrl}/api/Authentication/Register`;
     return this._httpClient.post<any>(url, formGroup)
@@ -25,12 +31,13 @@ export class AuthenticationService {
   login(formGroup:any):Observable<any>{
     const url = `${environment.apiUrl}/api/Authentication/Login`;
     return this._httpClient.post<any>(url, formGroup, {withCredentials:true}).pipe(
-      tap(response=> this._storeUsername(response.username))
+      tap(response=> this._storeCredentials(response))
     )
   }
-  
-  private _storeUsername(username:string){
-    console.log(username)
-    this._userSessionService.setUsername(username)
+
+  private _storeCredentials(response:any){
+ 
+    this._userSessionService.setUsername(response.username)
+    this._userSessionService.setEmail(response.email);
   }
 }

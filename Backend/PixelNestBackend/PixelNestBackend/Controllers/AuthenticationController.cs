@@ -71,6 +71,18 @@ namespace PixelNestBackend.Controllers
 
             return BadRequest();
         }
+        [HttpPost("Logout")]
+        public IActionResult Logout([FromBody] LogoutDto logoutDto)
+        {
+            string token = _authenticationRepository.ReturnToken(logoutDto.Email);
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.Now.AddMinutes(-1)
+            };
+            Response.Cookies.Append("jwtToken", token, cookieOptions);
+            return Ok();
+        }
 
         [HttpPost("Login")]
         public IActionResult Login([FromBody]LoginDto loginDto)
@@ -93,8 +105,8 @@ namespace PixelNestBackend.Controllers
                 {
                     Response = response.Response,
                     IsSuccessful = response.IsSuccessful,
-                    Username = response.Username
-                    
+                    Username = response.Username,
+                    Email = response.Email
                 });
 
             }

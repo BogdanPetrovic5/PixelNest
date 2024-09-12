@@ -41,6 +41,14 @@
       "PackagePath": "staticwebassets\\Photos\\Bogdan1\\20\\charles-gaudreault-xXofYCc3hqc-unsplash.jpg"
     },
     {
+      "Id": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\21\\alexander-redl-qo1pyCD02t4-unsplash.jpg",
+      "PackagePath": "staticwebassets\\Photos\\Bogdan1\\21\\alexander-redl-qo1pyCD02t4-unsplash.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\23\\slika5.jpg",
+      "PackagePath": "staticwebassets\\Photos\\Bogdan1\\23\\slika5.jpg"
+    },
+    {
       "Id": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\2\\Altja_jõgi_Lahemaal.jpg",
       "PackagePath": "staticwebassets\\Photos\\Bogdan1\\2\\Altja_jõgi_Lahemaal.jpg"
     },
@@ -71,6 +79,10 @@
     {
       "Id": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\9\\headway-5QgIuuBxKwM-unsplash.jpg",
       "PackagePath": "staticwebassets\\Photos\\Bogdan1\\9\\headway-5QgIuuBxKwM-unsplash.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\MichaelMike\\22\\blog1.jpg",
+      "PackagePath": "staticwebassets\\Photos\\MichaelMike\\22\\blog1.jpg"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.PixelNestBackend.Microsoft.AspNetCore.StaticWebAssets.props",

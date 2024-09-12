@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { PostService } from 'src/app/core/services/post/post.service';
-import { PostDto } from 'src/app/dto/post.dto';
+import { PostDto } from 'src/app/core/dto/post.dto';
 
 @Component({
   selector: 'app-feed',
