@@ -21,13 +21,15 @@ export class NewPostComponent implements OnInit{
   isError:boolean = false;
   newPostForm:boolean = true
   imageDisplay:boolean = false;
+  anim:boolean = false;
+
   objectFit:string = 'cover';
-
-
   selectedFiles:File[] = []
   imageSrc: string | ArrayBuffer | null = null;
   imageUrls: string[] = [];
   description:string = ""
+
+  
   constructor(
     private _dashboardStateMenagment:DashboardStateService,
     private _userSessionService:UserSessionService,
@@ -102,7 +104,11 @@ export class NewPostComponent implements OnInit{
   } 
 
   closeCreateNewPost(){
-    this._dashboardStateMenagment.setIsTabSelected(false)
+
+    this.anim = true;
+    setTimeout(()=>{
+      this._dashboardStateMenagment.setIsTabSelected(false)
+    },500)
   }
 
   hideCaption(){

@@ -37,7 +37,6 @@ export class NavigationComponent implements OnInit{
   logout(){
     let email = this._userSessionService.getEmail();
     this._authService.logout(email).subscribe(response =>{
-      
       console.log(response)
       this._router.navigate(["/Authentication/Login"])
       this._userSessionService.clearCookies();
