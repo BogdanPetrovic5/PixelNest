@@ -1,3 +1,4 @@
+<app-likes *ngIf="isLikesTabOpen" [likes]="likedByUsers"  (closeLikesTab)="closeLikesTab()"></app-likes>
 <div class="container">
     <div class="content">
         <div class="basic-info">
@@ -26,10 +27,10 @@
        </div>
        <div class="post-options">
             <div class="basic">
-                <div class="option" (click)="likePost(post.postID)">
-                    <img *ngIf="!isLiked" src="./assets/images/notLiked.png" alt="">
-                    <img *ngIf="isLiked" src="./assets/images/liked.png" alt="">
-                    <p>{{likedByUsers.length}} Likes</p>
+                <div class="option" >
+                    <img *ngIf="!isLiked" src="./assets/images/notLiked.png" alt="" (click)="likePost(post.postID)">
+                    <img *ngIf="isLiked" src="./assets/images/liked.png" alt="" (click)="likePost(post.postID)">
+                    <p (click)="showLikes()">{{likedByUsers.length}} Likes</p>
                 </div>
                 <div class="option">
                     <img src="./assets/images/comment.png" alt="">

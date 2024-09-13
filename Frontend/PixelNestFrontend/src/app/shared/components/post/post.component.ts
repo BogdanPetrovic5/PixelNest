@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { catchError, finalize, tap, throwError } from 'rxjs';
+import { catchError, finalize, Subscription, tap, throwError } from 'rxjs';
 import { PostService } from 'src/app/core/services/post/post.service';
+import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
 @Component({
@@ -12,6 +13,7 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
   providers:[DatePipe]
 })
 export class PostComponent implements OnInit{
+
   @Input() post:any
   likedByUsers: { username: string }[] = [];
 
@@ -19,11 +21,15 @@ export class PostComponent implements OnInit{
   formattedDate:string = ""
   username:string = ""
 
-  isLiked:boolean | null = null
+  isLiked:boolean | null = null;
+  isLikesTabOpen:boolean = false;
+
+  subscription:Subscription = new Subscription;
   constructor(
     private _datePipe:DatePipe,
     private _postService:PostService,
-    private _userSession:UserSessionService
+    private _userSession:UserSessionService,
+    private _dashboardState:DashboardStateService
   ){
    
   }
@@ -31,10 +37,13 @@ export class PostComponent implements OnInit{
   ngOnInit():void{
     this._initilizeComponent();
   }
-
+  closeLikesTab() {
+    this.isLikesTabOpen = false
+  }
+  showLikes(){
+    this.isLikesTabOpen = true
+  }
   likePost(postID:number){
-    
-    
     this._postService.likePost(postID, this.username).pipe(
       tap((response)=>{
         this._handleLikeArray();
@@ -53,6 +62,15 @@ export class PostComponent implements OnInit{
 
   private _initilizeComponent(){
     this.username = this._userSession.getUsername();
+    this.likedByUsers = this.post.likedByUsers;
+
+    this.subscription.add(
+      this._dashboardState.isLikesTab$.subscribe((response)=>{
+        if(response) this.isLikesTabOpen = response
+        
+      })
+    )
+
     this._formatDate()
     this._checkIsLiked()
   }

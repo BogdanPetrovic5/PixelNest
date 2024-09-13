@@ -8,6 +8,7 @@ import { PostComponent } from './components/post/post.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { LottieSuccessComponent } from './components/lottie-success/lottie-success.component';
 import { LottieFailComponent } from './components/lottie-fail/lottie-fail.component';
+import { LikesComponent } from './components/post/likes/likes.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { LottieFailComponent } from './components/lottie-fail/lottie-fail.compon
     PostComponent,
     AlertComponent,
     LottieSuccessComponent,
-    LottieFailComponent
+    LottieFailComponent,
+    LikesComponent
   ],
   imports: [
     CommonModule,
