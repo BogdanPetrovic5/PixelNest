@@ -4,6 +4,7 @@ using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Security;
 using System.Security.Claims;
 
 namespace PixelNestBackend.Services
@@ -13,19 +14,48 @@ namespace PixelNestBackend.Services
         private readonly IAuthenticationRepository _authenticationRepository;
         private readonly IUserService _userService;
         private readonly PasswordEncoder _passwordEncoder;
+        private readonly TokenGenerator _tokenGenerator;
         public AuthenticationService(
             IAuthenticationRepository authenticationRepository,
             IUserService userService,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+             TokenGenerator tokenGenerator
             ) {
             _authenticationRepository = authenticationRepository;
             _userService = userService;
             _passwordEncoder = passwordEncoder;
+            _tokenGenerator = tokenGenerator;
         }
 
         public LoginResponse Login(LoginDto loginDto)
         {
-            throw new NotImplementedException();
+            var response = _authenticationRepository.Login(loginDto);
+            if (response != null)
+            {
+                if (response.IsSuccessful)
+                {
+                    string email = response.Email;
+                    string token = _tokenGenerator.GenerateToken(email);
+                    return new LoginResponse
+                    {
+                        IsSuccessful = true,
+                        Email = response.Email,
+                        Username = response.Username,
+                        Response = response.Response,
+                        Token = token
+
+                    };
+                }
+                return new LoginResponse { 
+                    IsSuccessful = response.IsSuccessful,
+                    Response = response.Response,
+                };
+            }
+            return new LoginResponse
+            {
+                IsSuccessful = false,
+                Response = "Login failed."
+            };
         }
 
         public RegisterResponse Register(RegisterDto registerDto)

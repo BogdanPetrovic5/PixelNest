@@ -70,19 +70,15 @@ namespace PixelNestBackend.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody]LoginDto loginDto)
         {
-            var response = _authenticationRepository.Login(loginDto);
-            if (response.IsSuccessful)
+            var response = _authenticationService.Login(loginDto);
+            if(response.IsSuccessful == true)
             {
                 var cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
                     Expires = DateTime.Now.AddMinutes(30)
-                    /*    SameSite = SameSiteMode.None,
-       ,
-                        Domain = "localhost",
-                        Path = "/"*/
-                };
              
+                };
                 Response.Cookies.Append("jwtToken", response.Token, cookieOptions);
                 return Ok(new
                 {
@@ -90,10 +86,11 @@ namespace PixelNestBackend.Controllers
                     IsSuccessful = response.IsSuccessful,
                     Username = response.Username,
                     Email = response.Email
-                });
 
+                });
             }
             return NotFound(new { Response = response.Response });
+       
         }
 
     }

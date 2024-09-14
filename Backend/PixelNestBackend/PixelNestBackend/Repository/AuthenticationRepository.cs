@@ -68,59 +68,45 @@ namespace PixelNestBackend.Repository
         {
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
             string emailQuery = "SELECT * FROM Users WHERE Email = @Email";
-            using(SqlConnection connection = new SqlConnection(connectionString))
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(emailQuery, connection))
             {
-                using(SqlCommand command = new SqlCommand(emailQuery, connection))
+                command.Parameters.AddWithValue("@Email", loginDto.Email);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    command.Parameters.AddWithValue("@Email", loginDto.Email);
-                    connection.Open();
-                   using(SqlDataReader reader = command.ExecuteReader())
-                   {
-                        if (reader.Read())
-                        {
-                            string hashedPassword = reader["Password"].ToString();
-                            string username = reader["Username"].ToString();
-                            string email = reader["Email"].ToString();
-                            bool passwordCheck = _passwordEncoder.VerifyPassword(loginDto.Password, hashedPassword);
-                            if(passwordCheck)
-                            {
-                                string token = _tokenGenerator.GenerateToken(loginDto.Email);
-
-
-                                reader.Close();
-                                reader.Dispose();
-                                connection.Close();
-                                return new LoginResponse { 
-                                    Response = "Succesfull",
-                                    Token = token,
-                                    Username = username,
-                                    Email = email,
-                                    IsSuccessful = true
-                                    
-                                };
-
-                            }
-                            reader.Close();
-                            reader.Dispose();
-                            connection.Close();
-                            return new LoginResponse
-                            {
-                                Response = "Password incorrect!",
-                                IsSuccessful = false
-                            };
-                        }
-                        reader.Close();
-                        reader.Dispose();
-                        connection.Close();
+                    if (!reader.Read())
+                    {
                         return new LoginResponse
-                          {
+                        {
                             Response = "Email incorrect!",
                             IsSuccessful = false
-                           
-                          };
+                        };
                     }
+
+                    string hashedPassword = reader["Password"].ToString();
+                    string username = reader["Username"].ToString();
+                    string email = reader["Email"].ToString();
+                    bool passwordCheck = _passwordEncoder.VerifyPassword(loginDto.Password, hashedPassword);
+
+                    return passwordCheck
+                        ? new LoginResponse
+                        {
+                            Response = "Successful",
+                            Username = username,
+                            Email = email,
+                            IsSuccessful = true
+                        }
+                        : new LoginResponse
+                        {
+                            Response = "Password incorrect!",
+                            IsSuccessful = false
+                        };
                 }
             }
         }
+
     }
 }
