@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "H8906L0pYtzltcV3AS0FXOaqpwYfygymuUB54VGOnVE=",
+  "Hash": "zdG8dqx5nGd/SQVR/QgwKhMX8BgHUrIRwy/4RhqPlwQ=",
   "Source": "PixelNestBackend",
   "BasePath": "_content/PixelNestBackend",
   "Mode": "Default",
@@ -236,6 +236,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\23\\slika5.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\24\\Screenshot_2.jpg",
+      "SourceId": "PixelNestBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "RelativePath": "Photos/Bogdan1/24/Screenshot_2.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\24\\Screenshot_2.jpg"
     },
     {
       "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\3\\rachel-davis-tn2rBnvIl9I-unsplash.jpg",

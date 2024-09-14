@@ -6,5 +6,8 @@ namespace PixelNestBackend.Interfaces
     public interface IUserService
     {
         User ConvertRegisterDto(RegisterDto registerDto);
+        bool IsEmailRegistered(User user);
+        bool IsUsernameRegistered(User user);
+
     }
 }

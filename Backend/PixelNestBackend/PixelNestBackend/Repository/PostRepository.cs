@@ -42,13 +42,16 @@ namespace PixelNestBackend.Repository
             string userFolderName = postDto.OwnerUsername;
             string userFolderPath = Path.Combine(_basedFolderPath, userFolderName);
             int userID = _userUtility.GetUserID(postDto.OwnerUsername);
+
             if (!_folderGenerator.CheckIfFolderExists(userFolderPath))
             {
                 _folderGenerator.GenerateNewFolder(userFolderPath);
 
             }
+
             string newPostQuery = "INSERT INTO Posts(UserID, OwnerUsername, PostDescription, TotalComments, TotalLikes, PublishDate) Values(@UserID, @OwnerUsername, @PostDescription, @TotalComments, @TotalLikes, GETDATE())";
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
+
             if(postDto.Photos != null)
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))

@@ -14,11 +14,16 @@ namespace PixelNestBackend.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IAuthenticationRepository _authenticationRepository;
+
+        private readonly IAuthenticationService _authenticationService;
         private readonly IUserService _userService;
         private readonly PasswordEncoder _passwordEncoder;
+
+
         public AuthenticationController(
                 IConfiguration configuration, 
                 IAuthenticationRepository authenticationRepository, 
+                IAuthenticationService authenticationService,
                 IUserService userService,
                 PasswordEncoder passwordEncoder
             )
@@ -27,49 +32,27 @@ namespace PixelNestBackend.Controllers
             _authenticationRepository = authenticationRepository;
             _userService = userService;
             _passwordEncoder = passwordEncoder;
+            _authenticationService = authenticationService;
         }
 
         [HttpPost("Register")]
         public IActionResult Register(RegisterDto registerDto)
         {
-            if (registerDto == null)
+
+            if(registerDto == null)
             {
                 return BadRequest();
             }
-            User user = _userService.ConvertRegisterDto(registerDto);
-            if (user != null) {
-                user.Password = _passwordEncoder.EncodePassword(registerDto.Password);
-                user.TotalLikes = 0;
-                user.TotalPosts = 0;
-
-                bool isEmailRegistered = _authenticationRepository.IsEmailRegistered(user);
-                bool isUsernameRegistered = _authenticationRepository.IsUsernameRegistered(user);
-
-             
-                if (isEmailRegistered && isUsernameRegistered)
+            var response = _authenticationService.Register(registerDto);
+            if (response != null)
+            {
+                if(response.IsSuccess)
                 {
-                    return BadRequest(new { message = "A user with this email and username is already registered."});
+                    return Ok(response);
                 }
-                else if (isEmailRegistered)
-                {
-                    return BadRequest(new { message = "A user with this email is already registered." });
-                }
-                else if (isUsernameRegistered)
-                {
-                    return BadRequest(new { message = "A user with this username is already registered." });
-                }
-
-                var result = _authenticationRepository.Register(user);
-                if (result != null)
-                {
-                    return Ok(new { Message = "User registered successfully." });
-                }
-                else BadRequest("User registration failed.");
-          
-               
+                return BadRequest(response);
             }
-
-            return BadRequest();
+            return BadRequest(new { Message = "No response!" });
         }
         [HttpPost("Logout")]
         public IActionResult Logout([FromBody] LogoutDto logoutDto)

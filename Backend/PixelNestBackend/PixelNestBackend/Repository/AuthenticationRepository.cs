@@ -33,10 +33,21 @@ namespace PixelNestBackend.Repository
         }
         public bool Register(User registerDto)
         {
-            Console.WriteLine(registerDto.Username);
-            _context.Users.Add(registerDto);
-            
-            return _context.SaveChanges() > 0;
+            try
+            {
+                _context.Users.Add(registerDto);
+
+                return _context.SaveChanges() > 0;
+            }catch(SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+           
 
         }
 
