@@ -66,7 +66,7 @@ namespace PixelNestBackend.Repository
         }
         public LoginResponse Login(LoginDto loginDto)
         {
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            string? connectionString = _configuration.GetConnectionString("DefaultConnection");
             string emailQuery = "SELECT * FROM Users WHERE Email = @Email";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -86,9 +86,9 @@ namespace PixelNestBackend.Repository
                         };
                     }
 
-                    string hashedPassword = reader["Password"].ToString();
-                    string username = reader["Username"].ToString();
-                    string email = reader["Email"].ToString();
+                    string? hashedPassword = reader["Password"].ToString();
+                    string? username = reader["Username"].ToString();
+                    string? email = reader["Email"].ToString();
                     bool passwordCheck = _passwordEncoder.VerifyPassword(loginDto.Password, hashedPassword);
 
                     return passwordCheck

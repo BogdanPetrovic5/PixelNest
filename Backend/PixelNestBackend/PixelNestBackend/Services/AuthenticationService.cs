@@ -108,7 +108,7 @@ namespace PixelNestBackend.Services
 
         public string ReturnToken(string email)
         {
-            throw new NotImplementedException();
+            return _authenticationRepository.ReturnToken(email);
         }
     }
 }

@@ -12,26 +12,16 @@ namespace PixelNestBackend.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
-        private readonly IAuthenticationRepository _authenticationRepository;
+
+
 
         private readonly IAuthenticationService _authenticationService;
-        private readonly IUserService _userService;
-        private readonly PasswordEncoder _passwordEncoder;
 
 
         public AuthenticationController(
-                IConfiguration configuration, 
-                IAuthenticationRepository authenticationRepository, 
-                IAuthenticationService authenticationService,
-                IUserService userService,
-                PasswordEncoder passwordEncoder
+                IAuthenticationService authenticationService
             )
-        {
-            _configuration = configuration;
-            _authenticationRepository = authenticationRepository;
-            _userService = userService;
-            _passwordEncoder = passwordEncoder;
+        { 
             _authenticationService = authenticationService;
         }
 
@@ -57,7 +47,7 @@ namespace PixelNestBackend.Controllers
         [HttpPost("Logout")]
         public IActionResult Logout([FromBody] LogoutDto logoutDto)
         {
-            string token = _authenticationRepository.ReturnToken(logoutDto.Email);
+            string token = _authenticationService.ReturnToken(logoutDto.Email);
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
@@ -79,6 +69,7 @@ namespace PixelNestBackend.Controllers
                     Expires = DateTime.Now.AddMinutes(30)
              
                 };
+
                 Response.Cookies.Append("jwtToken", response.Token, cookieOptions);
                 return Ok(new
                 {
