@@ -12,12 +12,7 @@ namespace PixelNestBackend.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-
-
-
         private readonly IAuthenticationService _authenticationService;
-
-
         public AuthenticationController(
                 IAuthenticationService authenticationService
             )

@@ -5,6 +5,7 @@ using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
+using PixelNestBackend.Responses;
 using PixelNestBackend.Services;
 using PixelNestBackend.Utility;
 
@@ -14,45 +15,23 @@ namespace PixelNestBackend.Repository
     {
         private readonly DataContext _dataContext;
         private readonly IConfiguration _configuration;
-        private readonly string _basedFolderPath;
-        private readonly FolderGenerator _folderGenerator;
-        private readonly IPostService _postService;
-        private readonly UserUtility _userUtility;
-        private readonly PostUtility _postUtility;
+  
         public PostRepository(
             DataContext dataContext,
-            FolderGenerator folderGenerator,
-            IConfiguration configuration,
-            IPostService postService,
-            UserUtility userUtility,
-            PostUtility postUtility
+            IConfiguration configuration
             )
         {
             _dataContext = dataContext;
-            _basedFolderPath = Path.Combine("wwwroot", "Photos");
-            _folderGenerator = folderGenerator;
             _configuration = configuration;
-            _postService = postService;
-            _userUtility = userUtility;
-            _postUtility = postUtility;
-
         }
-        public async Task<bool> ShareNewPost(PostDto postDto)
+        public async Task<PostResponse> ShareNewPost(PostDto postDto, string userFolderPath, int userID)
         {
-            string userFolderName = postDto.OwnerUsername;
-            string userFolderPath = Path.Combine(_basedFolderPath, userFolderName);
-            int userID = _userUtility.GetUserID(postDto.OwnerUsername);
-
-            if (!_folderGenerator.CheckIfFolderExists(userFolderPath))
-            {
-                _folderGenerator.GenerateNewFolder(userFolderPath);
-
-            }
+         
 
             string newPostQuery = "INSERT INTO Posts(UserID, OwnerUsername, PostDescription, TotalComments, TotalLikes, PublishDate) Values(@UserID, @OwnerUsername, @PostDescription, @TotalComments, @TotalLikes, GETDATE())";
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-            if(postDto.Photos != null)
+            if(postDto != null)
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -70,19 +49,33 @@ namespace PixelNestBackend.Repository
                         using (SqlCommand getPostIDCommand = new SqlCommand(getPostID, connection))
                         {
                             int postID = Convert.ToInt32(getPostIDCommand.ExecuteScalar());
-                            await _postService.StoreImages(postDto, userFolderPath, postID);
+                            
                             connection.Close();
                             if (i > 0)
                             {
-                                return true;
+                                return new PostResponse {
+                                    IsSuccessfull = true,
+                                    PostID = postID,
+                                    Message = "Post was successfully added"
+                                    
+                                    
+                                };
                             }
-                            else return false;
+                            else return new PostResponse
+                            {
+                                IsSuccessfull = false,
+                                Message = "Post was not added"
+                            };
                         }
                     }
 
                 }
             }
-            return false;
+            return new PostResponse
+            {
+                IsSuccessfull = false,
+                Message = "PostDto is null!"
+            };
         }
         public async Task<ICollection<Post>> GetPosts()
         {
@@ -117,10 +110,9 @@ namespace PixelNestBackend.Repository
           
 
         }
-        public bool LikePost(LikeDto likeDto)
+        public bool LikePost(LikeDto likeDto, bool isLiked, int userID)
         {
-            int userID = _userUtility.GetUserID(likeDto.Username);
-            bool isLiked = _postUtility.FindDuplicate(likeDto.PostID, userID);
+           
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
             string query;
             if (!isLiked)
