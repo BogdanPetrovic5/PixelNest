@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { HttpHeaders} from '@angular/common/http';
 import { FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment.development';
-import { Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { UserSessionService } from '../user-session/user-session.service';
 @Injectable({
   providedIn: 'root'
@@ -31,10 +31,23 @@ export class AuthenticationService {
   login(formGroup:any):Observable<any>{
     const url = `${environment.apiUrl}/api/Authentication/Login`;
     return this._httpClient.post<any>(url, formGroup, {withCredentials:true}).pipe(
-      tap(response=> this._storeCredentials(response))
+      tap(response=> {
+        this._storeCredentials(response)
+        this.isLoggedIn()
+      })
     )
   }
 
+  isLoggedIn():Observable<any>{
+    return this._httpClient.post<{loggedIn:boolean}>(`${environment.apiUrl}/api/Authentication/IsLoggedIn`,{},{withCredentials:true})
+    .pipe(
+      map((response:any) => response.loggedIn)
+      ,
+      catchError((error:HttpErrorResponse)=>{
+        return of(false)
+      })
+    )
+  }
   private _storeCredentials(response:any){
  
     this._userSessionService.setUsername(response.username)

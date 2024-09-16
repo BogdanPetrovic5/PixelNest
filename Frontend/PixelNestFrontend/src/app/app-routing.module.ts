@@ -6,6 +6,8 @@ import { LoginFormComponent } from './features/components/authentication-page/lo
 import { RegisterFormComponent } from './features/components/authentication-page/register-form/register-form.component';
 import { FeedComponent } from './features/components/dashboard/feed/feed.component';
 import { DashboardComponent } from './features/components/dashboard/dashboard.component';
+import { AuthGuard } from './core/guards/auth.guard';
+import { DashboardGuard } from './core/guards/dashboard.guard';
 
 
 const routes: Routes = [
@@ -16,18 +18,20 @@ const routes: Routes = [
     component:AuthenticationPageComponent,
     children: [
       { path: '', redirectTo: 'Register', pathMatch: 'full' },
-      { path: 'Register', component: RegisterFormComponent },
-      { path: 'Login', component: LoginFormComponent }
-    ]
+      { path: 'Register', component: RegisterFormComponent,canActivate:[AuthGuard] },
+      { path: 'Login', component: LoginFormComponent,canActivate:[AuthGuard] }
+    ],
+    canActivate:[AuthGuard]
   },
   {
     path:"Dashboard", 
     component:DashboardComponent,
     children: [
       { path: '', redirectTo: 'Feed', pathMatch: 'full' },
-      { path: 'Feed', component: FeedComponent },
+      { path: 'Feed', component: FeedComponent, canActivate:[DashboardGuard] },
 
-    ]
+    ],
+    canActivate:[DashboardGuard]
   },
   {path:"**", redirectTo:"/Get Started"}
 ];
