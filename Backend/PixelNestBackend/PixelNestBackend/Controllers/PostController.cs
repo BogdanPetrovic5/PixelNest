@@ -67,12 +67,24 @@ namespace PixelNestBackend.Controllers
         [HttpPost("Comment")]
         public IActionResult Comment(CommentDto commentDto)
         {
-            bool result = _postService.Comment(commentDto);
-            if (result)
+            if (!ModelState.IsValid)
             {
-                return Ok(new { message = "Comment successfully added!" });
+                return BadRequest(ModelState);
             }
-            else return BadRequest(new { message = "Comment successfully not added" });
+            
+            try
+            {
+                bool result = _postService.Comment(commentDto);
+                if (result)
+                {
+                    return Ok(new { message = "Comment successfully added!" });
+                }
+                else return BadRequest(new { message = "Comment successfully not added" });
+            }catch(Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+            
         }
     }
 }

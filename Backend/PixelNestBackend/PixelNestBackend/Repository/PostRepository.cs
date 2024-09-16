@@ -15,14 +15,17 @@ namespace PixelNestBackend.Repository
     {
         private readonly DataContext _dataContext;
         private readonly IConfiguration _configuration;
-  
+        private readonly ILogger _logger;
+
         public PostRepository(
             DataContext dataContext,
-            IConfiguration configuration
+            IConfiguration configuration,
+            ILogger logger
             )
         {
             _dataContext = dataContext;
             _configuration = configuration;
+            _logger = logger;
         }
         public async Task<PostResponse> ShareNewPost(PostDto postDto, string userFolderPath, int userID)
         {
@@ -69,7 +72,7 @@ namespace PixelNestBackend.Repository
             }
             catch (SqlException ex)
             {
-             
+                _logger.LogError($"Database error: {ex.Message}");
                 return new PostResponse
                 {
                     IsSuccessfull = false,
@@ -78,7 +81,7 @@ namespace PixelNestBackend.Repository
             }
             catch (Exception ex)
             {
-                // Log general exceptions (e.g. _logger.LogError(ex, "An unexpected error occurred"))
+                _logger.LogError($"General error: {ex.Message}");
                 return new PostResponse
                 {
                     IsSuccessfull = false,
@@ -89,31 +92,46 @@ namespace PixelNestBackend.Repository
 
         public async Task<ICollection<Post>> GetPosts()
         {
-            var posts = await _dataContext.Posts.Select(a => new Post
+            try
             {
-                PostDescription = a.PostDescription,
-                OwnerUsername = a.OwnerUsername,
-                TotalComments = a.TotalComments,
-                TotalLikes = a.TotalLikes,
-                PostID = a.PostID,
-                PublishDate = a.PublishDate,
-                ImagePaths = a.ImagePaths,
-                Comments = a.Comments.Select(c => new Comment
+                var posts = await _dataContext.Posts.Select(a => new Post
                 {
-                    CommentText = c.CommentText,
-                    TotalLikes = c.TotalLikes,
-                    UserID = c.UserID,
-                    Username = c.Username
-                }).ToList(),
-                LikedByUsers = a.LikedPosts.Select(l => new LikeDto {
-                    Username = l.Username
+                    PostDescription = a.PostDescription,
+                    OwnerUsername = a.OwnerUsername,
+                    TotalComments = a.TotalComments,
+                    TotalLikes = a.TotalLikes,
+                    PostID = a.PostID,
+                    PublishDate = a.PublishDate,
+                    ImagePaths = a.ImagePaths,
+                    Comments = a.Comments.Select(c => new Comment
+                    {
+                        CommentText = c.CommentText,
+                        TotalLikes = c.TotalLikes,
+                        UserID = c.UserID,
+                        Username = c.Username
+                    }).ToList(),
+                    LikedByUsers = a.LikedPosts.Select(l => new LikeDto
+                    {
+                        Username = l.Username
 
-                }).ToList()
+                    }).ToList()
 
 
-            }).ToListAsync();
+                }).ToListAsync();
+                _logger.LogInformation("Posts retrieved successfully.");
+                return posts;
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogError($"Database error while retrieving posts: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError($"An unexpected error occurred: {ex.Message}");
+                throw; 
+            }
 
-            return posts;
         }
         public bool LikePost(LikeDto likeDto, bool isLiked, int userID)
         {
@@ -149,12 +167,12 @@ namespace PixelNestBackend.Repository
             }catch(SqlException ex)
             {
 
-                Console.WriteLine("Sql related error: ", ex.Message);
+                _logger.LogError($"Database related error: {ex.Message}");
                 return false;
             }
             catch(Exception ex)
             {
-                Console.WriteLine("General error: ", ex.Message);
+                _logger.LogError($"General error: {ex.Message}");
                 return false;
             }
            
@@ -172,11 +190,11 @@ namespace PixelNestBackend.Repository
                        
             }catch(SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError($"Database related error: {ex.Message}");
                 return false;
             }catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError($"General error: {ex.Message}");
                 return false;
             }
         }

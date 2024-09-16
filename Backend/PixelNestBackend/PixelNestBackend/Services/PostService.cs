@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
@@ -18,14 +19,16 @@ namespace PixelNestBackend.Services
         private readonly IPostRepository _postRepository;
         public readonly IFileUpload _fileUpload;
         private readonly string _basedFolderPath;
-       
+        private readonly ILogger _ILogger;
+
         public PostService(
-            
+
             UserUtility userUtility,
             PostUtility postUtility,
             FolderGenerator folderGenerator,
             IPostRepository postRepository,
-            IFileUpload fileUpload
+            IFileUpload fileUpload,
+            ILogger logger
             )
         {
            
@@ -35,6 +38,7 @@ namespace PixelNestBackend.Services
             _folderGenerator = folderGenerator;
             _postRepository = postRepository;
             _fileUpload = fileUpload;
+            _ILogger = logger;
         }
 
         public async Task<ICollection<Post>> GetPosts()
@@ -97,16 +101,29 @@ namespace PixelNestBackend.Services
 
         public bool Comment(CommentDto commentDto)
         {
-            int userID = _userUtility.GetUserID(commentDto.Username);
-            Comment comment = new Comment
+            try
             {
-                UserID = userID,
-                CommentText = commentDto.CommentText,
-                Username = commentDto.Username,
-                PostID = commentDto.PostID,
-                TotalLikes = 0
-            };
-            return _postRepository.Comment(comment);
+                int userID = _userUtility.GetUserID(commentDto.Username);
+
+                Comment comment = new Comment
+                {
+                    UserID = userID,
+                    CommentText = commentDto.CommentText,
+                    Username = commentDto.Username,
+                    PostID = commentDto.PostID,
+                    TotalLikes = 0
+                };
+                return _postRepository.Comment(comment);
+            }catch(Exception ex)
+            {
+                _ILogger.LogError($"General error: {ex.Message}");
+                return false;
+            }catch(SqlException ex)
+            {
+                _ILogger.LogError($"Database error: {ex.Message}");
+                return false;
+            }
+           
         }
 
 
