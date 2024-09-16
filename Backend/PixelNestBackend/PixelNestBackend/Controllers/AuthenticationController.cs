@@ -1,4 +1,5 @@
 ﻿using CarWebShop.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
@@ -16,7 +17,7 @@ namespace PixelNestBackend.Controllers
         public AuthenticationController(
                 IAuthenticationService authenticationService
             )
-        { 
+        {
             _authenticationService = authenticationService;
         }
 
@@ -24,14 +25,14 @@ namespace PixelNestBackend.Controllers
         public IActionResult Register(RegisterDto registerDto)
         {
 
-            if(registerDto == null)
+            if (registerDto == null)
             {
                 return BadRequest();
             }
             var response = _authenticationService.Register(registerDto);
             if (response != null)
             {
-                if(response.IsSuccess)
+                if (response.IsSuccess)
                 {
                     return Ok(response);
                 }
@@ -53,16 +54,16 @@ namespace PixelNestBackend.Controllers
         }
 
         [HttpPost("Login")]
-        public IActionResult Login([FromBody]LoginDto loginDto)
+        public IActionResult Login([FromBody] LoginDto loginDto)
         {
             var response = _authenticationService.Login(loginDto);
-            if(response.IsSuccessful == true)
+            if (response.IsSuccessful == true)
             {
                 var cookieOptions = new CookieOptions
                 {
                     HttpOnly = true,
                     Expires = DateTime.Now.AddMinutes(30)
-             
+
                 };
 
                 Response.Cookies.Append("jwtToken", response.Token, cookieOptions);
@@ -76,7 +77,13 @@ namespace PixelNestBackend.Controllers
                 });
             }
             return NotFound(new { Response = response.Response });
-       
+
+        }
+        [Authorize]
+        [HttpPost("IsLoggedIn")]
+        public IActionResult IsLoggedIn()
+        {
+            return Ok(new {loggedIn = true});
         }
 
     }

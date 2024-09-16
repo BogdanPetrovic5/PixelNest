@@ -26,57 +26,67 @@ namespace PixelNestBackend.Repository
         }
         public async Task<PostResponse> ShareNewPost(PostDto postDto, string userFolderPath, int userID)
         {
-         
+            if (postDto == null)
+            {
+                return new PostResponse
+                {
+                    IsSuccessfull = false,
+                    Message = "PostDto is null!"
+                };
+            }
 
-            string newPostQuery = "INSERT INTO Posts(UserID, OwnerUsername, PostDescription, TotalComments, TotalLikes, PublishDate) Values(@UserID, @OwnerUsername, @PostDescription, @TotalComments, @TotalLikes, GETDATE())";
+            string newPostQuery = @"INSERT INTO Posts(UserID, OwnerUsername, PostDescription, TotalComments, TotalLikes, PublishDate) 
+                            VALUES(@UserID, @OwnerUsername, @PostDescription, @TotalComments, @TotalLikes, GETDATE());
+                            SELECT CAST(SCOPE_IDENTITY() as int)";
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-            if(postDto != null)
+            try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
+                    await connection.OpenAsync();
+
                     using (SqlCommand command = new SqlCommand(newPostQuery, connection))
                     {
+                      
                         command.Parameters.AddWithValue("@UserID", userID);
                         command.Parameters.AddWithValue("@OwnerUsername", postDto.OwnerUsername);
                         command.Parameters.AddWithValue("@PostDescription", postDto.PostDescription);
                         command.Parameters.AddWithValue("@TotalComments", 0);
                         command.Parameters.AddWithValue("@TotalLikes", 0);
-                        connection.Open();
-                        int i = command.ExecuteNonQuery();
 
-                        string getPostID = "SELECT @@IDENTITY";
-                        using (SqlCommand getPostIDCommand = new SqlCommand(getPostID, connection))
+                      
+                        int postID = (int)await command.ExecuteScalarAsync();
+
+                        return new PostResponse
                         {
-                            int postID = Convert.ToInt32(getPostIDCommand.ExecuteScalar());
-                            
-                            connection.Close();
-                            if (i > 0)
-                            {
-                                return new PostResponse {
-                                    IsSuccessfull = true,
-                                    PostID = postID,
-                                    Message = "Post was successfully added"
-                                    
-                                    
-                                };
-                            }
-                            else return new PostResponse
-                            {
-                                IsSuccessfull = false,
-                                Message = "Post was not added"
-                            };
-                        }
+                            IsSuccessfull = true,
+                            PostID = postID,
+                            Message = "Post was successfully added"
+                        };
                     }
-
                 }
             }
-            return new PostResponse
+            catch (SqlException ex)
             {
-                IsSuccessfull = false,
-                Message = "PostDto is null!"
-            };
+             
+                return new PostResponse
+                {
+                    IsSuccessfull = false,
+                    Message = $"Database error: {ex.Message}"
+                };
+            }
+            catch (Exception ex)
+            {
+                // Log general exceptions (e.g. _logger.LogError(ex, "An unexpected error occurred"))
+                return new PostResponse
+                {
+                    IsSuccessfull = false,
+                    Message = $"An unexpected error occurred: {ex.Message}"
+                };
+            }
         }
+
         public async Task<ICollection<Post>> GetPosts()
         {
             var posts = await _dataContext.Posts.Select(a => new Post
@@ -104,11 +114,6 @@ namespace PixelNestBackend.Repository
             }).ToListAsync();
 
             return posts;
-
-          
-
-          
-
         }
         public bool LikePost(LikeDto likeDto, bool isLiked, int userID)
         {
