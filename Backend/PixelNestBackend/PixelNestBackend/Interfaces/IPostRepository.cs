@@ -11,6 +11,7 @@ namespace PixelNestBackend.Interfaces
         Task<ICollection<Post>> GetPosts();
 
         bool LikePost(LikeDto likeDto, bool isLiked, int userID);
+        bool Comment(Comment comment);
 
     }
 }

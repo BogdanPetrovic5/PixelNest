@@ -95,7 +95,19 @@ namespace PixelNestBackend.Services
             }; 
         }
 
-      
+        public bool Comment(CommentDto commentDto)
+        {
+            int userID = _userUtility.GetUserID(commentDto.Username);
+            Comment comment = new Comment
+            {
+                UserID = userID,
+                CommentText = commentDto.CommentText,
+                Username = commentDto.Username,
+                PostID = commentDto.PostID,
+                TotalLikes = 0
+            };
+            return _postRepository.Comment(comment);
+        }
 
 
     }

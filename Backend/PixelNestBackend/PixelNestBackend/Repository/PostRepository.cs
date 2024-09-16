@@ -161,5 +161,24 @@ namespace PixelNestBackend.Repository
 
 
         } 
+        public bool Comment(Comment comment)
+        {
+            try
+            {
+                _dataContext.Comments.Add(comment);
+                int result = _dataContext.SaveChanges();
+                if (result > 0) return true;
+                return false;
+                       
+            }catch(SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
     }
 }

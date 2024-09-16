@@ -12,5 +12,6 @@ namespace PixelNestBackend.Interfaces
         bool IsUsernameRegistered(User registerDto);
         string ReturnToken(string email);
         LoginResponse Login(LoginDto loginDto);
+
     }
 }
