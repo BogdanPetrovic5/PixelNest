@@ -85,3 +85,5 @@ Once registered and logged in, users have access to several features (with more 
 
 ### Planned features
 - Instagram-like Stories: One of the key features to be implemented will be the ability for users to post stories, similar to Instagram’s story functionality.
+
+## Backend
