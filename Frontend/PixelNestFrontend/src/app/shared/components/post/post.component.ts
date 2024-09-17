@@ -23,6 +23,7 @@ export class PostComponent implements OnInit{
 
   isLiked:boolean | null = null;
   isLikesTabOpen:boolean = false;
+  areCommentsOpened:boolean = false;
 
   subscription:Subscription = new Subscription;
   constructor(
@@ -42,6 +43,9 @@ export class PostComponent implements OnInit{
   }
   showLikes(){
     this.isLikesTabOpen = true
+  }
+  showComments(){
+    this.areCommentsOpened = true;
   }
   likePost(postID:number){
     this._postService.likePost(postID, this.username).pipe(

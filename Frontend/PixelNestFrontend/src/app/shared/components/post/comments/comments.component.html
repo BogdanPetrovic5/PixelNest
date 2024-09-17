@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="wrap">
+        <div class="header">
+          <h1>Comments</h1>
+        </div>
+        <div class="usernames">
+            <div class="username" *ngFor="let username of comments">
+               <img src="./assets/images/user.png" alt="">
+               <div class="comment-details">
+                    <h1>{{username.username}}</h1>
+                    <p>{{username.commentText}}</p>
+               </div>
+            </div>
+        </div>
+        <div class="footer">
+            <h1 >Close</h1>
+        </div>
+    </div>
+</div>
