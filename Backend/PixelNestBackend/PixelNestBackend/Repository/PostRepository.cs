@@ -15,12 +15,12 @@ namespace PixelNestBackend.Repository
     {
         private readonly DataContext _dataContext;
         private readonly IConfiguration _configuration;
-        private readonly ILogger _logger;
+        private readonly ILogger<PostRepository> _logger;
 
         public PostRepository(
             DataContext dataContext,
             IConfiguration configuration,
-            ILogger logger
+            ILogger<PostRepository> logger
             )
         {
             _dataContext = dataContext;

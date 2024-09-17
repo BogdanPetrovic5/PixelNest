@@ -30,15 +30,16 @@ namespace PixelNestBackend.Controllers
                 return BadRequest();
             }
             var response = _authenticationService.Register(registerDto);
-            if (response != null)
+            if (response == null)
             {
-                if (response.IsSuccess)
-                {
-                    return Ok(response);
-                }
-                return BadRequest(response);
+                return NotFound();
             }
-            return BadRequest(new { Message = "No response!" });
+            if (response.IsSuccess == false) 
+                return NotFound(new { message = response.Message });
+           
+            return Ok(new { message = response.Message });
+            
+            
         }
         [HttpPost("Logout")]
         public IActionResult Logout([FromBody] LogoutDto logoutDto)
@@ -57,26 +58,28 @@ namespace PixelNestBackend.Controllers
         public IActionResult Login([FromBody] LoginDto loginDto)
         {
             var response = _authenticationService.Login(loginDto);
-            if (response.IsSuccessful == true)
+            if(response == null || response.IsSuccessful == false)
             {
-                var cookieOptions = new CookieOptions
-                {
-                    HttpOnly = true,
-                    Expires = DateTime.Now.AddMinutes(30)
-
-                };
-
-                Response.Cookies.Append("jwtToken", response.Token, cookieOptions);
-                return Ok(new
-                {
-                    Response = response.Response,
-                    IsSuccessful = response.IsSuccessful,
-                    Username = response.Username,
-                    Email = response.Email
-
-                });
+                return NotFound();
             }
-            return NotFound(new { Response = response.Response });
+          
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.Now.AddMinutes(30)
+
+            };
+
+            Response.Cookies.Append("jwtToken", response.Token, cookieOptions);
+            return Ok(new
+            {
+                Response = response.Response,
+                IsSuccessful = response.IsSuccessful,
+                Username = response.Username,
+                Email = response.Email
+
+            });
+          
 
         }
         [Authorize]

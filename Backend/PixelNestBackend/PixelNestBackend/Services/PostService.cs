@@ -19,7 +19,7 @@ namespace PixelNestBackend.Services
         private readonly IPostRepository _postRepository;
         public readonly IFileUpload _fileUpload;
         private readonly string _basedFolderPath;
-        private readonly ILogger _ILogger;
+        private readonly ILogger<PostService> _ILogger;
 
         public PostService(
 
@@ -28,7 +28,7 @@ namespace PixelNestBackend.Services
             FolderGenerator folderGenerator,
             IPostRepository postRepository,
             IFileUpload fileUpload,
-            ILogger logger
+            ILogger<PostService> logger
             )
         {
            
@@ -50,6 +50,7 @@ namespace PixelNestBackend.Services
         public bool LikePost(LikeDto likeDto)
         {
             int userID = _userUtility.GetUserID(likeDto.Username);
+            if (userID < 0) return false;
             bool isLiked = _postUtility.FindDuplicate(likeDto.PostID, userID);
             
             bool result = _postRepository.LikePost(likeDto, isLiked, userID);
@@ -114,13 +115,15 @@ namespace PixelNestBackend.Services
                     TotalLikes = 0
                 };
                 return _postRepository.Comment(comment);
-            }catch(Exception ex)
-            {
-                _ILogger.LogError($"General error: {ex.Message}");
-                return false;
-            }catch(SqlException ex)
+            }
+            catch (SqlException ex)
             {
                 _ILogger.LogError($"Database error: {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _ILogger.LogError($"General error: {ex.Message}");
                 return false;
             }
            

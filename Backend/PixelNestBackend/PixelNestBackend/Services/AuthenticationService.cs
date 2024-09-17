@@ -58,39 +58,29 @@ namespace PixelNestBackend.Services
             };
         }
 
-        public RegisterResponse Register(RegisterDto registerDto)
+        public RegisterResponse? Register(RegisterDto registerDto)
         {
             User user = _userService.ConvertRegisterDto(registerDto);
             if(user == null)
             {
-                return new RegisterResponse
-                {
-                    IsSuccess = false,
-                    Message = "User is null!"
-
-                };
+         
+                return null;
             }
             user.Password = _passwordEncoder.EncodePassword(registerDto.Password);
             user.TotalLikes = 0;
             user.TotalPosts = 0;
-            bool isEmailRegistered = _authenticationRepository.IsEmailRegistered(user);
-            bool isUsernameRegistered = _authenticationRepository.IsUsernameRegistered(user);
 
+            var validateUser = _validateUser(user);
+          
+            if (validateUser == null) return null;
+ 
 
-            if (isEmailRegistered && isUsernameRegistered)
+            if (!validateUser.IsSuccess)
             {
-                return new RegisterResponse { Message = "A user with this email and username is already registered.", IsSuccess = false };
+                return validateUser;
             }
-            else if (isEmailRegistered)
-            {
-                return new RegisterResponse { Message = "A user with this email is already registered.", IsSuccess = false };
-            }
-            else if (isUsernameRegistered)
-            {
-                return new RegisterResponse { Message = "A user with this username is already registered.", IsSuccess = false } ;
-            }
-
             bool result = _authenticationRepository.Register(user);
+           
             if(result)
             {
                 return new RegisterResponse
@@ -109,6 +99,27 @@ namespace PixelNestBackend.Services
         public string ReturnToken(string email)
         {
             return _authenticationRepository.ReturnToken(email);
+        }
+
+        private RegisterResponse? _validateUser(User user)
+        {
+            bool isEmailRegistered = _authenticationRepository.IsEmailRegistered(user);
+            bool isUsernameRegistered = _authenticationRepository.IsUsernameRegistered(user);
+
+
+            if (isEmailRegistered && isUsernameRegistered)
+            {
+                return new RegisterResponse { Message = "A user with this email and username is already registered.", IsSuccess = false };
+            }
+            else if (isEmailRegistered)
+            {
+                return new RegisterResponse { Message = "A user with this email is already registered.", IsSuccess = false };
+            }
+            else if (isUsernameRegistered)
+            {
+                return new RegisterResponse { Message = "A user with this username is already registered.", IsSuccess = false };
+            }
+            return new RegisterResponse { Message = "User is valid!", IsSuccess = true };
         }
     }
 }

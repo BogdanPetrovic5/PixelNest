@@ -27,6 +27,7 @@ namespace PixelNestBackend.Controllers
             {
 
                 var result = await _postService.ShareNewPost(postDto);
+
                 if (result.IsSuccessfull)
                 {
                     return Ok(new { message = result.Message });
@@ -58,11 +59,15 @@ namespace PixelNestBackend.Controllers
         [HttpPost("LikePost")]
         public IActionResult LikePost(LikeDto likeDto)
         {
+            if(likeDto == null)
+            {
+                return BadRequest();
+            }
             bool result = _postService.LikePost(likeDto);
             if (result)
             {
                 return Ok();
-            } else return BadRequest();
+            } else return NotFound();
         }
         [HttpPost("Comment")]
         public IActionResult Comment(CommentDto commentDto)
