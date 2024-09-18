@@ -10,17 +10,21 @@ export class UserSessionService {
   clearCookies(){
     this._cookieService.deleteAll('/');
   }
-  getUsername(){
-    return this._cookieService.get("username");
-  }
-  getEmail(){
-    return this._cookieService.get("email");
-  }
-  setUsername(username:string){
-    this._cookieService.set("username", username, {path:"/"});
-  }
-  setEmail(email:string){
-    this._cookieService.set("email", email, {path:"/"});
+
+  getFromCookie(key:string){
+    return this._cookieService.get(key);
   }
 
+  setToCookie(key:any, value:any){
+    this._cookieService.set(key, value, {path:"/"});
+  }
+
+  setToLocalStorage(key:string, value:any){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+  getFromLocalStorage(key:string){
+    let value = localStorage.getItem(key)
+    if(value != null) return JSON.parse(value);
+    return null;
+  }
 }

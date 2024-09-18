@@ -50,7 +50,7 @@ export class AuthenticationService {
   }
   private _storeCredentials(response:any){
  
-    this._userSessionService.setUsername(response.username)
-    this._userSessionService.setEmail(response.email);
+    this._userSessionService.setToCookie("username",response.username)
+    this._userSessionService.setToCookie("email", response.email);
   }
 }

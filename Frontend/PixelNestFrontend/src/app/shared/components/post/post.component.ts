@@ -20,7 +20,7 @@ export class PostComponent implements OnInit{
 
   formattedDate:string = ""
   username:string = ""
-
+  
   isLiked:boolean | null = null;
   isLikesTabOpen:boolean = false;
   areCommentsOpened:boolean = false;
@@ -41,11 +41,15 @@ export class PostComponent implements OnInit{
   closeLikesTab() {
     this.isLikesTabOpen = false
   }
+  closeCommentsTab(){
+    this.areCommentsOpened = false;
+  }
   showLikes(){
     this.isLikesTabOpen = true
   }
   showComments(){
     this.areCommentsOpened = true;
+    this._userSession.setToLocalStorage("postID",this.post.postID);
   }
   likePost(postID:number){
     this._postService.likePost(postID, this.username).pipe(
@@ -57,15 +61,12 @@ export class PostComponent implements OnInit{
       catchError((error:HttpErrorResponse)=>{
         console.log(error)
         return throwError(error);
-      }),
-      finalize(()=>{
-        console.log("End")
       })
     ).subscribe()
   }
 
   private _initilizeComponent(){
-    this.username = this._userSession.getUsername();
+    this.username = this._userSession.getFromCookie("username");
     this.likedByUsers = this.post.likedByUsers;
 
     this.subscription.add(

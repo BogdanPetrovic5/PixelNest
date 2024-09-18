@@ -1,5 +1,5 @@
 <app-likes *ngIf="isLikesTabOpen" [likes]="likedByUsers"  (closeLikesTab)="closeLikesTab()"></app-likes>
-<app-comments *ngIf="areCommentsOpened" [comments]="post.comments"></app-comments>
+<app-comments *ngIf="areCommentsOpened" [comments]="post.comments" (closeCommentsTab)="closeCommentsTab()"></app-comments>
 <div class="container">
     <div class="content">
         <div class="basic-info">

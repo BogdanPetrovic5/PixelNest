@@ -1,19 +1,31 @@
 <div class="container">
     <div class="wrap">
         <div class="header">
-          <h1>Comments</h1>
+            <img src="./assets/images/back.png" alt="" (click)="close()">
+            <div class="title">
+                <h1>Comments</h1>
+            </div>
+            
+            <div class="helper">
+
+            </div>
         </div>
         <div class="usernames">
             <div class="username" *ngFor="let username of comments">
-               <img src="./assets/images/user.png" alt="">
-               <div class="comment-details">
-                    <h1>{{username.username}}</h1>
-                    <p>{{username.commentText}}</p>
+               <div class="comment">
+                    <img src="./assets/images/user.png" alt="">
+                    <div class="comment-details">
+                            <h1>{{username.username}}</h1>
+                            <p>{{username.commentText}}</p>
+                    </div>
                </div>
+               
+               <img class="like" src="./assets/images/notLiked.png" alt="">
             </div>
         </div>
-        <div class="footer">
-            <h1 >Close</h1>
+        <div class="new-comment">
+            <input type="text" [(ngModel)]="commentText" placeholder="Comment here..." (keydown.enter)="addComment()">
         </div>
+        
     </div>
 </div>

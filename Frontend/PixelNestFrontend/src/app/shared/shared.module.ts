@@ -10,6 +10,7 @@ import { LottieSuccessComponent } from './components/lottie-success/lottie-succe
 import { LottieFailComponent } from './components/lottie-fail/lottie-fail.component';
 import { LikesComponent } from './components/post/likes/likes.component';
 import { CommentsComponent } from './components/post/comments/comments.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,11 +21,12 @@ import { CommentsComponent } from './components/post/comments/comments.component
     LottieSuccessComponent,
     LottieFailComponent,
     LikesComponent,
-    CommentsComponent
+    CommentsComponent,
+    
   ],
   imports: [
     CommonModule,
-    
+    FormsModule
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

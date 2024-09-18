@@ -44,7 +44,7 @@ export class NewPostComponent implements OnInit{
  
   sharePost(){
     const text = this._takeText()
-    const username = this._userSessionService.getUsername();
+    const username = this._userSessionService.getFromCookie("username");
     const formData = this._appendToForm(text, username)
 
     this._postService.createNewPost(formData).subscribe((response) =>{

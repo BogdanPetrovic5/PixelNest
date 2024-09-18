@@ -25,7 +25,7 @@ export class NavigationComponent implements OnInit{
     this.initilize()
   }
   initilize(){
-    this.username = this._userSessionService.getUsername()
+    this.username = this._userSessionService.getFromCookie("username")
   }
   openNewPostDialog(){
     this._dashboardStateMenagment.setIsTabSelected(true);
@@ -35,7 +35,7 @@ export class NavigationComponent implements OnInit{
     this.selectedTab = tabIndex
   }
   logout(){
-    let email = this._userSessionService.getEmail();
+    let email = this._userSessionService.getFromCookie("email");
     this._authService.logout(email).subscribe(response =>{
       console.log(response)
       this._router.navigate(["/Authentication/Login"])
