@@ -105,10 +105,12 @@ namespace PixelNestBackend.Repository
                     ImagePaths = a.ImagePaths,
                     Comments = a.Comments.Select(c => new Comment
                     {
+                        CommentID = c.CommentID,
                         CommentText = c.CommentText,
                         TotalLikes = c.TotalLikes,
                         UserID = c.UserID,
-                        Username = c.Username
+                        Username = c.Username,
+                        PostID = c.PostID
                     }).ToList(),
                     LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                     {

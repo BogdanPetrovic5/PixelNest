@@ -116,7 +116,7 @@ namespace PixelNestBackend.Repository
                             {
                                 return new LoginResponse
                                 {
-                                    Response = "Email incorrect!",
+                                    Response = "Credentials incorrect!",
                                     IsSuccessful = false
                                 };
                             }
@@ -136,7 +136,7 @@ namespace PixelNestBackend.Repository
                                 }
                                 : new LoginResponse
                                 {
-                                    Response = "Password incorrect!",
+                                    Response = "Credentials incorrect!",
                                     IsSuccessful = false
                                 };
                         }

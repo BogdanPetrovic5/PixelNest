@@ -22,6 +22,7 @@ namespace PixelNestBackend.Models
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<LikedPosts> LikedPosts { get; set;}
+        public ICollection<LikedComments> LikedComments { get; set; }
         
     }
 }

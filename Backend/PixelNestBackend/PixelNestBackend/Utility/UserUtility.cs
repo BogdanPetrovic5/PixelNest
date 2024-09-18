@@ -13,7 +13,7 @@ namespace PixelNestBackend.Utility
         }
         public int GetUserID(string username)
         {
-            int userID = 0;
+            int userID = -1;
             if (_dataContext != null)
             {
                 var user =_dataContext.Users.FirstOrDefault(x => x.Username == username);
