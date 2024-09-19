@@ -90,11 +90,12 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public async Task<ICollection<Post>> GetPosts()
+        public async Task<ICollection<ResponsePostDto>> GetPosts()
         {
             try
             {
-                var posts = await _dataContext.Posts.Select(a => new Post
+             var posts = await _dataContext.Posts
+                .Select(a => new ResponsePostDto
                 {
                     PostDescription = a.PostDescription,
                     OwnerUsername = a.OwnerUsername,
@@ -103,23 +104,39 @@ namespace PixelNestBackend.Repository
                     PostID = a.PostID,
                     PublishDate = a.PublishDate,
                     ImagePaths = a.ImagePaths,
-                    Comments = a.Comments.Select(c => new Comment
+
+
+                    AllComments = a.Comments != null ? a.Comments.Where(c => c.ParentCommentID == null).Select(c => new ResponseCommentDto
                     {
                         CommentID = c.CommentID,
                         CommentText = c.CommentText,
                         TotalLikes = c.TotalLikes,
                         UserID = c.UserID,
                         Username = c.Username,
-                        PostID = c.PostID
-                    }).ToList(),
+                        PostID = c.PostID,
+                        ParentCommentID = c.ParentCommentID,
+                        LikedByUsers = c.LikedComments != null
+                        ? c.LikedComments.Select(l => new LikeCommentDto
+                        {
+                            Username = l.Username
+                        }).ToList()
+                        : new List<LikeCommentDto>(),
+                        Replies = _GetReplies(c.CommentID, a.Comments)
+                        
+
+                    }).ToList() : new List<ResponseCommentDto>(),
+
+                  
                     LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                     {
                         Username = l.Username
 
                     }).ToList()
 
+                })
+                .AsSplitQuery() 
+                .ToListAsync();
 
-                }).ToListAsync();
                 _logger.LogInformation("Posts retrieved successfully.");
                 return posts;
             }
@@ -196,9 +213,34 @@ namespace PixelNestBackend.Repository
                 return false;
             }catch(Exception ex)
             {
-                _logger.LogError($"General error: {ex.Message}");
+                _logger.LogError($"General error in repo: {ex.Message}");
                 return false;
             }
+        }
+    
+        private static List<ResponseCommentDto> _GetReplies(int commentID, ICollection<Comment> allComments)
+        {
+            return allComments != null ? allComments.Where(reply => reply.ParentCommentID == commentID)
+                .Select(reply => new ResponseCommentDto
+                {
+                    CommentID = reply.CommentID,
+                    CommentText = reply.CommentText,
+                    TotalLikes = reply.TotalLikes,
+                    UserID = reply.UserID,
+                    Username = reply.Username,
+                    PostID = reply.PostID,
+                    ParentCommentID = reply.ParentCommentID,
+                    LikedByUsers = reply.LikedComments != null
+                        ? reply.LikedComments.Select(l => new LikeCommentDto
+                        {
+                            Username = l.Username
+                        }).ToList()
+                        : new List<LikeCommentDto>(),
+
+
+                    Replies = _GetReplies(reply.CommentID, allComments)
+
+                }).ToList() : new List<ResponseCommentDto>();
         }
     }
 }

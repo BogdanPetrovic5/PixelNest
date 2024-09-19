@@ -34,11 +34,11 @@ namespace PixelNestBackend.Repository
             _tokenGenerator = tokenGenerator;
             _logger = logger;
         }
-        public bool Register(User registerDto)
+        public bool Register(User user)
         {
             try
             {
-                _context.Users.Add(registerDto);
+                _context.Users.Add(user);
 
                 return _context.SaveChanges() > 0;
             }catch(SqlException ex)

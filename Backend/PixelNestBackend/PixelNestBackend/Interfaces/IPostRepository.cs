@@ -8,7 +8,7 @@ namespace PixelNestBackend.Interfaces
     public interface IPostRepository
     {
         Task<PostResponse> ShareNewPost(PostDto postDto, string userFolderPath, int userID);
-        Task<ICollection<Post>> GetPosts();
+        Task<ICollection<ResponsePostDto>> GetPosts();
 
         bool LikePost(LikeDto likeDto, bool isLiked, int userID);
         bool Comment(Comment comment);

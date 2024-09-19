@@ -41,14 +41,19 @@ namespace PixelNestBackend.Controllers
           
         }
         [HttpGet("GetPosts")]
-        public async Task<IActionResult> GetPosts(int page = 1, int maximumPosts = 16){
+        public async Task<IActionResult> GetPosts(int page = 1, int maximumPosts = 5){
             try
             {
-                ICollection<Post> posts;
+                ICollection<ResponsePostDto> posts;
                 posts = await _postService.GetPosts();
                 if(posts == null && !posts.Any()) return NotFound(new { message = "No posts found"});
                 var result = posts.OrderByDescending(a => a.PublishDate);
-                return Ok(result);
+                var paginatedPosts = result
+                    .Skip((page - 1) * maximumPosts)  
+                    .Take(maximumPosts)               
+                    .ToList();
+                
+                return Ok(paginatedPosts);
             }
             catch(Exception ex)
             {

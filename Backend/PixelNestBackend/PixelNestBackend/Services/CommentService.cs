@@ -22,7 +22,7 @@ namespace PixelNestBackend.Services
             int userID = _userUtility.GetUserID(likeCommentDto.Username);
             if(userID > -1)
             {
-                bool result = _commentRepository.LikeComment(userID, likeCommentDto.CommentID);
+                bool result = _commentRepository.LikeComment(userID, likeCommentDto);
                 if (result)
                 {
                     return true;

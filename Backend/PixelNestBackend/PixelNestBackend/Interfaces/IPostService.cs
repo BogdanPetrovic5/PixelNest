@@ -8,7 +8,7 @@ namespace PixelNestBackend.Interfaces
     {
 
         Task<PostResponse> ShareNewPost(PostDto postDto);
-        Task<ICollection<Post>> GetPosts();
+        Task<ICollection<ResponsePostDto>> GetPosts();
 
         bool LikePost(LikeDto likeDto);
         bool Comment(CommentDto commentDto);

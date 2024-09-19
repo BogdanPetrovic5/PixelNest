@@ -11,5 +11,7 @@ namespace PixelNestBackend.Dto
         [Required]
         public int PostID { get; set; }
        
+        public int? ParentCommentID { get; set; }
+      
     }
 }

@@ -41,8 +41,9 @@ namespace PixelNestBackend.Services
             _ILogger = logger;
         }
 
-        public async Task<ICollection<Post>> GetPosts()
+        public async Task<ICollection<ResponsePostDto>> GetPosts()
         {
+
             var result = await _postRepository.GetPosts();
             return result;
         }
@@ -105,14 +106,20 @@ namespace PixelNestBackend.Services
             try
             {
                 int userID = _userUtility.GetUserID(commentDto.Username);
-
+                if (userID < 0)
+                {
+                    Console.WriteLine("user not found");
+                    return false;
+                }
                 Comment comment = new Comment
                 {
                     UserID = userID,
                     CommentText = commentDto.CommentText,
                     Username = commentDto.Username,
                     PostID = commentDto.PostID,
-                    TotalLikes = 0
+                    TotalLikes = 0,
+                    ParentCommentID = commentDto.ParentCommentID
+                    
                 };
                 return _postRepository.Comment(comment);
             }
@@ -123,7 +130,7 @@ namespace PixelNestBackend.Services
             }
             catch (Exception ex)
             {
-                _ILogger.LogError($"General error: {ex.Message}");
+                _ILogger.LogError($"General error in service: {ex.Message}");
                 return false;
             }
            

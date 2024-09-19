@@ -1,7 +1,9 @@
-﻿namespace PixelNestBackend.Interfaces
+﻿using PixelNestBackend.Dto;
+
+namespace PixelNestBackend.Interfaces
 {
     public interface ICommentRepository
     {
-        bool LikeComment(int userID, int commentID);
+        bool LikeComment(int userID, LikeCommentDto likeCommentDto);
     }
 }

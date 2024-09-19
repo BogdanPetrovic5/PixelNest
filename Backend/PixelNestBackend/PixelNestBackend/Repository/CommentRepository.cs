@@ -18,13 +18,15 @@ namespace PixelNestBackend.Repository
             _dataContext = dataContext;
             _logger = logger;
         }
-        public bool LikeComment(int userID, int commentID)
+        public bool LikeComment(int userID, LikeCommentDto likeCommentDto)
         {
             try
             {
                 var likeObj = new LikedComments{
                    UserID = userID,
-                   CommentID = commentID
+                   CommentID = likeCommentDto.CommentID,
+                   Username = likeCommentDto.Username
+                   
                 };
               
                 
