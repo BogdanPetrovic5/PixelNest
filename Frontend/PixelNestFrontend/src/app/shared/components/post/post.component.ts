@@ -17,6 +17,7 @@ export class PostComponent implements OnInit{
   @Input() post:any
   likedByUsers: { username: string }[] = [];
 
+  totalComments:number = 0
 
   formattedDate:string = ""
   username:string = ""
@@ -68,7 +69,7 @@ export class PostComponent implements OnInit{
   private _initilizeComponent(){
     this.username = this._userSession.getFromCookie("username");
     this.likedByUsers = this.post.likedByUsers;
-
+  
     this.subscription.add(
       this._dashboardState.isLikesTab$.subscribe((response)=>{
         if(response) this.isLikesTabOpen = response

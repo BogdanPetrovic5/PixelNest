@@ -11,6 +11,7 @@ import { LottieFailComponent } from './components/lottie-fail/lottie-fail.compon
 import { LikesComponent } from './components/post/likes/likes.component';
 import { CommentsComponent } from './components/post/comments/comments.component';
 import { FormsModule } from '@angular/forms';
+import { CommentComponent } from './components/post/comments/comment/comment.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { FormsModule } from '@angular/forms';
     LottieFailComponent,
     LikesComponent,
     CommentsComponent,
+    CommentComponent,
     
   ],
   imports: [

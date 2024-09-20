@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="comment-wrap">
+        <div class="comment">
+            <img src="./assets/images/user.png" alt="">
+            <div class="details">
+                <h1>{{comment.username}}</h1>
+               <p>{{comment.commentText}} </p>
+               <span>Reply</span>
+            </div>
+        </div>
+        <img class="like" src="./assets/images/like.png" alt="">
+    </div>
+    <span *ngIf="haveReplies()" (click)="showReplies()">View replies</span>
+
+    <div class="replies-container">
+        <!-- <div class="reply" *ngFor="let reply of replies">
+            <app-comment [comment]="reply"></app-comment>
+        </div> -->
+
+        <div class="comment-wrap" *ngFor="let reply of flattenReplies">
+            <div class="comment" >
+                <img src="./assets/images/user.png" alt="">
+                <div class="details">
+                    <h1>{{reply.username}}</h1>
+                   <p>{{reply.commentText}} </p>
+                   <span>Reply</span>
+                </div>
+            </div>
+            <img class="like" src="./assets/images/like.png" alt="">
+        </div>
+    </div>
+</div>
+

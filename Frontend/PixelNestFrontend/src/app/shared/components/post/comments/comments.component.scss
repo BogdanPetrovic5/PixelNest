@@ -84,6 +84,13 @@ $HFONT: "Roboto Condensed", sans-serif;
                 cursor: pointer;
             }
         }
+        .usernames::-webkit-scrollbar {
+            width: 8px;
+        }
+        .usernames::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.5);  /* Color of the scrollbar */
+            border-radius: 10px;  /* Rounded scrollbar */
+        }
         .usernames{
             display: flex;
             flex-direction: column;
@@ -92,47 +99,18 @@ $HFONT: "Roboto Condensed", sans-serif;
             width: 100%;
             height: calc(100% - 80px);
             padding-top: 20px;
+            overflow-y: scroll;
             .username{
-                width: 90%;
+                width: 95%;
                 font-size: 25px;
                 display: flex;
-                flex-direction: row;
-                justify-content: space-between;
+                flex-direction: column;
+                justify-content: center;
                 align-items: center;
                 gap: 10px;
-                .comment{
-                    display: flex;
-                    flex-direction: row;
-                    gap: 10px;
-                }
-                img{
-                    width: 40px;
-                    height: 40px;
-                }
-                img.like{
-                    width: 20px;
-                    height: 20px;
-                    margin-right: 0;
-                    cursor: pointer;
-                }
-                .comment-details{
-                    display: flex;
-                    flex-direction: column;
-                    gap: 5px;
-                    margin-left: 0;
-                    h1{
-                        font-size: 0.7em;
-                        color: $PCOLOR;
-                        font-family: $PFONT;
-                        margin: 0;
-                    }
-                    p{
-                        font-size: 0.6em;
-                        color: $PCOLOR;
-                        font-family: $PFONT;
-                        margin: 0;
-                        font-weight: 300;
-                    }
+                
+                app-comment{
+                    width: 100%;
                 }
              
             }

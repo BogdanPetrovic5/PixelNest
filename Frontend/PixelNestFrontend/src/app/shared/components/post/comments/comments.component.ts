@@ -8,7 +8,7 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
   styleUrls: ['./comments.component.scss']
 })
 export class CommentsComponent {
-  @Input() comments:{username:string, commentText:string}[] = [];
+  @Input() comments:{username:string, commentText:string, commentID?:number, replies?:any}[] = [];
   @Output() closeCommentsTab: EventEmitter<void> = new EventEmitter<void>();
   username:string = ""
 

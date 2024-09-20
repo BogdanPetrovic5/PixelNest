@@ -11,17 +11,10 @@
             </div>
         </div>
         <div class="usernames">
-            <div class="username" *ngFor="let username of comments">
-               <div class="comment">
-                    <img src="./assets/images/user.png" alt="">
-                    <div class="comment-details">
-                            <h1>{{username.username}}</h1>
-                            <p>{{username.commentText}}</p>
-                    </div>
-               </div>
-               
-               <img class="like" src="./assets/images/notLiked.png" alt="">
+            <div class="username" *ngFor="let comment of comments">
+                <app-comment [comment]="comment"></app-comment>
             </div>
+           
         </div>
         <div class="new-comment">
             <input type="text" [(ngModel)]="commentText" placeholder="Comment here..." (keydown.enter)="addComment()">
