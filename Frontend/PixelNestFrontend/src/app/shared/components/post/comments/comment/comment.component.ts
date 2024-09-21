@@ -1,4 +1,12 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { catchError, map, tap, throwError } from 'rxjs';
+import { CommentDto } from 'src/app/core/dto/comment.dto';
+import { FlattenReplies } from 'src/app/core/dto/flattenReplies.dto';
+import { Replies } from 'src/app/core/dto/replies.dto';
+import { CommentService } from 'src/app/core/services/comment/comment.service';
+import { PostService } from 'src/app/core/services/post/post.service';
+import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
 @Component({
   selector: 'app-comment',
@@ -6,43 +14,133 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./comment.component.scss']
 })
 export class CommentComponent implements OnInit{
-  @Input() comment:any;
-  replies:any
 
-  flattenReplies:any;
+  constructor(
+    private _userSession:UserSessionService,
+    private _postService:PostService,
+    private _commentService:CommentService
+  ){
+
+  }
+  @Input() comment!:CommentDto;
+
+
+  flattenReplies:FlattenReplies[] = [];
+  replies:Replies[] =[];
+  username:string = "";
+  replyText:string = "";
+
+  postID:number = 0;
+
 
   repliesVisible:boolean = false;
+  isReplyBox:boolean = false;
+
+  isDisabled:boolean = false;
   ngOnInit(): void {
     
     
   }
-  haveReplies(){
-    return this.comment.replies.length > 0
+  replyComment(parentCommentID?:number){
+    console.log(parentCommentID)
+    this.username = this._userSession.getFromCookie("username")
+    this.postID = this._userSession.getFromLocalStorage("postID");
+    this._postService.addComment(this.replyText, this.username, this.postID, parentCommentID).subscribe({
+      next:(response)=>{
+        console.log(response.message)
+        
+        this.flattenReplies.push({username:this.username, commentText:this.replyText, parentCommentID:parentCommentID})
+        this.replyText = ""
+        this.isDisabled = false;
+        this.getReplies()
+        
+      }
+    })
+    
   }
-  
-  showReplies(){
-   
+
+  haveReplies(){
+    if(this.comment.totalReplies != undefined){
+      return this.comment.totalReplies > 0
+    }
+    return false
+    
+  }
+
+  toggleReplies(){
     if (this.repliesVisible) {
-     
       // this.replies = [];
       this.flattenReplies = []
     } else {
-    
-      this.flattenReplies = this._flattenReplies(this.comment)
-      this.flattenReplies.shift()
+      this.flattenReplies = this._flattenReplies(this.replies)
+      console.log(this.flattenReplies)
     }
-    this.repliesVisible = !this.repliesVisible;
+    this.repliesVisible = !this.repliesVisible
   }
 
+  getReplies(){
+    if(this.isDisabled == false){
+      this._commentService.getReplies(this.comment.commentID).pipe(
+        tap((response)=>{
+          this.replies = response
+          this.isDisabled = true;
+        }),
+        map(
+          (response)=>this._flattenReplies(response)
+        ),
+        catchError((error: HttpErrorResponse) => {
+          console.log(error);
+          return throwError(() => error);
+        })
+
+      ).subscribe((response)=>{
+        this.flattenReplies = response;
+      })
+    }
+   
+    
+  }
+
+  openParentReply(){
+    this.isReplyBox = !this.isReplyBox
+  }
+
+  openReplyBox(i:number){
+   this.flattenReplies[i].isReplyBox = !this.flattenReplies[i].isReplyBox
+  }
+
+  findUsername(parentCommentID?:number | null){
+    for(let i = 0; i < this.flattenReplies.length;i++){
+      if(this.flattenReplies[i].commentID == parentCommentID){
+        if(this.flattenReplies[i].parentCommentID == null){
+          return ""
+        }
+      }
+    }
+
+    let username;
+    for(let i = 0; i < this.flattenReplies.length;i++){
+      if(this.flattenReplies[i].commentID == parentCommentID){
+        if(this.flattenReplies[i].username != undefined){
+          username = this.flattenReplies[i].username;
+        }
+       
+        return "@" + username;
+      }
+    }
+    return ""
+  }
 
   private _flattenReplies(comment: any):any[]{
     let flattened = [];
-    flattened.push(comment);
+    for (const reply of comment) {
+      const { replies, ...rest } = reply;
+      flattened.push({
+          ...rest
+      });
 
-    if (comment.replies && comment.replies.length > 0) {
-     
-      for (const reply of comment.replies) {
-        flattened = flattened.concat(this._flattenReplies(reply));
+      if (reply.replies && reply.replies.length > 0) {
+          flattened = flattened.concat(this._flattenReplies(reply.replies));
       }
     }
 

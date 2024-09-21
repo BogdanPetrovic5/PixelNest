@@ -5,25 +5,27 @@
             <div class="details">
                 <h1>{{comment.username}}</h1>
                <p>{{comment.commentText}} </p>
-               <span>Reply</span>
+               <span (click)="openParentReply()">Reply</span>
+               <input (keydown.enter)="replyComment(comment.commentID)" type="text" placeholder="Reply here..."  [(ngModel)]="replyText" *ngIf="isReplyBox">
             </div>
         </div>
         <img class="like" src="./assets/images/like.png" alt="">
     </div>
-    <span *ngIf="haveReplies()" (click)="showReplies()">View replies</span>
+    <span class="view-replies" *ngIf="haveReplies()" (click)="getReplies()" (click)="toggleReplies()">View replies</span>
 
     <div class="replies-container">
         <!-- <div class="reply" *ngFor="let reply of replies">
             <app-comment [comment]="reply"></app-comment>
         </div> -->
 
-        <div class="comment-wrap" *ngFor="let reply of flattenReplies">
+        <div class="comment-wrap" *ngFor="let reply of flattenReplies; let i = index">
             <div class="comment" >
                 <img src="./assets/images/user.png" alt="">
                 <div class="details">
                     <h1>{{reply.username}}</h1>
-                   <p>{{reply.commentText}} </p>
-                   <span>Reply</span>
+                   <p><span>{{findUsername(reply.parentCommentID)}}</span> {{reply.commentText}} </p>
+                   <span (click)="openReplyBox(i)">Reply</span>
+                   <input (keydown.enter)="replyComment(reply.commentID)" type="text" placeholder="Reply here..." *ngIf="reply.isReplyBox" [(ngModel)]="replyText">
                 </div>
             </div>
             <img class="like" src="./assets/images/like.png" alt="">

@@ -12,9 +12,11 @@ import { GlobalInterceptor } from './core/interceptors/global.interceptor';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
+  
   ],
   imports: [
     BrowserModule,

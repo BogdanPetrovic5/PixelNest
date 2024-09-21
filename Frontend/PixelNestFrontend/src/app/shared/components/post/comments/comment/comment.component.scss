@@ -35,6 +35,10 @@ $HFONT: "Roboto Condensed", sans-serif;
         opacity: 0.7;
         cursor: pointer;
         margin-top: 5px;
+        
+    }
+    span.view-replies{
+        margin-left: 7%;
     }
     .comment-wrap{
         width: 100%;
@@ -47,14 +51,26 @@ $HFONT: "Roboto Condensed", sans-serif;
             display: flex;
             flex-direction: row;
             gap: 10px;
+            width:90%;
             .details{
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 gap: 5px;
+                width: calc(100% - 40px);
                 font-size: 25px;
                 color: $PCOLOR;
                 font-family: $PFONT;
+                input{
+                    width: 90%;
+                    background-color: transparent;
+                    outline: none;
+                    border: none;
+                    border-bottom: 1px solid #484f53 !important;
+                    font-family: $PFONT;
+                    color: white;
+                    margin-top: 10px;
+                }
                 h1{
                     margin: 0;
                     font-size: 0.7em;
@@ -64,7 +80,11 @@ $HFONT: "Roboto Condensed", sans-serif;
                     margin: 0;
                     font-size: 0.7em;
                     font-weight: 300;
-                   
+                   span{
+                    font-size: 1em !important;
+                    font-weight: 400 !important;
+                    opacity: 0.7 !important;
+                   }
                 }
                 span{
                     font-size: 0.55em;

@@ -1,3 +1,6 @@
+import { CommentDto } from "./comment.dto";
+import { LikedByUsers } from "./likedByUsers.dto";
+
 export interface PostDto {
     postID: number;
     userID: number;
@@ -5,9 +8,11 @@ export interface PostDto {
     postDescription: string;
     totalComments: number;
     totalLikes: number;
+    likedByUsers:LikedByUsers[];
+    allComments:CommentDto[];
     imagePaths: ImagePathDto[];
     publishDate:Date;
-    comments: CommentDto[];
+   
 }
   
 export interface ImagePathDto {
@@ -15,9 +20,3 @@ export interface ImagePathDto {
     photoDisplay:string;
 }
   
-export interface CommentDto {
-    commentText: string;
-    totalLikes: number;
-    userID: number;
-    username: string;
-}

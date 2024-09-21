@@ -28,12 +28,13 @@ export class PostService {
     })
   }
   
-  addComment(commentText:string, username:string, postID:number):Observable<any>{
+  addComment(commentText:string, username:string, postID:number, parentCommentID?:number):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/Comment`
     return this._httpClient.post(url, {
       CommentText:commentText,
       Username:username,
-      PostID:postID
+      PostID:postID,
+      ParentCommentID:parentCommentID
     })
   }
 }

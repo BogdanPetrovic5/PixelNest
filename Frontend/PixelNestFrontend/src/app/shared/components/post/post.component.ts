@@ -2,6 +2,8 @@ import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { catchError, finalize, Subscription, tap, throwError } from 'rxjs';
+import { LikedByUsers } from 'src/app/core/dto/likedByUsers.dto';
+import { PostDto } from 'src/app/core/dto/post.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
@@ -14,8 +16,8 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
 })
 export class PostComponent implements OnInit{
 
-  @Input() post:any
-  likedByUsers: { username: string }[] = [];
+  @Input() post!:PostDto;
+  likedByUsers: LikedByUsers[] = [];
 
   totalComments:number = 0
 
