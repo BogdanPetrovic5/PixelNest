@@ -104,29 +104,7 @@ namespace PixelNestBackend.Repository
                     PostID = a.PostID,
                     PublishDate = a.PublishDate,
                     ImagePaths = a.ImagePaths,
-
-
-                    AllComments = a.Comments != null ? a.Comments.Where(c => c.ParentCommentID == null).Select(c => new ResponseCommentDto
-                    {
-                        CommentID = c.CommentID,
-                        CommentText = c.CommentText,
-                        TotalLikes = c.TotalLikes,
-                        UserID = c.UserID,
-                        Username = c.Username,
-                        PostID = c.PostID,
-                        ParentCommentID = c.ParentCommentID,
-                        LikedByUsers = c.LikedComments != null
-                        ? c.LikedComments.Select(l => new LikeCommentDto
-                        {
-                            Username = l.Username
-                        }).ToList()
-                        : new List<LikeCommentDto>(),
-                        Replies = _GetReplies(c.CommentID, a.Comments)
-                        
-
-                    }).ToList() : new List<ResponseCommentDto>(),
-
-                  
+                
                     LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                     {
                         Username = l.Username
@@ -202,12 +180,30 @@ namespace PixelNestBackend.Repository
         {
             try
             {
+                var post = _dataContext.Posts.FirstOrDefault(p => p.PostID == comment.PostID);
+                if (post != null)
+                {
+                   
+                    post.TotalComments += 1;
+                }
+
                 _dataContext.Comments.Add(comment);
+                if (comment.ParentCommentID.HasValue)
+                {
+                    var parentComment = _dataContext.Comments.FirstOrDefault(c => c.CommentID == comment.ParentCommentID.Value && c.ParentCommentID == null);
+                    if (parentComment != null)
+                    {
+                        parentComment.TotalReplies += 1;
+                    }
+                }
+
                 int result = _dataContext.SaveChanges();
+
                 if (result > 0) return true;
                 return false;
-                       
-            }catch(SqlException ex)
+
+            }
+            catch(SqlException ex)
             {
                 _logger.LogError($"Database related error: {ex.Message}");
                 return false;
@@ -218,29 +214,6 @@ namespace PixelNestBackend.Repository
             }
         }
     
-        private static List<ResponseCommentDto> _GetReplies(int commentID, ICollection<Comment> allComments)
-        {
-            return allComments != null ? allComments.Where(reply => reply.ParentCommentID == commentID)
-                .Select(reply => new ResponseCommentDto
-                {
-                    CommentID = reply.CommentID,
-                    CommentText = reply.CommentText,
-                    TotalLikes = reply.TotalLikes,
-                    UserID = reply.UserID,
-                    Username = reply.Username,
-                    PostID = reply.PostID,
-                    ParentCommentID = reply.ParentCommentID,
-                    LikedByUsers = reply.LikedComments != null
-                        ? reply.LikedComments.Select(l => new LikeCommentDto
-                        {
-                            Username = l.Username
-                        }).ToList()
-                        : new List<LikeCommentDto>(),
-
-
-                    Replies = _GetReplies(reply.CommentID, allComments)
-
-                }).ToList() : new List<ResponseCommentDto>();
-        }
+        
     }
 }

@@ -16,6 +16,27 @@ namespace PixelNestBackend.Controllers
         {
             _commentService = commentService;
         }
+        [HttpGet("GetReplies")]
+        public IActionResult GetReplies(int initialParentID)
+        {
+            var result = _commentService.GetReplies(initialParentID);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+        }
+        [HttpGet("GetComments")]
+        public IActionResult GetComments(int postID)
+        {
+            ICollection<ResponseCommentDto> result;
+            result = _commentService.GetComments(postID);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            else return BadRequest();
+        }
         [HttpPost("LikeComment")]
         public IActionResult Like(LikeCommentDto likeCommentDto)
         {

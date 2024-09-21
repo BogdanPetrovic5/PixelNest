@@ -21,7 +21,7 @@ namespace PixelNestBackend.Dto
 
         public ICollection<LikeDto> LikedByUsers { get; set; }
         [NotMapped]
-        public ICollection<ResponseCommentDto> AllComments { get; set; }
+
 
         public ICollection<ImagePath> ImagePaths { get; set; }
     }

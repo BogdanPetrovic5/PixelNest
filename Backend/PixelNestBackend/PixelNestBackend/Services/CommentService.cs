@@ -1,5 +1,6 @@
 ﻿using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
+using PixelNestBackend.Models;
 using PixelNestBackend.Utility;
 
 namespace PixelNestBackend.Services
@@ -16,6 +17,18 @@ namespace PixelNestBackend.Services
         {
             _userUtility = userUtility;
             _commentRepository = commentRepository;
+        }
+        public ICollection<ResponseReplyCommentDto> GetReplies(int? initialParentID)
+        {
+            ICollection<ResponseReplyCommentDto> result;
+            result = _commentRepository.GetReplies(initialParentID);
+            return result;
+        }
+        public ICollection<ResponseCommentDto> GetComments(int postID)
+        {
+            ICollection<ResponseCommentDto> result;
+            result = _commentRepository.GetComments(postID);
+            return result;
         }
         public bool LikeComment(LikeCommentDto likeCommentDto)
         {

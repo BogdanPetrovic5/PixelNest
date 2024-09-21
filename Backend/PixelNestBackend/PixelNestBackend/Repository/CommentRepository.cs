@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
@@ -17,6 +18,73 @@ namespace PixelNestBackend.Repository
         {
             _dataContext = dataContext;
             _logger = logger;
+        }
+        public  ICollection<ResponseReplyCommentDto> GetReplies(int? initialParentID)
+        {
+
+            try
+            {
+                var allComments = _dataContext.Comments.Include(c => c.LikedComments).ToList();
+                var replies = allComments.Where(c => c.ParentCommentID == initialParentID).ToList();
+                return replies.Select(r => new ResponseReplyCommentDto
+                {
+                    CommentID = r.CommentID,
+                    CommentText = r.CommentText,
+                    TotalLikes = r.TotalLikes,
+                    UserID = r.UserID,
+                    Username = r.Username,
+                    PostID = r.PostID,
+                    ParentCommentID = r.ParentCommentID,
+                    TotalReplies = r.TotalReplies,
+                    LikedByUsers = r.LikedComments != null
+                             ? r.LikedComments.Select(l => new LikeCommentDto
+                             {
+                                 Username = l.Username
+                             }).ToList()
+                             : new List<LikeCommentDto>(),
+                    Replies = _GetReplies(r.CommentID, allComments)
+
+
+                }).ToList();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
+        public ICollection<ResponseCommentDto> GetComments(int postID)
+        {
+            try
+            {
+                var allComments = _dataContext.Comments.Include(c => c.LikedComments).Where(c => c.PostID == postID).ToList();
+
+          
+                return allComments
+                    .Where(c => c.ParentCommentID == null) 
+                    .Select(c => new ResponseCommentDto
+                    {
+                        CommentID = c.CommentID,
+                        CommentText = c.CommentText,
+                        TotalLikes = c.TotalLikes,
+                        UserID = c.UserID,
+                        Username = c.Username,
+                        PostID = c.PostID,
+                        ParentCommentID = c.ParentCommentID,
+                        TotalReplies = c.TotalReplies,
+                        LikedByUsers = c.LikedComments != null
+                            ? c.LikedComments.Select(l => new LikeCommentDto
+                            {
+                                Username = l.Username
+                            }).ToList()
+                            : new List<LikeCommentDto>(),
+                        
+                    })
+                    .ToList();
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
         public bool LikeComment(int userID, LikeCommentDto likeCommentDto)
         {
@@ -46,5 +114,31 @@ namespace PixelNestBackend.Repository
                 return false;
             }
         }
+
+        private static List<ResponseReplyCommentDto> _GetReplies(int commentID, ICollection<Comment> allComments)
+        {
+            return allComments != null ? allComments.Where(reply => reply.ParentCommentID == commentID)
+                .Select(reply => new ResponseReplyCommentDto
+                {
+                    CommentID = reply.CommentID,
+                    CommentText = reply.CommentText,
+                    TotalLikes = reply.TotalLikes,
+                    UserID = reply.UserID,
+                    Username = reply.Username,
+                    PostID = reply.PostID,
+                    ParentCommentID = reply.ParentCommentID,
+                    LikedByUsers = reply.LikedComments != null
+                        ? reply.LikedComments.Select(l => new LikeCommentDto
+                        {
+                            Username = l.Username
+                        }).ToList()
+                        : new List<LikeCommentDto>(),
+
+
+                    Replies = _GetReplies(reply.CommentID, allComments)
+
+                }).ToList() : new List<ResponseReplyCommentDto>();
+        }
     }
+    
 }
