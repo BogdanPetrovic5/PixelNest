@@ -67,6 +67,7 @@ namespace PixelNestBackend.Data
                 .WithMany(likedComments => likedComments.LikedComments)
                 .HasForeignKey(lc => lc.UserID)
                 .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<LikedComments>()
                 .HasOne(comment => comment.Comment)
                 .WithMany(likedComments => likedComments.LikedComments)

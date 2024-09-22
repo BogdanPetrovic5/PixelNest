@@ -35,6 +35,7 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<FolderGenerator>();
 builder.Services.AddScoped<UserUtility>();
 builder.Services.AddScoped<PostUtility>();
+builder.Services.AddScoped<CommentUtility>();
 builder.Services.AddScoped<TokenGenerator>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => {

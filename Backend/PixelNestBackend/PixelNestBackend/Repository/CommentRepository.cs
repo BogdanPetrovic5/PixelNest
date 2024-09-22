@@ -86,21 +86,28 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
-        public bool LikeComment(int userID, LikeCommentDto likeCommentDto)
+        public bool LikeComment(int userID, LikeCommentDto likeCommentDto, bool isDuplicate)
         {
             try
             {
-                var likeObj = new LikedComments{
-                   UserID = userID,
-                   CommentID = likeCommentDto.CommentID,
-                   Username = likeCommentDto.Username
-                   
+                var likeObj = new LikedComments
+                {
+                    UserID = userID,
+                    CommentID = likeCommentDto.CommentID,
+                    Username = likeCommentDto.Username
+
                 };
-              
-                
-                _dataContext.LikeComments.Add(likeObj);
+                if (!isDuplicate)
+                {
+                    Console.WriteLine("Nije duplikat");
+
+
+                    _dataContext.LikeComments.Add(likeObj);
+                    return _dataContext.SaveChanges() > 0;
+                }
+                Console.WriteLine("Jeste duplikat");
+                _dataContext.LikeComments.Remove(likeObj);
                 return _dataContext.SaveChanges() > 0;
-                
                
             }catch(SqlException ex)
             {

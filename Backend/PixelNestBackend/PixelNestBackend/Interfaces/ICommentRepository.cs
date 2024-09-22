@@ -6,6 +6,6 @@ namespace PixelNestBackend.Interfaces
     {
         ICollection<ResponseCommentDto> GetComments(int postID);
         ICollection<ResponseReplyCommentDto> GetReplies(int? initialParentID);
-        bool LikeComment(int userID, LikeCommentDto likeCommentDto);
+        bool LikeComment(int userID, LikeCommentDto likeCommentDto, bool isDuplicate);
     }
 }
