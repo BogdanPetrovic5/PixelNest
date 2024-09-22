@@ -42,14 +42,13 @@ export class CommentComponent implements OnInit{
     
   }
   replyComment(parentCommentID?:number){
-    console.log(parentCommentID)
+    
     this.username = this._userSession.getFromCookie("username")
     this.postID = this._userSession.getFromLocalStorage("postID");
+
     this._postService.addComment(this.replyText, this.username, this.postID, parentCommentID).subscribe({
       next:(response)=>{
-        console.log(response.message)
-        
-        this.flattenReplies.push({username:this.username, commentText:this.replyText, parentCommentID:parentCommentID})
+
         this.replyText = ""
         this.isDisabled = false;
         this.getReplies()
@@ -69,16 +68,20 @@ export class CommentComponent implements OnInit{
 
   toggleReplies(){
     if (this.repliesVisible) {
-      // this.replies = [];
       this.flattenReplies = []
     } else {
       this.flattenReplies = this._flattenReplies(this.replies)
-      console.log(this.flattenReplies)
+     
     }
     this.repliesVisible = !this.repliesVisible
   }
 
-  getReplies(){
+  getReplies(data?: { message: string}){
+
+    if(data?.message === "fromChild"){
+      this.isDisabled = false;
+    }
+
     if(this.isDisabled == false){
       this._commentService.getReplies(this.comment.commentID).pipe(
         tap((response)=>{

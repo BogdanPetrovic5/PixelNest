@@ -41,19 +41,24 @@ export class PostComponent implements OnInit{
   ngOnInit():void{
     this._initilizeComponent();
   }
+
   closeLikesTab() {
     this.isLikesTabOpen = false
   }
+
   closeCommentsTab(){
     this.areCommentsOpened = false;
   }
+
   showLikes(){
     this.isLikesTabOpen = true
   }
+
   showComments(){
     this.areCommentsOpened = true;
     this._userSession.setToLocalStorage("postID",this.post.postID);
   }
+
   likePost(postID:number){
     this._postService.likePost(postID, this.username).pipe(
       tap((response)=>{
@@ -94,7 +99,6 @@ export class PostComponent implements OnInit{
   private _formatDate(){
     const date = this.post.publishDate;
       const dateObject = new Date(date)
-
       if (isNaN(dateObject.getTime())) {
         this.formattedDate = 'Invalid Date';
       } else {

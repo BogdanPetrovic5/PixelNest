@@ -9,7 +9,7 @@
                <input (keydown.enter)="replyComment(comment.commentID)" type="text" placeholder="Reply here..."  [(ngModel)]="replyText" *ngIf="isReplyBox">
             </div>
         </div>
-        <img class="like" src="./assets/images/like.png" alt="">
+        <app-like-comment [commentID]="comment.commentID" [likedByUsers] = "comment.likedByUsers" [commentUsername]="comment.username"></app-like-comment>
     </div>
     <span class="view-replies" *ngIf="haveReplies()" (click)="getReplies()" (click)="toggleReplies()">View replies</span>
 
@@ -19,7 +19,7 @@
         </div> -->
 
         <div class="comment-wrap" *ngFor="let reply of flattenReplies; let i = index">
-            <div class="comment" >
+            <!-- <div class="comment" >
                 <img src="./assets/images/user.png" alt="">
                 <div class="details">
                     <h1>{{reply.username}}</h1>
@@ -28,7 +28,8 @@
                    <input (keydown.enter)="replyComment(reply.commentID)" type="text" placeholder="Reply here..." *ngIf="reply.isReplyBox" [(ngModel)]="replyText">
                 </div>
             </div>
-            <img class="like" src="./assets/images/like.png" alt="">
+            <img class="like" src="./assets/images/like.png" alt=""> -->
+            <app-reply [reply]="reply" [commentID]="reply.commentID" [parentUsername]="findUsername(reply.parentCommentID)" (notifyParent)="getReplies($event)"></app-reply>
         </div>
     </div>
 </div>

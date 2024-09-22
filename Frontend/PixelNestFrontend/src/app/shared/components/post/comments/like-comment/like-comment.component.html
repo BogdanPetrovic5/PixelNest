@@ -1,0 +1,5 @@
+<div (click)="likeComment()">
+    <img class="like" *ngIf="!isLikedByUser()" src="./assets/images/like.png" alt="">
+    <img class="like" *ngIf="isLikedByUser()" src="./assets/images/like1.png" alt="">
+</div>
+

@@ -12,6 +12,8 @@ import { LikesComponent } from './components/post/likes/likes.component';
 import { CommentsComponent } from './components/post/comments/comments.component';
 import { FormsModule } from '@angular/forms';
 import { CommentComponent } from './components/post/comments/comment/comment.component';
+import { ReplyComponent } from './components/post/comments/comment/reply/reply.component';
+import { LikeCommentComponent } from './components/post/comments/like-comment/like-comment.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { CommentComponent } from './components/post/comments/comment/comment.com
     LikesComponent,
     CommentsComponent,
     CommentComponent,
+    ReplyComponent,
+    LikeCommentComponent,
     
   ],
   imports: [

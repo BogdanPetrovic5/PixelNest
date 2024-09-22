@@ -15,8 +15,19 @@ export class CommentService {
     return this._httpClient.get<any>(url);
 
   }
-  getReplies(initialParentID?:number){
+
+  getReplies(initialParentID?:number):Observable<any>{
     const url = `${environment.apiUrl}/api/Comment/GetReplies?initialParentID=${initialParentID}`
     return this._httpClient.get<any>(url);
+  }
+
+  likeComment(commentID?:number, username?:string){
+    const url = `${environment.apiUrl}/api/Comment/LikeComment`;
+
+    return this._httpClient.post<any>(url, {
+
+      Username:username,
+      CommentID:commentID
+    })
   }
 }
