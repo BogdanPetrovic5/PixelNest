@@ -39,9 +39,9 @@
                 </div>
             </div>
            <div class="basic-1">
-             <div class="option">
-                <img src="./assets/images/saved.png">
-
+             <div class="option" (click)="savePost()">
+                <img *ngIf="isSavedByUser()" src="./assets/images/saved.png">
+                <img *ngIf="!isSavedByUser()" src="./assets/images/unsaved.png">
              </div>
            </div>
        </div>

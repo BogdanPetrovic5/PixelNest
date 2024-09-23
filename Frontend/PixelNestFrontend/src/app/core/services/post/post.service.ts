@@ -27,7 +27,13 @@ export class PostService {
       Username:username
     })
   }
-  
+  savePost(username:string, postID:number){
+    const url = `${environment.apiUrl}/api/Post/SavePost`
+    return this._httpClient.post<any>(url,{
+      Username:username,
+      PostID:postID
+    })
+  }
   addComment(commentText:string, username:string, postID:number, parentCommentID?:number):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/Comment`
     return this._httpClient.post(url, {

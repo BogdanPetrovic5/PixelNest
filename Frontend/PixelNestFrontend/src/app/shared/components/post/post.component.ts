@@ -4,6 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { catchError, finalize, Subscription, tap, throwError } from 'rxjs';
 import { LikedByUsers } from 'src/app/core/dto/likedByUsers.dto';
 import { PostDto } from 'src/app/core/dto/post.dto';
+import { SavedPosts } from 'src/app/core/dto/savePost.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
@@ -18,6 +19,7 @@ export class PostComponent implements OnInit{
 
   @Input() post!:PostDto;
   likedByUsers: LikedByUsers[] = [];
+  savedByUsers:SavedPosts[] = []
 
   totalComments:number = 0
 
@@ -72,11 +74,22 @@ export class PostComponent implements OnInit{
       })
     ).subscribe()
   }
-
+  isSavedByUser(){
+    return this.post.savedByUsers.find(a=>a.username == this.username);
+  }
+  savePost(){
+    this._postService.savePost(this.username, this.post.postID).subscribe({
+      next:response=>{
+        console.log(response)
+        this._handleSavedArray()
+      }
+    })
+  }
   private _initilizeComponent(){
     this.username = this._userSession.getFromCookie("username");
     this.likedByUsers = this.post.likedByUsers;
-  
+    this.savedByUsers = this.post.savedByUsers;
+
     this.subscription.add(
       this._dashboardState.isLikesTab$.subscribe((response)=>{
         if(response) this.isLikesTabOpen = response
@@ -86,6 +99,13 @@ export class PostComponent implements OnInit{
 
     this._formatDate()
     this._checkIsLiked()
+  }
+
+  private _handleSavedArray(){
+    
+    if(this.isSavedByUser()){
+      this.post.savedByUsers = this.post.savedByUsers.filter(a => a.username != this.username);
+    }else this.post.savedByUsers.push({username:this.username});
   }
 
   private _checkIsLiked(){
