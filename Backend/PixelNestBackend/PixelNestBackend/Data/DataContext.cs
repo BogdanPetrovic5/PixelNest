@@ -15,6 +15,7 @@ namespace PixelNestBackend.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<LikedPosts> LikedPosts { get; set; }
         public DbSet<LikedComments> LikeComments { get; set; }
+        public DbSet<SavedPosts> SavedPosts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LikeDto>().HasNoKey();
@@ -24,7 +25,7 @@ namespace PixelNestBackend.Data
             modelBuilder.Entity<Comment>().HasKey(c => c.CommentID);
             modelBuilder.Entity<LikedPosts>().HasKey(lp => new { lp.PostID, lp.UserID });
             modelBuilder.Entity<LikedComments>().HasKey(lc => new { lc.CommentID, lc.UserID });
-
+            modelBuilder.Entity<SavedPosts>().HasKey(lc => new { lc.PostID, lc.UserID });
             modelBuilder.Entity<Post>()
                 .HasOne(user => user.User)
                 .WithMany(post => post.Posts)
@@ -73,6 +74,19 @@ namespace PixelNestBackend.Data
                 .WithMany(likedComments => likedComments.LikedComments)
                 .HasForeignKey(lc => lc.CommentID)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SavedPosts>()
+                .HasOne(post => post.Post)
+                .WithMany(savedPosts => savedPosts.SavedPosts)
+                .HasForeignKey(sp => sp.PostID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SavedPosts>()
+                .HasOne(user => user.User)
+                .WithMany(savedPosts => savedPosts.SavedPosts)
+                .HasForeignKey(sp => sp.UserID)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

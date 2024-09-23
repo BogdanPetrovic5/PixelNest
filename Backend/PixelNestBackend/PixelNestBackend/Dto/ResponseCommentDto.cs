@@ -17,7 +17,7 @@ namespace PixelNestBackend.Dto
         public int? ParentCommentID { get; set; }
         public ICollection<LikeCommentDto>? LikedByUsers { get; set; }
 
-        public ICollection<ResponseCommentDto>? Replies { get; set; }
+      
     }
 }
 

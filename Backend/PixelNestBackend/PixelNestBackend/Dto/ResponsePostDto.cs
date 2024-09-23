@@ -20,8 +20,7 @@ namespace PixelNestBackend.Dto
      
 
         public ICollection<LikeDto> LikedByUsers { get; set; }
-        [NotMapped]
-
+        public ICollection<SavePostDto> SavedByUsers { get; set; }
 
         public ICollection<ImagePath> ImagePaths { get; set; }
     }

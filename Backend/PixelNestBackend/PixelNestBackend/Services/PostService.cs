@@ -40,7 +40,17 @@ namespace PixelNestBackend.Services
             _fileUpload = fileUpload;
             _ILogger = logger;
         }
+        public bool SavePost(SavePostDto savePostDto)
+        {
+            int userID = _userUtility.GetUserID(savePostDto.Username);
+            if (userID < 1) return false;
 
+            bool isLiked = _postUtility.FindDuplicate(savePostDto.PostID, userID, "savedPosts");
+
+            bool result = _postRepository.SavePost(userID, savePostDto, isLiked);
+            if (result) return true;
+            return false;
+        }
         public async Task<ICollection<ResponsePostDto>> GetPosts()
         {
 
@@ -52,7 +62,7 @@ namespace PixelNestBackend.Services
         {
             int userID = _userUtility.GetUserID(likeDto.Username);
             if (userID < 0) return false;
-            bool isLiked = _postUtility.FindDuplicate(likeDto.PostID, userID);
+            bool isLiked = _postUtility.FindDuplicate(likeDto.PostID, userID, "likedPosts");
             
             bool result = _postRepository.LikePost(likeDto, isLiked, userID);
             if (result) return true;

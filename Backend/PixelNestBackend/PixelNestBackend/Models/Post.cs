@@ -22,11 +22,13 @@ namespace PixelNestBackend.Models
         public ICollection<LikeDto>? LikedByUsers { get; set; }
         [NotMapped]
         public ICollection<ResponseCommentDto> AllComments { get; set; }
+        [NotMapped]
+        public ICollection<SavePostDto> SavedByUsers { get; set; }
 
         public ICollection<ImagePath>? ImagePaths { get; set; }
         public ICollection<Comment>? Comments { get; set; }
         public ICollection<LikedPosts>? LikedPosts { get; set; }
-
+        public ICollection<SavedPosts> SavedPosts { get; set; }
     
     }
 }

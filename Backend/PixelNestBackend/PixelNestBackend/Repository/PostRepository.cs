@@ -27,6 +27,28 @@ namespace PixelNestBackend.Repository
             _configuration = configuration;
             _logger = logger;
         }
+
+        public bool SavePost(int userID, SavePostDto savePostDto, bool isDuplicate)
+        {
+            var obj = new SavedPosts
+            {
+                UserID = userID,
+                PostID = savePostDto.PostID,
+                Username = savePostDto.Username
+            };
+            if (!isDuplicate)
+            {
+                _dataContext.SavedPosts.Add(obj);
+                return _dataContext.SaveChanges() > 0; 
+            }
+            var existingSave = _dataContext.SavedPosts.FirstOrDefault(sp => sp.PostID == savePostDto.PostID && sp.UserID == userID);
+            if (existingSave != null) 
+            {
+                _dataContext.SavedPosts.Remove(existingSave);
+                return _dataContext.SaveChanges() > 0;
+            }
+            return false;
+        }
         public async Task<PostResponse> ShareNewPost(PostDto postDto, string userFolderPath, int userID)
         {
             if (postDto == null)
@@ -94,24 +116,28 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-             var posts = await _dataContext.Posts
-                .Select(a => new ResponsePostDto
-                {
-                    PostDescription = a.PostDescription,
-                    OwnerUsername = a.OwnerUsername,
-                    TotalComments = a.TotalComments,
-                    TotalLikes = a.TotalLikes,
-                    PostID = a.PostID,
-                    PublishDate = a.PublishDate,
-                    ImagePaths = a.ImagePaths,
-                
-                    LikedByUsers = a.LikedPosts.Select(l => new LikeDto
-                    {
-                        Username = l.Username
+                var posts = await _dataContext.Posts
+                   .Select(a => new ResponsePostDto
+                   {
+                       PostDescription = a.PostDescription,
+                       OwnerUsername = a.OwnerUsername,
+                       TotalComments = a.TotalComments,
+                       TotalLikes = a.TotalLikes,
+                       PostID = a.PostID,
+                       PublishDate = a.PublishDate,
+                       ImagePaths = a.ImagePaths,
 
-                    }).ToList()
+                       LikedByUsers = a.LikedPosts.Select(l => new LikeDto
+                       {
+                           Username = l.Username
 
-                })
+                       }).ToList(),
+                       SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
+                       {
+                           Username = s.Username
+
+                       }).ToList()
+                   })
                 .AsSplitQuery() 
                 .ToListAsync();
 

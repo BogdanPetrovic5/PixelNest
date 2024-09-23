@@ -11,11 +11,19 @@ namespace PixelNestBackend.Utility
             _configuration = configuration;
             _dataContext = dataContext;
         }
-        public bool FindDuplicate(int postID, int userID)
+        public bool FindDuplicate(int postID, int userID, string tableName)
         {
-
-            return _dataContext.LikedPosts.Any(
-                lp => lp.PostID == postID && lp.UserID == userID);
+            if(tableName == "likedPosts")
+            {
+                return _dataContext.LikedPosts.Any(
+               lp => lp.PostID == postID && lp.UserID == userID);
+            }else if(tableName == "savedPosts")
+            {
+                return _dataContext.SavedPosts.Any(
+              lp => lp.PostID == postID && lp.UserID == userID);
+            }
+            throw new Exception("Invalid table name");
         }
+        
     }
 }

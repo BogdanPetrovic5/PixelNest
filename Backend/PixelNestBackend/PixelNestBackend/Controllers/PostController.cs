@@ -40,6 +40,15 @@ namespace PixelNestBackend.Controllers
            
           
         }
+
+        [HttpPost("SavePost")]
+        public IActionResult SavePost(SavePostDto savePostDto)
+        {
+            if (savePostDto == null) return BadRequest();
+            bool result = _postService.SavePost(savePostDto);
+            if (result) return Ok();
+            return NotFound();
+        }
         [HttpGet("GetPosts")]
         public async Task<IActionResult> GetPosts(int page = 1, int maximumPosts = 5){
             try

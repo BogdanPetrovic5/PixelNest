@@ -105,11 +105,22 @@ namespace PixelNestBackend.Repository
                     _dataContext.LikeComments.Add(likeObj);
                     return _dataContext.SaveChanges() > 0;
                 }
-                Console.WriteLine("Jeste duplikat");
-                _dataContext.LikeComments.Remove(likeObj);
-                return _dataContext.SaveChanges() > 0;
-               
-            }catch(SqlException ex)
+                var existingLike = _dataContext.LikeComments
+                    .FirstOrDefault(l => l.UserID == userID && l.CommentID == likeCommentDto.CommentID);
+
+                if (existingLike != null)
+                {
+                    _dataContext.LikeComments.Remove(existingLike);
+                    return _dataContext.SaveChanges() > 0;
+                }
+                else
+                {
+                    Console.WriteLine("No such like found to remove");
+                    return false; 
+                }
+
+            }
+            catch(SqlException ex)
             {
                 _logger.LogError($"SQL related error: {ex.Message}");
                 return false;
