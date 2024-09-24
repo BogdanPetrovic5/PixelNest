@@ -11,6 +11,8 @@ import { PostDto } from 'src/app/core/dto/post.dto';
 })
 export class FeedComponent implements OnInit{
   posts:PostDto[] = []
+  temporalResponse:PostDto[] = []
+  currentPage:number = 1;
   constructor(private _postService: PostService){
 
   }
@@ -21,15 +23,24 @@ export class FeedComponent implements OnInit{
     this.loadPosts()
   }
   loadPosts(){
-    this._postService.getPosts()
+    this._postService.getPosts(this.currentPage)
     .pipe(
       catchError((error:HttpErrorResponse)=>{
         console.log(error)
         return throwError(()=>error);
       })
     ).subscribe(response =>{
-      this.posts = response
+      this.temporalResponse = response
+      this.posts = this.posts.concat(this.temporalResponse);
       console.log(this.posts);
     })
+  }
+
+  loadMore(event:any){
+    const scrollElement = event.target;
+    if (scrollElement.offsetHeight + scrollElement.scrollTop >= scrollElement.scrollHeight) {
+      this.currentPage += 1;
+      this.loadPosts()
+    }
   }
 }

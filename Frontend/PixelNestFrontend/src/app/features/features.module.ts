@@ -18,6 +18,7 @@ import { DashboardModule } from './components/dashboard/dashboard.module';
     AuthenticationPageComponent,
     LoginFormComponent,
     RegisterFormComponent
+    
   ],
   imports: [
     CommonModule,

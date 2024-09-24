@@ -8,10 +8,11 @@ import { FeedComponent } from './features/components/dashboard/feed/feed.compone
 import { DashboardComponent } from './features/components/dashboard/dashboard.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { DashboardGuard } from './core/guards/dashboard.guard';
+import { ProfileComponent } from './features/components/dashboard/profile/profile.component';
 
 
 const routes: Routes = [
-  {path:'',redirectTo:"/Dashboard", pathMatch:'full'},
+  {path:'',redirectTo:"Dashboard/", pathMatch:'full'},
   {path:"Get Started", component:LandingPageComponent},
   {
     path:"Authentication", 
@@ -29,6 +30,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'Feed', pathMatch: 'full' },
       { path: 'Feed', component: FeedComponent, canActivate:[DashboardGuard] },
+     
 
     ],
     canActivate:[DashboardGuard]
