@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DashboardModule } from './components/dashboard/dashboard.module';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 
@@ -17,8 +18,8 @@ import { DashboardModule } from './components/dashboard/dashboard.module';
     LandingPageComponent,
     AuthenticationPageComponent,
     LoginFormComponent,
-    RegisterFormComponent
-    
+    RegisterFormComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,

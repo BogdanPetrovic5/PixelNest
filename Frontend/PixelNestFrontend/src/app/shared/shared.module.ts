@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { CommentComponent } from './components/post/comments/comment/comment.component';
 import { ReplyComponent } from './components/post/comments/comment/reply/reply.component';
 import { LikeCommentComponent } from './components/post/comments/like-comment/like-comment.component';
+import { LottieLoadingComponent } from './components/lottie-loading/lottie-loading.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { LikeCommentComponent } from './components/post/comments/like-comment/li
     AlertComponent,
     LottieSuccessComponent,
     LottieFailComponent,
+    LottieLoadingComponent,
     LikesComponent,
     CommentsComponent,
     CommentComponent,
@@ -44,7 +46,8 @@ import { LikeCommentComponent } from './components/post/comments/like-comment/li
     PostComponent,
     AlertComponent,
     LottieSuccessComponent,
-    LottieFailComponent
+    LottieFailComponent,
+    LottieLoadingComponent
   ]
 })
 export class SharedModule { }

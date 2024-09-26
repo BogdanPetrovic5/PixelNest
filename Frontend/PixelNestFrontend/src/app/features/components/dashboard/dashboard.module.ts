@@ -4,7 +4,7 @@ import { DashboardComponent } from './dashboard.component';
 import { FeedComponent } from './feed/feed.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NewPostComponent } from './new-post/new-post.component';
-import { ProfileComponent } from './profile/profile.component';
+
 import { RouterOutlet } from '@angular/router';
 
 
@@ -12,8 +12,7 @@ import { RouterOutlet } from '@angular/router';
   declarations: [
     DashboardComponent,
     FeedComponent,
-    NewPostComponent,
-    ProfileComponent
+    NewPostComponent
   ],
   imports: [
     CommonModule,

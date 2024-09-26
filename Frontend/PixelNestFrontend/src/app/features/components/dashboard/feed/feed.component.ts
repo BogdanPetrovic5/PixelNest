@@ -13,16 +13,16 @@ export class FeedComponent implements OnInit{
   posts:PostDto[] = []
   temporalResponse:PostDto[] = []
   currentPage:number = 1;
+  isLoading:boolean = false;
   constructor(private _postService: PostService){
 
   }
   ngOnInit(): void {
-      this.initilizeApp();
+      this._initilizeApp();
   }
-  initilizeApp(){
-    this.loadPosts()
-  }
+  
   loadPosts(){
+    this.isLoading = true;
     this._postService.getPosts(this.currentPage)
     .pipe(
       catchError((error:HttpErrorResponse)=>{
@@ -32,15 +32,19 @@ export class FeedComponent implements OnInit{
     ).subscribe(response =>{
       this.temporalResponse = response
       this.posts = this.posts.concat(this.temporalResponse);
+      this.isLoading = false;
       console.log(this.posts);
     })
   }
 
   loadMore(event:any){
     const scrollElement = event.target;
-    if (scrollElement.offsetHeight + scrollElement.scrollTop >= scrollElement.scrollHeight) {
+    if ((scrollElement.offsetHeight + 50) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
       this.currentPage += 1;
       this.loadPosts()
     }
+  }
+ private _initilizeApp(){
+    this.loadPosts()
   }
 }
