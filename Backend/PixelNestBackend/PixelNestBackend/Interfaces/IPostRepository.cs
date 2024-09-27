@@ -9,6 +9,7 @@ namespace PixelNestBackend.Interfaces
     {
         Task<PostResponse> ShareNewPost(PostDto postDto, string userFolderPath, int userID);
         Task<ICollection<ResponsePostDto>> GetPosts();
+        Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username);
         bool SavePost(int userID, SavePostDto savePostDto, bool isDuplicate);
         bool LikePost(LikeDto likeDto, bool isLiked, int userID);
         bool Comment(Comment comment);

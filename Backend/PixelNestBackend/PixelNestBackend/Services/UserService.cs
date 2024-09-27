@@ -12,11 +12,17 @@ namespace PixelNestBackend.Services
     {
         readonly private IMapper _userMapper;
         readonly private IAuthenticationRepository _authenticationRepository;
+        readonly private IUserRepository _userRepository;
 
-        public UserService(IMapper mapper, IAuthenticationRepository authenticationRepository)
+        public UserService(
+            IMapper mapper,
+            IAuthenticationRepository authenticationRepository,
+            IUserRepository userRepository
+            )
         {
             _userMapper = mapper;
             _authenticationRepository = authenticationRepository;
+            _userRepository = userRepository;
         }
         public User ConvertRegisterDto(RegisterDto registerDto)
         {
@@ -24,6 +30,15 @@ namespace PixelNestBackend.Services
             return user;
         }
 
+        public UserProfileDto GetUserProfileData(string username)
+        {
+            UserProfileDto user = _userRepository.GetUserProfileData(username);
+            if (user != null)
+            {
+                return user;
+            }
+            return null;
+        }
 
         public bool IsEmailRegistered(User user)
         {

@@ -105,7 +105,15 @@ namespace PixelNestBackend.Controllers
             }
             
         }
-
-        
+        [HttpGet("GetPostsByUsername")]
+        public async Task<IActionResult> GetPostsByUsername(string username)
+        {
+            ICollection<ResponsePostDto> result = await _postService.GetPostsByUsername(username);
+            if(result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound();
+        }
     }
 }

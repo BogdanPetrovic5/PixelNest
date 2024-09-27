@@ -9,5 +9,8 @@ namespace PixelNestBackend.Interfaces
         bool IsEmailRegistered(User user);
         bool IsUsernameRegistered(User user);
 
+        UserProfileDto GetUserProfileData(string username);
+    
+
     }
 }
