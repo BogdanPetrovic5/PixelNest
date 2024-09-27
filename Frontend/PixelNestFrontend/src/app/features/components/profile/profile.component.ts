@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PostDto } from 'src/app/core/dto/post.dto';
 import { ProfileUser } from 'src/app/core/dto/profileUser.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
@@ -12,6 +13,8 @@ import { UserService } from 'src/app/core/services/user/user.service';
 export class ProfileComponent implements OnInit{
   username:string = ""
   user!:ProfileUser
+
+  posts:PostDto[] = []
   constructor(
     private _userSessions:UserSessionService,
     private _userService:UserService,
@@ -35,6 +38,7 @@ export class ProfileComponent implements OnInit{
     this._postService.getPostsByUsername(this.username).subscribe({
       next:response=>{
         console.log(response)
+        this.posts = response
       },
       error:error=>{
         console.log(error);

@@ -52,8 +52,8 @@
                         </div>
                        
                         <div class="feed-posts-list">
-                            <app-post></app-post>
-                            <app-post></app-post>
+                            <app-post *ngFor="let post of posts" [post] = "post"></app-post>
+                           
                         </div>
                     </div>
                   
