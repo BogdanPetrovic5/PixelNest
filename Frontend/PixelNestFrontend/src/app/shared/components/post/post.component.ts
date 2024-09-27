@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, finalize, Subscription, tap, throwError } from 'rxjs';
 import { LikedByUsers } from 'src/app/core/dto/likedByUsers.dto';
 import { PostDto } from 'src/app/core/dto/post.dto';
@@ -35,13 +36,19 @@ export class PostComponent implements OnInit{
     private _datePipe:DatePipe,
     private _postService:PostService,
     private _userSession:UserSessionService,
-    private _dashboardState:DashboardStateService
+    private _dashboardState:DashboardStateService,
+    private _router:Router
   ){
    
   }
 
   ngOnInit():void{
     this._initilizeComponent();
+  }
+
+  navigateToUserProfile(username:string){
+    this._userSession.setToCookie("profileUsername", username);
+    this._router.navigate(['/Profile'])
   }
 
   closeLikesTab() {

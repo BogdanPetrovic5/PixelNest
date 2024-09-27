@@ -12,7 +12,7 @@ import { ProfileComponent } from './features/components/profile/profile.componen
 
 
 const routes: Routes = [
-  {path:'',redirectTo:"Profile", pathMatch:'full'},
+  {path:'',redirectTo:"Dashboard", pathMatch:'full'},
   {path:"Get Started", component:LandingPageComponent},
   {
     path:"Authentication", 

@@ -5,7 +5,7 @@
         <div class="basic-info">
             <img src="./assets/images/user.png" alt="">
             <div class="info">
-                <h1>
+                <h1 (click)="navigateToUserProfile(post.ownerUsername)">
                    {{post.ownerUsername}} 
                 </h1>
                 <p>{{formattedDate}}<span class="material-symbols-outlined">

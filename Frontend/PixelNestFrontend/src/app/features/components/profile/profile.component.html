@@ -18,17 +18,17 @@
                             <div class="info">
                                 <div class="bio">
                                     <h1>
-                                        Bogdan5
+                                        {{user.username}}
                                     </h1>
-                                    <h2>Bogdan Petrovic</h2>
+                                    <h2>{{user.name}} {{user.lastname}}</h2>
                                     <p>
                                         Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
                                     </p>
                                 </div>
                                 
                                 <div class="stats">
-                                    <p><span class="numbers">321</span> <span> followers</span></p>
-                                    <p><span class="numbers">456</span> <span> following</span></p>
+                                    <p><span class="numbers">{{user.followers}}</span> <span> followers</span></p>
+                                    <p><span class="numbers">{{user.followings}}</span> <span> following</span></p>
                                 </div>
                                 <div class="buttons">
                                     <button>
