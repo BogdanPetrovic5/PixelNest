@@ -28,7 +28,10 @@ namespace PixelNestBackend.Repository
                         Username = up.Username,
                         Followers = up.Followers,
                         Followings = up.Following,
-                        TotalPosts = up.TotalPosts
+                        TotalPosts = up.TotalPosts,
+                        Name = up.Firstname,
+                        Lastname = up.Lastname
+
                     })
                     .FirstOrDefault();
                 return user;
