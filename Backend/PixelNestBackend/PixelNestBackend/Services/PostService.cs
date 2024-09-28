@@ -148,7 +148,9 @@ namespace PixelNestBackend.Services
 
         public async Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username)
         {
-            ICollection<ResponsePostDto> result = await _postRepository.GetPostsByUsername(username);
+            ICollection<ResponsePostDto> result = await _postRepository
+                .GetPostsByUsername(username);
+            
             return result;
         }
     }

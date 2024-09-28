@@ -106,12 +106,19 @@ namespace PixelNestBackend.Controllers
             
         }
         [HttpGet("GetPostsByUsername")]
-        public async Task<IActionResult> GetPostsByUsername(string username)
+        public async Task<IActionResult> GetPostsByUsername(string username, int page, int maximumPosts = 5)
         {
-            ICollection<ResponsePostDto> result = await _postService.GetPostsByUsername(username);
-            if(result != null)
+            ICollection<ResponsePostDto> posts = await _postService
+                .GetPostsByUsername(username);
+            if(posts != null)
             {
-                return Ok(result);
+                var result = posts.OrderByDescending(a => a.PublishDate);
+                var paginatedPosts = result
+                    .Skip((page - 1) * maximumPosts)
+                    .Take(maximumPosts)
+                    .ToList();
+
+                return Ok(paginatedPosts);
             }
             return NotFound();
         }
