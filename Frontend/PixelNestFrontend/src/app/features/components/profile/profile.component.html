@@ -51,10 +51,11 @@
                             <h1>Posts</h1>
                         </div>
                        
-                        <div class="feed-posts-list">
+                        <div class="feed-posts-list" (scroll)="loadMore($event)">
                             <app-post *ngFor="let post of posts" [post] = "post"></app-post>
                            
                         </div>
+                        <app-lottie-loading *ngIf="isLoading"></app-lottie-loading>
                     </div>
                   
                 </div>

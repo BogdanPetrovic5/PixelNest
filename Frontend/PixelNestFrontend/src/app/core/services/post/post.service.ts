@@ -19,8 +19,8 @@ export class PostService {
     const url = `${environment.apiUrl}/api/Post/GetPosts?page=${currentPage}`
     return this._httpClient.get<any>(url)
   }
-  getPostsByUsername(username:string):Observable<any>{
-    const url = `${environment.apiUrl}/api/Post/GetPostsByUsername?username=${username}`
+  getPostsByUsername(username:string, currentNumber:number, maximumPosts:number = 5):Observable<any>{
+    const url = `${environment.apiUrl}/api/Post/GetPostsByUsername?username=${username}&page=${currentNumber}&maximumPosts=${maximumPosts}`
     return this._httpClient.get<any>(url)
   }
   likePost(postID:number, username:string):Observable<any>{

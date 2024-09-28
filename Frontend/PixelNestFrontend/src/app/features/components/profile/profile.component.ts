@@ -15,6 +15,9 @@ export class ProfileComponent implements OnInit{
   user!:ProfileUser
 
   posts:PostDto[] = []
+  isLoading:boolean = false
+  currentPage:number = 1;
+
   constructor(
     private _userSessions:UserSessionService,
     private _userService:UserService,
@@ -34,17 +37,32 @@ export class ProfileComponent implements OnInit{
         console.error('An error occurred:', error);
       }
     })
+    this.loadPosts()
+  }
 
-    this._postService.getPostsByUsername(this.username).subscribe({
+  loadPosts(){
+    this.isLoading = true;
+    this._postService.getPostsByUsername(this.username, this.currentPage).subscribe({
       next:response=>{
-        console.log(response)
-        this.posts = response
+        console.log(response);
+        this.posts = this.posts.concat(response);
+        this.isLoading = false;
       },
       error:error=>{
         console.log(error);
       }
     })
   }
+
+  loadMore(event:any){
+    const scrollElement = event.target;
+    if ((scrollElement.offsetHeight + 50) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
+      this.currentPage += 1;
+      this.loadPosts()
+    }
+  }
+
+
   private _initilizeApp(){
     this.username = this._userSessions.getFromCookie("profileUsername")
   }
