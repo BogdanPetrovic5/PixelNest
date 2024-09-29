@@ -15,7 +15,9 @@ export class UserSessionService {
   getFromCookie(key:string){
     return this._cookieService.get(key);
   }
-
+  clearStorage(){
+    localStorage.clear()
+  }
   setToCookie(key:any, value:any){
     this._cookieService.set(key, value, {path:"/"});
   }

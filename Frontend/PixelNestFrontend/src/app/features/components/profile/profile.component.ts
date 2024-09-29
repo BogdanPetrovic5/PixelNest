@@ -25,9 +25,21 @@ export class ProfileComponent implements OnInit{
   ){}
   ngOnInit(): void {
     this._initilizeApp()
-    this.loadData()
+    this._loadData()
   }
-  loadData(){
+  loadMore(event:any){
+    const scrollElement = event.target;
+    if ((scrollElement.offsetHeight + 50) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
+      this.currentPage += 1;
+      this._loadPosts()
+    }
+  }
+
+  checkCurrentUser(){
+    return this._userSessions.getFromCookie("username") == this.username
+  }
+
+  private _loadData(){
     this._userService.getUserData(this.username).subscribe({
       next:response=>{
         console.log(response);
@@ -37,10 +49,10 @@ export class ProfileComponent implements OnInit{
         console.error('An error occurred:', error);
       }
     })
-    this.loadPosts()
+    this._loadPosts()
   }
 
-  loadPosts(){
+  private _loadPosts(){
     this.isLoading = true;
     this._postService.getPostsByUsername(this.username, this.currentPage).subscribe({
       next:response=>{
@@ -53,16 +65,6 @@ export class ProfileComponent implements OnInit{
       }
     })
   }
-
-  loadMore(event:any){
-    const scrollElement = event.target;
-    if ((scrollElement.offsetHeight + 50) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
-      this.currentPage += 1;
-      this.loadPosts()
-    }
-  }
-
-
   private _initilizeApp(){
     this.username = this._userSessions.getFromCookie("profileUsername")
   }

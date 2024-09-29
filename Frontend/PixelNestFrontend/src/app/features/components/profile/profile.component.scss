@@ -149,7 +149,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                                     margin-top: 20px;
                                     margin-bottom: 20px;
                                     font-size: 25px;
-                                    button{
+                                    button.follow{
                                        width: 150px;
                                        height: 50px;
                                        font-size: 0.65em;
@@ -175,10 +175,40 @@ $HFONT: "Roboto Condensed", sans-serif;
                                         height: 20px;
                                        }
                                     }
-                                    button:nth-child(2){
+                                    button.message{
                                         background-color: transparent !important;
                                         border: 1px solid white;
                                         color: $PCOLOR;
+                                        width: 150px;
+                                        height: 50px;
+                                        font-size: 0.65em;
+                                        font-family: $PFONT;
+                                        border-radius: 5px;
+                                        display: flex;
+                                        flex-direction: row;
+                                        align-items: center;
+                                        justify-content: center;
+                                      
+                                    }
+                                    button.edit{
+                                        background-color: transparent !important;
+                                        border: 1px solid white;
+                                        color: $PCOLOR;
+                                        width: 150px;
+                                        height: 50px;
+                                        font-size: 0.65em;
+                                        font-family: $PFONT;
+                                        border-radius: 5px;
+                                        display: flex;
+                                        flex-direction: row;
+                                        align-items: center;
+                                        justify-content: center;
+                                        h1{
+                                            font-size: 1em;
+                                            align-self: center;
+                                            margin: 0;
+                                           
+                                        }
                                     }
                                     
                                 }
@@ -195,12 +225,12 @@ $HFONT: "Roboto Condensed", sans-serif;
                 flex-direction: row;
                 margin: 0 auto;
                 .messages{
-                    width: 30%;
+                    width: 0%;
                     height: 100%;
                 }
                 .feed{
                 
-                    width: 70%;
+                    width: 100%;
                     height: 100%;
                     border: 1px solid $BORDERCOLOR;
                     border-radius: 25px;
@@ -220,7 +250,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                         display: flex;
                         flex-direction: column;
                         position: relative;
-                        align-items: flex-start;
+                        align-items: center;
                         .header{
                             width: 100%;
                             height: 10%;
@@ -238,15 +268,19 @@ $HFONT: "Roboto Condensed", sans-serif;
                    
                         .feed-posts-list{
                             display: flex;
-                            flex-direction: column;
-                            
-                            width: 100%;
+                            flex-direction: row;
+                            justify-content: left;
+                            gap:14.5%;
+                            flex-wrap: wrap;
+                            align-self: center;
                             max-height: 90%;
+                            width: fit-content;
                             overflow-y: scroll;
                             -ms-overflow-style: none;  
                             scrollbar-width: none; 
                             
                             app-post{
+                                width: 500px;
                                 margin-bottom: 40px;
                             }
                         }

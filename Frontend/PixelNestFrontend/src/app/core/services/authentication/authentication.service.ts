@@ -17,7 +17,7 @@ export class AuthenticationService {
   ngOnInit():void{
     
   }
-    logout(email:string):Observable<any>{
+  logout(email:string):Observable<any>{
     let url = `${environment.apiUrl}/api/Authentication/Logout`
     return this._httpClient.post<any>(url, {
       Email:email

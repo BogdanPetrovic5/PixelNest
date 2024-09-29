@@ -34,7 +34,7 @@ const routes: Routes = [
     canActivate:[DashboardGuard]
   },
   {
-    path:"Profile",
+    path:"Profile/:username",
     component:ProfileComponent,
     
   },
