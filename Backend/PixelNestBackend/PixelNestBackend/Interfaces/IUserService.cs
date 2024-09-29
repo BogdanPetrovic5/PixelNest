@@ -10,7 +10,7 @@ namespace PixelNestBackend.Interfaces
         bool IsUsernameRegistered(User user);
 
         UserProfileDto GetUserProfileData(string username);
-    
+        bool Follow(FollowDto followDto);
 
     }
 }

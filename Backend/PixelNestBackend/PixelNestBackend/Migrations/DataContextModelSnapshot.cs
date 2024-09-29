@@ -74,6 +74,29 @@ namespace PixelNestBackend.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("PixelNestBackend.Models.Follow", b =>
+                {
+                    b.Property<int>("UserFollowerID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserFollowingID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FollowerUsername")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FollowingUsername")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserFollowerID", "UserFollowingID");
+
+                    b.HasIndex("UserFollowingID");
+
+                    b.ToTable("Follow");
+                });
+
             modelBuilder.Entity("PixelNestBackend.Models.ImagePath", b =>
                 {
                     b.Property<int>("PathID")
@@ -257,6 +280,25 @@ namespace PixelNestBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PixelNestBackend.Models.Follow", b =>
+                {
+                    b.HasOne("PixelNestBackend.Models.User", "UserFollower")
+                        .WithMany("FollowingsList")
+                        .HasForeignKey("UserFollowerID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PixelNestBackend.Models.User", "UserFollowing")
+                        .WithMany("FollowersList")
+                        .HasForeignKey("UserFollowingID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UserFollower");
+
+                    b.Navigation("UserFollowing");
+                });
+
             modelBuilder.Entity("PixelNestBackend.Models.ImagePath", b =>
                 {
                     b.HasOne("PixelNestBackend.Models.Post", "Post")
@@ -355,6 +397,10 @@ namespace PixelNestBackend.Migrations
             modelBuilder.Entity("PixelNestBackend.Models.User", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("FollowersList");
+
+                    b.Navigation("FollowingsList");
 
                     b.Navigation("LikedComments");
 
