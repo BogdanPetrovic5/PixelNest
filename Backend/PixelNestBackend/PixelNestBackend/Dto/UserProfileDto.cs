@@ -8,5 +8,7 @@
         public string Username { get; set; }
         public string Name { get; set; }
         public string Lastname { get; set; }
+        public ICollection<FollowDto> ListFollowings { get; set; } 
+        public ICollection<FollowDto> ListFollowers { get; set; }
     }
 }

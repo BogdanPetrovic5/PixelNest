@@ -6,5 +6,7 @@ namespace PixelNestBackend.Interfaces
     {
         UserProfileDto GetUserProfileData(string username);
         bool Follow(FollowDto followDto);
+        ICollection<ResponseFollowersDto> GetFollowers(string username);
+        ICollection<ResponseFollowingDto> GetFollowings(string username);
     }
 }

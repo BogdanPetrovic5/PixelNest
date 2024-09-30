@@ -49,7 +49,14 @@ namespace PixelNestBackend.Services
         {
             return _authenticationRepository.IsUsernameRegistered(user);
         }
-
+        public ICollection<ResponseFollowersDto> GetFollowers(string username)
+        {
+            return _userRepository.GetFollowers(username);
+        }
+        public ICollection<ResponseFollowingDto> GetFollowings(string username)
+        {
+            return _userRepository.GetFollowings(username);
+        }
         public bool Follow(FollowDto followDto)
         {
             return _userRepository.Follow(followDto);

@@ -22,7 +22,45 @@ namespace PixelNestBackend.Repository
             _logger = logger;
             _userUtility = userUtility;
         }
+        public ICollection<ResponseFollowingDto> GetFollowings(string username)
+        {
+            try
+            {
+                ICollection<ResponseFollowingDto> users = _dataContext
+                    .Follow
+                    .Where(follower => follower.FollowerUsername == username && follower.FollowingUsername != username)
+                    .Select(f => new ResponseFollowingDto
+                    {
+                        FollowingUsername = f.FollowingUsername
 
+                    }).ToList();
+                return users;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Doslo je do fatalne greske: {ex.Message}");
+                return null;
+            }
+        }
+        public ICollection<ResponseFollowersDto> GetFollowers(string username)
+        {
+            try
+            {
+                ICollection<ResponseFollowersDto> users = _dataContext
+                    .Follow
+                    .Where(follower => follower.FollowingUsername == username && follower.FollowerUsername != username)
+                    .Select(f => new ResponseFollowersDto
+                    {
+                        FollowerUsername = f.FollowerUsername
+
+                    }).ToList();
+                return users;
+            }catch(Exception ex)
+            {
+                Console.WriteLine($"Doslo je do fatalne greske: {ex.Message}");
+                return null;
+            }
+        }
 
         public bool Follow(FollowDto followDto)
         {
@@ -91,7 +129,8 @@ namespace PixelNestBackend.Repository
                         Followings = up.Following,
                         TotalPosts = up.TotalPosts,
                         Name = up.Firstname,
-                        Lastname = up.Lastname
+                        Lastname = up.Lastname,
+                    
 
                     })
                     .FirstOrDefault();

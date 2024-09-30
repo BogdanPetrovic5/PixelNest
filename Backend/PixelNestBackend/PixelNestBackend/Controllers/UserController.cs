@@ -14,6 +14,27 @@ namespace PixelNestBackend.Controllers
         {
             _userRepository = userRepository;
         }
+        [HttpPost("GetFollowings")]
+        public ICollection<ResponseFollowingDto>? GetFollowings(string username)
+        {
+            ICollection<ResponseFollowingDto> users = _userRepository.GetFollowings(username);
+            if (users != null)
+            {
+                return users;
+            }
+            else return null;
+        }
+        [HttpPost("GetFollowers")]
+        public ICollection<ResponseFollowersDto>? GetFollowers(string username)
+        {
+            ICollection<ResponseFollowersDto> users = _userRepository.GetFollowers(username);
+            if (users != null)
+            {
+                return users;
+            }
+            else return null;
+        }
+
         [HttpPost("Follow")]
         public IActionResult Follow(FollowDto followDto)
         {
