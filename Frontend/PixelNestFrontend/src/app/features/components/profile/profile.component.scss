@@ -139,6 +139,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                                         }
                                         span{
                                             opacity: 0.7;
+                                            cursor: pointer;
                                         }
                                     }
                                 }
@@ -249,7 +250,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                         overflow: hidden;
                         display: flex;
                         flex-direction: column;
-                        position: relative;
+                       
                         align-items: center;
                         .header{
                             width: 100%;
@@ -274,7 +275,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                             flex-wrap: wrap;
                             align-self: center;
                             max-height: 90%;
-                            width: fit-content;
+                            width: 100%;
                             overflow-y: scroll;
                             -ms-overflow-style: none;  
                             scrollbar-width: none; 

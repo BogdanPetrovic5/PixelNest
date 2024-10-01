@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef, OnDestroy  } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 import { PostDto } from 'src/app/core/dto/post.dto';
 import { ProfileUser } from 'src/app/core/dto/profileUser.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
@@ -10,29 +12,58 @@ import { UserService } from 'src/app/core/services/user/user.service';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit{
+export class ProfileComponent implements OnInit, OnDestroy{
   username:string = ""
   user!:ProfileUser
 
   posts:PostDto[] = []
   isLoading:boolean = false
+  followersTab:boolean = false
+  followingsTab:boolean = false;
+  empty:boolean = false;
   currentPage:number = 1;
 
+  subscribe:Subscription = new Subscription;
+ 
   constructor(
     private _userSessions:UserSessionService,
     private _userService:UserService,
-    private _postService:PostService
+    private _postService:PostService,
+    private _cdr:ChangeDetectorRef,
+    private _router:Router,
+    private _route:ActivatedRoute
   ){}
   ngOnInit(): void {
     this._initilizeApp()
-    this._loadData()
+   
+    this._router.events
+    .pipe(
+      filter(event => event instanceof NavigationEnd)
+    )
+    .subscribe(() => {
+      window.location.reload()
+    });
   }
+  ngOnDestroy(): void {
+      this.subscribe.unsubscribe();
+  }
+  toggleFollowings(){
+    this.followingsTab = !this.followingsTab
+  }
+
+  toggleFollowers(){
+    this.followersTab = !this.followersTab;
+  }
+
   loadMore(event:any){
-    const scrollElement = event.target;
-    if ((scrollElement.offsetHeight + 50) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
-      this.currentPage += 1;
-      this._loadPosts()
+    if(!this.empty){
+      const scrollElement = event.target;
+      if ((scrollElement.offsetHeight) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
+        this.currentPage += 1;
+        this._loadPosts()
+      }
     }
+   
   }
 
   checkCurrentUser(){
@@ -42,21 +73,24 @@ export class ProfileComponent implements OnInit{
   private _loadData(){
     this._userService.getUserData(this.username).subscribe({
       next:response=>{
-        console.log(response);
         this.user = response
+        this._loadPosts()
       },
       error: error => {
         console.error('An error occurred:', error);
       }
     })
-    this._loadPosts()
+    
   }
 
   private _loadPosts(){
+    
     this.isLoading = true;
     this._postService.getPostsByUsername(this.username, this.currentPage).subscribe({
       next:response=>{
-        console.log(response);
+     
+        if(response.length == 0) this.empty = true;
+        console.log(this.currentPage);
         this.posts = this.posts.concat(response);
         this.isLoading = false;
       },
@@ -66,7 +100,19 @@ export class ProfileComponent implements OnInit{
     })
   }
   private _initilizeApp(){
-    this.username = this._userSessions.getFromCookie("profileUsername")
+   
+    this.subscribe.add(
+      this._route.paramMap.subscribe(params => {
+        this.username = params.get("username") || this._userSessions.getFromCookie("username")
+        this.posts = []
+        this.currentPage = 1;
+        this.empty = false;
+        this._loadData()
+      })
+
+    );
+   
+    
   }
   
 }

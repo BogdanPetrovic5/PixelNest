@@ -33,7 +33,7 @@ export class FeedComponent implements OnInit{
       this.temporalResponse = response
       this.posts = this.posts.concat(this.temporalResponse);
       this.isLoading = false;
-      console.log(this.posts);
+     
     })
   }
 

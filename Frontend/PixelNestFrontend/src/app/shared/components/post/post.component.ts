@@ -47,7 +47,7 @@ export class PostComponent implements OnInit{
   }
 
   navigateToUserProfile(username:string){
-    this._userSession.setToCookie("profileUsername", username);
+
     this._router.navigate([`/Profile/${username}`])
   }
 

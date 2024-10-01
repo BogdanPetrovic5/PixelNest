@@ -1,5 +1,7 @@
 <div class="container">
     <app-navigation></app-navigation>
+    <app-followers *ngIf="followersTab" [username]="username" (closeFollowersTab)="toggleFollowers()"></app-followers>
+    <app-followings *ngIf="followingsTab" [username]="username" (closeFollowingTab)="toggleFollowings()"></app-followings>
     <div class="content">
         <div class="wrap">
             <div class="banner">
@@ -28,8 +30,8 @@
                                 
                                 <div class="stats">
                                     <p><span class="numbers">{{user.totalPosts}}</span> <span> posts</span></p>
-                                    <p><span class="numbers">{{user.followers}}</span> <span> followers</span></p>
-                                    <p><span class="numbers">{{user.followings}}</span> <span> following</span></p>
+                                    <p (click)="toggleFollowers()"><span class="numbers">{{user.followers}}</span> <span> followers</span></p>
+                                    <p (click)="toggleFollowings()"><span class="numbers">{{user.followings}}</span> <span> following</span></p>
                                 </div>
                                 <div class="buttons">
                                     <button class="follow" *ngIf="!checkCurrentUser()">

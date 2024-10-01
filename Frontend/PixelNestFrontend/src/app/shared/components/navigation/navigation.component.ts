@@ -46,7 +46,7 @@ export class NavigationComponent implements OnInit{
   }
 
   navigateToUserProfile(){
-    this._userSessionService.setToCookie("profileUsername", this.username);
+   
     this._router.navigate([`/Profile/${this.username}`])
   }
 
