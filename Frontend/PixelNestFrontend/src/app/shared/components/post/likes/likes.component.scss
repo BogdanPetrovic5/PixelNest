@@ -43,7 +43,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 color: $PCOLOR;
                 font-family: $PFONT;
                 margin: 0;
-
+              
             }
         }
         .footer{
@@ -77,6 +77,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     font-size: 0.8em;
                     color: $PCOLOR;
                     font-family: $PFONT;
+                    cursor: pointer;
                 }
             }
         }

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { FlattenReplies } from 'src/app/core/dto/flattenReplies.dto';
 import { Replies } from 'src/app/core/dto/replies.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
@@ -13,7 +14,8 @@ export class ReplyComponent {
 
   constructor(
     private _userSession:UserSessionService,
-    private _postService:PostService
+    private _postService:PostService,
+    private _router:Router
   ){
 
   }
@@ -31,9 +33,14 @@ export class ReplyComponent {
 
   isReplyBox:boolean = false;
 
-  findUsername(){
-    return 
+  navigateToProfile(username?:string){
+    this._router.navigate([`Profile/${username}`])
   }
+
+  trimAtSymbol(username: string): string {
+    return username.replace(/^@/, ''); 
+  }
+
   openReplyBox(){
     this.isReplyBox = !this.isReplyBox
   }

@@ -2,8 +2,8 @@
     <div class="comment" >
         <img src="./assets/images/user.png" alt="">
         <div class="details">
-            <h1>{{reply.username}}</h1>
-            <p><span>{{parentUsername}}</span> {{reply.commentText}} </p>
+            <h1 (click)="navigateToProfile(reply.username)">{{reply.username}}</h1>
+            <p><span (click)="navigateToProfile(trimAtSymbol(parentUsername))">{{parentUsername}}</span> {{reply.commentText}} </p>
             <span (click)="openReplyBox()">Reply</span>
             <input (keydown.enter)="replyToComment()" type="text" placeholder="Reply here..." *ngIf="isReplyBox" [(ngModel)]="replyText">
         </div>

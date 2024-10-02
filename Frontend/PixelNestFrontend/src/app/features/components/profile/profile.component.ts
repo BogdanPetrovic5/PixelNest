@@ -1,6 +1,6 @@
 import { Component, OnInit,ChangeDetectorRef, OnDestroy  } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, Subscription } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { filter, Subscription, switchMap } from 'rxjs';
 import { PostDto } from 'src/app/core/dto/post.dto';
 import { ProfileUser } from 'src/app/core/dto/profileUser.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
@@ -35,18 +35,25 @@ export class ProfileComponent implements OnInit, OnDestroy{
   ){}
   ngOnInit(): void {
     this._initilizeApp()
-   
-    this._router.events
-    .pipe(
-      filter(event => event instanceof NavigationEnd)
+  
+    this.subscribe.add(
+      this._router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+  
+      )
+      .subscribe((response:any) => {
+        window.location.reload()
+      })
+     
     )
-    .subscribe(() => {
-      window.location.reload()
-    });
+  
   }
+
   ngOnDestroy(): void {
       this.subscribe.unsubscribe();
   }
+
   toggleFollowings(){
     this.followingsTab = !this.followingsTab
   }
@@ -71,42 +78,46 @@ export class ProfileComponent implements OnInit, OnDestroy{
   }
 
   private _loadData(){
-    this._userService.getUserData(this.username).subscribe({
-      next:response=>{
-        this.user = response
-        this._loadPosts()
-      },
-      error: error => {
-        console.error('An error occurred:', error);
-      }
-    })
+    this.subscribe.add(
+      this._userService.getUserData(this.username).subscribe({
+        next:response=>{
+          this.user = response
+          this._loadPosts();
+        },
+        error: error => {
+          console.error('An error occurred:', error);
+        }
+      })
+    )
+   
     
   }
 
   private _loadPosts(){
     
     this.isLoading = true;
-    this._postService.getPostsByUsername(this.username, this.currentPage).subscribe({
-      next:response=>{
-     
-        if(response.length == 0) this.empty = true;
-        console.log(this.currentPage);
-        this.posts = this.posts.concat(response);
-        this.isLoading = false;
-      },
-      error:error=>{
-        console.log(error);
-      }
-    })
+    this.subscribe.add(
+      this._postService.getPostsByUsername(this.username, this.currentPage).subscribe({
+        next:response=>{
+       
+          if(response.length < 5) this.empty = true;
+          console.log(this.currentPage);
+          this.posts = this.posts.concat(response);
+          this.isLoading = false;
+        },
+        error:error=>{
+          console.log(error);
+        }
+      })
+    )
+   
   }
   private _initilizeApp(){
-   
+   this._resetProfileState();
     this.subscribe.add(
       this._route.paramMap.subscribe(params => {
         this.username = params.get("username") || this._userSessions.getFromCookie("username")
-        this.posts = []
-        this.currentPage = 1;
-        this.empty = false;
+        
         this._loadData()
       })
 
@@ -114,5 +125,12 @@ export class ProfileComponent implements OnInit, OnDestroy{
    
     
   }
-  
+  private _resetProfileState() {
+   
+    this.posts = [];
+    this.currentPage = 1;
+    this.empty = false;
+    this.isLoading = false;
+    console.log("RESET", this.currentPage)
+  }
 }

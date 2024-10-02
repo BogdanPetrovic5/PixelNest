@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { CommentDto } from 'src/app/core/dto/comment.dto';
 import { FlattenReplies } from 'src/app/core/dto/flattenReplies.dto';
@@ -18,7 +19,8 @@ export class CommentComponent implements OnInit{
   constructor(
     private _userSession:UserSessionService,
     private _postService:PostService,
-    private _commentService:CommentService
+    private _commentService:CommentService,
+    private _router:Router
   ){
 
   }
@@ -40,6 +42,9 @@ export class CommentComponent implements OnInit{
   ngOnInit(): void {
     
     
+  }
+  navigateToProfile(username?:string){
+    this._router.navigate([`Profile/${username}`])
   }
   replyComment(parentCommentID?:number){
     
