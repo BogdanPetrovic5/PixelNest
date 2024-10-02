@@ -50,7 +50,7 @@ namespace PixelNestBackend.Controllers
             return NotFound();
         }
         [HttpGet("GetPosts")]
-        public async Task<IActionResult> GetPosts(int page = 1, int maximumPosts = 5){
+        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPosts(int page = 1, int maximumPosts = 5){
             try
             {
                 ICollection<ResponsePostDto> posts;
@@ -106,7 +106,7 @@ namespace PixelNestBackend.Controllers
             
         }
         [HttpGet("GetPostsByUsername")]
-        public async Task<IActionResult> GetPostsByUsername(string username, int page, int maximumPosts = 5)
+        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPostsByUsername(string username, int page, int maximumPosts = 5)
         {
             ICollection<ResponsePostDto> posts = await _postService
                 .GetPostsByUsername(username);

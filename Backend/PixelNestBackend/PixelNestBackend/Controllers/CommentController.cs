@@ -17,17 +17,17 @@ namespace PixelNestBackend.Controllers
             _commentService = commentService;
         }
         [HttpGet("GetReplies")]
-        public IActionResult GetReplies(int initialParentID)
+        public ActionResult<ICollection<ResponseReplyCommentDto>> GetReplies(int initialParentID)
         {
-            var result = _commentService.GetReplies(initialParentID);
+            ICollection<ResponseReplyCommentDto> result = _commentService.GetReplies(initialParentID);
             if (result != null)
             {
                 return Ok(result);
             }
-            return BadRequest();
+            return NotFound();
         }
         [HttpGet("GetComments")]
-        public IActionResult GetComments(int postID)
+        public ActionResult<ICollection<ResponseCommentDto>?> GetComments(int postID)
         {
             ICollection<ResponseCommentDto> result;
             result = _commentService.GetComments(postID);
@@ -35,7 +35,7 @@ namespace PixelNestBackend.Controllers
             {
                 return Ok(result);
             }
-            else return BadRequest();
+            else return NotFound();
         }
         [HttpPost("LikeComment")]
         public IActionResult Like(LikeCommentDto likeCommentDto)
