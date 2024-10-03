@@ -11,4 +11,15 @@ $HFONT: "Roboto Condensed", sans-serif;
     width: 100%;
     height: 100vh;
     overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .posts{
+        width: 100%;
+        height: 70%;
+        background-color: $BGCOLOR;
+     
+    }
 }
