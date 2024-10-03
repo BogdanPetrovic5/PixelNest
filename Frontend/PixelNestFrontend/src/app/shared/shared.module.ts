@@ -15,6 +15,7 @@ import { CommentComponent } from './components/post/comments/comment/comment.com
 import { ReplyComponent } from './components/post/comments/comment/reply/reply.component';
 import { LikeCommentComponent } from './components/post/comments/like-comment/like-comment.component';
 import { LottieLoadingComponent } from './components/lottie-loading/lottie-loading.component';
+import { LocationComponent } from './components/location/location.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { LottieLoadingComponent } from './components/lottie-loading/lottie-loadi
     CommentComponent,
     ReplyComponent,
     LikeCommentComponent,
+    LocationComponent,
     
   ],
   imports: [

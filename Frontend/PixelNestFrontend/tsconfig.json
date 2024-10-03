@@ -10,6 +10,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -22,7 +23,13 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types"
+    ],
+    "esModuleInterop": true, // Allows default imports from modules with no default export
+    "skipLibCheck": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

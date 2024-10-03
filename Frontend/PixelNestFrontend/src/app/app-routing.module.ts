@@ -9,10 +9,11 @@ import { DashboardComponent } from './features/components/dashboard/dashboard.co
 import { AuthGuard } from './core/guards/auth.guard';
 import { DashboardGuard } from './core/guards/dashboard.guard';
 import { ProfileComponent } from './features/components/profile/profile.component';
+import { LocationComponent } from './shared/components/location/location.component';
 
 
 const routes: Routes = [
-  {path:'',redirectTo:"Dashboard", pathMatch:'full'},
+  {path:'',redirectTo:"Location", pathMatch:'full'},
   {path:"Get Started", component:LandingPageComponent},
   {
     path:"Authentication", 
@@ -38,7 +39,14 @@ const routes: Routes = [
     component:ProfileComponent,
     
   },
-  {path:"**", redirectTo:"/Get Started"}
+  {
+    path:"Location",
+    component:LocationComponent
+  },
+  {
+    path:"**", 
+    redirectTo:"/Get Started"
+  }
 ];
 
 @NgModule({
