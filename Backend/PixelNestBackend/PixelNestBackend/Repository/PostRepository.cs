@@ -60,8 +60,8 @@ namespace PixelNestBackend.Repository
                 };
             }
 
-            string newPostQuery = @"INSERT INTO Posts(UserID, OwnerUsername, PostDescription, TotalComments, TotalLikes, PublishDate) 
-                            VALUES(@UserID, @OwnerUsername, @PostDescription, @TotalComments, @TotalLikes, GETDATE());
+            string newPostQuery = @"INSERT INTO Posts(UserID, OwnerUsername, PostDescription, TotalComments, TotalLikes, PublishDate, Location) 
+                            VALUES(@UserID, @OwnerUsername, @PostDescription, @TotalComments, @TotalLikes, GETDATE(), @Location);
                             SELECT CAST(SCOPE_IDENTITY() as int)";
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
@@ -79,7 +79,7 @@ namespace PixelNestBackend.Repository
                         command.Parameters.AddWithValue("@PostDescription", postDto.PostDescription);
                         command.Parameters.AddWithValue("@TotalComments", 0);
                         command.Parameters.AddWithValue("@TotalLikes", 0);
-
+                        command.Parameters.AddWithValue("@Location", postDto.Location);
                       
                         int postID = (int)await command.ExecuteScalarAsync();
 
@@ -126,7 +126,7 @@ namespace PixelNestBackend.Repository
                        PostID = a.PostID,
                        PublishDate = a.PublishDate,
                        ImagePaths = a.ImagePaths,
-
+                       Location = a.Location,
                        LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                        {
                            Username = l.Username
@@ -169,7 +169,7 @@ namespace PixelNestBackend.Repository
                        PostID = a.PostID,
                        PublishDate = a.PublishDate,
                        ImagePaths = a.ImagePaths,
-
+                       Location = a.Location,
                        LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                        {
                            Username = l.Username

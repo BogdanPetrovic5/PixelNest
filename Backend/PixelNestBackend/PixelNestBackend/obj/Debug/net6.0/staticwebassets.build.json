@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "z/VQVgYykrq3n7mpNMCfNaQ7IwmJeNGgQ+VmMIuVtYs=",
+  "Hash": "Vg9y+5S7TuH2kOqVtunQdSL93L6eJ9Uvbmb7Y9ikJyI=",
   "Source": "PixelNestBackend",
   "BasePath": "_content/PixelNestBackend",
   "Mode": "Default",
@@ -423,6 +423,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Photos\\MichaelMike\\22\\blog1.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Nikola6\\29\\dylan-gillis-KdeqA3aTnBY-unsplash.jpg",
+      "SourceId": "PixelNestBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "RelativePath": "Photos/Nikola6/29/dylan-gillis-KdeqA3aTnBY-unsplash.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Photos\\Nikola6\\29\\dylan-gillis-KdeqA3aTnBY-unsplash.jpg"
     }
   ]
 }

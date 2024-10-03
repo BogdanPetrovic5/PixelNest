@@ -14,7 +14,7 @@ namespace PixelNestBackend.Dto
         public int TotalLikes { get; set; }
 
         public int TotalComments { get; set; }
-
+        public string Location { get; set; }
         public DateTime PublishDate { get; set; }
 
      

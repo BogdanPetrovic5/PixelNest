@@ -15,7 +15,7 @@ namespace PixelNestBackend.Models
         public string? PostDescription { get; set; }
         public int TotalComments { get; set; }
         public int TotalLikes { get; set; }
-
+        public string Location { get; set; }
         public DateTime PublishDate { get; set; }
         public User? User { get; set; }
         [NotMapped]
