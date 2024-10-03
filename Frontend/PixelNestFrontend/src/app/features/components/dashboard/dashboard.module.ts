@@ -6,18 +6,21 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { NewPostComponent } from './new-post/new-post.component';
 
 import { RouterOutlet } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     DashboardComponent,
     FeedComponent,
-    NewPostComponent
+    NewPostComponent,
+    
   ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterOutlet
+    RouterOutlet,
+    FormsModule
   ]
   
 })

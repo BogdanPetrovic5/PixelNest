@@ -15,7 +15,7 @@ export class LocationComponent {
   private geocodeUrl = 'https://api.maptiler.com/geocoding/';
   private apiKey = 'aqR39NWYQyZAdFc6KtYh'
   suggestions: any[] = [];
-  location = 'Zmaj Jovina 5, Kragujevac';
+  location = 'Kragujevac, Serbia';
   ngOnInit(): void {
     this.initializeMap();
   }
@@ -83,6 +83,7 @@ export class LocationComponent {
   selectLocation(suggestion: any) {
     // Set the map center to the selected location
     const center = suggestion.center;
+    
     this.map.setCenter(center);
     this.map.setZoom(15); // Adjust zoom level for street view
     this.suggestions = []; // Clear suggestions after selection

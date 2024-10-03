@@ -14,6 +14,7 @@ export interface PostDto {
     imagePaths: ImagePathDto[];
     publishDate:Date;
     savedByUsers:SavedPosts[];
+    location:string;
 }
   
 export interface ImagePathDto {

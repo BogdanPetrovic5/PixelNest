@@ -139,6 +139,52 @@ $HFONT: "Roboto Condensed", sans-serif;
                     opacity: 0.4;
                     
                 }
+                .options{
+                    margin-bottom: 20px;
+                    .location{
+                        width: 100%;
+                        input{
+                            width: 100%;
+                            background-color: transparent !important;
+                            border: none;
+                            border-bottom: 1px solid #484f53;
+                            outline:none;
+                            color: white;
+                            font-family:$PFONT;
+                            text-indent: 10px;
+                            height: 20px;
+                          
+                        }
+                       
+                            #suggestionsList{
+                                width: 100%;
+                                font-size: 25px;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: flex-start;
+                                gap: 10px;
+                                background-color: #06293817;
+                                div{
+                                    list-style: none;
+                                    border-bottom: 1px solid #484f53;
+                                    font-size: 0.7em;
+                                    color: white;
+                                    font-family: $PFONT;
+                                    color: $PCOLOR;
+                                    font-weight: 300;
+                                    position: relative;
+                                    z-index: 1;
+                                    width: 100%;
+                                    cursor: pointer;
+                                    padding-bottom: 5px;
+                                    padding-left: 5px;
+                                    padding-top: 5px;
+                                }
+                            }
+                           
+                        
+                    }
+                }
                 .description{
                     color: white;
                     width: calc(100% - 10px);

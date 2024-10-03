@@ -31,7 +31,10 @@
                 </span>
                 <div class="options">
                     <div class="location">
-
+                        <input type="text" id="locationInput" placeholder="Enter a location" (input)="onLocationInput($event)" [value]="locationCenter" (focus)="setFocus()" [(ngModel)]="locationValue" />
+                        <div id="suggestionsList" *ngIf="inFocus()">
+                            <div *ngFor="let suggestion of suggestions" (click)="setLocation(suggestion)">{{ suggestion.place_name }}</div>
+                        </div>
                     </div>
                 </div>
                 <button (click)="sharePost()">

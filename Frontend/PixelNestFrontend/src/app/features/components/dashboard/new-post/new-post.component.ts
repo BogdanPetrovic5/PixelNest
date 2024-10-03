@@ -1,5 +1,7 @@
+import { query } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import axios from 'axios';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
@@ -12,6 +14,10 @@ import { ImageCompressorService } from 'src/app/uitility/image-compressor.servic
 export class NewPostComponent implements OnInit{
 
   @ViewChild('descriptionDiv') descriptionDiv: ElementRef<HTMLDivElement> | undefined
+  apiKey: string = 'aqR39NWYQyZAdFc6KtYh'; // Replace with your MapTiler API Key
+  geocodeUrl: string = 'https://api.maptiler.com/geocoding/';
+  suggestions: any[] = [];
+
   charCount:number = 0;
   maxChar:number = 1000;
   
@@ -22,7 +28,10 @@ export class NewPostComponent implements OnInit{
   newPostForm:boolean = true
   imageDisplay:boolean = false;
   anim:boolean = false;
+  isFocus:boolean = false;
 
+  locationValue:string = ""
+  locationCenter:string = ""
   objectFit:string = 'cover';
   selectedFiles:File[] = []
   imageSrc: string | ArrayBuffer | null = null;
@@ -41,7 +50,36 @@ export class NewPostComponent implements OnInit{
   ngOnInit(): void {
     
   }
- 
+  
+  async onLocationInput(event:any){
+    const query = event.target.value;
+    if(query.length > 3){
+      const response = await axios.get(`${this.geocodeUrl}${encodeURIComponent(query)}.json`,{
+        params:{
+          key:this.apiKey,
+          limit:5
+        }
+      })
+      this.suggestions = response.data.features
+    }else this.suggestions = [];
+    
+  }
+  setLocation(location:any){
+    this.locationCenter = location.place_name;
+    console.log(this.locationCenter)
+    this.suggestions = [];
+    this.removeFocus();
+  }
+
+  setFocus(){
+    this.isFocus = true;
+  }
+  removeFocus(){
+    this.isFocus = false;
+  }
+  inFocus(){
+    return this.locationValue.length >= 3
+  }
   sharePost(){
     const text = this._takeText()
     const username = this._userSessionService.getFromCookie("username");
@@ -154,6 +192,7 @@ export class NewPostComponent implements OnInit{
     formData.append("PostDescription", description)
     formData.append("OwnerUsername", username);
     formData.append("PhotoDisplay", this.objectFit);
+    formData.append("Location", this.locationCenter);
     for (let i = 0; i < this.selectedFiles.length; i++) {
       formData.append("Photos", this.selectedFiles[i]);
     }

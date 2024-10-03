@@ -13,7 +13,7 @@ import { LocationComponent } from './shared/components/location/location.compone
 
 
 const routes: Routes = [
-  {path:'',redirectTo:"Location", pathMatch:'full'},
+  {path:'',redirectTo:"Get Started", pathMatch:'full'},
   {path:"Get Started", component:LandingPageComponent},
   {
     path:"Authentication", 
