@@ -50,7 +50,10 @@ export class PostComponent implements OnInit{
 
     this._router.navigate([`/Profile/${username}`])
   }
-
+  navigate(url:string){
+    this._router.navigate([`Location/${url}`])
+    this._dashboardState.setNewLocation(url);
+  }
   closeLikesTab() {
     this.isLikesTabOpen = false
   }

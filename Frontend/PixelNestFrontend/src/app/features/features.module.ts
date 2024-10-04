@@ -8,10 +8,11 @@ import { RegisterFormComponent } from './components/authentication-page/register
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DashboardModule } from './components/dashboard/dashboard.module';
+import { DashboardModule } from './components/layout/dashboard/dashboard.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FollowingsComponent } from './components/profile/followings/followings.component';
 import { FollowersComponent } from './components/profile/followers/followers.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
 
 
@@ -23,7 +24,8 @@ import { FollowersComponent } from './components/profile/followers/followers.com
     RegisterFormComponent,
     ProfileComponent,
     FollowingsComponent,
-    FollowersComponent
+    FollowersComponent,
+    LayoutComponent
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
@@ -27,15 +27,20 @@ export class NavigationComponent implements OnInit{
     private _userSessionService:UserSessionService,
     private _authService:AuthenticationService,
     private _router:Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private _route:ActivatedRoute
   ){
 
   }
   ngOnInit():void{
     this._initilize()
- 
-    this._router.events.pipe(filter(event=>event instanceof NavigationEnd))
-    this.setActiveTab(this._router.url);
+
+    this._router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(()=>{
+      const currentUrl = this._router.url;
+      this.setActiveTab(currentUrl);
+    })
   }
 
   setActiveTab(url:string){

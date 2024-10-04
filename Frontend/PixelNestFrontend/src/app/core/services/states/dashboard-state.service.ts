@@ -10,6 +10,10 @@ export class DashboardStateService {
 
   private IsLikesTabSubject = new BehaviorSubject<boolean | null>(false)
   isLikesTab$ = this.IsLikesTabSubject.asObservable()
+
+  private NewLocationSubject = new BehaviorSubject<string>("")
+  location$ = this.NewLocationSubject.asObservable()
+
   constructor() { }
 
   setIsTabSelected(isSelected:boolean | null){
@@ -17,5 +21,9 @@ export class DashboardStateService {
   }
   setIsLikesTab(isSelected:boolean | null){
     this.IsLikesTabSubject.next(isSelected);
+  }
+
+  setNewLocation(location:string){
+    this.NewLocationSubject.next(location);
   }
 }

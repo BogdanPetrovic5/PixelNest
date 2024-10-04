@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import axios from 'axios';
 
 import { Map } from '@maptiler/sdk'; 
+import { UserStateService } from 'src/app/core/services/states/user-state.service';
+import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 
 
 @Component({
@@ -15,9 +17,19 @@ export class LocationComponent {
   private geocodeUrl = 'https://api.maptiler.com/geocoding/';
   private apiKey = 'aqR39NWYQyZAdFc6KtYh'
   suggestions: any[] = [];
-  location = 'Kragujevac, Serbia';
+  location = "";
+  constructor(private _dashboardState:DashboardStateService){
+
+  }
   ngOnInit(): void {
-    this.initializeMap();
+   
+    this._dashboardState.location$.subscribe({
+      next:response =>{
+        this.location = response;
+        console.log(response);
+        this.initializeMap()
+      }
+    })
   }
 
   private async getCoordinates(location: string): Promise<[number, number] | null> {
@@ -64,28 +76,5 @@ export class LocationComponent {
     });
     
   }
-  async onLocationInput(event: any) {
-    const query = event.target.value;
-    if (query.length > 2) { // Start searching after 2 characters
-      const response = await axios.get(`${this.geocodeUrl}${encodeURIComponent(query)}.json`, {
-        params: {
-          key: this.apiKey,
-          limit: 5 // Limit to 5 suggestions
-        }
-      });
-
-      this.suggestions = response.data.features;
-    } else {
-      this.suggestions = [];
-    }
-  }
-
-  selectLocation(suggestion: any) {
-    // Set the map center to the selected location
-    const center = suggestion.center;
-    
-    this.map.setCenter(center);
-    this.map.setZoom(15); // Adjust zoom level for street view
-    this.suggestions = []; // Clear suggestions after selection
-  }
+ 
 }

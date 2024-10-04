@@ -8,7 +8,7 @@
                 <h1 (click)="navigateToUserProfile(post.ownerUsername)">
                    {{post.ownerUsername}} 
                 </h1>
-                <p>{{formattedDate}}<span class="material-symbols-outlined">
+                <p (click)="navigate(post.location)">{{formattedDate}}<span class="material-symbols-outlined">
                     location_on
                 </span> 
                     {{post.location}}

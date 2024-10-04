@@ -1,5 +1,4 @@
 <div class="container">
-    <app-navigation></app-navigation>
     <app-followers *ngIf="followersTab" [username]="username" (closeFollowersTab)="toggleFollowers()"></app-followers>
     <app-followings *ngIf="followingsTab" [username]="username" (closeFollowingTab)="toggleFollowings()"></app-followings>
     <div class="content">
