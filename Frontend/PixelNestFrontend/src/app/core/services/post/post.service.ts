@@ -23,6 +23,10 @@ export class PostService {
     const url = `${environment.apiUrl}/api/Post/GetPostsByUsername?username=${username}&page=${currentNumber}&maximumPosts=${maximumPosts}`
     return this._httpClient.get<any>(url)
   }
+  getPostsByLocation(location:string):Observable<any>{
+    const url = `${environment.apiUrl}/api/Post/GetPostsByLocation?location=${location}`
+    return this._httpClient.get<any>(url)
+  }
   likePost(postID:number, username:string):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/LikePost`
     return this._httpClient.post(url, {

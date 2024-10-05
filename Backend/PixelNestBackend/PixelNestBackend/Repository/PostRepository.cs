@@ -76,11 +76,26 @@ namespace PixelNestBackend.Repository
                       
                         command.Parameters.AddWithValue("@UserID", userID);
                         command.Parameters.AddWithValue("@OwnerUsername", postDto.OwnerUsername);
-                        command.Parameters.AddWithValue("@PostDescription", postDto.PostDescription);
+                        
                         command.Parameters.AddWithValue("@TotalComments", 0);
                         command.Parameters.AddWithValue("@TotalLikes", 0);
-                        command.Parameters.AddWithValue("@Location", postDto.Location);
-                      
+                        if (string.IsNullOrEmpty(postDto.Location))
+                        {
+                            command.Parameters.AddWithValue("@Location", DBNull.Value); 
+                        }
+                        else
+                        {
+                            command.Parameters.AddWithValue("@Location", postDto.Location);
+                        }
+
+                        if (string.IsNullOrEmpty(postDto.PostDescription))
+                        {
+                            command.Parameters.AddWithValue("@PostDescription", DBNull.Value);
+                        }
+                        else
+                        {
+                            command.Parameters.AddWithValue("@PostDescription", postDto.PostDescription);
+                        }
                         int postID = (int)await command.ExecuteScalarAsync();
 
                         return new PostResponse

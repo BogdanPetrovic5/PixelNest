@@ -9,12 +9,12 @@ namespace PixelNestBackend.Dto
 
         public string OwnerUsername { get; set; }
 
-        public string PostDescription { get; set; }
+        public string? PostDescription { get; set; }
 
         public int TotalLikes { get; set; }
 
         public int TotalComments { get; set; }
-        public string Location { get; set; }
+        public string? Location { get; set; }
         public DateTime PublishDate { get; set; }
 
      

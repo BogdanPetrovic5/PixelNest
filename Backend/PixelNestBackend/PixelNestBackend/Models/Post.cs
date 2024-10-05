@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PixelNestBackend.Dto;
+using System.Runtime.InteropServices;
 
 namespace PixelNestBackend.Models
 {
@@ -15,7 +16,8 @@ namespace PixelNestBackend.Models
         public string? PostDescription { get; set; }
         public int TotalComments { get; set; }
         public int TotalLikes { get; set; }
-        public string Location { get; set; }
+
+        public string? Location { get; set; }
         public DateTime PublishDate { get; set; }
         public User? User { get; set; }
         [NotMapped]
