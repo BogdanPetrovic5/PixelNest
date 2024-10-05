@@ -145,7 +145,12 @@ namespace PixelNestBackend.Services
             }
            
         }
-
+        public async Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location)
+        {
+            ICollection<ResponsePostDto> result = await _postRepository
+                .GetPostsByLocation(location);
+            return result;
+        }
         public async Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username)
         {
             ICollection<ResponsePostDto> result = await _postRepository

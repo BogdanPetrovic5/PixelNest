@@ -155,6 +155,50 @@ namespace PixelNestBackend.Repository
                 throw;
             }
         }
+        public async Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location)
+        {
+            try
+            {
+                var posts = await _dataContext.Posts
+                   .Where(l => l.Location == location)
+                   .Select(a => new ResponsePostDto
+                   {
+                       PostDescription = a.PostDescription,
+                       OwnerUsername = a.OwnerUsername,
+                       TotalComments = a.TotalComments,
+                       TotalLikes = a.TotalLikes,
+                       PostID = a.PostID,
+                       PublishDate = a.PublishDate,
+                       ImagePaths = a.ImagePaths,
+                       Location = a.Location,
+                       LikedByUsers = a.LikedPosts.Select(l => new LikeDto
+                       {
+                           Username = l.Username
+
+                       }).ToList(),
+                       SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
+                       {
+                           Username = s.Username
+
+                       }).ToList()
+                   })
+                .AsSplitQuery()
+                .ToListAsync();
+
+                _logger.LogInformation("Posts retrieved successfully.");
+                return posts;
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogError($"Database error while retrieving posts: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An unexpected error occurred: {ex.Message}");
+                throw;
+            }
+        }
         public async Task<ICollection<ResponsePostDto>> GetPosts()
         {
             try
@@ -199,6 +243,7 @@ namespace PixelNestBackend.Repository
             }
 
         }
+        
         public bool LikePost(LikeDto likeDto, bool isLiked, int userID)
         {
            
