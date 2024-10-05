@@ -8,10 +8,14 @@
                 <h1 (click)="navigateToUserProfile(post.ownerUsername)">
                    {{post.ownerUsername}} 
                 </h1>
-                <p (click)="navigate(post.location)">{{formattedDate}}<span class="material-symbols-outlined">
-                    location_on
-                </span> 
-                    {{post.location}}
+                <p>
+                    {{formattedDate}}
+                    <span (click)="navigate(post.location)" *ngIf="post.location">
+                        <span class="material-symbols-outlined">
+                            location_on
+                        </span> 
+                        {{post.location}}
+                    </span>
                 </p>
                 
             </div>

@@ -2,9 +2,13 @@ import { Component } from '@angular/core';
 
 import axios from 'axios';
 
-import { Map } from '@maptiler/sdk'; 
+import { Map, Marker } from '@maptiler/sdk'; 
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
+import maplibregl from 'maplibre-gl';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PostDto } from 'src/app/core/dto/post.dto';
+import { PostService } from 'src/app/core/services/post/post.service';
 
 
 @Component({
@@ -18,20 +22,48 @@ export class LocationComponent {
   private apiKey = 'aqR39NWYQyZAdFc6KtYh'
   suggestions: any[] = [];
   location = "";
-  constructor(private _dashboardState:DashboardStateService){
+
+  posts:PostDto[] = []
+  constructor(
+    private _dashboardState:DashboardStateService,
+    private _router:Router,
+    private _route:ActivatedRoute,
+    private _postService:PostService
+  ){
 
   }
   ngOnInit(): void {
    
     this._dashboardState.location$.subscribe({
       next:response =>{
-        this.location = response;
-        console.log(response);
-        this.initializeMap()
+        console.log(response)
+        if(response == null){
+          this._route.params.subscribe(params => {
+            const data = params['location'];
+            console.log(data);
+            this.location = data
+            this.loadPosts();
+            this.initializeMap();
+          });
+        }else{
+          this.location = response;
+          this.initializeMap()
+        }
+        
       }
     })
   }
-
+  private loadPosts(){
+    this._postService.getPostsByLocation(this.location).subscribe({
+      next:response=>{
+        this.posts = response
+        console.log(this.posts);
+      },
+      error:error=>{
+        console.log(error.message)
+      }
+    })
+  }
   private async getCoordinates(location: string): Promise<[number, number] | null> {
     try {
       const requestUrl = `${this.geocodeUrl}${encodeURIComponent(location)}.json`;
@@ -68,13 +100,21 @@ export class LocationComponent {
       console.error("MapTiler map library is not loaded.");
       return;
     }
-    this.map = new Map({
+    this.map = new maplibregl.Map({
       container: 'map',
       style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${this.apiKey}`, 
       center: center, 
-      zoom: 12
+      zoom: 8
     });
+ 
+    const marker = new maplibregl.Marker({
+     
+      
+    }).setLngLat(center)
+    .addTo(this.map);
+
+  } 
+  private setMarker(center:[number, number]){
     
   }
- 
 }

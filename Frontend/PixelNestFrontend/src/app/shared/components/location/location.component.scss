@@ -11,7 +11,7 @@ $HFONT: "Roboto Condensed", sans-serif;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    position: relative;
+  
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -26,17 +26,48 @@ $HFONT: "Roboto Condensed", sans-serif;
             display: flex;
             border-radius: 25px;
             flex-direction: column;
-            overflow: hidden;
+           overflow: hidden;
             #map{
                 align-self: center;
                 border-top-left-radius: 25px;
                 border-top-right-radius: 25px;
+                
             }
+       
             .posts{
                 width: 100%;
                 height: 70%;
                 background-color: $BGCOLOR;
-             
+                
+                .header{
+                    font-size: 25px;
+                    height: 70px;
+                    display: flex;
+                    
+                    align-items: center;
+                    h1{
+                        color: white;
+                        font-size: 1.4em;
+                        font-family: $PFONT;
+    
+                    }
+                }
+                .posts-list{
+                    width: 100%;
+                    height: calc(100% - 70px);
+                    overflow-y: scroll;
+                    div{
+                        width: 100%;
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: wrap;
+                     
+                        app-post{
+                            width: 400px;
+                        }
+                    }
+                  
+                }
             }
         }
     
