@@ -47,7 +47,9 @@ export class LocationComponent {
           });
         }else{
           this.location = response;
+          this.loadPosts();
           this.initializeMap()
+          
         }
         
       }

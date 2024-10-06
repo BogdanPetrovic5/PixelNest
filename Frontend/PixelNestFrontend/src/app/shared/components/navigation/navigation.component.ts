@@ -33,20 +33,21 @@ export class NavigationComponent implements OnInit{
 
   }
   ngOnInit():void{
-    this._initilize()
-
+   
     this._router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(()=>{
       const currentUrl = this._router.url;
+      console.log(currentUrl);
       this.setActiveTab(currentUrl);
     })
+    this.setActiveTab(this._router.url);
+    
   }
 
   setActiveTab(url:string){
     this.selectedTab = Object.keys(this.routeToTabMap).find(key => url.includes(key)) 
-    ? this.routeToTabMap[Object.keys(this.routeToTabMap).find(key => url.includes(key))!] 
-    : 0;
+    ? this.routeToTabMap[Object.keys(this.routeToTabMap).find(key => url.includes(key))!] : 0
    
   }
 
@@ -81,8 +82,6 @@ export class NavigationComponent implements OnInit{
   }
   private _initilize(){
     this.username = this._userSessionService.getFromCookie("username")
-    this.selectedTab = this._userSessionService.getFromLocalStorage("tab") ?? 1;
-    
     this.cdr.detectChanges()
   }
 }

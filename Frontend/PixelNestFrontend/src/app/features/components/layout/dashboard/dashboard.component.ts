@@ -17,30 +17,19 @@ export class DashboardComponent implements OnInit, OnDestroy{
 
   post:PostDto[] = []
   constructor(
-    private _dashboardStateMenagment:DashboardStateService, 
-    private _postService: PostService,
-    private _userSession: UserSessionService
+ 
   ){
 
   }
   ngOnDestroy(): void {
-    // this._userSession.clearCookies()
+    
   }
   ngOnInit(): void {
  
-      this.initilizeApp()
-  }
-
-  initilizeApp(){
-    this.subscriptions.add(
-      this._dashboardStateMenagment.newPostTab$.subscribe(response =>{
-        if(this.newPost != null && response != null){
-          this.newPost = response
-        }
-      })
-    )
     
   }
+
+
 
 
 }
