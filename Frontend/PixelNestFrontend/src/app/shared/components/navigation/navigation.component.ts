@@ -34,13 +34,6 @@ export class NavigationComponent implements OnInit{
   }
   ngOnInit():void{
    
-    this._router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(()=>{
-      const currentUrl = this._router.url;
-      console.log(currentUrl);
-      this.setActiveTab(currentUrl);
-    })
     this.setActiveTab(this._router.url);
     
   }

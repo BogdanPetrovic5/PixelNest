@@ -7,12 +7,13 @@ import { LoginFormComponent } from './components/authentication-page/login-form/
 import { RegisterFormComponent } from './components/authentication-page/register-form/register-form.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from 'src/app/app-routing.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardModule } from './components/layout/dashboard/dashboard.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import { FollowingsComponent } from './components/profile/followings/followings.component';
 import { FollowersComponent } from './components/profile/followers/followers.component';
 import { LayoutComponent } from './components/layout/layout.component';
+import { NewPostComponent } from './components/layout/new-post/new-post.component';
 
 
 
@@ -25,14 +26,17 @@ import { LayoutComponent } from './components/layout/layout.component';
     ProfileComponent,
     FollowingsComponent,
     FollowersComponent,
-    LayoutComponent
+    LayoutComponent,
+    NewPostComponent
+    
   ],
   imports: [
     CommonModule,
     SharedModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    DashboardModule
+    DashboardModule,
+    FormsModule
     
   ],
   schemas: [
