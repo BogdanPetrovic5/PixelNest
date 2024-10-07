@@ -109,14 +109,25 @@ export class LocationComponent {
       zoom: 8
     });
  
+ 
+    this.setMarker(center);
+    this._addNewMarker();
+  } 
+
+  private _addNewMarker(){
+    this.map.on("click",(event:maplibregl.MapMouseEvent & maplibregl.MapDataEvent) =>{
+      const coordinates = event.lngLat;
+
+      const marker = new maplibregl.Marker().setLngLat(coordinates).addTo(this.map)
+    })
+  }
+
+
+  private setMarker(center:[number, number]){
     const marker = new maplibregl.Marker({
      
       
     }).setLngLat(center)
     .addTo(this.map);
-
-  } 
-  private setMarker(center:[number, number]){
-    
   }
 }

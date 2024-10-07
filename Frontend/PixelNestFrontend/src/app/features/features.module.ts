@@ -9,9 +9,9 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardModule } from './components/layout/dashboard/dashboard.module';
-import { ProfileComponent } from './components/profile/profile.component';
-import { FollowingsComponent } from './components/profile/followings/followings.component';
-import { FollowersComponent } from './components/profile/followers/followers.component';
+import { ProfileComponent } from './components/layout/profile/profile.component';
+import { FollowingsComponent } from './components/layout/profile/followings/followings.component';
+import { FollowersComponent } from './components/layout/profile/followers/followers.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { NewPostComponent } from './components/layout/new-post/new-post.component';
 

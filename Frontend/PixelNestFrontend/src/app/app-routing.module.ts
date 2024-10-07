@@ -8,7 +8,7 @@ import { FeedComponent } from './features/components/layout/dashboard/feed/feed.
 import { DashboardComponent } from './features/components/layout/dashboard/dashboard.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { DashboardGuard } from './core/guards/dashboard.guard';
-import { ProfileComponent } from './features/components/profile/profile.component';
+import { ProfileComponent } from './features/components/layout/profile/profile.component';
 import { LocationComponent } from './shared/components/location/location.component';
 import { LayoutComponent } from './features/components/layout/layout.component';
 

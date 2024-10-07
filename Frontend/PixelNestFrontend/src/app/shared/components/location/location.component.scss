@@ -57,21 +57,23 @@ $HFONT: "Roboto Condensed", sans-serif;
                     height: calc(100% - 70px);
                    
                     overflow-y: scroll;
-                    div{
-                        width: 95%;
+                    .post{
+                        width: 100%;
                         display: flex;
-                        flex-direction: row;
+                       
                         justify-content: center;
                         align-items: center;
                        
                         div{
+                           width: 100%;
                             display: flex;
                             flex-direction: row;
                             justify-content: left;
                             flex-wrap: wrap;
-                            gap: 14%;
+                            gap: 5%;
                             app-post{
-                                width: 500px;
+                                width: 45%;
+                                margin-bottom: 50px;
                                 
                             }
                         }
