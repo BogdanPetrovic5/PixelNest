@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import axios from 'axios';
 
@@ -6,10 +6,11 @@ import { Map, Marker, geocoding, config } from '@maptiler/sdk';
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import maplibregl from 'maplibre-gl';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { PostDto } from 'src/app/core/dto/post.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { MapService } from 'src/app/core/services/map/map.service';
+import { filter, Subscription, windowWhen } from 'rxjs';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { MapService } from 'src/app/core/services/map/map.service';
   templateUrl: './location.component.html',
   styleUrls: ['./location.component.scss']
 })
-export class LocationComponent {
+export class LocationComponent implements OnInit, OnDestroy{
   private map: any;
   private geocodeUrl = 'https://api.maptiler.com/geocoding/';
   private apiKey = 'aqR39NWYQyZAdFc6KtYh'
@@ -26,6 +27,7 @@ export class LocationComponent {
   location = "";
 
   posts:PostDto[] = []
+  subscribe:Subscription = new Subscription;
   constructor(
     private _dashboardState:DashboardStateService,
     private _router:Router,
@@ -36,27 +38,10 @@ export class LocationComponent {
     config.apiKey = 'aqR39NWYQyZAdFc6KtYh'
   }
   ngOnInit(): void {
-   
-    this._dashboardState.location$.subscribe({
-      next:response =>{
-        console.log(response)
-        if(response == null){
-          this._route.params.subscribe(params => {
-            const data = params['location'];
-            console.log(data);
-            this.location = data
-            this.loadPosts();
-            this.initializeMap();
-          });
-        }else{
-          this.location = response;
-          this.loadPosts();
-          this.initializeMap()
-          
-        }
-        
-      }
-    })
+      this._initilizeApp();
+  }
+  ngOnDestroy(): void {
+      this.subscribe.unsubscribe();
   }
   private loadPosts(){
     this._postService.getPostsByLocation(this.location).subscribe({
@@ -72,20 +57,20 @@ export class LocationComponent {
   private async getCoordinates(location: string): Promise<[number, number] | null> {
     try {
       const requestUrl = `${this.geocodeUrl}${encodeURIComponent(location)}.json`;
-      console.log(requestUrl)
+    
       const response = await axios.get(requestUrl, {
         params: {
           key: this.apiKey, 
           limit: 1 
         }
       });
-      console.log('API Response:', response.data);
+  
 
 
       const features = response.data.features;
       if (Array.isArray(features) && features.length > 0) {
         const center = features[0].geometry.coordinates;
-        console.log('Coordinates:', center); 
+       
         return center; 
       } else {
         console.warn('No features found in response or features is not an array.');
@@ -96,7 +81,39 @@ export class LocationComponent {
       return null;
     }
   }
+  private _initilizeApp(){
+    this.subscribe.add(
+      this._router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe((response:any)=>{
+        window.location.reload()
+      })
 
+      
+    )
+    this.subscribe.add(
+      this._dashboardState.location$.subscribe({
+        next:response =>{
+        
+          if(response == null){
+            this._route.params.subscribe(params => {
+              const data = params['location'];
+              
+              this.location = data
+              this.loadPosts();
+              this.initializeMap();
+            });
+          }else{
+            this.location = response;
+            this.loadPosts();
+            this.initializeMap()
+            
+          }
+          
+        }
+      })
+    )
+  }
   private async initializeMap(): Promise<void> {
     const coordinates = await this.getCoordinates(this.location);
 
@@ -130,8 +147,10 @@ export class LocationComponent {
 
   private _getLocationName(result:any) {
     if(result && Array.isArray(result.features) && result.features.length > 0){
-      this.location = result.features[0]?.place_name; 
-      console.error(this.location);
+      this.location = result.features[0]?.place_name_en; 
+      console.log(result)
+      console.log(this.location)
+      this._router.navigate([`/Location/${this.location}`])
     }
   }
   private setMarker(center:[number, number]){
