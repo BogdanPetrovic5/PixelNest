@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 
 import axios from 'axios';
 
-import { Map, Marker } from '@maptiler/sdk'; 
+import { Map, Marker, geocoding, config } from '@maptiler/sdk'; 
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import maplibregl from 'maplibre-gl';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostDto } from 'src/app/core/dto/post.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
+import { MapService } from 'src/app/core/services/map/map.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class LocationComponent {
   private map: any;
   private geocodeUrl = 'https://api.maptiler.com/geocoding/';
   private apiKey = 'aqR39NWYQyZAdFc6KtYh'
+  
   suggestions: any[] = [];
   location = "";
 
@@ -28,9 +30,10 @@ export class LocationComponent {
     private _dashboardState:DashboardStateService,
     private _router:Router,
     private _route:ActivatedRoute,
-    private _postService:PostService
+    private _postService:PostService,
+    private _mapService:MapService
   ){
-
+    config.apiKey = 'aqR39NWYQyZAdFc6KtYh'
   }
   ngOnInit(): void {
    
@@ -115,14 +118,22 @@ export class LocationComponent {
   } 
 
   private _addNewMarker(){
-    this.map.on("click",(event:maplibregl.MapMouseEvent & maplibregl.MapDataEvent) =>{
+    this.map.on("click",async (event:maplibregl.MapMouseEvent & maplibregl.MapDataEvent) =>{
       const coordinates = event.lngLat;
 
       const marker = new maplibregl.Marker().setLngLat(coordinates).addTo(this.map)
+      const results = await geocoding.reverse([coordinates.lng, coordinates.lat]);
+      this._getLocationName(results)
+      
     })
   }
 
-
+  private _getLocationName(result:any) {
+    if(result && Array.isArray(result.features) && result.features.length > 0){
+      this.location = result.features[0]?.place_name; 
+      console.error(this.location);
+    }
+  }
   private setMarker(center:[number, number]){
     const marker = new maplibregl.Marker({
      
