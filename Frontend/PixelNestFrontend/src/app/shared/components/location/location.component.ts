@@ -54,6 +54,7 @@ export class LocationComponent implements OnInit, OnDestroy{
       }
     })
   }
+  
   private async getCoordinates(location: string): Promise<[number, number] | null> {
     try {
       const requestUrl = `${this.geocodeUrl}${encodeURIComponent(location)}.json`;
@@ -147,10 +148,10 @@ export class LocationComponent implements OnInit, OnDestroy{
 
   private _getLocationName(result:any) {
     if(result && Array.isArray(result.features) && result.features.length > 0){
-      this.location = result.features[0]?.place_name_en; 
+      this.location = result.features[6]?.place_name_en; 
       console.log(result)
       console.log(this.location)
-      this._router.navigate([`/Location/${this.location}`])
+      // this._router.navigate([`/Location/${this.location}`])
     }
   }
   private setMarker(center:[number, number]){

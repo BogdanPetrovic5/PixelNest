@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class MapService {
   mapTilerApiKey:string = 'aqR39NWYQyZAdFc6KtYh';
+  apiKey: string = 'aqR39NWYQyZAdFc6KtYh'; 
+  geocodeUrl: string = 'https://api.maptiler.com/geocoding/';
   constructor(private _httpClient:HttpClient) { }
 
   getLocation(lng:number, lat:number):Observable<any>{
@@ -15,5 +17,14 @@ export class MapService {
 
     return this._httpClient.get<any>(reverseGeocodingUrl, { withCredentials: false })
     
+  }
+  getAllLocations(query:string):Observable<any>{
+    const url = `${this.geocodeUrl}${encodeURIComponent(query)}.json`
+    return this._httpClient.get<any>(url, {
+      params:{
+        key:this.apiKey,
+        limit:5
+      }
+    })
   }
 }

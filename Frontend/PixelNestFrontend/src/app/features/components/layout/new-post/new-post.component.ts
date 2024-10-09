@@ -6,6 +6,7 @@ import { PostService } from 'src/app/core/services/post/post.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { ImageCompressorService } from 'src/app/uitility/image-compressor.service';
+import { Map, Marker, geocoding, config } from '@maptiler/sdk'; 
 @Component({
   selector: 'app-new-post',
   templateUrl: './new-post.component.html',
@@ -45,7 +46,7 @@ export class NewPostComponent implements OnInit{
     private _postService:PostService,
     private _imageCompressorService:ImageCompressorService
   ){
-
+    config.apiKey = 'aqR39NWYQyZAdFc6KtYh'
   }
   ngOnInit(): void {
     
@@ -54,13 +55,8 @@ export class NewPostComponent implements OnInit{
   async onLocationInput(event:any){
     const query = event.target.value;
     if(query.length > 3){
-      const response = await axios.get(`${this.geocodeUrl}${encodeURIComponent(query)}.json`,{
-        params:{
-          key:this.apiKey,
-          limit:5
-        }
-      })
-      this.suggestions = response.data.features
+      const response = await geocoding.forward(query)
+      this.suggestions = response.features
     }else this.suggestions = [];
     
   }
