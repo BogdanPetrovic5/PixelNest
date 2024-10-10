@@ -56,7 +56,13 @@ export class NewPostComponent implements OnInit{
     const query = event.target.value;
     if(query.length > 3){
       const response = await geocoding.forward(query)
-      this.suggestions = response.features
+      console.log(response)
+      this.suggestions = response.features.map((feature:any)=>({
+        
+          
+          place_name: feature?.context?.[0]?.text || feature?.place_name
+        
+      }))
     }else this.suggestions = [];
     
   }

@@ -116,6 +116,7 @@ export class LocationComponent implements OnInit, OnDestroy{
     )
   }
   private async initializeMap(): Promise<void> {
+    console.log(this.location)
     const coordinates = await this.getCoordinates(this.location);
 
     const center: [number, number] = coordinates ? coordinates : [0, 0];
@@ -148,7 +149,7 @@ export class LocationComponent implements OnInit, OnDestroy{
 
   private _getLocationName(result:any) {
     if(result && Array.isArray(result.features) && result.features.length > 0){
-      this.location = result.features[6]?.place_name_en; 
+      this.location = result.features[3]?.text_en; 
       console.log(result)
       console.log(this.location)
       // this._router.navigate([`/Location/${this.location}`])
