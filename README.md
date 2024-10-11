@@ -2,8 +2,7 @@
 
 ## Short Description
 
-PixelNest is a web application that is still under development. Purpose of this application is because I wanted to expand my knowledge of Angular and ASP.NET.
-For storing data I used MSSQL.
+PixelNest is a web application currently under development, created with the purpose of expanding my knowledge in Angular and ASP.NET. The application is backed by MSSQL for data storage, integrating a modern tech stack to provide a robust environment for learning and development.
 
 ## Frontend
 
@@ -87,3 +86,28 @@ Once registered and logged in, users have access to several features (with more 
 - Instagram-like Stories: One of the key features to be implemented will be the ability for users to post stories, similar to Instagram’s story functionality.
 
 ## Backend
+REST API for application and project strucuture is listed down below.
+
+Key directories:
+- `Controllers:`
+   - `AuthenticatioController.cs`
+   - `CommentController.cs`
+   - `PostController.cs`
+   - `UserController.cs`
+- `Data`
+   - `DataContext.cs`
+- `Dto`
+- `Gateaway`
+   - `FileUpload.cs`
+- `Interfaces`
+  - `IAuthenticationRepository.cs`
+  - `IAuthenticationService.cs`
+  - `IPostRespository.cs`
+  - `IPostService.cs`
+  - `ICommentRepository.cs`
+  - `ICommentService.cs`
+  - `IFileUploade.cs`
+  - `IUserService.cs`
+  - `IUserRepository.cs`
+...
+
