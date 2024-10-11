@@ -57,7 +57,13 @@ These child components are defined in `dashboard-module.ts`, which is imported i
 #### Feed and Post Components  
 - The main focus of the dashboard is the Feed, where posts are displayed.
 - Each post is a shared component within `shared-module.ts.`
+- Post Location Feature: Each post can be associated with a location. When a user clicks on a location attached to a post, the Location Component opens. This component displays posts related to that location, allowing users to interact with a map. Users can select specific locations to see photos from those places or browse posts based on locations of interest.
 
+
+#### Location Component
+- Map Interactivity: The Location Component integrates with a map interface, allowing users to explore posts based on geographic locations.
+- Post Filtering by Location: Users can filter posts based on specific areas by interacting with the map. When a location is selected, the component displays posts relevant to that region.
+- User Engagement: Within the map, users can choose the location they want to explore and see photos or posts from that place, providing a more immersive way to interact with posts.
 ---
 
 #### Modular Architecture
