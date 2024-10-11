@@ -33,7 +33,7 @@
                                     <p (click)="toggleFollowings()"><span class="numbers">{{user.followings}}</span> <span> following</span></p>
                                 </div>
                                 <div class="buttons">
-                                    <button class="follow" *ngIf="!checkCurrentUser()">
+                                    <button class="follow" (click) = 'follow()' *ngIf="!checkCurrentUser()" [ngClass]="!isFollowing ? 'follow' : 'no-follow'">
                                         
                                         
                                         

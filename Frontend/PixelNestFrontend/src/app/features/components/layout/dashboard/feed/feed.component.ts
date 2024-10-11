@@ -14,11 +14,14 @@ export class FeedComponent implements OnInit{
   temporalResponse:PostDto[] = []
   currentPage:number = 1;
   isLoading:boolean = false;
+
+  isEmpty:boolean = false;
   constructor(private _postService: PostService){
 
   }
   ngOnInit(): void {
-      this._initilizeApp();
+    console.log(this.currentPage)
+    this._initilizeApp();
   }
   
   loadPosts(){
@@ -30,19 +33,27 @@ export class FeedComponent implements OnInit{
         return throwError(()=>error);
       })
     ).subscribe(response =>{
+      if(response.length < 5) this.isEmpty = true;
       this.temporalResponse = response
       this.posts = this.posts.concat(this.temporalResponse);
+      console.log(this.posts);
       this.isLoading = false;
      
     })
   }
 
   loadMore(event:any){
-    const scrollElement = event.target;
-    if ((scrollElement.offsetHeight + 50) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
-      this.currentPage += 1;
-      this.loadPosts()
+    
+    if(!this.isEmpty){
+      const scrollElement = event.target;
+      if ((scrollElement.offsetHeight) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
+       
+        this.currentPage += 1;
+        
+        this.loadPosts()
+      }
     }
+   
   }
  private _initilizeApp(){
     this.loadPosts()

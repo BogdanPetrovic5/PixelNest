@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   ){}
   ngOnInit(): void {
     
-    this.callSubscriptions();
+    this._callSubscriptions();
     this._initilizeApp()
   
   }
@@ -45,19 +45,20 @@ export class ProfileComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
       this.subscribe.unsubscribe();
   }
-  callSubscriptions(){
+
+  follow(){
+    this.isFollowing = !this.isFollowing
+    let currentUsername = this._userSessions.getFromCookie("username")
     this.subscribe.add(
-      this._router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-  
-      )
-      .subscribe((response:any) => {
-        window.location.reload()
+      this._userService.follow(currentUsername, this.username).subscribe({
+        next:response=>{
+          console.log(response);
+        }
       })
-     
     )
+   
   }
+
   checkIsFollowing(){
     let username = this._userSessions.getFromCookie("username");
     this._userService.isFollowing(username, this.user.username).subscribe({
@@ -106,7 +107,19 @@ export class ProfileComponent implements OnInit, OnDestroy{
    
     
   }
-
+  private  _callSubscriptions(){
+    this.subscribe.add(
+      this._router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+  
+      )
+      .subscribe((response:any) => {
+        window.location.reload()
+      })
+     
+    )
+  }
   private _loadPosts(){
     
     this.isLoading = true;

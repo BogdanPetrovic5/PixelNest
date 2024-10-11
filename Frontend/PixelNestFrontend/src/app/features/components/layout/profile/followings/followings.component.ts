@@ -16,6 +16,10 @@ export class FollowingsComponent implements OnInit{
   ngOnInit(): void {
       this._loadFollowings();
   }
+  
+  close(){
+    this.closeFollowingTab.emit()
+  }
   private _loadFollowings(){
     this._userService.getFollowings(this.username).subscribe({
       next:response=>{
@@ -27,7 +31,5 @@ export class FollowingsComponent implements OnInit{
       }
     })
   }
-  close(){
-    this.closeFollowingTab.emit()
-  }
+ 
 }
