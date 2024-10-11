@@ -34,11 +34,11 @@
                                 </div>
                                 <div class="buttons">
                                     <button class="follow" *ngIf="!checkCurrentUser()">
-                                        <img src="./assets/images/add-friend.png">
                                         
                                         
-                                        <ng-container *ngIf="isFollowing(); else followedTemplate">
-                                            <h1>Follow</h1>
+                                        
+                                        <ng-container *ngIf="!isFollowing; else followedTemplate">
+                                            <img src="./assets/images/add-friend.png"> <h1>Follow</h1>
                                           </ng-container>
                                         
                                           <ng-template #followedTemplate>

@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   followersTab:boolean = false
   followingsTab:boolean = false;
   empty:boolean = false;
-  
+  isFollowing:boolean = false;
   
   currentPage:number = 1;
 
@@ -36,8 +36,16 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _route:ActivatedRoute
   ){}
   ngOnInit(): void {
+    
+    this.callSubscriptions();
     this._initilizeApp()
   
+  }
+
+  ngOnDestroy(): void {
+      this.subscribe.unsubscribe();
+  }
+  callSubscriptions(){
     this.subscribe.add(
       this._router.events
       .pipe(
@@ -49,18 +57,12 @@ export class ProfileComponent implements OnInit, OnDestroy{
       })
      
     )
-  
   }
-
-  ngOnDestroy(): void {
-      this.subscribe.unsubscribe();
-  }
-
-  isFollowing(){
+  checkIsFollowing(){
     let username = this._userSessions.getFromCookie("username");
     this._userService.isFollowing(username, this.user.username).subscribe({
       next:response=>{
-        return response;
+        this.isFollowing = response
       }
     })
   }
@@ -93,6 +95,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
       this._userService.getUserData(this.username).subscribe({
         next:response=>{
           this.user = response
+          this.checkIsFollowing()
           this._loadPosts();
         },
         error: error => {
@@ -112,7 +115,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
         next:response=>{
        
           if(response.length < 5) this.empty = true;
-          console.log(this.currentPage);
+         
           this.posts = this.posts.concat(response);
           this.isLoading = false;
         },
@@ -124,6 +127,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
    
   }
   private _initilizeApp(){
+
    this._resetProfileState();
     this.subscribe.add(
       this._route.paramMap.subscribe(params => {
