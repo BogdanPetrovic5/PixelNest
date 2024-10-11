@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
+using PixelNestBackend.Responses;
 
 namespace PixelNestBackend.Controllers
 {
@@ -57,6 +58,20 @@ namespace PixelNestBackend.Controllers
                 return user;
             }
             return null;
+        }
+
+        [HttpGet("IsFollowing")]
+        public ActionResult<bool> IsFollowing([FromQuery]FollowDto followDto)
+        {
+            FollowResponse followResponse = _userRepository.IsFollowing(followDto);
+
+            if (followResponse == null) return BadRequest();
+
+            if (followResponse.IsSuccessful)
+            {
+                return Ok(followResponse.IsFollowing);
+            }
+            else return NotFound();
         }
     }
 }

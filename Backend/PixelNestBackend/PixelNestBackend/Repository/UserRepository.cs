@@ -3,6 +3,7 @@ using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
+using PixelNestBackend.Responses;
 using PixelNestBackend.Utility;
 
 namespace PixelNestBackend.Repository
@@ -21,6 +22,34 @@ namespace PixelNestBackend.Repository
             _dataContext = dataContext;
             _logger = logger;
             _userUtility = userUtility;
+        }
+        public FollowResponse IsFollowing(FollowDto follow)
+        {
+            try
+            {
+                bool isFollowing =  _dataContext.Follow.Any(a => a.FollowerUsername == follow.FollowerUsername && a.FollowingUsername == follow.FollowingUsername);
+                return new FollowResponse
+                {
+                    IsFollowing = isFollowing,
+                    IsSuccessful = true
+                };
+            }catch(SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new FollowResponse
+                {
+                    IsFollowing = false,
+                    IsSuccessful = false
+                }; 
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new FollowResponse
+                {
+                    IsFollowing = false,
+                    IsSuccessful = false
+                }; 
+            }
         }
         public ICollection<ResponseFollowingDto> GetFollowings(string username)
         {

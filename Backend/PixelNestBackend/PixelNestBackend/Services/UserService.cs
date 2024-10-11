@@ -4,6 +4,7 @@ using PixelNestBackend.Interfaces;
 using PixelNestBackend.Mappers;
 using PixelNestBackend.Models;
 using PixelNestBackend.Repository;
+using PixelNestBackend.Responses;
 
 namespace PixelNestBackend.Services
 {
@@ -60,6 +61,11 @@ namespace PixelNestBackend.Services
         public bool Follow(FollowDto followDto)
         {
             return _userRepository.Follow(followDto);
+        }
+
+        public FollowResponse IsFollowing(FollowDto followDto)
+        {
+            return _userRepository.IsFollowing(followDto);
         }
     }
 }

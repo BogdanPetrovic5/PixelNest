@@ -1,5 +1,6 @@
 ﻿using PixelNestBackend.Dto;
 using PixelNestBackend.Models;
+using PixelNestBackend.Responses;
 
 namespace PixelNestBackend.Interfaces
 {
@@ -11,6 +12,7 @@ namespace PixelNestBackend.Interfaces
 
         UserProfileDto GetUserProfileData(string username);
         bool Follow(FollowDto followDto);
+        FollowResponse IsFollowing(FollowDto followDto);
         ICollection<ResponseFollowersDto> GetFollowers(string username);
         ICollection<ResponseFollowingDto> GetFollowings(string username);
     }

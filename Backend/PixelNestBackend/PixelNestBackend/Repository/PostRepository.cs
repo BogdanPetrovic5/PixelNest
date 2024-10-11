@@ -175,7 +175,7 @@ namespace PixelNestBackend.Repository
             try
             {
                 var posts = await _dataContext.Posts
-                   .Where(l => l.Location == location)
+                   .Where(l => l.Location.ToLower().Contains(location.ToLower()))
                    .Select(a => new ResponsePostDto
                    {
                        PostDescription = a.PostDescription,
