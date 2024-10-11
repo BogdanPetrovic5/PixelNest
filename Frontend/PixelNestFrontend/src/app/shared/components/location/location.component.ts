@@ -57,31 +57,25 @@ export class LocationComponent implements OnInit, OnDestroy{
   
   private async getCoordinates(location: string): Promise<[number, number] | null> {
     try {
-      const requestUrl = `${this.geocodeUrl}${encodeURIComponent(location)}.json`;
-    
-      const response = await axios.get(requestUrl, {
-        params: {
-          key: this.apiKey, 
-          limit: 1 
-        }
-      });
-  
-
-
-      const features = response.data.features;
+      const response = await geocoding.forward(location);
+      const features = response.features;
       if (Array.isArray(features) && features.length > 0) {
-        const center = features[0].geometry.coordinates;
-       
-        return center; 
-      } else {
-        console.warn('No features found in response or features is not an array.');
-        return null;
-      }
-    } catch (error:any) {
-      console.error('Error fetching coordinates:', error.response ? error.response.data : error.message);
-      return null;
-    }
+        const geometry = features[0].geometry;
+        if (geometry.type === "Point") {
+            const coordinates = geometry.coordinates;
+           
+            const [longitude, latitude] = coordinates;
+            return [longitude, latitude];
+        } else {
+          console.warn('No features found in response or features is not an array.');
+          return null;
+        } 
+     } return null
+  } catch (error:any) {
+    console.error('Error fetching coordinates:', error.response ? error.response.data : error.message);
+    return null;
   }
+}
   private _initilizeApp(){
     this.subscribe.add(
       this._router.events.pipe(
@@ -116,7 +110,7 @@ export class LocationComponent implements OnInit, OnDestroy{
     )
   }
   private async initializeMap(): Promise<void> {
-    console.log(this.location)
+    
     const coordinates = await this.getCoordinates(this.location);
 
     const center: [number, number] = coordinates ? coordinates : [0, 0];
@@ -150,9 +144,7 @@ export class LocationComponent implements OnInit, OnDestroy{
   private _getLocationName(result:any) {
     if(result && Array.isArray(result.features) && result.features.length > 0){
       this.location = result.features[3]?.text_en; 
-      console.log(result)
-      console.log(this.location)
-      // this._router.navigate([`/Location/${this.location}`])
+      this._router.navigate([`/Location/${this.location}`])
     }
   }
   private setMarker(center:[number, number]){

@@ -57,6 +57,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     height: calc(100% - 70px);
                    
                     overflow-y: scroll;
+                    
                     .post{
                         width: 100%;
                         display: flex;
@@ -70,9 +71,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                             flex-direction: row;
                             justify-content: left;
                             flex-wrap: wrap;
-                            gap: 5%;
+                            gap: 6%;
                             app-post{
-                                width: 45%;
+                                width: 47%;
                                 margin-bottom: 50px;
                                 
                             }
@@ -80,6 +81,13 @@ $HFONT: "Roboto Condensed", sans-serif;
                        
                     }
                   
+                }
+                .posts-list::-webkit-scrollbar {
+                    width: 8px;
+                }
+                .posts-list::-webkit-scrollbar-thumb {
+                    background-color: rgba(255, 255, 255, 0.5); 
+                    border-radius: 10px;  
                 }
             }
         }

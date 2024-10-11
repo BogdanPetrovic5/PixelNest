@@ -21,6 +21,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
   followersTab:boolean = false
   followingsTab:boolean = false;
   empty:boolean = false;
+  
+  
   currentPage:number = 1;
 
   subscribe:Subscription = new Subscription;
@@ -52,6 +54,15 @@ export class ProfileComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
       this.subscribe.unsubscribe();
+  }
+
+  isFollowing(){
+    let username = this._userSessions.getFromCookie("username");
+    this._userService.isFollowing(username, this.user.username).subscribe({
+      next:response=>{
+        return response;
+      }
+    })
   }
 
   toggleFollowings(){

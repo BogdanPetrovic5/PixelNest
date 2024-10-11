@@ -269,7 +269,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                             display: flex;
                             flex-direction: row;
                             justify-content: left;
-                            gap:14.5%;
+                            gap:6%;
                             flex-wrap: wrap;
                             align-self: center;
                             max-height: 90%;
@@ -279,7 +279,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                             scrollbar-width: none; 
                             
                             app-post{
-                                width: 500px;
+                                width: 47%;
                                 margin-bottom: 40px;
                             }
                         }
@@ -290,8 +290,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                     width: 8px;
                 }
                 .feed::-webkit-scrollbar-thumb {
-                    background-color: rgba(255, 255, 255, 0.5);  /* Color of the scrollbar */
-                    border-radius: 10px;  /* Rounded scrollbar */
+                    background-color: rgba(255, 255, 255, 0.5); 
+                    border-radius: 10px;  
                 }
             }
             

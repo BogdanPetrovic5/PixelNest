@@ -33,8 +33,16 @@ export class NavigationComponent implements OnInit{
 
   }
   ngOnInit():void{
+    this._router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+  
+      )
+      .subscribe((response:any) => {
+        this.setActiveTab(this._router.url);
+      })
+      this.setActiveTab(this._router.url);
    
-    this.setActiveTab(this._router.url);
     
   }
 

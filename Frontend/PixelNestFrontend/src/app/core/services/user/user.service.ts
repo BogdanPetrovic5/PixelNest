@@ -25,4 +25,9 @@ export class UserService {
     const url = `${environment.apiUrl}/api/User/GetFollowings?username=${username}`
     return this._httpClient.get<FollowingsDto[]>(url);
   }
+
+  isFollowing(follower:string, following:string):Observable<boolean>{
+    const url = `${environment.apiUrl}/api/User/IsFollowing?FollowerUsername=${follower}&FollowingUsername=${following}`
+    return this._httpClient.get<boolean>(url);
+  }
 }
