@@ -8,9 +8,7 @@ $HFONT: "Roboto Condensed", sans-serif;
 .container{
     width:100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+   
     border-right: 1px solid rgb(87, 87, 87);
     .content{
         overflow: hidden;
@@ -19,7 +17,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
+        
         .story-section{
             width: 90%;
             height: 120px;
@@ -98,17 +96,27 @@ $HFONT: "Roboto Condensed", sans-serif;
         .posts{
             height: calc(100% - 120px);
             width: 90%;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            margin-bottom: 20px;
-            overflow: auto;
-            -ms-overflow-style: none;  
-            scrollbar-width: none; 
+            overflow: hidden;
+           
+           
+          
             .posts-list{
                 display: flex;
-                flex-direction: column;
-                gap: 30px;
+                flex-direction: row;
+                justify-content: left;
+                gap:6%;
+                flex-wrap: wrap;
+                align-self: center;
+                height:100%;
+                width: 100%;
+                overflow-y: scroll;
+                -ms-overflow-style: none;  
+                scrollbar-width: none; 
+                
+                app-post{
+                    width: 100%;
+                    margin-bottom: 40px;
+                }
             }
         }
     }

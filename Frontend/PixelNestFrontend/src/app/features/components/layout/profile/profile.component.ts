@@ -31,15 +31,10 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _userSessions:UserSessionService,
     private _userService:UserService,
     private _postService:PostService,
-    private _cdr:ChangeDetectorRef,
-    private _router:Router,
     private _route:ActivatedRoute
   ){}
   ngOnInit(): void {
-    
-    this._callSubscriptions();
-    this._initilizeApp()
-  
+    this._initilizeApp();
   }
 
   ngOnDestroy(): void {
@@ -107,19 +102,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
    
     
   }
-  private  _callSubscriptions(){
-    this.subscribe.add(
-      this._router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-  
-      )
-      .subscribe((response:any) => {
-        window.location.reload()
-      })
-     
-    )
-  }
   private _loadPosts(){
     
     this.isLoading = true;
@@ -141,11 +123,11 @@ export class ProfileComponent implements OnInit, OnDestroy{
   }
   private _initilizeApp(){
 
-   this._resetProfileState();
+   
     this.subscribe.add(
       this._route.paramMap.subscribe(params => {
         this.username = params.get("username") || this._userSessions.getFromCookie("username")
-        
+        this._resetProfileState();
         this._loadData()
       })
 
@@ -159,6 +141,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
     this.currentPage = 1;
     this.empty = false;
     this.isLoading = false;
-    console.log("RESET", this.currentPage)
+    
   }
 }
