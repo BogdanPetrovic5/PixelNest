@@ -76,7 +76,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
       const scrollElement = event.target;
       if ((scrollElement.offsetHeight) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
         this.currentPage += 1;
-        this._loadPosts()
+        this._loadMorePosts()
       }
     }
    
@@ -87,22 +87,33 @@ export class ProfileComponent implements OnInit, OnDestroy{
   }
 
   private _loadData(){
+
+    this.isLoading = true;
     this.subscribe.add(
-      this._userService.getUserData(this.username).subscribe({
-        next:response=>{
-          this.user = response
-          this.checkIsFollowing()
-          this._loadPosts();
+      this._userService.getUserData(this.username).pipe(
+        switchMap(
+          response =>{
+            this.user = response;
+            this.checkIsFollowing();
+            return this._postService.getPostsByUsername(this.user.username, this.currentPage);
+          }
+        )
+      ).subscribe({
+        next:posts=>{
+          if(posts.length < 5) this.empty = true;
+          this.posts = this.posts.concat(posts);
+          this.isLoading = false;
         },
         error: error => {
           console.error('An error occurred:', error);
+          this.isLoading = false; 
         }
       })
+
     )
-   
-    
+
   }
-  private _loadPosts(){
+  private _loadMorePosts(){
     
     this.isLoading = true;
     this.subscribe.add(
