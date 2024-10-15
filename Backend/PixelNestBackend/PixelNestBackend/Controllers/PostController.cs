@@ -50,12 +50,25 @@ namespace PixelNestBackend.Controllers
             return NotFound();
         }
         [HttpGet("GetPosts")]
-        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPosts(int page = 1, int maximumPosts = 5){
+        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPosts(string? username,string? location, int page = 1, int maximumPosts = 5){
             try
             {
                 ICollection<ResponsePostDto> posts;
-                posts = await _postService.GetPosts();
-                if(posts == null && !posts.Any()) return NotFound(new { message = "No posts found"});
+                if (!string.IsNullOrEmpty(username) && string.IsNullOrEmpty(location))
+                {
+                    posts = await _postService.GetPostsByUsername(username);
+                }
+                else if (string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(location))
+                {
+                    posts = await _postService.GetPostsByLocation(location);
+                }
+                else
+                {
+                    posts = await _postService.GetPosts();
+                }
+
+
+                if (posts == null && !posts.Any()) return NotFound(new { message = "No posts found"});
                 var result = posts.OrderByDescending(a => a.PublishDate);
                 var paginatedPosts = result
                     .Skip((page - 1) * maximumPosts)  
@@ -106,41 +119,6 @@ namespace PixelNestBackend.Controllers
             
         }
 
-        [HttpGet("GetPosts/ByLocation/{location}")]
-        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPostsByLocation(string location, int page, int maximumPosts = 5)
-        {
-            ICollection<ResponsePostDto> posts = await _postService
-                .GetPostsByLocation(location);
-
-            if(posts == null)
-            {
-                return NotFound();
-            }
-            var result = posts.OrderByDescending(a => a.PublishDate);
-            var paginatedPosts = result
-                .Skip((page - 1) * maximumPosts)
-                .Take(maximumPosts)
-                .ToList();
-            return Ok(paginatedPosts);
-
-        }
-
-        [HttpGet("GetPosts/ByUsername/{username}")]
-        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPostsByUsername(string username, int page, int maximumPosts = 5)
-        {
-            ICollection<ResponsePostDto> posts = await _postService
-                .GetPostsByUsername(username);
-            if(posts != null)
-            {
-                var result = posts.OrderByDescending(a => a.PublishDate);
-                var paginatedPosts = result
-                    .Skip((page - 1) * maximumPosts)
-                    .Take(maximumPosts)
-                    .ToList();
-
-                return Ok(paginatedPosts);
-            }
-            return NotFound();
-        }
+       
     }
 }
