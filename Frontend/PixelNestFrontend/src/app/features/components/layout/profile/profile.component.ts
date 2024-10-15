@@ -114,7 +114,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
 
   }
   private _loadMorePosts(){
-    
     this.isLoading = true;
     this.subscribe.add(
       this._postService.getPostsByUsername(this.username, this.currentPage).subscribe({

@@ -4,7 +4,7 @@ import { LandingPageComponent } from './features/components/landing-page/landing
 import { AuthenticationPageComponent } from './features/components/authentication-page/authentication-page.component';
 import { LoginFormComponent } from './features/components/authentication-page/login-form/login-form.component';
 import { RegisterFormComponent } from './features/components/authentication-page/register-form/register-form.component';
-import { FeedComponent } from './features/components/layout/dashboard/feed/feed.component';
+import { FeedComponent } from './shared/components/feed/feed.component';
 import { DashboardComponent } from './features/components/layout/dashboard/dashboard.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { DashboardGuard } from './core/guards/dashboard.guard';

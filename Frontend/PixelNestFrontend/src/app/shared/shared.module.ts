@@ -1,7 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RegisterFormComponent } from '../features/components/authentication-page/register-form/register-form.component';
-import { LoginFormComponent } from '../features/components/authentication-page/login-form/login-form.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { PostComponent } from './components/post/post.component';
@@ -16,6 +14,7 @@ import { ReplyComponent } from './components/post/comments/comment/reply/reply.c
 import { LikeCommentComponent } from './components/post/comments/like-comment/like-comment.component';
 import { LottieLoadingComponent } from './components/lottie-loading/lottie-loading.component';
 import { LocationComponent } from './components/location/location.component';
+import { FeedComponent } from './components/feed/feed.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,7 @@ import { LocationComponent } from './components/location/location.component';
     ReplyComponent,
     LikeCommentComponent,
     LocationComponent,
-    
+    FeedComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +48,8 @@ import { LocationComponent } from './components/location/location.component';
     AlertComponent,
     LottieSuccessComponent,
     LottieFailComponent,
-    LottieLoadingComponent
+    LottieLoadingComponent,
+    FeedComponent
   ]
 })
 export class SharedModule { }

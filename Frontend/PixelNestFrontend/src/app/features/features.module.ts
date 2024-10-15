@@ -32,10 +32,11 @@ import { NewPostComponent } from './components/layout/new-post/new-post.componen
   ],
   imports: [
     CommonModule,
+    DashboardModule,
     SharedModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    DashboardModule,
+   
     FormsModule
     
   ],

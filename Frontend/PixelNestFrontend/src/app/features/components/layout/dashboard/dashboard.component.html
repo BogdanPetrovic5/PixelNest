@@ -1,10 +1,15 @@
 <div class="container">
-    <div class="content">
-        <app-feed></app-feed>
-        <div class="mess">
-
+    <div class="wrapper">
+        <app-story></app-story>
+        <div class="content" >
+            
+            <app-feed [inputPosts]="posts"></app-feed>
+            <div class="mess">
+    
+            </div>
         </div>
     </div>
+
     
-    
+    <app-lottie-loading *ngIf="isLoading"></app-lottie-loading>
 </div>

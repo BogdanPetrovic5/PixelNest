@@ -1,9 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-
-import axios from 'axios';
-
 import { Map, Marker, geocoding, config } from '@maptiler/sdk'; 
-import { UserStateService } from 'src/app/core/services/states/user-state.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import maplibregl from 'maplibre-gl';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';

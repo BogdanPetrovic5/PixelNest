@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="content">
+        
+
+        <div class="posts" >
+            <div class="posts-list" (scroll)="loadMore($event)">
+                <app-post *ngFor="let post of posts" [post] = "post"></app-post>
+                
+            </div>
+            
+        </div>
+    </div>
+   
+</div>

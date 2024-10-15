@@ -20,11 +20,11 @@ export class PostService {
     return this._httpClient.get<any>(url)
   }
   getPostsByUsername(username:string, currentNumber:number, maximumPosts:number = 5):Observable<any>{
-    const url = `${environment.apiUrl}/api/Post/GetPostsByUsername?username=${username}&page=${currentNumber}&maximumPosts=${maximumPosts}`
+    const url = `${environment.apiUrl}/api/Post/GetPosts/ByUsername/${username}&page=${currentNumber}&maximumPosts=${maximumPosts}`
     return this._httpClient.get<any>(url)
   }
   getPostsByLocation(location:string):Observable<any>{
-    const url = `${environment.apiUrl}/api/Post/GetPostsByLocation?location=${location}`
+    const url = `${environment.apiUrl}/api/Post/GetPosts/ByLocation/${location}`
     return this._httpClient.get<any>(url)
   }
   likePost(postID:number, username:string):Observable<any>{
