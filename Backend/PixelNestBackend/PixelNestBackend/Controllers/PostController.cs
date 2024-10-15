@@ -106,7 +106,7 @@ namespace PixelNestBackend.Controllers
             
         }
 
-        [HttpGet("GetPostsByLocation")]
+        [HttpGet("GetPosts/ByLocation/{location}")]
         public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPostsByLocation(string location, int page, int maximumPosts = 5)
         {
             ICollection<ResponsePostDto> posts = await _postService
@@ -125,7 +125,7 @@ namespace PixelNestBackend.Controllers
 
         }
 
-        [HttpGet("GetPostsByUsername")]
+        [HttpGet("GetPosts/ByUsername/{username}")]
         public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPostsByUsername(string username, int page, int maximumPosts = 5)
         {
             ICollection<ResponsePostDto> posts = await _postService
