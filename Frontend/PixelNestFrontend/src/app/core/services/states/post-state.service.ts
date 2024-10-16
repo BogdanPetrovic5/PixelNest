@@ -7,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class PostStateService implements OnInit{
+export class PostStateService{
   private _postsSubject = new BehaviorSubject<PostDto[]>([]);
   private _loadingSubject = new BehaviorSubject<boolean>(false);
   
@@ -20,22 +20,21 @@ export class PostStateService implements OnInit{
 
   constructor(private _postService:PostService) { }
 
-  ngOnInit():void{
-    this.loadPosts();
-  }
-  
   setLoading(value:boolean){
     this._loadingSubject.next(value);
   }
-
-  loadMore(){
-    this.currentPage += 1;
-    this.loadPosts();
+  setPosts(value:PostDto[]){
+    this._postsSubject.next(value);
+    this.posts = value;
+  }
+  loadMore(currentPage:number){
+    
+    this.loadPosts(currentPage);
   }
 
-  loadPosts() {
+  loadPosts(currentPage:number) {
     this.setLoading(true);
-    this._postService.getPosts(this.currentPage).subscribe({
+    this._postService.getPosts(currentPage).subscribe({
       next:response=>{
         this.posts = this.posts.concat(response);
         this._postsSubject.next(this.posts);
