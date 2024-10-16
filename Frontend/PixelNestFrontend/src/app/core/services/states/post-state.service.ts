@@ -8,9 +8,12 @@ import { HttpErrorResponse } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PostStateService implements OnInit{
-  private postsSubject = new BehaviorSubject<PostDto[]>([]);
-  public posts$ = this.postsSubject.asObservable();
+  private _postsSubject = new BehaviorSubject<PostDto[]>([]);
+  private _loadingSubject = new BehaviorSubject<boolean>(false);
   
+  public posts$ = this._postsSubject.asObservable();
+  public isLoading$ = this._loadingSubject.asObservable();
+
   public posts:PostDto[] = [];
   private currentPage = 1;
 
@@ -21,16 +24,22 @@ export class PostStateService implements OnInit{
     this.loadPosts();
   }
   
+  setLoading(value:boolean){
+    this._loadingSubject.next(value);
+  }
+
   loadMore(){
     this.currentPage += 1;
     this.loadPosts();
   }
 
   loadPosts() {
+    this.setLoading(true);
     this._postService.getPosts(this.currentPage).subscribe({
       next:response=>{
         this.posts = this.posts.concat(response);
-        this.postsSubject.next(this.posts);
+        this._postsSubject.next(this.posts);
+        this.setLoading(false)
       }
     })
   }

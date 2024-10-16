@@ -36,17 +36,22 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
   }
   ngOnInit(): void {
     this.loadPosts();
+    this._postState.isLoading$.subscribe({
+      next:response=>{
+        this.isLoading = response;
+      }
+    })
   }
 
    loadPosts(){
-    this.isLoading = true;
+
     this._postState.loadPosts();
+
     this.subscriptions.add(
       this._postState.posts$.subscribe({
         next:response=>{
           this.posts = response;
           console.log(this.posts);
-          this.isLoading = false;
         },error:error=>{
           console.error(error.message);
         },

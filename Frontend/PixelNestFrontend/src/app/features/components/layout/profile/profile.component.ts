@@ -95,7 +95,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
           response =>{
             this.user = response;
             this.checkIsFollowing();
-            return this._postService.getPostsByUsername(this.user.username, this.currentPage);
+            return this._postService.getPosts(this.currentPage,`username=${this.user.username}`);
           }
         )
       ).subscribe({
@@ -116,7 +116,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   private _loadMorePosts(){
     this.isLoading = true;
     this.subscribe.add(
-      this._postService.getPostsByUsername(this.username, this.currentPage).subscribe({
+      this._postService.getPosts(this.currentPage, `username=${this.user.username}`).subscribe({
         next:response=>{
        
           if(response.length < 5) this.empty = true;

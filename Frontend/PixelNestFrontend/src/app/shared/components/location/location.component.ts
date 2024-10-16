@@ -40,7 +40,8 @@ export class LocationComponent implements OnInit, OnDestroy{
       this.subscribe.unsubscribe();
   }
   private loadPosts(){
-    this._postService.getPostsByLocation(this.location).subscribe({
+    const parameter = `location=${this.location}`
+    this._postService.getPosts(1,parameter).subscribe({
       next:response=>{
         this.posts = response
         console.log(this.posts);
