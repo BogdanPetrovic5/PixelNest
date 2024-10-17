@@ -270,7 +270,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                         }
                         .feed-posts{
                            height: 90%;
-                           
+                           width: 100%;
                         }
                         ::ng-deep app-feed  {
                             .container {
@@ -280,17 +280,24 @@ $HFONT: "Roboto Condensed", sans-serif;
                                             display: flex;
                                             flex-direction: row !important;
                                             flex-wrap: wrap;
+                                            gap: 1.5%;
+                                            width: 100%;
+                                        }
+                                    }
+                                    .posts-option{
+                                        .option{
+                                            width: 50%;
                                         }
                                     }
                                 }
                             }
                         }
                         ::ng-deep app-post  {
-                            width: 45% !important;
+                            width: 32%;
                             .container{
                                 .content{
                                     .image-holder{
-                                        height: 250px !important;
+                                        height: 200px !important;
                                     }
                                 }
                             }

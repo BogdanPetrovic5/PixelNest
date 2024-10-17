@@ -21,7 +21,7 @@ $HFONT: "Roboto Condensed", sans-serif;
        
         .posts{
             height: 100%;
-            width: 90%;
+            width: 100%;
             overflow: hidden;
            
            
@@ -30,7 +30,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 display: flex;
                 flex-direction: row;
                 justify-content: left;
-                gap:6%;
+               
                 flex-wrap: wrap;
                 align-self: center;
                 height:100%;
@@ -41,7 +41,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 
                 app-post{
                     width: 100%;
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
                 }
             }
         }
