@@ -15,7 +15,7 @@ export class PostService {
     return this._httpClient.post<any>(url, body);
   }
 
-  getPosts(currentPage:number, parameter?:string):Observable<any>{
+  getPosts(currentPage:number, parameter?:string ):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/GetPosts?${parameter}&page=${currentPage}`
     return this._httpClient.get<any>(url)
   }

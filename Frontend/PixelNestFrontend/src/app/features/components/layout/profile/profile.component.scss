@@ -268,7 +268,33 @@ $HFONT: "Roboto Condensed", sans-serif;
                                 margin: 0;
                             }
                         }
-                   
+                        .feed-posts{
+                           height: 90%;
+                           
+                        }
+                        ::ng-deep app-feed  {
+                            .container {
+                                .content {
+                                    .posts {
+                                        .posts-list {
+                                            display: flex;
+                                            flex-direction: row !important;
+                                            flex-wrap: wrap;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ::ng-deep app-post  {
+                            width: 45% !important;
+                            .container{
+                                .content{
+                                    .image-holder{
+                                        height: 250px !important;
+                                    }
+                                }
+                            }
+                        }
                         .feed-posts-list{
                             display: flex;
                             flex-direction: row;

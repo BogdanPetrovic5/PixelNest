@@ -1,9 +1,10 @@
 import { Component, OnInit,ChangeDetectorRef, OnDestroy  } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { filter, Subscription, switchMap } from 'rxjs';
+import { debounceTime, filter, Subscription, switchMap, tap } from 'rxjs';
 import { PostDto } from 'src/app/core/dto/post.dto';
 import { ProfileUser } from 'src/app/core/dto/profileUser.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
+import { PostStateService } from 'src/app/core/services/states/post-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { UserService } from 'src/app/core/services/user/user.service';
 
@@ -31,14 +32,18 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _userSessions:UserSessionService,
     private _userService:UserService,
     private _postService:PostService,
-    private _route:ActivatedRoute
+    private _route:ActivatedRoute,
+    private _postState:PostStateService
   ){}
   ngOnInit(): void {
+    this._postState.setPosts([]);
     this._initilizeApp();
   }
 
   ngOnDestroy(): void {
       this.subscribe.unsubscribe();
+      this._postState.setPosts([]);
+      this._postState.setQuery(undefined);
   }
 
   follow(){
@@ -71,66 +76,62 @@ export class ProfileComponent implements OnInit, OnDestroy{
     this.followersTab = !this.followersTab;
   }
 
-  loadMore(event:any){
-    if(!this.empty){
-      const scrollElement = event.target;
-      if ((scrollElement.offsetHeight) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
-        this.currentPage += 1;
-        this._loadMorePosts()
-      }
-    }
-   
-  }
-
   checkCurrentUser(){
     return this._userSessions.getFromCookie("username") == this.username
   }
 
   private _loadData(){
 
-    this.isLoading = true;
-    this.subscribe.add(
-      this._userService.getUserData(this.username).pipe(
-        switchMap(
-          response =>{
-            this.user = response;
-            this.checkIsFollowing();
-            return this._postService.getPosts(this.currentPage,`username=${this.user.username}`);
-          }
-        )
-      ).subscribe({
-        next:posts=>{
-          if(posts.length < 5) this.empty = true;
-          this.posts = this.posts.concat(posts);
-          this.isLoading = false;
-        },
-        error: error => {
-          console.error('An error occurred:', error);
-          this.isLoading = false; 
-        }
-      })
+    // this.subscribe.add(
+    //   this._userService.getUserData(this.username).pipe(
+    //     switchMap(
+    //       response =>{
+    //         this.user = response;
+    //         this.checkIsFollowing();
+    //         return this._postState.posts$.pipe(
+    //           tap(
+    //             posts=>{
+    //               if(posts.length == 0){
+    //                 this._postState.loadMore(1);
+    //               }
+    //             },
+    //             debounceTime(300)
+    //           )
+    //         )
+    //       }
+    //     )
+    //   ).subscribe({
+    //     next:posts=>{
+    //       if(posts.length < 5) this.empty = true;
+    //       this.posts = posts
+    //       this.isLoading = false;
+    //     },
+    //     error: error => {
+    //       console.error('An error occurred:', error);
+    //       this.isLoading = false; 
+    //     }
+    //   })
 
-    )
-
-  }
-  private _loadMorePosts(){
-    this.isLoading = true;
+    // )
     this.subscribe.add(
-      this._postService.getPosts(this.currentPage, `username=${this.user.username}`).subscribe({
+      this._userService.getUserData(this.username).subscribe({
         next:response=>{
-       
-          if(response.length < 5) this.empty = true;
-         
-          this.posts = this.posts.concat(response);
-          this.isLoading = false;
-        },
-        error:error=>{
-          console.log(error);
+          this.user = response;
+          this._postState.setQuery(`username=${this.user.username}`)
+          this._postState.loadPosts(1);
+          this._postState.posts$.subscribe({
+            next:response=>{
+              this.posts = response;
+              console.log(this.posts)
+            }
+          })
         }
       })
     )
-   
+    
+
   }
+
   private _initilizeApp(){
 
    
