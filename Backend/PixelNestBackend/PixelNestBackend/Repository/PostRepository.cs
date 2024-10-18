@@ -97,7 +97,11 @@ namespace PixelNestBackend.Repository
                             command.Parameters.AddWithValue("@PostDescription", postDto.PostDescription);
                         }
                         int postID = (int)await command.ExecuteScalarAsync();
-
+                        User user = _dataContext.Users.FirstOrDefault(u => u.Username == postDto.OwnerUsername);
+                        if(user != null)
+                        {
+                            user.TotalPosts += 1;
+                        }
                         return new PostResponse
                         {
                             IsSuccessfull = true,
