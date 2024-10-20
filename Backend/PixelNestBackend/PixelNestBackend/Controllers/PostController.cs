@@ -54,20 +54,8 @@ namespace PixelNestBackend.Controllers
             try
             {
                 ICollection<ResponsePostDto> posts;
-                if (!string.IsNullOrEmpty(username) && string.IsNullOrEmpty(location))
-                {
-                    posts = await _postService.GetPostsByUsername(username);
-                }
-                else if (string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(location))
-                {
-                    posts = await _postService.GetPostsByLocation(location);
-                }
-                else
-                {
-                    posts = await _postService.GetPosts();
-                }
-
-
+           
+                posts = await _postService.GetPosts(username,location);
                 if (posts == null && !posts.Any()) return NotFound(new { message = "No posts found"});
                 var result = posts.OrderByDescending(a => a.PublishDate);
                 var paginatedPosts = result

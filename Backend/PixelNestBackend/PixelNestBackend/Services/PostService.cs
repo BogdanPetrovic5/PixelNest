@@ -51,11 +51,22 @@ namespace PixelNestBackend.Services
             if (result) return true;
             return false;
         }
-        public async Task<ICollection<ResponsePostDto>> GetPosts()
+        public async Task<ICollection<ResponsePostDto>> GetPosts(string? username, string? location)
         {
-
-            var result = await _postRepository.GetPosts();
-            return result;
+            ICollection<ResponsePostDto> posts;
+            if (!string.IsNullOrEmpty(username) && string.IsNullOrEmpty(location))
+            {
+                posts = await _postRepository.GetPostsByUsername(username);
+            }
+            else if (string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(location))
+            {
+                posts = await _postRepository.GetPostsByLocation(location);
+            }
+            else
+            {
+                posts = await _postRepository.GetPosts();
+            }
+            return posts;
         }
 
         public bool LikePost(LikeDto likeDto)
@@ -145,18 +156,6 @@ namespace PixelNestBackend.Services
             }
            
         }
-        public async Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location)
-        {
-            ICollection<ResponsePostDto> result = await _postRepository
-                .GetPostsByLocation(location);
-            return result;
-        }
-        public async Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username)
-        {
-            ICollection<ResponsePostDto> result = await _postRepository
-                .GetPostsByUsername(username);
-            
-            return result;
-        }
+      
     }
 }
