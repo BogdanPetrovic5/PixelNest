@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
+using PixelNestBackend.Responses;
 using PixelNestBackend.Services;
 
 namespace PixelNestBackend.Controllers
@@ -22,22 +23,22 @@ namespace PixelNestBackend.Controllers
         }
 
         [HttpPost("Register")]
-        public IActionResult Register(RegisterDto registerDto)
+        public ActionResult<RegisterResponse> Register(RegisterDto registerDto)
         {
 
             if (registerDto == null)
             {
-                return BadRequest();
+                return BadRequest(new RegisterResponse { IsSuccess = false, Message = "Bad request" });
             }
             var response = _authenticationService.Register(registerDto);
             if (response == null)
             {
-                return NotFound();
+                return NotFound(new RegisterResponse { IsSuccess = false, Message = response.Message });
             }
             if (response.IsSuccess == false) 
-                return NotFound(new { message = response.Message });
+                return NotFound(new RegisterResponse { IsSuccess = false, Message = response.Message});
            
-            return Ok(new { message = response.Message });
+            return Ok(new RegisterResponse { IsSuccess = true, Message = response.Message });
             
             
         }
@@ -55,8 +56,12 @@ namespace PixelNestBackend.Controllers
         }
 
         [HttpPost("Login")]
-        public IActionResult Login([FromBody] LoginDto loginDto)
+        public ActionResult<LoginResponse> Login([FromBody] LoginDto loginDto)
         {
+            if(loginDto == null)
+            {
+                return BadRequest();
+            }
             var response = _authenticationService.Login(loginDto);
             if(response == null || response.IsSuccessful == false)
             {
@@ -71,7 +76,7 @@ namespace PixelNestBackend.Controllers
             };
 
             Response.Cookies.Append("jwtToken", response.Token, cookieOptions);
-            return Ok(new
+            return Ok(new LoginResponse
             {
                 Response = response.Response,
                 IsSuccessful = response.IsSuccessful,
