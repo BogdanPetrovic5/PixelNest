@@ -5,6 +5,7 @@
 PixelNest is a web application currently under development, created with the purpose of expanding my knowledge in Angular and ASP.NET. The application is backed by MSSQL for data storage, integrating a modern tech stack to provide a robust environment for learning and development.
 
 ## API endpoints listed down below:
+## Authentication
   #### POST `/api/Authentication/Registration`
   - Request body: 
       ```
@@ -66,7 +67,68 @@ PixelNest is a web application currently under development, created with the pur
   - Request Header: `JWT TOKEN`
   - Responses: `401 Unauthorized` and `200 OK`
 
-
+## Comment
+ #### GET `/api/Comments/GetReplies
+  - Request URL `/api/Comment/GetReplies?initialParentID=${number}`
+  - Response:
+    ```
+        [
+          {
+            "commentID": 0,
+            "totalLikes": 0,
+            "userID": 0,
+            "commentText": "string",
+            "username": "string",
+            "postID": 0,
+            "totalReplies": 0,
+            "parentCommentID": 0,
+            "likedByUsers": [
+              {
+                "username": "string",
+                "commentID": 0
+              }
+            ],
+            "replies": [
+              "string"
+            ]
+          }
+        ]
+    ``` 
+  #### GET `/api/Comments/GetComments
+  - Request URL `/api/Comment/GetComments?postID=${number}`
+  - Response:
+    ```
+        [
+          {
+            "commentID": 0,
+            "totalLikes": 0,
+            "userID": 0,
+            "commentText": "string",
+            "username": "string",
+            "postID": 0,
+            "totalReplies": 0,
+            "parentCommentID": 0,
+            "likedByUsers": [
+              {
+                "username": "string",
+                "commentID": 0
+              }
+            ],
+            "replies": [
+              "string"
+            ]
+          }
+        ]
+    ``` 
+  #### POST `/api/Comments/LikeComment
+  - Request:
+  ```
+    {
+      "username": "string",
+      "commentID": 0
+    }
+  ```
+  - Responses: `200 OK`, `400 BadRequest`, `404 NotFound`
 
 ## Frontend
 
