@@ -7,6 +7,7 @@ import { PostDto } from 'src/app/core/dto/post.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { MapService } from 'src/app/core/services/map/map.service';
 import { filter, Subscription, windowWhen } from 'rxjs';
+import { PostStateService } from 'src/app/core/services/states/post-state.service';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class LocationComponent implements OnInit, OnDestroy{
     private _router:Router,
     private _route:ActivatedRoute,
     private _postService:PostService,
-    private _mapService:MapService
+    private _postState:PostStateService
   ){
     config.apiKey = 'aqR39NWYQyZAdFc6KtYh'
   }
@@ -38,6 +39,7 @@ export class LocationComponent implements OnInit, OnDestroy{
   }
   ngOnDestroy(): void {
       this.subscribe.unsubscribe();
+      this._postState.setPosts([]);
   }
   private loadPosts(){
     const parameter = `location=${this.location}`

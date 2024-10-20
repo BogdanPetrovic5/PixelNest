@@ -52,6 +52,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
     this.subscribe.add(
       this._userService.follow(currentUsername, this.username).subscribe({
         next:response=>{
+          if(!this.isFollowing) this.user.followers -= 1;
+          else this.user.followers += 1;
           console.log(response);
         }
       })

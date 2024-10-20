@@ -9,13 +9,13 @@
           </h1>
         </div>
         <div class="posts-list">
-          <div class="post">
-           <div>
-            <app-post *ngFor="let post of posts" [post]="post"></app-post>
-           </div>  
+          
+        
+            <app-feed [inputPosts]="posts"></app-feed>
+           
             <!--  -->
             
-          </div>
+         
            
         </div>
       </div>
