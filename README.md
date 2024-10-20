@@ -4,6 +4,70 @@
 
 PixelNest is a web application currently under development, created with the purpose of expanding my knowledge in Angular and ASP.NET. The application is backed by MSSQL for data storage, integrating a modern tech stack to provide a robust environment for learning and development.
 
+## API endpoints listed down below:
+  #### POST `/api/Authentication/Registration`
+  - Request body: 
+      ```
+        {
+          "firstname": "string",
+          "lastname": "string",
+          "username": "string",
+          "password": "string",
+          "email": "string"
+       } 
+      ```
+   - Responses:
+     - `200 OK` :
+      ```
+        {
+          "message": "string",
+          "isSuccess": true
+        }
+      ```
+     - `400 Bad Request`, `404 Not Found` :
+      ```
+        {
+          "message": "string",
+          "isSuccess": false
+        }
+      ```
+ #### POST `/api/Authentication/Logout`
+  - Request body: 
+      ```
+        {
+          "email": "string"
+        }
+      ```
+  - Response: `200 OK`
+ #### POST `/api/Authentication/Login`
+  - Request body: 
+      ```
+        {
+          "firstname": "string",
+          "lastname": "string",
+          "username": "string",
+          "password": "string",
+          "email": "string"
+       } 
+      ```
+   - Responses:
+     - `200 OK` :
+      ``` 
+        {
+          "response": "string",
+          "token": "string",
+          "username": "string",
+          "email": "string",
+          "isSuccessful": true
+        }
+      ```
+     - `400 Bad Request`, `404 Not Found`
+#### POST `/api/Authentication/IsLoggedIn`
+  - Request Header: `JWT TOKEN`
+  - Responses: `401 Unauthorized` and `200 OK`
+
+
+
 ## Frontend
 
 For frontend part as primary and only framework I used Angular 15.
@@ -94,26 +158,61 @@ Once registered and logged in, users have access to several features (with more 
 ## Backend
 REST API for application and project strucuture is listed down below.
 
-Key directories:
-- `Controllers:`
-   - `AuthenticatioController.cs`
-   - `CommentController.cs`
-   - `PostController.cs`
-   - `UserController.cs`
-- `Data`
-   - `DataContext.cs`
-- `Dto`
-- `Gateaway`
-   - `FileUpload.cs`
-- `Interfaces`
-  - `IAuthenticationRepository.cs`
-  - `IAuthenticationService.cs`
-  - `IPostRespository.cs`
-  - `IPostService.cs`
-  - `ICommentRepository.cs`
-  - `ICommentService.cs`
-  - `IFileUploade.cs`
-  - `IUserService.cs`
-  - `IUserRepository.cs`
-...
-
+- Controllers
+  - AuthenticationController.cs
+  - CommentController.cs
+  - PostController.cs
+  - UserController.cs
+- Data
+  - DataContext.cs
+- Dto
+- Gateway
+  - FileUpload.cs
+- Interfaces
+  - IAuthenticationRepository.cs
+  - IAuthenticationService.cs
+  - IPostRepository.cs
+  - IPostService.cs
+  - ICommentRepository.cs
+  - ICommentService.cs
+  - IFileUpload.cs
+  - IUserService.cs
+  - IUserRepository.cs
+- Mappers
+  - UserMapper.cs
+- Migrations
+- Models
+  - Comment.cs
+  - Follow.cs
+  - ImagePath.cs
+  - LikedComments.cs
+  - LikedPosts.cs
+  - Post.cs
+  - SavedPosts.cs
+  - Story.cs
+  - User.cs
+- Proxy
+  - ProxyController.cs
+- Repository
+  - AuthenticationRepository.cs
+  - CommentRepository.cs
+  - PostRepository.cs
+  - UserRepository.cs
+- Responses
+  - FollowResponse.cs
+  - LoginResponse.cs
+  - PostResponse.cs
+  - RegisterResponse.cs
+- Security
+  - PasswordEncoder.cs
+  - TokenGenerator.cs
+- Services
+  - AuthenticationService.cs
+  - CommentService.cs
+  - PostService.cs
+  - UserService.cs
+- Utility
+  - CommentUtility.cs
+  - FolderGenerator.cs
+  - PostUtility.cs
+  - UserUtility.cs
