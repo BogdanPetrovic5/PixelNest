@@ -94,7 +94,7 @@ PixelNest is a web application currently under development, created with the pur
           }
         ]
     ``` 
-  #### GET `/api/Comments/GetComments
+  #### GET `/api/Comments/GetComments`
   - Request URL `/api/Comment/GetComments?postID=${number}`
   - Response:
     ```
@@ -120,7 +120,7 @@ PixelNest is a web application currently under development, created with the pur
           }
         ]
     ``` 
-  #### POST `/api/Comments/LikeComment
+  #### POST `/api/Comments/LikeComment`
   - Request:
   ```
     {
@@ -129,6 +129,45 @@ PixelNest is a web application currently under development, created with the pur
     }
   ```
   - Responses: `200 OK`, `400 BadRequest`, `404 NotFound`
+## Post  
+#### POST `/api/Post/ShareNewPost`
+- Request in form data format:
+  ```
+    {
+      "postDescription":"string",
+      "ownerUsername":"string",
+      "photoDisplay":"string",
+      "location":"string",
+      "photos":[]
+    }
+  ```
+- Response:
+  ```
+    {
+      "postID": 0,
+      "isSuccessfull": true,
+      "message": "string"
+    }
+  ```
+#### POST `/api/Post/SavePost`
+- Request in form data format:
+  ```
+    {
+      "username": "string",
+      "postID": 0
+    }
+  ```
+- Responses:
+  - `200 OK`, if post was saved successfully.
+  - `400 BadRequest`, if request body is missing or its not right format.
+  - `404 NotFound`, Database related error.
+
+#### GET `/api/Post/GetPosts`
+- Request URL format:
+  - `/api/Post/GetPosts?page=1&maximumPosts=5`
+  - `/api/Post/GetPosts?username=${username}&location=${string}&page=${number}&maximumPosts=${number}`
+- All of these query paramters are optional. User can pass location or username only, or none. In that case all posts will be fetched.
+
 
 ## Frontend
 
