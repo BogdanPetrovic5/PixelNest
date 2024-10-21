@@ -167,7 +167,40 @@ PixelNest is a web application currently under development, created with the pur
   - `/api/Post/GetPosts?page=1&maximumPosts=5`
   - `/api/Post/GetPosts?username=${username}&location=${string}&page=${number}&maximumPosts=${number}`
 - All of these query paramters are optional. User can pass location or username only, or none. In that case all posts will be fetched.
-
+- Response:
+   ```
+     [
+        {
+          "postID": 0,
+          "ownerUsername": "string",
+          "postDescription": "string",
+          "totalLikes": 0,
+          "totalComments": 0,
+          "location": "string",
+          "publishDate": "2024-10-21T08:38:27.017Z",
+          "likedByUsers": [
+            {
+              "username": "string",
+              "postID": 0
+            }
+          ],
+          "savedByUsers": [
+            {
+              "username": "string",
+              "postID": 0
+            }
+          ],
+          "imagePaths": [
+            {
+              "pathID": 0,
+              "postID": 0,
+              "path": "string",
+              "photoDisplay": "string"
+            }
+          ]
+        }
+    ]
+   ```
 
 ## Frontend
 
