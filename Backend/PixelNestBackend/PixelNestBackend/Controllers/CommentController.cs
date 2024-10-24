@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 
 namespace PixelNestBackend.Controllers

@@ -113,12 +113,18 @@ namespace PixelNestBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PostID")
+                    b.Property<int?>("PostID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoryID")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("PathID");
 
                     b.HasIndex("PostID");
+
+                    b.HasIndex("StoryID");
 
                     b.ToTable("ImagePaths");
                 });
@@ -219,6 +225,34 @@ namespace PixelNestBackend.Migrations
                     b.ToTable("SavedPosts");
                 });
 
+            modelBuilder.Entity("PixelNestBackend.Models.Story", b =>
+                {
+                    b.Property<int>("StoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StoryID"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StoryID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Stories");
+                });
+
             modelBuilder.Entity("PixelNestBackend.Models.User", b =>
                 {
                     b.Property<int>("UserID")
@@ -307,10 +341,17 @@ namespace PixelNestBackend.Migrations
                     b.HasOne("PixelNestBackend.Models.Post", "Post")
                         .WithMany("ImagePaths")
                         .HasForeignKey("PostID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PixelNestBackend.Models.Story", "Story")
+                        .WithMany("ImagePath")
+                        .HasForeignKey("StoryID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Post");
+
+                    b.Navigation("Story");
                 });
 
             modelBuilder.Entity("PixelNestBackend.Models.LikedComments", b =>
@@ -381,6 +422,17 @@ namespace PixelNestBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PixelNestBackend.Models.Story", b =>
+                {
+                    b.HasOne("PixelNestBackend.Models.User", "User")
+                        .WithMany("Stories")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PixelNestBackend.Models.Comment", b =>
                 {
                     b.Navigation("LikedComments");
@@ -395,6 +447,11 @@ namespace PixelNestBackend.Migrations
                     b.Navigation("LikedPosts");
 
                     b.Navigation("SavedPosts");
+                });
+
+            modelBuilder.Entity("PixelNestBackend.Models.Story", b =>
+                {
+                    b.Navigation("ImagePath");
                 });
 
             modelBuilder.Entity("PixelNestBackend.Models.User", b =>
@@ -412,6 +469,8 @@ namespace PixelNestBackend.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("SavedPosts");
+
+                    b.Navigation("Stories");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Mappers;
 using PixelNestBackend.Models;

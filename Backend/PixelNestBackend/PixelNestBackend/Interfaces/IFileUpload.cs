@@ -4,6 +4,6 @@ namespace PixelNestBackend.Interfaces
 {
     public interface IFileUpload
     {
-        Task<bool> StoreImages(PostDto postDto, string userFolder, int postFolder);
+        Task<bool> StoreImages(PostDto? postDto, StoryDto? storyDto, string userFolder, int folder);
     }
 }

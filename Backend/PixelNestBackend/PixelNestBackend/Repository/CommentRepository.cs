@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 

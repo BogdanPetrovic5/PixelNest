@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 
 namespace PixelNestBackend.Models
 {

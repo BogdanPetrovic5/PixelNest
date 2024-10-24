@@ -17,6 +17,7 @@ namespace PixelNestBackend.Data
         public DbSet<LikedComments> LikeComments { get; set; }
         public DbSet<SavedPosts> SavedPosts { get; set; }
         public DbSet<Follow> Follow { get; set; }
+        public DbSet<Story> Stories { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LikeDto>().HasNoKey();
@@ -28,6 +29,7 @@ namespace PixelNestBackend.Data
             modelBuilder.Entity<LikedComments>().HasKey(lc => new { lc.CommentID, lc.UserID });
             modelBuilder.Entity<SavedPosts>().HasKey(lc => new { lc.PostID, lc.UserID });
             modelBuilder.Entity<Follow>().HasKey(f => new {f.UserFollowerID, f.UserFollowingID});
+            modelBuilder.Entity<Story>().HasKey(s => s.StoryID);
 
             modelBuilder.Entity<Post>()
                 .HasOne(user => user.User)
@@ -48,10 +50,19 @@ namespace PixelNestBackend.Data
                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ImagePath>()
-                .HasOne(post => post.Post)
-                .WithMany(path => path.ImagePaths)
-                .HasForeignKey(post => post.PostID)
+                .HasOne(imagePath => imagePath.Post)
+                .WithMany(post => post.ImagePaths)
+                .HasForeignKey(imagePath => imagePath.PostID)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ImagePath>()
+                .HasOne(imagePath => imagePath.Story)
+                .WithMany(story => story.ImagePath)
+                .HasForeignKey(ImagePath => ImagePath.StoryID)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ImagePath>()
+                .Property(pi => pi.PostID)
+                .IsRequired(false);
 
             modelBuilder.Entity<LikedPosts>()
                 .HasOne(user => user.User)
@@ -102,6 +113,13 @@ namespace PixelNestBackend.Data
                 .WithMany(followings => followings.FollowersList)
                 .HasForeignKey(followed => followed.UserFollowingID)               
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Story>()
+                .HasOne(user => user.User)
+                .WithMany(story => story.Stories)
+                .HasForeignKey(user => user.UserID)
+                .OnDelete(DeleteBehavior.Restrict);
+                
         }
     }
 }

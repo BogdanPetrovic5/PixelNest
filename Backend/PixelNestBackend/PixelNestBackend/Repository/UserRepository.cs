@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;

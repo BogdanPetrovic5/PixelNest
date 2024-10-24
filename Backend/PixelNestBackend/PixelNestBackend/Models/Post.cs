@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using PixelNestBackend.Dto;
 using System.Runtime.InteropServices;
+using PixelNestBackend.Dto.Projections;
 
 namespace PixelNestBackend.Models
 {

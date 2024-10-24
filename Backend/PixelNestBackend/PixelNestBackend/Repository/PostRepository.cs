@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
@@ -48,7 +49,7 @@ namespace PixelNestBackend.Repository
             }
             return false;
         }
-        public async Task<PostResponse> ShareNewPost(PostDto postDto, string userFolderPath, int userID)
+        public async Task<PostResponse> PublishPost(PostDto postDto,int userID)
         {
             if (postDto == null)
             {
@@ -143,7 +144,13 @@ namespace PixelNestBackend.Repository
                        TotalLikes = a.TotalLikes,
                        PostID = a.PostID,
                        PublishDate = a.PublishDate,
-                       ImagePaths = a.ImagePaths,
+                       ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
+                       {
+                           Path = l.Path,
+                           PhotoDisplay = l.PhotoDisplay,
+                           PathID = l.PathID
+
+                       }).ToList(),
                        Location = a.Location,
                        LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                        {
@@ -187,7 +194,13 @@ namespace PixelNestBackend.Repository
                        TotalLikes = a.TotalLikes,
                        PostID = a.PostID,
                        PublishDate = a.PublishDate,
-                       ImagePaths = a.ImagePaths,
+                       ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
+                       {
+                           Path = l.Path,
+                           PhotoDisplay = l.PhotoDisplay,
+                           PathID = l.PathID
+
+                       }).ToList(),
                        Location = a.Location,
                        LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                        {
@@ -230,7 +243,12 @@ namespace PixelNestBackend.Repository
                        TotalLikes = a.TotalLikes,
                        PostID = a.PostID,
                        PublishDate = a.PublishDate,
-                       ImagePaths = a.ImagePaths,
+                       ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto { 
+                            Path = l.Path,
+                            PhotoDisplay = l.PhotoDisplay,
+                            PathID = l.PathID
+                       
+                       }).ToList(),
                        Location = a.Location,
                        LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                        {
@@ -308,7 +326,7 @@ namespace PixelNestBackend.Repository
 
 
         } 
-        public bool Comment(Comment comment)
+        public PostResponse Comment(Comment comment)
         {
             try
             {
@@ -331,18 +349,18 @@ namespace PixelNestBackend.Repository
 
                 int result = _dataContext.SaveChanges();
 
-                if (result > 0) return true;
-                return false;
+                if (result > 0) return new PostResponse {Message = "Comment Added!", IsSuccessfull = true };
+                return new PostResponse { Message = "Failed to add comment!", IsSuccessfull = false };
 
             }
             catch(SqlException ex)
             {
                 _logger.LogError($"Database related error: {ex.Message}");
-                return false;
+                return null;
             }catch(Exception ex)
             {
                 _logger.LogError($"General error in repo: {ex.Message}");
-                return false;
+                return null;
             }
         }
     

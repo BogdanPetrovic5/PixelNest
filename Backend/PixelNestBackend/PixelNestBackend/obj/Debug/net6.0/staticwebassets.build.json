@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "xHkNfDNGO2HEOj/WNYHw+9xKpFV+KQgvBlSoUaBZ6t4=",
+  "Hash": "aFRHwOvgGWBkI97jirsmbb9PL/LJAwc6kG5qE6smx2Y=",
   "Source": "PixelNestBackend",
   "BasePath": "_content/PixelNestBackend",
   "Mode": "Default",
@@ -525,6 +525,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\9\\headway-5QgIuuBxKwM-unsplash.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\Stories\\0\\slika1.jpg",
+      "SourceId": "PixelNestBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "RelativePath": "Photos/Bogdan1/Stories/0/slika1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\Stories\\0\\slika1.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\Stories\\15\\slika1.jpg",
+      "SourceId": "PixelNestBackend",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\",
+      "BasePath": "_content/PixelNestBackend",
+      "RelativePath": "Photos/Bogdan1/Stories/15/slika1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Photos\\Bogdan1\\Stories\\15\\slika1.jpg"
     },
     {
       "Identity": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\MichaelMike\\22\\blog1.jpg",

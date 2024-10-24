@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Repository;
@@ -80,7 +81,7 @@ namespace PixelNestBackend.Services
             return false;
         }
 
-        public async Task<PostResponse> ShareNewPost(PostDto postDto)
+        public async Task<PostResponse> PublishPost(PostDto postDto)
         {
             string userFolderName = postDto.OwnerUsername;
             string userFolderPath = Path.Combine(_basedFolderPath, userFolderName);
@@ -91,14 +92,15 @@ namespace PixelNestBackend.Services
                 _folderGenerator.GenerateNewFolder(userFolderPath);
 
             }
-            var response = await _postRepository.ShareNewPost(postDto, userFolderPath, userID);
+            var response = await _postRepository
+                .PublishPost(postDto,userID);
 
             if(response != null)
             {
                 if (response.IsSuccessfull)
                 {
                     int postID = response.PostID;
-                    bool isUploaded = await _fileUpload.StoreImages(postDto, userFolderPath, postID);
+                    bool isUploaded = await _fileUpload.StoreImages(postDto, null, userFolderPath, postID);
                     if (isUploaded) return new PostResponse { 
                         IsSuccessfull = true,
                         Message = "Post was successfully added to your feed."
@@ -122,7 +124,7 @@ namespace PixelNestBackend.Services
             }; 
         }
 
-        public bool Comment(CommentDto commentDto)
+        public PostResponse Comment(CommentDto commentDto)
         {
             try
             {
@@ -130,7 +132,7 @@ namespace PixelNestBackend.Services
                 if (userID < 0)
                 {
                     Console.WriteLine("user not found");
-                    return false;
+                    return new PostResponse {Message = "User not found!", IsSuccessfull = false };
                 }
                 Comment comment = new Comment
                 {
@@ -147,12 +149,12 @@ namespace PixelNestBackend.Services
             catch (SqlException ex)
             {
                 _ILogger.LogError($"Database error: {ex.Message}");
-                return false;
+                return new PostResponse { Message = "Database error", IsSuccessfull = false };
             }
             catch (Exception ex)
             {
                 _ILogger.LogError($"General error in service: {ex.Message}");
-                return false;
+                return new PostResponse { Message = "Unknown error occurred", IsSuccessfull = false };
             }
            
         }

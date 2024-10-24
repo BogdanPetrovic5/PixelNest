@@ -1,4 +1,5 @@
 ﻿using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Responses;
 
 namespace PixelNestBackend.Interfaces

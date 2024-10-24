@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
+using PixelNestBackend.Responses;
 
 namespace PixelNestBackend.Controllers
 {
@@ -20,22 +22,22 @@ namespace PixelNestBackend.Controllers
 
         }
         [Authorize]
-        [HttpPost("ShareNewPost")]
-        public async Task<IActionResult> ShareNewPost([FromForm] PostDto postDto)
+        [HttpPost("PublishPost")]
+        public async Task<ActionResult<PostResponse>> PublishPost([FromForm] PostDto postDto)
         {
             try
             {
 
-                var result = await _postService.ShareNewPost(postDto);
+                var result = await _postService.PublishPost(postDto);
 
                 if (result.IsSuccessfull)
                 {
-                    return Ok(new { message = result.Message });
+                    return Ok(new PostResponse { Message = result.Message, IsSuccessfull = true });
                 }
-                return BadRequest(new {message = result.Message});
+                return BadRequest(new PostResponse { Message = result.Message, IsSuccessfull = false });
             }catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving posts.", error = ex.Message });
+                return StatusCode(500, new PostResponse { Message = ex.Message, IsSuccessfull = false });
             }
            
           
@@ -85,7 +87,7 @@ namespace PixelNestBackend.Controllers
             } else return NotFound();
         }
         [HttpPost("Comment")]
-        public IActionResult Comment(CommentDto commentDto)
+        public ActionResult<PostResponse> Comment(CommentDto commentDto)
         {
             if (!ModelState.IsValid)
             {
@@ -94,12 +96,12 @@ namespace PixelNestBackend.Controllers
             
             try
             {
-                bool result = _postService.Comment(commentDto);
-                if (result)
+                PostResponse result = _postService.Comment(commentDto);
+                if (result.IsSuccessfull)
                 {
-                    return Ok(new { message = "Comment successfully added!" });
+                    return Ok(new PostResponse { Message = result.Message, IsSuccessfull = result.IsSuccessfull });
                 }
-                else return BadRequest(new { message = "Comment successfully not added" });
+                else return BadRequest(new PostResponse { Message = result.Message, IsSuccessfull = result.IsSuccessfull });
             }catch(Exception ex)
             {
                 return StatusCode(500, new { message = ex.Message });
