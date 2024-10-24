@@ -5,6 +5,7 @@
 PixelNest is a web application currently under development, created with the purpose of expanding my knowledge in Angular and ASP.NET. The application is backed by MSSQL for data storage, integrating a modern tech stack to provide a robust environment for learning and development.
 
 ## API endpoints listed down below:
+## Authentication
   #### POST `/api/Authentication/Registration`
   - Request body: 
       ```
@@ -66,7 +67,140 @@ PixelNest is a web application currently under development, created with the pur
   - Request Header: `JWT TOKEN`
   - Responses: `401 Unauthorized` and `200 OK`
 
+## Comment
+ #### GET `/api/Comments/GetReplies
+  - Request URL `/api/Comment/GetReplies?initialParentID=${number}`
+  - Response:
+    ```
+        [
+          {
+            "commentID": 0,
+            "totalLikes": 0,
+            "userID": 0,
+            "commentText": "string",
+            "username": "string",
+            "postID": 0,
+            "totalReplies": 0,
+            "parentCommentID": 0,
+            "likedByUsers": [
+              {
+                "username": "string",
+                "commentID": 0
+              }
+            ],
+            "replies": [
+              "string"
+            ]
+          }
+        ]
+    ``` 
+  #### GET `/api/Comments/GetComments`
+  - Request URL `/api/Comment/GetComments?postID=${number}`
+  - Response:
+    ```
+        [
+          {
+            "commentID": 0,
+            "totalLikes": 0,
+            "userID": 0,
+            "commentText": "string",
+            "username": "string",
+            "postID": 0,
+            "totalReplies": 0,
+            "parentCommentID": 0,
+            "likedByUsers": [
+              {
+                "username": "string",
+                "commentID": 0
+              }
+            ],
+            "replies": [
+              "string"
+            ]
+          }
+        ]
+    ``` 
+  #### POST `/api/Comments/LikeComment`
+  - Request:
+  ```
+    {
+      "username": "string",
+      "commentID": 0
+    }
+  ```
+  - Responses: `200 OK`, `400 BadRequest`, `404 NotFound`
+## Post  
+#### POST `/api/Post/ShareNewPost`
+- Request in form data format:
+  ```
+    {
+      "postDescription":"string",
+      "ownerUsername":"string",
+      "photoDisplay":"string",
+      "location":"string",
+      "photos":[]
+    }
+  ```
+- Response:
+  ```
+    {
+      "postID": 0,
+      "isSuccessfull": true,
+      "message": "string"
+    }
+  ```
+#### POST `/api/Post/SavePost`
+- Request in form data format:
+  ```
+    {
+      "username": "string",
+      "postID": 0
+    }
+  ```
+- Responses:
+  - `200 OK`, if post was saved successfully.
+  - `400 BadRequest`, if request body is missing or its not right format.
+  - `404 NotFound`, Database related error.
 
+#### GET `/api/Post/GetPosts`
+- Request URL format:
+  - `/api/Post/GetPosts?page=1&maximumPosts=5`
+  - `/api/Post/GetPosts?username=${username}&location=${string}&page=${number}&maximumPosts=${number}`
+- All of these query paramters are optional. User can pass location or username only, or none. In that case all posts will be fetched.
+- Response:
+   ```
+     [
+        {
+          "postID": 0,
+          "ownerUsername": "string",
+          "postDescription": "string",
+          "totalLikes": 0,
+          "totalComments": 0,
+          "location": "string",
+          "publishDate": "2024-10-21T08:38:27.017Z",
+          "likedByUsers": [
+            {
+              "username": "string",
+              "postID": 0
+            }
+          ],
+          "savedByUsers": [
+            {
+              "username": "string",
+              "postID": 0
+            }
+          ],
+          "imagePaths": [
+            {
+              "pathID": 0,
+              "postID": 0,
+              "path": "string",
+              "photoDisplay": "string"
+            }
+          ]
+        }
+    ]
+   ```
 
 ## Frontend
 
