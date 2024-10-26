@@ -25,6 +25,10 @@ namespace PixelNestBackend.Controllers
         [HttpPost("PublishPost")]
         public async Task<ActionResult<PostResponse>> PublishPost([FromForm] PostDto postDto)
         {
+            if(postDto == null)
+            {
+                return BadRequest(new PostResponse { IsSuccessfull = false, Message = "PostDto has bad request body!" });
+            }
             try
             {
 
@@ -34,7 +38,7 @@ namespace PixelNestBackend.Controllers
                 {
                     return Ok(new PostResponse { Message = result.Message, IsSuccessfull = true });
                 }
-                return BadRequest(new PostResponse { Message = result.Message, IsSuccessfull = false });
+                return NotFound(new PostResponse { Message = result.Message, IsSuccessfull = false });
             }catch (Exception ex)
             {
                 return StatusCode(500, new PostResponse { Message = ex.Message, IsSuccessfull = false });

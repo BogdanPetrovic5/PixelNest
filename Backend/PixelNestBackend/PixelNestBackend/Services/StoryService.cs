@@ -1,4 +1,5 @@
 ﻿using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Responses;
 using PixelNestBackend.Utility;
@@ -26,6 +27,12 @@ namespace PixelNestBackend.Services
             _storyRepository = storyRepository;
             _userUtility = userUtility;
         }
+
+        public async Task<ICollection<ResponseStoryDto>> GetStories(string username)
+        {
+            return await _storyRepository.GetStories(username);
+        }
+
         public async Task<StoryResponse> PublishStory(StoryDto storyDto)
         {
             string userFolderName = storyDto.Username;

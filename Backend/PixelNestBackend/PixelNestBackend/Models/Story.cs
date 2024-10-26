@@ -11,7 +11,7 @@ namespace PixelNestBackend.Models
         public int UserID { get; set; }
         public string Username { get; set; }
         [NotMapped]
-        public ICollection<ImagePath>? ImagePath { get; set; }
+        public ICollection<ImagePath> ImagePath { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime ExpirationDate { get; set; }
         [NotMapped]

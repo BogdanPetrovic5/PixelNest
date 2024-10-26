@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Responses;
 
@@ -15,6 +16,16 @@ namespace PixelNestBackend.Controllers
         {
             _storyService = storyService;
         }
+        [HttpGet("GetStories")]
+        public async Task<ActionResult<ResponseStoryDto>> GetStories(string username)
+        {
+            ICollection<ResponseStoryDto> stories = await _storyService.GetStories(username);
+            if (stories != null)
+            {
+                return Ok(stories);
+            } else return NotFound();
+        }
+
         [HttpPost("PublishStory")]
         public async Task<ActionResult<StoryResponse>> PublishStory([FromForm]StoryDto storyDto)
         {
