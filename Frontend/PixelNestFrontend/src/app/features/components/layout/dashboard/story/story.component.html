@@ -8,31 +8,15 @@
         </div>
         <div class="following">
             <div class="following-list">
-                <div class="user-box">
+                <div class="user-box" *ngFor="let story of stories">
                     <div class="box">
                         <img src="./assets/images/user.png" alt="">
                     </div>
                     <h1>Bogdan</h1>
                 </div>
-                <div class="user-box">
-                    <div class="box">
-                        <img src="./assets/images/user.png" alt="">
-                    </div>
-                    <h1>Bogdan</h1>
-                </div>
-                <div class="user-box">
-                    <div class="box">
-                        <img src="./assets/images/user.png" alt="">
-                    </div>
-                    <h1>Bogdan</h1>
-                </div>
-                <div class="user-box">
-                    <div class="box">
-                        <img src="./assets/images/user.png" alt="">
-                    </div>
-                    <h1>Bogdan</h1>
-                </div>
+               
             </div>
         </div>
     </div>
 </div>
+<app-new-story></app-new-story>

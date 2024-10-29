@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="new-story-wrapper">
+        <div class="header">
+            <img src="/assets/images/back.png">
+            <div class="title">
+                <h1>New Story</h1>
+            </div>
+            <div class="dummy">
+
+            </div>
+        </div>
+        <div class="image">
+            <img  src="/assets/images/add.png">
+            <div class="image-input">
+                <input type="file" type="file" #fileInput  (change)="onFileSelected($event)">
+               
+                <button (click)="fileInput.click()"  >Select from computer</button>
+            </div>
+        </div>
+      
+    </div>
+</div>

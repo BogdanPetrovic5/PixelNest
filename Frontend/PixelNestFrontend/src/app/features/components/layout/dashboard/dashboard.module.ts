@@ -8,13 +8,15 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterOutlet } from '@angular/router';
 import { StoryComponent } from './story/story.component';
 import { FormsModule } from '@angular/forms';
+import { NewStoryComponent } from './story/new-story/new-story.component';
 
 
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    StoryComponent
+    StoryComponent,
+    NewStoryComponent
  
     
   ],

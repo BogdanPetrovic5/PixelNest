@@ -22,7 +22,7 @@ export class StoryComponent implements OnInit{
     this._storyService.getStories(this.username).subscribe({
       next:response=>{
         this.stories = response
-        
+        console.log(this.stories)
       }
     })      
   }

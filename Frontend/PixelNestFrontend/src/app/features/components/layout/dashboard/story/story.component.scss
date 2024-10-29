@@ -35,7 +35,15 @@ $HFONT: "Roboto Condensed", sans-serif;
             color:rgb(87, 87, 87);
             font-weight: 300;
             font-family: $PFONT;
+            transition: 300ms;
+            cursor: pointer;
             
+        }
+        .box:hover{
+            transform: scale(1.1);
+        }
+        .box:hover ~ h1{
+            transform: scale(1.1);
         }
         h1{
             font-size: 0.8em;
@@ -43,6 +51,7 @@ $HFONT: "Roboto Condensed", sans-serif;
             font-family: $HFONT;
             font-weight: 300;
             margin: 0;
+            transition: 300ms;
         }
     }
     .following{
