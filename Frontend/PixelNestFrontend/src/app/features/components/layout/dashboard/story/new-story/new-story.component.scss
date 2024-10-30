@@ -24,6 +24,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         height: 90%;
         background-color: #32373a;
         border-radius: 25px;
+        overflow: hidden;
         .header{
             width: 100%;
             height: 60px;
@@ -37,6 +38,11 @@ $HFONT: "Roboto Condensed", sans-serif;
                 width: 20px;
                 height: 20px;
                 margin-left: 40px;
+                cursor: pointer;
+                transition: 300ms;
+            }
+            img:hover{
+                transform: scale(1.1);
             }
             .title{
                 font-size: 25px;
@@ -60,37 +66,70 @@ $HFONT: "Roboto Condensed", sans-serif;
           
         }
         .image{
-            height: calc(100% - 100px) ;
+            height: calc(100% - 60px) ;
             width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            div.image-input{
-                position: relative;
-                font-size: 25px;
-                cursor: pointer;
-                width: fit-content;
-                input{
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    opacity:  0;
-                    display: none;
-                }
+            overflow: hidden;
+            position: relative;
+            .commands{
+                width: 90%;
+                display: flex;
+                flex-direction: row;
+                gap: 40px;
+                justify-content: center;
+                align-items: center;
+                bottom: 20px;
+                position: absolute;
                 button{
-                    padding: 5px 30px; 
-                    border-radius: 10px;
+                    font-size: 1em;
+                    font-family: $PFONT;
+                    padding: 15px 25px;
+                    border-radius: 25px;
                     border: none;
                     outline: none;
-                    font-size: 0.6em;
-                    background-color: #64A3B9;
-                    font-family: $HFONT;
-                    font-weight: 400;
-                    cursor: pointer;
-
+                }
+                .share{
+                    background-color: #01BAEF;
+                }
+                .discard{
+                    background-color: #FBFBFF;
                 }
             }
+            .open-image{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                div.image-input{
+                    position: relative;
+                    font-size: 25px;
+                    cursor: pointer;
+                    width: fit-content;
+                    input{
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        opacity:  0;
+                        display: none;
+                    }
+                    button{
+                        padding: 5px 30px; 
+                        border-radius: 10px;
+                        border: none;
+                        outline: none;
+                        font-size: 0.6em;
+                        background-color: #64A3B9;
+                        font-family: $HFONT;
+                        font-weight: 400;
+                        cursor: pointer;
+    
+                    }
+                }
+            }
+          
         }
     }
 }

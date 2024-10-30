@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
+import { StoryService } from 'src/app/core/services/story/story.service';
 import { ImageCompressorService } from 'src/app/uitility/image-compressor.service';
 
 @Component({
@@ -11,12 +14,45 @@ export class NewStoryComponent {
 
   imageSrc: string | ArrayBuffer | null = null;
   imageUrls: string[] = [];
+  objectFit:string = 'cover';
 
   imageDisplay:boolean = false;
   img:boolean = true;
-  constructor(private _imageCompressorService:ImageCompressorService){
+  newStory:boolean = false;
+
+  constructor(
+    private _imageCompressorService:ImageCompressorService,
+    private _dashboardState:DashboardStateService,
+    private _cookieService:CookieService,
+    private _storyService:StoryService
+  ){
 
   }
+  closeTab(){
+    this._dashboardState.setIsNewStoryTabOpen(false);
+  }
+
+
+  discardPhoto(){
+    this.selectedFiles = []
+    this.imageSrc = ""
+    alert(this.imageSrc)
+    this.img = true
+  }
+
+  shareStory(){
+    const formData = this._appendToForm()
+
+    this._storyService.publishStory(formData).subscribe({
+      next:response=>{
+        console.log(response)
+      },
+      error:error=>{
+        console.error(error);
+      }
+    })
+  }
+
   async onFileSelected(event:any){
     const inputElement = event.target as HTMLInputElement;
     const files = inputElement.files;
@@ -37,6 +73,7 @@ export class NewStoryComponent {
           reader.onload = (e: ProgressEvent<FileReader>) => {
             if (e.target?.result) {
               this.imageSrc = e.target.result as string;
+              alert(this.imageSrc)
               this.img = false; 
             }
           };
@@ -52,5 +89,17 @@ export class NewStoryComponent {
         }
       }
     }
+  }
+
+  private _appendToForm(){
+    let username = this._cookieService.get("username");
+    const FORM_DATA = new FormData();
+
+    FORM_DATA.append("Username", username);
+    FORM_DATA.append("PhotoDisplay", this.objectFit)
+    for(let i = 0; i< this.selectedFiles.length;i++){
+      FORM_DATA.append("StoryImage", this.selectedFiles[i]);
+    }
+    return FORM_DATA;
   }
 }

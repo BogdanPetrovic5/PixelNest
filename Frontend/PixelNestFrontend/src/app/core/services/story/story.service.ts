@@ -15,4 +15,9 @@ export class StoryService {
     const url = `${environment.apiUrl}/api/Story/GetStories?username=${username}`
     return this._httpClient.get<StoryDto[]>(url);
   }
+
+  publishStory(formData:FormData):Observable<any>{
+    const url = `${environment.apiUrl}/api/Story/PublishStory`;
+    return this._httpClient.post(url, formData);
+  }
 }

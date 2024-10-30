@@ -8,6 +8,7 @@
         <div class="post">
             <div class="image">
                 <img *ngIf="imageSrc" [src]="imageSrc" alt="Selected Image" style="width: 100%; height: 100%;" [ngStyle]="{'object-fit': objectFit}" />
+                
                 <div class="open-image" *ngIf="img">
                     
                     <img src="./assets/images/add.png" alt="">

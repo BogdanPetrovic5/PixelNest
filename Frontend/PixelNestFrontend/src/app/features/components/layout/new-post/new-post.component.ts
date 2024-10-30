@@ -15,7 +15,7 @@ import { Map, Marker, geocoding, config } from '@maptiler/sdk';
 export class NewPostComponent implements OnInit{
 
   @ViewChild('descriptionDiv') descriptionDiv: ElementRef<HTMLDivElement> | undefined
-  apiKey: string = 'aqR39NWYQyZAdFc6KtYh'; // Replace with your MapTiler API Key
+  apiKey: string = 'aqR39NWYQyZAdFc6KtYh'; 
   geocodeUrl: string = 'https://api.maptiler.com/geocoding/';
   suggestions: any[] = [];
 
@@ -190,15 +190,15 @@ export class NewPostComponent implements OnInit{
     return text;
   }
   private _appendToForm(description:any, username:string):FormData{
-    const formData = new FormData()
-    formData.append("PostDescription", description)
-    formData.append("OwnerUsername", username);
-    formData.append("PhotoDisplay", this.objectFit);
-    formData.append("Location", this.locationCenter);
+    const FORM_DATA = new FormData()
+    FORM_DATA.append("PostDescription", description)
+    FORM_DATA.append("OwnerUsername", username);
+    FORM_DATA.append("PhotoDisplay", this.objectFit);
+    FORM_DATA.append("Location", this.locationCenter);
     for (let i = 0; i < this.selectedFiles.length; i++) {
-      formData.append("Photos", this.selectedFiles[i]);
+      FORM_DATA.append("Photos", this.selectedFiles[i]);
     }
-    return formData
+    return FORM_DATA;
   }
  
 

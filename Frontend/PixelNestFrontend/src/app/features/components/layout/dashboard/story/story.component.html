@@ -1,7 +1,7 @@
 <div class="container">
     <div class="story-section">
         <div class="personal">
-            <div class="box">
+            <div class="box" (click)="openNewStory()">
                 +
             </div>
             <h1>You</h1>
@@ -19,4 +19,4 @@
         </div>
     </div>
 </div>
-<app-new-story></app-new-story>
+<app-new-story *ngIf="newStory"></app-new-story>

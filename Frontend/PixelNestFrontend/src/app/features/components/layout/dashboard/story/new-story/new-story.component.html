@@ -1,7 +1,7 @@
 <div class="container">
     <div class="new-story-wrapper">
         <div class="header">
-            <img src="/assets/images/back.png">
+            <img (click)="closeTab()" src="/assets/images/back.png">
             <div class="title">
                 <h1>New Story</h1>
             </div>
@@ -10,12 +10,24 @@
             </div>
         </div>
         <div class="image">
-            <img  src="/assets/images/add.png">
-            <div class="image-input">
-                <input type="file" type="file" #fileInput  (change)="onFileSelected($event)">
-               
-                <button (click)="fileInput.click()"  >Select from computer</button>
+            <img *ngIf="imageSrc" [src]="imageSrc" alt="Selected Image" style="width: 100%; height: 100%;" [ngStyle]="{'object-fit': objectFit}" />
+            <div class="commands" *ngIf="imageSrc">
+                <button class="share" (click)="shareStory()">
+                    Share Story
+                </button>
+                <button (click)="discardPhoto()" class="discard">
+                    Discard Photo
+                </button>
             </div>
+            <div class="open-image" *ngIf="img">
+                <img  src="/assets/images/add.png">
+                <div class="image-input">
+                    <input type="file" type="file" #fileInput  (change)="onFileSelected($event)">
+                   
+                    <button (click)="fileInput.click()"  >Select from computer</button>
+                </div>
+            </div>
+           
         </div>
       
     </div>

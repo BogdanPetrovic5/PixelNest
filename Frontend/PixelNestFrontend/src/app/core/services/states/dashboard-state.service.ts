@@ -14,7 +14,13 @@ export class DashboardStateService {
   private NewLocationSubject = new BehaviorSubject<string | null>(null)
   location$ = this.NewLocationSubject.asObservable()
 
+  private _newStoryTab = new BehaviorSubject<boolean>(true)
+  newStoryTab$ = this._newStoryTab.asObservable();
   constructor() { }
+
+  setIsNewStoryTabOpen(isSelected:boolean){
+    this._newStoryTab.next(isSelected);
+  }
 
   setIsTabSelected(isSelected:boolean | null){
     this.NewPostTabSubject.next(isSelected)
