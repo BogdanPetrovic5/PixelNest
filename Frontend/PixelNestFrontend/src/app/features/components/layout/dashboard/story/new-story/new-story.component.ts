@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
+import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { StoryService } from 'src/app/core/services/story/story.service';
 import { ImageCompressorService } from 'src/app/uitility/image-compressor.service';
 
@@ -24,7 +25,8 @@ export class NewStoryComponent {
     private _imageCompressorService:ImageCompressorService,
     private _dashboardState:DashboardStateService,
     private _cookieService:CookieService,
-    private _storyService:StoryService
+    private _storyService:StoryService,
+    private _lottieState:LottieStateService
   ){
 
   }
@@ -36,7 +38,6 @@ export class NewStoryComponent {
   discardPhoto(){
     this.selectedFiles = []
     this.imageSrc = ""
-    alert(this.imageSrc)
     this.img = true
   }
 
@@ -46,6 +47,11 @@ export class NewStoryComponent {
     this._storyService.publishStory(formData).subscribe({
       next:response=>{
         console.log(response)
+        this._lottieState.setIsSuccess(true);
+        this._dashboardState.setIsNewStoryTabOpen(false);
+        setTimeout(()=>{
+          this._lottieState.setIsSuccess(false)
+        },1400)
       },
       error:error=>{
         console.error(error);
@@ -97,6 +103,7 @@ export class NewStoryComponent {
 
     FORM_DATA.append("Username", username);
     FORM_DATA.append("PhotoDisplay", this.objectFit)
+
     for(let i = 0; i< this.selectedFiles.length;i++){
       FORM_DATA.append("StoryImage", this.selectedFiles[i]);
     }

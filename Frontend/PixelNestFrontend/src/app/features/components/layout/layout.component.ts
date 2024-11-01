@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
+import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 
 @Component({
   selector: 'app-layout',
@@ -11,7 +12,11 @@ export class LayoutComponent implements OnInit{
   newPost:boolean | null = false;
   subscriptions: Subscription = new Subscription();
 
-  constructor(private _dashboardStateMenagment:DashboardStateService){
+  isSuccess:boolean = false
+  constructor(
+    private _dashboardStateMenagment:DashboardStateService,
+    private _lottieState:LottieStateService
+  ){
     
   }
   ngOnInit(): void {
@@ -19,6 +24,13 @@ export class LayoutComponent implements OnInit{
       this._dashboardStateMenagment.newPostTab$.subscribe(response =>{
         if(this.newPost != null && response != null){
           this.newPost = response
+        }
+      })
+    )
+    this.subscriptions.add(
+      this._lottieState.isSuccess$.subscribe({
+        next:response=>{
+          this.isSuccess = response
         }
       })
     )

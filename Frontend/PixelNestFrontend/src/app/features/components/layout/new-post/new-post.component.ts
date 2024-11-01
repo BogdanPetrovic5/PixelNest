@@ -7,6 +7,7 @@ import { DashboardStateService } from 'src/app/core/services/states/dashboard-st
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { ImageCompressorService } from 'src/app/uitility/image-compressor.service';
 import { Map, Marker, geocoding, config } from '@maptiler/sdk'; 
+import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 @Component({
   selector: 'app-new-post',
   templateUrl: './new-post.component.html',
@@ -44,7 +45,8 @@ export class NewPostComponent implements OnInit{
     private _dashboardStateMenagment:DashboardStateService,
     private _userSessionService:UserSessionService,
     private _postService:PostService,
-    private _imageCompressorService:ImageCompressorService
+    private _imageCompressorService:ImageCompressorService,
+    private _lottieState:LottieStateService
   ){
     config.apiKey = 'aqR39NWYQyZAdFc6KtYh'
   }
@@ -89,10 +91,11 @@ export class NewPostComponent implements OnInit{
 
     this._postService.createNewPost(formData).subscribe((response) =>{
       this.newPostForm = false
-      this.isShared = true;
+      this._lottieState.setIsSuccess(true);
+      this._dashboardStateMenagment.setIsTabSelected(false);
       setTimeout(()=>{
-        this._dashboardStateMenagment.setIsTabSelected(false);
-      }, 1000)
+        this._lottieState.setIsSuccess(false);
+      }, 1600)
     }, (error:HttpErrorResponse) =>{
       this.newPostForm = false
       console.log(error)

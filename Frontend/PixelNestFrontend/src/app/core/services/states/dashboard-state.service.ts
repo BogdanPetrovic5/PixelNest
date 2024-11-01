@@ -14,7 +14,7 @@ export class DashboardStateService {
   private NewLocationSubject = new BehaviorSubject<string | null>(null)
   location$ = this.NewLocationSubject.asObservable()
 
-  private _newStoryTab = new BehaviorSubject<boolean>(true)
+  private _newStoryTab = new BehaviorSubject<boolean>(false)
   newStoryTab$ = this._newStoryTab.asObservable();
   constructor() { }
 
