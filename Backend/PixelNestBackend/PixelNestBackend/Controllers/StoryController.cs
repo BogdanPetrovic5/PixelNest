@@ -17,9 +17,9 @@ namespace PixelNestBackend.Controllers
             _storyService = storyService;
         }
         [HttpGet("GetStories")]
-        public async Task<ActionResult<ResponseStoryDto>> GetStories(string username)
+        public async Task<ActionResult<GroupedStoriesDto>> GetStories(string username)
         {
-            ICollection<ResponseStoryDto> stories = await _storyService.GetStories(username);
+            ICollection<GroupedStoriesDto> stories = await _storyService.GetStories(username);
             if (stories != null)
             {
                 return Ok(stories);

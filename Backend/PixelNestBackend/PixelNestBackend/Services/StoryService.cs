@@ -28,7 +28,7 @@ namespace PixelNestBackend.Services
             _userUtility = userUtility;
         }
 
-        public async Task<ICollection<ResponseStoryDto>> GetStories(string username)
+        public async Task<ICollection<GroupedStoriesDto>> GetStories(string username)
         {
             return await _storyRepository.GetStories(username);
         }

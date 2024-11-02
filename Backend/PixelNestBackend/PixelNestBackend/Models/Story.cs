@@ -16,5 +16,6 @@ namespace PixelNestBackend.Models
         public DateTime ExpirationDate { get; set; }
         [NotMapped]
         public User User { get; set; }
+        public ICollection<Seen>? SeenList { get; set; }
     }
 }

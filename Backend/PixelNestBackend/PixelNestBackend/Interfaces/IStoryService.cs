@@ -6,7 +6,7 @@ namespace PixelNestBackend.Interfaces
 {
     public interface IStoryService
     {
-        Task<ICollection<ResponseStoryDto>> GetStories(string username);
+        Task<ICollection<GroupedStoriesDto>> GetStories(string username);
         Task<StoryResponse> PublishStory(StoryDto storyDto);
 
     }

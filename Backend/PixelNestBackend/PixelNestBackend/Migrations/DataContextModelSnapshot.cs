@@ -225,6 +225,25 @@ namespace PixelNestBackend.Migrations
                     b.ToTable("SavedPosts");
                 });
 
+            modelBuilder.Entity("PixelNestBackend.Models.Seen", b =>
+                {
+                    b.Property<int>("StoryID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StoryID", "UserID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Seen");
+                });
+
             modelBuilder.Entity("PixelNestBackend.Models.Story", b =>
                 {
                     b.Property<int>("StoryID")
@@ -422,6 +441,25 @@ namespace PixelNestBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PixelNestBackend.Models.Seen", b =>
+                {
+                    b.HasOne("PixelNestBackend.Models.Story", "Story")
+                        .WithMany("SeenList")
+                        .HasForeignKey("StoryID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PixelNestBackend.Models.User", "User")
+                        .WithMany("SeenList")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Story");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PixelNestBackend.Models.Story", b =>
                 {
                     b.HasOne("PixelNestBackend.Models.User", "User")
@@ -452,6 +490,8 @@ namespace PixelNestBackend.Migrations
             modelBuilder.Entity("PixelNestBackend.Models.Story", b =>
                 {
                     b.Navigation("ImagePath");
+
+                    b.Navigation("SeenList");
                 });
 
             modelBuilder.Entity("PixelNestBackend.Models.User", b =>
@@ -469,6 +509,8 @@ namespace PixelNestBackend.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("SavedPosts");
+
+                    b.Navigation("SeenList");
 
                     b.Navigation("Stories");
                 });

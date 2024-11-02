@@ -17,27 +17,34 @@ namespace PixelNestBackend.Repository
             _dataContext = dataContext;
         }
 
-        public async Task<ICollection<ResponseStoryDto>> GetStories(string username)
+        public async Task<ICollection<GroupedStoriesDto>> GetStories(string username)
         {
             try
             {
-                ICollection<ResponseStoryDto> responseStoryDto = await _dataContext
-                    .Stories
-                    .Where(l => l.Username != username && l.ExpirationDate > DateTime.Now)
-                    .Select(s => new ResponseStoryDto
-                    {
-                        OwnerUsername = s.Username,
-                        ImagePaths = s.ImagePath.Select(i => new ResponseImageDto {
-                            Path = i.Path,
-                            PhotoDisplay = i.PhotoDisplay,
-                        }).ToList(),
-                        StoryID = s.StoryID
+                    var groupedStories = await _dataContext
+               .Stories
+               .Where(s => s.Username != username)
+               .GroupBy(s => s.Username)
+               .Select(group => new GroupedStoriesDto
+               {
+                   OwnerUsername = group.Key,
+                   Stories = group.Select(s => new ResponseStoryDto
+                   {
+                       OwnerUsername = s.Username,
+                       ImagePaths = s.ImagePath.Select(i => new ResponseImageDto
+                       {
+                           Path = i.Path,
+                           PhotoDisplay = i.PhotoDisplay,
+                       }).ToList(),
+                       StoryID = s.StoryID
+                   }).ToList()
+               })
+               .AsSplitQuery()
+               .ToListAsync();
 
-                    })
-                    .AsSplitQuery()
-                    .ToListAsync();
-                return responseStoryDto;
-            }catch(SqlException ex)
+                return groupedStories;
+            }
+            catch(SqlException ex)
             {
                 return null;
             }   

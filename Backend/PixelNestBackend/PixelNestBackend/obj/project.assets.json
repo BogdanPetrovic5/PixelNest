@@ -3256,23 +3256,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Bogdan\\.nuget\\packages\\": {},
+    "C:\\Users\\petro\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\PixelNestBackend.csproj",
+      "projectUniqueName": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\PixelNestBackend.csproj",
       "projectName": "PixelNestBackend",
-      "projectPath": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\PixelNestBackend.csproj",
-      "packagesPath": "C:\\Users\\Bogdan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Bogdan\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\obj\\",
+      "projectPath": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\PixelNestBackend.csproj",
+      "packagesPath": "C:\\Users\\petro\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Bogdan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\petro\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3281,7 +3281,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3294,6 +3294,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3352,7 +3357,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403\\RuntimeIdentifierGraph.json"
       }
     }
   }

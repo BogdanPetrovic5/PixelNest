@@ -49,19 +49,18 @@ namespace PixelNestBackend.Gateaway
                     var formFile = storyDto.StoryImage;
                     if(formFile != null)
                     {
-                        Console.WriteLine("FolderID: " + folder);
-                        Console.WriteLine("Ima slike:");
+                        
                         string storyFolderID = folder.ToString();
                         string storyFolderPath = Path.Combine(userFolder, storyFolderID);
                         Directory.CreateDirectory(storyFolderPath);
                         string fileName = formFile.FileName;
                         string filePath = Path.Combine(storyFolderPath, fileName);
-                        Console.WriteLine("File path: " + filePath);
+                       
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await formFile.CopyToAsync(stream);
                         }
-                        Console.WriteLine("Stigo dovde:");
+                       
                         ImagePath imagePath = new ImagePath
                         {
                             StoryID = folder,

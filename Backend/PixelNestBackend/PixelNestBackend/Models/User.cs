@@ -20,17 +20,18 @@ namespace PixelNestBackend.Models
         public int Followers { get; set; } = 0;
         public int Following { get; set; } = 0;
         public int TotalPosts { get; set; }
-        public ICollection<Post> Posts { get; set; }
-        public ICollection<Story> Stories { get; set; }
+        public ICollection<Post>? Posts { get; set; }
+        public ICollection<Story>? Stories { get; set; }
         [NotMapped]
-        public UserProfileDto UserProfileDto { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<LikedPosts> LikedPosts { get; set;}
-        public ICollection<LikedComments> LikedComments { get; set; }
-        public ICollection<SavedPosts> SavedPosts { get; set; }
+        public UserProfileDto? UserProfileDto { get; set; }
+        public ICollection<Comment>? Comments { get; set; }
+        public ICollection<LikedPosts>? LikedPosts { get; set;}
+        public ICollection<LikedComments>? LikedComments { get; set; }
+        public ICollection<SavedPosts>? SavedPosts { get; set; }
 
-        public ICollection<Follow> FollowingsList { get; set; }
-        public ICollection<Follow> FollowersList { get; set; }
+        public ICollection<Follow>? FollowingsList { get; set; }
+        public ICollection<Follow>? FollowersList { get; set; }
+        public ICollection<Seen>? SeenList { get; set; }
 
     }
 }
