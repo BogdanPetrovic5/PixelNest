@@ -16,6 +16,10 @@ export class DashboardStateService {
 
   private _newStoryTab = new BehaviorSubject<boolean>(false)
   newStoryTab$ = this._newStoryTab.asObservable();
+
+  private _storyPreview = new BehaviorSubject<boolean>(false)
+  storyPreview$ = this._storyPreview.asObservable();
+
   constructor() { }
 
   setIsNewStoryTabOpen(isSelected:boolean){
@@ -31,5 +35,8 @@ export class DashboardStateService {
 
   setNewLocation(location:string){
     this.NewLocationSubject.next(location);
+  }
+  setStoryPrewiew(value:boolean){
+    this._storyPreview.next(value);
   }
 }

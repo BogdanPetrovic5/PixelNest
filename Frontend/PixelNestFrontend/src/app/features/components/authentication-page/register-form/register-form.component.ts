@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
+import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 @Component({
   selector: 'app-register-form',
   templateUrl: './register-form.component.html',
@@ -15,7 +16,7 @@ export class RegisterFormComponent {
     private _router:Router,
     private _formBuilder:FormBuilder,
     private _authService:AuthenticationService,
-    private _authState:AuthStateService
+    private _lottieState:LottieStateService
   ){
     this.registerForm = this._formBuilder.group({
       Firstname: ['', Validators.required],
@@ -47,9 +48,9 @@ export class RegisterFormComponent {
   register(){
     const formValues = this.registerForm.value;
     this._authService.register(formValues).subscribe((response)=>{
-      this._authState.setIsAuthSuccess(true)
+      this._lottieState.setIsSuccess(true)
       setTimeout(() => {
-        this._authState.setIsAuthSuccess(false)
+        this._lottieState.setIsSuccess(false)
       }, 1500);
     },(error:HttpErrorResponse) =>{
       console.log(error);

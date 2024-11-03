@@ -1,0 +1,108 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.259);
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .story-wrapper{
+        width: 30%;
+        height: 85%;
+        background-color: $TABCOLOR;
+        border-radius: 25px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img{
+            cursor: pointer;
+        }
+        .left
+        {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+          
+            left: 0;
+        }
+        .right{
+            position: absolute;
+            width: 20px;
+            height: 20px;
+           
+            right: 0;
+        }
+        .story-header{
+            position: absolute;
+            top: 0;
+            height: 80px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgb(0,0,0);
+            
+            background: linear-gradient(180deg, rgba(0,0,0,0.2721463585434174) 54%, rgba(0,0,0,0) 100%);
+            .header-wrapper{
+                width: 90%;
+                height: 100%;
+                .progress-bar-wrapper{
+                    display: flex;
+                    flex-direction: row;
+                    gap: 2px;
+                    .progress-bar{
+                        width: 100%;
+                        height: 2px;
+                        background-color: #616161;
+                        border-radius: 5px;
+                        margin-top: 20px;
+                            .bar{
+                                height: 100%;
+                                background-color: rgb(214, 214, 214);
+                            }
+                    }
+                }
+                
+                   .profile{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        margin-top: 5px;
+                        font-size: 25px;
+                        gap: 10px;
+                        .img{
+                            width: 25px;
+                            height: 25px;
+                            img{
+                                height: 100%;
+                                width: 100%;
+                            }
+                        }
+                        h1{
+                            font-size: 0.6em;
+                            color: $PCOLOR;
+                            font-family: $PFONT;
+                            stroke: 1px solid black;
+                            font-weight: 600;
+                        }
+                   }
+            }
+           
+        }
+    }
+}

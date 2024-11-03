@@ -8,7 +8,8 @@
         </div>
         <div class="following">
             <div class="following-list">
-                <div class="user-box" *ngFor="let story of stories">
+                <div class="user-box" *ngFor="let story of groupedStories" (click)="openStoryPreview(story.stories)">
+                    
                     <div class="box">
                         <img src="./assets/images/user.png" alt="">
                         <!-- <div class="new"></div> -->
@@ -21,3 +22,4 @@
     </div>
 </div>
 <app-new-story *ngIf="newStory"></app-new-story>
+<app-story-preview *ngIf="storyPreview" [stories]="storiesByUser"></app-story-preview>

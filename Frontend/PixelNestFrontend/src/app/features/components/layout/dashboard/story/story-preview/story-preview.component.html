@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="story-wrapper" >
+        <img src="/assets/images/left.png" class="left" (click)="navigate('left')">
+        <img src="/assets/images/right.png" class="right" (click)="navigate('right')">
+        <div class="story-header">
+            <div class="header-wrapper">
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar" *ngFor="let story of stories;let i = index">
+                
+                        <div class="bar" *ngIf="currentIndex >= i"
+                            [style]="{ 'width': currentIndex > i ? '100% !important' : storyCurrentLength + '%' }"></div>
+                       
+                    </div>
+                </div>
+               
+                <div class="profile">
+                    <div class="img">
+                        <img src="/assets/images/user.png">
+                    </div>
+                    <h1>{{stories[0].ownerUsername}}</h1>
+                </div>
+            </div>
+            
+        </div>
+        <img src="http://localhost:7157/Photos/{{stories[currentIndex].imagePaths[0].path}}" [style]="{'object-fit': stories[currentIndex].imagePaths[0].photoDisplay}">
+    </div>
+    
+</div>

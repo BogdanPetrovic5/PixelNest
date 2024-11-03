@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
+import { StoriesDto } from 'src/app/core/dto/stories.dto';
 import { StoryDto } from 'src/app/core/dto/story.dto';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { StoryService } from 'src/app/core/services/story/story.service';
@@ -12,10 +13,12 @@ import { StoryService } from 'src/app/core/services/story/story.service';
 })
 export class StoryComponent implements OnInit{
   username:String = ""
-  stories:StoryDto[] = []
-
+  groupedStories:StoriesDto[] = []
+  storiesByUser:StoryDto[] = [];
+  storyPreview:boolean = false;
   newStory:boolean = false;
   subscription:Subscription = new Subscription();
+
   constructor(
     private _storyService:StoryService,
     private _cookieService:CookieService,
@@ -28,7 +31,13 @@ export class StoryComponent implements OnInit{
   }
 
   openNewStory(){
+   
     this._dashboardState.setIsNewStoryTabOpen(true)
+  }
+
+  openStoryPreview(story:StoryDto[]){
+    this.storiesByUser = story;
+    this._dashboardState.setStoryPrewiew(true);
   }
 
   private _initilizeComponent() {
@@ -45,10 +54,18 @@ export class StoryComponent implements OnInit{
     this.subscription.add( 
         this._storyService.getStories(this.username).subscribe({
         next:response=>{
-          this.stories = response
-          console.log(this.stories)
+          this.groupedStories = response
+          console.log(this.groupedStories)
         }
       })      
+    )
+
+    this.subscription.add(
+        this._dashboardState.storyPreview$.subscribe({
+          next:response=>{
+            this.storyPreview = response
+          }
+        })
     )
   }
 

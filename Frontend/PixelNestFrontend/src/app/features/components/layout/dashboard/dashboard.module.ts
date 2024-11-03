@@ -9,6 +9,7 @@ import { RouterOutlet } from '@angular/router';
 import { StoryComponent } from './story/story.component';
 import { FormsModule } from '@angular/forms';
 import { NewStoryComponent } from './story/new-story/new-story.component';
+import { StoryPreviewComponent } from './story/story-preview/story-preview.component';
 
 
 
@@ -16,7 +17,8 @@ import { NewStoryComponent } from './story/new-story/new-story.component';
   declarations: [
     DashboardComponent,
     StoryComponent,
-    NewStoryComponent
+    NewStoryComponent,
+    StoryPreviewComponent
  
     
   ],

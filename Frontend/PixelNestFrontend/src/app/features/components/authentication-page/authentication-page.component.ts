@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
+import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
 @Component({
@@ -21,15 +22,17 @@ export class AuthenticationPageComponent implements OnInit{
   constructor(
     private _route:ActivatedRoute,
     private _userSession:UserSessionService,
-    private _authState:AuthStateService
+    private _lottieState:LottieStateService
   ){}
 
   ngOnInit():void{
 
 
     this.subscriptions.add(
-      this._authState.isAuthSuccess$.subscribe(response=>{
-        if(response) this.isSuccess = response;
+      this._lottieState.isSuccess$.subscribe({
+        next:response=>{
+          this.isSuccess = response;
+        }
       })
     )
   }
