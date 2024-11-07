@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { StoriesDto } from 'src/app/core/dto/stories.dto';
 import { StoryDto } from 'src/app/core/dto/story.dto';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
+import { StoryStateService } from 'src/app/core/services/states/story-state.service';
 import { StoryService } from 'src/app/core/services/story/story.service';
 
 @Component({
@@ -22,7 +23,8 @@ export class StoryComponent implements OnInit{
   constructor(
     private _storyService:StoryService,
     private _cookieService:CookieService,
-    private _dashboardState:DashboardStateService
+    private _dashboardState:DashboardStateService,
+    private _stateService:StoryStateService
   ){}  
   ngOnInit(): void {
     this.username = this._cookieService.get("username");
@@ -35,9 +37,10 @@ export class StoryComponent implements OnInit{
     this._dashboardState.setIsNewStoryTabOpen(true)
   }
 
-  openStoryPreview(story:StoryDto[]){
-    this.storiesByUser = story;
-    this._dashboardState.setStoryPrewiew(true);
+  openStories(index: number){
+    
+   this._dashboardState.setStoryPrewiew(true)
+   this._stateService.setCurrentStoryState(index);
   }
 
   private _initilizeComponent() {

@@ -1,0 +1,9 @@
+<div class="story-list-container">
+    <div class="story-list-wrapper">
+        <div *ngFor="let userStories of storyList; let i = index" >
+            <app-story-preview [stories]="userStories.stories" [listIndex]="i"></app-story-preview>
+        </div>
+        
+    </div>
+</div>
+ 
