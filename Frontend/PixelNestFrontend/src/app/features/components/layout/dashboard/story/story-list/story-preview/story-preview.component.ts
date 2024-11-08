@@ -1,7 +1,7 @@
 import { animate } from '@angular/animations';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { flush } from '@angular/core/testing';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
+import { Subscription } from 'rxjs';
+
 import { StoryDto } from 'src/app/core/dto/story.dto';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { StoryStateService } from 'src/app/core/services/states/story-state.service';
@@ -22,42 +22,43 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
     storyDuration = 3000;
     interval = 4.16;
     step = this.targetValue / (this.storyDuration / 16.67);
-    animationFrameId: any;
-
+    animationFrameId: any | undefined;
+    storySubscription: Subscription | undefined;
   
 
     constructor(
       private _dashboardState:DashboardStateService,
       private _storyState:StoryStateService
     ){}
-    ngOnDestroy(): void {
-      cancelAnimationFrame(this.animationFrameId);
-      this._storyState.resetCurrentState();
-    }
     ngOnInit(): void {
+      console.log(`Initializing instance ${this.listIndex}`);
       this.currentIndex = 0;
       this.storyCurrentLength = 0;  
      
-    
-      this._storyState.currentStory$.subscribe({
+      
+      this.storySubscription = this._storyState.currentStory$.subscribe({
         next:response=>{
           this.userIndex = response
-         
+          
           if(this.userIndex == this.listIndex) {
-         
-            
-            this.animationFrameId = requestAnimationFrame(animate);
-            this._initilizeInterval();
+            this._startAnimation()
           }else {
-           
-            cancelAnimationFrame(this.animationFrameId);
+            this._stopAnimation()
           }
         }
        })
     }
-    ngOnChanges(changes: SimpleChanges): void {
-      
+    ngOnDestroy(): void {
+      console.log(`Destroying instance ${this.listIndex}`);
+  
+      this._stopAnimation();
+      this.storySubscription?.unsubscribe();
+      this._storyState.resetCurrentState();
     }
+
+   ngOnChanges(changes: SimpleChanges): void {
+     
+   }
     navigate(direction:string){
       
       if(direction === "left"){
@@ -72,35 +73,52 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
       
       }
     }
-    close(){
+    close() {
+      this._stopAnimation();
+    
       this._dashboardState.setStoryPrewiew(false);
     }
-    private _initilizeInterval(){
-      
-      this.storyCurrentLength = 0;
-      this.currentIndex = 0
-      const animate = () => {
+    private animate = () => {
         
-        this.storyCurrentLength += this.step;
-
-        if (this.storyCurrentLength >= this.targetValue) {
-
-          this.storyCurrentLength = this.targetValue;
-          this.storyCurrentLength = 0;
+      this.storyCurrentLength += this.step;
+      if (this.storyCurrentLength >= this.targetValue) {
+        console.log(this.targetValue)
+        this.storyCurrentLength = 0;
+        this.currentIndex += 1;
+        if (this.currentIndex >= this.stories.length) {
+          this.currentIndex = 0;
+          this._stopAnimation()
+          this._storyState.setCurrentStoryState(1);
           
-          this.currentIndex += 1;
-          if (this.currentIndex >= this.stories.length) {
-            this.currentIndex = 0;
-            cancelAnimationFrame(this.animationFrameId);
-            this._storyState.setCurrentStoryState(1);
-            // this._dashboardState.setStoryPrewiew(false)
-            return;
-          }
+          return;
         }
-        this.animationFrameId = requestAnimationFrame(animate);
-      };
+        
+      }
+      this.animationFrameId = requestAnimationFrame(this.animate);
+      
+    };
 
-      this.animationFrameId = requestAnimationFrame(animate);
+
+
+
+    private _startAnimation() {
+      this.storyCurrentLength = 0;
+      this.currentIndex = 0;
+
+
+      this.animate();
+   
+
     }
+
+    private _stopAnimation(){
+      if(this.animationFrameId){
+        cancelAnimationFrame(this.animationFrameId);
+        this.animationFrameId = undefined
+      }
+    }
+
+
+ 
   
 }

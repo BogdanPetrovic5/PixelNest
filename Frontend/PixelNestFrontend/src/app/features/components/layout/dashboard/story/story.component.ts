@@ -10,7 +10,8 @@ import { StoryService } from 'src/app/core/services/story/story.service';
 @Component({
   selector: 'app-story',
   templateUrl: './story.component.html',
-  styleUrls: ['./story.component.scss']
+  styleUrls: ['./story.component.scss'],
+  standalone:false
 })
 export class StoryComponent implements OnInit{
   username:String = ""
