@@ -12,15 +12,21 @@ import { StoryStateService } from 'src/app/core/services/states/story-state.serv
 export class StoryListComponent implements OnInit{
   @Input() storyList:StoriesDto[] = []
   userIndex:number = 0;
+  margin:number = 90;
+
+  counter:number = 1;
+ 
   constructor(private _storyState:StoryStateService){}
   ngOnInit(): void {
-    console.log(this.storyList);
+    
     this._storyState.currentStory$.subscribe({
       next:response=>{
+        this.counter += 1;
+        if(response > this.userIndex) this.margin = this.margin - 56;
         this.userIndex = response
-       
-     
       }
      })
+
+
   }
 }

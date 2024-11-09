@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="story-wrapper" >
+    <div class="story-wrapper" [ngClass]="listIndex == userIndex ? 'active' : 'un-active'">
         <img src="/assets/images/left.png" class="left" (click)="navigate('left')">
         <img src="/assets/images/right.png" class="right" (click)="navigate('right')">
         <div class="story-header">

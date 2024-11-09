@@ -1,5 +1,5 @@
 import { animate } from '@angular/animations';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { StoryDto } from 'src/app/core/dto/story.dto';
@@ -19,19 +19,21 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
     currentIndex = 0;
     storyCurrentLength:number = 0;
     targetValue = 100;
-    storyDuration = 3000;
+    storyDuration = 15000;
     interval = 4.16;
-    step = this.targetValue / (this.storyDuration / 16.67);
+    step = this.targetValue / (this.storyDuration / 33.67);
     animationFrameId: any | undefined;
     storySubscription: Subscription | undefined;
   
 
     constructor(
       private _dashboardState:DashboardStateService,
-      private _storyState:StoryStateService
+      private _storyState:StoryStateService,
+      private _cdr: ChangeDetectorRef,
+     
     ){}
     ngOnInit(): void {
-      console.log(`Initializing instance ${this.listIndex}`);
+
       this.currentIndex = 0;
       this.storyCurrentLength = 0;  
      
@@ -49,28 +51,38 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
        })
     }
     ngOnDestroy(): void {
-      console.log(`Destroying instance ${this.listIndex}`);
+      
   
       this._stopAnimation();
       this.storySubscription?.unsubscribe();
       this._storyState.resetCurrentState();
     }
 
-   ngOnChanges(changes: SimpleChanges): void {
-     
-   }
+    ngOnChanges(changes: SimpleChanges): void {
+      
+    }  
     navigate(direction:string){
       
-      if(direction === "left"){
+      if(direction == "left"){
         if(this.currentIndex - 1 >= 0){
           this.currentIndex -= 1
           this.storyCurrentLength = 0
         
         } 
-      }else if(this.currentIndex + 1 <= this.stories.length){
-        this.currentIndex += 1;
-        this.storyCurrentLength = 0
-      
+      }
+      if(direction == "right"){
+        if(this.currentIndex + 1 < this.stories.length){
+          this.currentIndex += 1;
+          this.storyCurrentLength = 0;
+        }else{
+          this.currentIndex = 0;
+          this.storyCurrentLength = 0;
+          this._stopAnimation();
+          
+          
+          this._storyState.setCurrentStoryState(1);
+          
+        }
       }
     }
     close() {
@@ -82,11 +94,12 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
         
       this.storyCurrentLength += this.step;
       if (this.storyCurrentLength >= this.targetValue) {
-        console.log(this.targetValue)
+       
         this.storyCurrentLength = 0;
         this.currentIndex += 1;
         if (this.currentIndex >= this.stories.length) {
-          this.currentIndex = 0;
+          this.currentIndex = 0
+          this.storyCurrentLength = 0;
           this._stopAnimation()
           this._storyState.setCurrentStoryState(1);
           
@@ -104,11 +117,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
     private _startAnimation() {
       this.storyCurrentLength = 0;
       this.currentIndex = 0;
-
-
       this.animate();
-   
-
     }
 
     private _stopAnimation(){
