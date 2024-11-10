@@ -32,12 +32,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
       private _cdr: ChangeDetectorRef,
      
     ){}
-    ngOnInit(): void {
-
-      this.currentIndex = 0;
-      this.storyCurrentLength = 0;  
-     
-      
+    ngOnInit(): void {    
       this.storySubscription = this._storyState.currentStory$.subscribe({
         next:response=>{
           this.userIndex = response
@@ -62,21 +57,26 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
       
     }  
     navigate(direction:string){
-      
       if(direction == "left"){
         if(this.currentIndex - 1 >= 0){
           this.currentIndex -= 1
           this.storyCurrentLength = 0
         
-        } 
+        }else{
+          this._resetParameters();
+          this._stopAnimation();
+          
+          
+          this._storyState.setCurrentStoryState(-1);
+        }
       }
+
       if(direction == "right"){
         if(this.currentIndex + 1 < this.stories.length){
           this.currentIndex += 1;
           this.storyCurrentLength = 0;
         }else{
-          this.currentIndex = 0;
-          this.storyCurrentLength = 0;
+          this._resetParameters();
           this._stopAnimation();
           
           
@@ -87,7 +87,6 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
     }
     close() {
       this._stopAnimation();
-    
       this._dashboardState.setStoryPrewiew(false);
     }
     private animate = () => {
@@ -98,8 +97,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
         this.storyCurrentLength = 0;
         this.currentIndex += 1;
         if (this.currentIndex >= this.stories.length) {
-          this.currentIndex = 0
-          this.storyCurrentLength = 0;
+          this._resetParameters();
           this._stopAnimation()
           this._storyState.setCurrentStoryState(1);
           
@@ -113,10 +111,12 @@ export class StoryPreviewComponent implements OnInit, OnDestroy, OnChanges{
 
 
 
-
-    private _startAnimation() {
+    private _resetParameters(){
       this.storyCurrentLength = 0;
       this.currentIndex = 0;
+    }
+    private _startAnimation() {
+      this._resetParameters();
       this.animate();
     }
 

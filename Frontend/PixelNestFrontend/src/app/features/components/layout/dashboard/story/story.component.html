@@ -22,4 +22,4 @@
     </div>
 </div>
 <app-new-story *ngIf="newStory"></app-new-story>
-<app-story-list *ngIf="storyPreview" [storyList]="groupedStories"></app-story-list>
+<app-story-list *ngIf="storyPreview" [storyList]="groupedStories" [userIndex]="selectedStoryIndex"></app-story-list>

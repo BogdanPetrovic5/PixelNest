@@ -1,5 +1,5 @@
 <div class="story-list-container">
-    <div class="story-list-wrapper">
+    <div class="story-list-wrapper" [ngStyle]="{'margin-left':margin + '%'}">
         <div *ngFor="let userStories of storyList; let i = index" >
             <app-story-preview [stories]="userStories.stories" [listIndex]="i"></app-story-preview>
         </div>

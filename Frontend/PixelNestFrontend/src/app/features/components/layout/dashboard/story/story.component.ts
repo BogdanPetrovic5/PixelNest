@@ -19,6 +19,7 @@ export class StoryComponent implements OnInit{
   storiesByUser:StoryDto[] = [];
   storyPreview:boolean = false;
   newStory:boolean = false;
+  selectedStoryIndex!:number 
   subscription:Subscription = new Subscription();
 
   constructor(
@@ -39,7 +40,7 @@ export class StoryComponent implements OnInit{
   }
 
   openStories(index: number){
-    
+   this.selectedStoryIndex = index; 
    this._dashboardState.setStoryPrewiew(true)
    this._stateService.setCurrentStoryState(index);
   }
