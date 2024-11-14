@@ -328,6 +328,32 @@
   },
   {
     "ContainingType": "PixelNestBackend.Controllers.StoryController",
+    "Method": "MarkStoryAsSeen",
+    "RelativePath": "api/Story/MarkStoryAsSeen",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "seenDto",
+        "Type": "PixelNestBackend.Dto.SeenDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "PixelNestBackend.Responses.StoryResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "PixelNestBackend.Controllers.StoryController",
     "Method": "PublishStory",
     "RelativePath": "api/Story/PublishStory",
     "HttpMethod": "POST",

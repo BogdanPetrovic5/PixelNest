@@ -31,6 +31,7 @@ namespace PixelNestBackend.Repository
                    Stories = group.Select(s => new ResponseStoryDto
                    {
                        OwnerUsername = s.Username,
+                       SeenByUser = _dataContext.Seen.Any(a => a.Username == username && s.StoryID == a.StoryID),
                        ImagePaths = s.ImagePath.Select(i => new ResponseImageDto
                        {
                            Path = i.Path,
@@ -48,6 +49,36 @@ namespace PixelNestBackend.Repository
             {
                 return null;
             }   
+        }
+
+        public StoryResponse MarkStoryAsSeen(Seen seen) 
+        {
+            try
+            {
+                _dataContext.Seen.Add(seen);
+                int result = _dataContext.SaveChanges();
+
+                if (result > 0)
+                {
+                    return new StoryResponse
+                    {
+                        IsSuccessful = true,
+                        Message = "Seen successfull"
+
+                    };
+                }
+                return new StoryResponse
+                {
+                    IsSuccessful = false,
+                    Message = "Something wrong"
+
+                };
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         public async Task<StoryResponse> PublishStory(StoryDto storyDto, int userID)

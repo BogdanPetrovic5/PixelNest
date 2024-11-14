@@ -8,6 +8,6 @@ namespace PixelNestBackend.Interfaces
     {
         Task<ICollection<GroupedStoriesDto>> GetStories(string username);
         Task<StoryResponse> PublishStory(StoryDto storyDto);
-
+        StoryResponse MarkStoryAsSeen(SeenDto seenDto);
     }
 }

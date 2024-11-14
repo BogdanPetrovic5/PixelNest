@@ -25,8 +25,20 @@
       "PackagePath": "staticwebassets\\Photos\\Bogdan1\\Stories\\6\\anastase-maragos-7kEpUPB8vNk-unsplash.jpg"
     },
     {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\JohnFive\\Stories\\8\\barbarian_warrior___27_by_mjranum_stock_d1ac5s0.jpg",
+      "PackagePath": "staticwebassets\\Photos\\JohnFive\\Stories\\8\\barbarian_warrior___27_by_mjranum_stock_d1ac5s0.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\JohnFive\\Stories\\9\\barbarian_warrior___27_by_mjranum_stock_d1ac5s0.jpg",
+      "PackagePath": "staticwebassets\\Photos\\JohnFive\\Stories\\9\\barbarian_warrior___27_by_mjranum_stock_d1ac5s0.jpg"
+    },
+    {
       "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Nikola6\\Stories\\1\\6.jpg",
       "PackagePath": "staticwebassets\\Photos\\Nikola6\\Stories\\1\\6.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\david5\\Stories\\7\\DRSDD.jpg",
+      "PackagePath": "staticwebassets\\Photos\\david5\\Stories\\7\\DRSDD.jpg"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.PixelNestBackend.Microsoft.AspNetCore.StaticWebAssets.props",

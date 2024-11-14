@@ -11,15 +11,15 @@ namespace PixelNestBackend.Controllers
     public class UserController : Controller
     {
 
-        private readonly IUserService _userRepository;
-        public UserController(IUserService userRepository)
+        private readonly IUserService _userService;
+        public UserController(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
         [HttpGet("GetFollowings")]
         public ICollection<ResponseFollowingDto>? GetFollowings(string username)
         {
-            ICollection<ResponseFollowingDto> users = _userRepository.GetFollowings(username);
+            ICollection<ResponseFollowingDto> users = _userService.GetFollowings(username);
             if (users != null)
             {
                 return users;
@@ -29,7 +29,7 @@ namespace PixelNestBackend.Controllers
         [HttpGet("GetFollowers")]
         public ICollection<ResponseFollowersDto>? GetFollowers(string username)
         {
-            ICollection<ResponseFollowersDto> users = _userRepository.GetFollowers(username);
+            ICollection<ResponseFollowersDto> users = _userService.GetFollowers(username);
             if (users != null)
             {
                 return users;
@@ -41,7 +41,7 @@ namespace PixelNestBackend.Controllers
         public IActionResult Follow(FollowDto followDto)
         {
             if (followDto == null) return BadRequest();
-            bool response = _userRepository.Follow(followDto);
+            bool response = _userService.Follow(followDto);
             if (response)
             {
                 return Ok();
@@ -52,7 +52,7 @@ namespace PixelNestBackend.Controllers
         public UserProfileDto? GetUserData(string username)
         {
             
-            UserProfileDto user = _userRepository.GetUserProfileData(username);
+            UserProfileDto user = _userService.GetUserProfileData(username);
 
             if(user != null)
             {
@@ -64,7 +64,7 @@ namespace PixelNestBackend.Controllers
         [HttpGet("IsFollowing")]
         public ActionResult<bool> IsFollowing([FromQuery]FollowDto followDto)
         {
-            FollowResponse followResponse = _userRepository.IsFollowing(followDto);
+            FollowResponse followResponse = _userService.IsFollowing(followDto);
 
             if (followResponse == null) return BadRequest();
 

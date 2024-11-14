@@ -1,6 +1,7 @@
 ﻿using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
+using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
 using PixelNestBackend.Utility;
 
@@ -31,6 +32,18 @@ namespace PixelNestBackend.Services
         public async Task<ICollection<GroupedStoriesDto>> GetStories(string username)
         {
             return await _storyRepository.GetStories(username);
+        }
+
+        public StoryResponse MarkStoryAsSeen(SeenDto seenDto)
+        {
+            int userID = _userUtility.GetUserID(seenDto.Username);
+            Seen seen = new Seen
+            {
+                StoryID = seenDto.StoryID,
+                Username = seenDto.Username,
+                UserID = userID
+            };
+            return _storyRepository.MarkStoryAsSeen(seen);
         }
 
         public async Task<StoryResponse> PublishStory(StoryDto storyDto)
