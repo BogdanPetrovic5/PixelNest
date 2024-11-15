@@ -10,7 +10,7 @@
             <div class="following-list">
                 <div class="user-box" *ngFor="let story of groupedStories; let i = index" (click)="openStories(i)">
                     
-                    <div class="box">
+                    <div class="box" [ngStyle]="{'border':story.stories[story.stories.length - 1].seenByUser ? '2px solid gray':'2px solid red'} ">
                         <img src="./assets/images/user.png" alt="">
                         <!-- <div class="new"></div> -->
                     </div>

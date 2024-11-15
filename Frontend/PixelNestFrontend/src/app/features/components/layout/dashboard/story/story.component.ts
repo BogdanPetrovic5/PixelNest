@@ -21,7 +21,7 @@ export class StoryComponent implements OnInit{
   newStory:boolean = false;
   selectedStoryIndex!:number 
   subscription:Subscription = new Subscription();
-
+  isStorySeen:boolean = false;
   constructor(
     private _storyService:StoryService,
     private _cookieService:CookieService,

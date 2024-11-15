@@ -21,4 +21,12 @@ export class StoryService {
     const url = `${environment.apiUrl}/api/Story/PublishStory`;
     return this._httpClient.post(url, formData);
   }
+  
+  marStoryAsSeen(storyID:number, username:string):Observable<any>{
+    const url = `${environment.apiUrl}/api/Story/MarkStoryAsSeen`;
+    return this._httpClient.post(url, {
+        StoryID:storyID,
+        Username:username
+    });
+  }
 }
