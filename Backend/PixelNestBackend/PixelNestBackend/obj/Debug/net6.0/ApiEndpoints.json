@@ -309,6 +309,11 @@
     "Order": 0,
     "Parameters": [
       {
+        "Name": "forCurrentUser",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
         "Name": "username",
         "Type": "System.String",
         "IsRequired": false

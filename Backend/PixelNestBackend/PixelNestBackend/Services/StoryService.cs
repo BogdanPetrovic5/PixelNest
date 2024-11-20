@@ -29,8 +29,12 @@ namespace PixelNestBackend.Services
             _userUtility = userUtility;
         }
 
-        public async Task<ICollection<GroupedStoriesDto>> GetStories(string username)
+        public async Task<ICollection<GroupedStoriesDto>> GetStories(bool forCurrentUser, string username)
         {
+            if (forCurrentUser)
+            {
+                return await _storyRepository.GetCurrentUserStories(username);
+            }
             return await _storyRepository.GetStories(username);
         }
 
@@ -63,9 +67,9 @@ namespace PixelNestBackend.Services
                 if (response.IsSuccessful)
                 {
                     int storyID = response.StoryID;
-                    Console.WriteLine(storyID);
+                    
                     bool isUploaded = await _fileUpload.StoreImages(null, storyDto, userFolderPath, storyID);
-                    Console.WriteLine("da li je uploadovano: " + isUploaded);
+                    
                     if (isUploaded)
                     {
                         return new StoryResponse

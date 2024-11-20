@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PixelNestBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fb799caf6d71144d06b676f0c1ebb63ffad0a38b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e282e473a32327deabf9ed1fc160ea7a5332026b")]
 [assembly: System.Reflection.AssemblyProductAttribute("PixelNestBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PixelNestBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

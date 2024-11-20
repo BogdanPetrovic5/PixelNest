@@ -50,29 +50,70 @@ namespace PixelNestBackend.Repository
                 return null;
             }   
         }
+        public async Task<ICollection<GroupedStoriesDto>> GetCurrentUserStories(string username)
+        {
+            try
+            {
+                var groupedStories = await _dataContext
+           .Stories
+           .Where(s => s.Username == username)
+           .GroupBy(s => s.Username)
+           .Select(group => new GroupedStoriesDto
+           {
+               OwnerUsername = group.Key,
+               Stories = group.Select(s => new ResponseStoryDto
+               {
+                   OwnerUsername = s.Username,
+                   SeenByUser = _dataContext.Seen.Any(a => a.Username == username && s.StoryID == a.StoryID),
+                   ImagePaths = s.ImagePath.Select(i => new ResponseImageDto
+                   {
+                       Path = i.Path,
+                       PhotoDisplay = i.PhotoDisplay,
+                   }).ToList(),
+                   StoryID = s.StoryID
+               }).ToList()
+           })
+           .AsSplitQuery()
+           .ToListAsync();
 
+                return groupedStories;
+            }
+            catch (SqlException ex)
+            {
+                return null;
+            }
+        }
         public StoryResponse MarkStoryAsSeen(Seen seen) 
         {
             try
             {
-                _dataContext.Seen.Add(seen);
-                int result = _dataContext.SaveChanges();
-
-                if (result > 0)
+                if(!_dataContext.Seen.Any(a => a.Username == seen.Username && a.StoryID == seen.StoryID))
                 {
+                    _dataContext.Seen.Add(seen);
+                    int result = _dataContext.SaveChanges();
+
+                    if (result > 0)
+                    {
+                        return new StoryResponse
+                        {
+                            IsSuccessful = true,
+                            Message = "Seen successfull"
+
+                        };
+                    }
                     return new StoryResponse
                     {
-                        IsSuccessful = true,
-                        Message = "Seen successfull"
+                        IsSuccessful = false,
+                        Message = "Something wrong"
 
                     };
-                }
-                return new StoryResponse
+                }else return new StoryResponse
                 {
                     IsSuccessful = false,
-                    Message = "Something wrong"
+                    Message = "Already seen!"
 
                 };
+
             }
             catch (SqlException ex)
             {

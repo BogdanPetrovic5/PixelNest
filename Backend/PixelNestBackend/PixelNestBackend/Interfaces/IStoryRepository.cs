@@ -8,6 +8,7 @@ namespace PixelNestBackend.Interfaces
     public interface IStoryRepository
     {
         Task<ICollection<GroupedStoriesDto>> GetStories(string username);
+        Task<ICollection<GroupedStoriesDto>> GetCurrentUserStories(string username);
         Task<StoryResponse> PublishStory(StoryDto storyDto,int userID);
         StoryResponse MarkStoryAsSeen(Seen seen);
     }
