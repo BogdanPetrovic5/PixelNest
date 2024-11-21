@@ -12,8 +12,8 @@ export class StoryService {
 
   constructor(private _httpClient:HttpClient) { }
 
-  getStories(username:String):Observable<StoriesDto[]>{
-    const url = `${environment.apiUrl}/api/Story/GetStories?username=${username}`
+  getStories(username:String, forCurrentUser:boolean):Observable<StoriesDto[]>{
+    const url = `${environment.apiUrl}/api/Story/GetStories?username=${username}&forCurrentUser=${forCurrentUser}`
     return this._httpClient.get<StoriesDto[]>(url);
   }
 

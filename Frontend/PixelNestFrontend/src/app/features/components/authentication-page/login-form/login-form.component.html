@@ -28,7 +28,9 @@
                         <span style="transition-delay:50ms">r</span>
                         <span style="transition-delay:0ms">d</span>
                     </label>
+                    <h1 *ngIf="error" class="error animate__animated animate__headShake animate__faster">{{errorMessage}}</h1>
                 </div>
+                
                 <button type="submit"><h1>LOGIN</h1></button>
                 <p (click)="navigateToRegister()">Don't Have An Account? Register!</p>
             </form>

@@ -34,6 +34,12 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
             .inputs{
                 margin-top: 50px;
+                .error{
+                  color: red;
+                  font-size: 0.7em;
+                  font-family: $PFONT;
+                  margin-top: 20px;
+                }
                 button{
                     width: 100%;
                     padding-top: 15px;

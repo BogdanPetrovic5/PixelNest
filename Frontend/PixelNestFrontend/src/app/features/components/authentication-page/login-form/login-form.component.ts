@@ -13,6 +13,8 @@ import { LottieStateService } from 'src/app/core/services/states/lottie-state.se
 })
 export class LoginFormComponent {
   loginForm:FormGroup;
+  error:boolean = false;
+  errorMessage:string = ""
   constructor(
     private _router:Router,
     private _formBuilder:FormBuilder,
@@ -39,7 +41,19 @@ export class LoginFormComponent {
       }, 1500);
      
     },(error:HttpErrorResponse)=>{
-        console.log(error)
+      this.errorMessage = "";
+        setTimeout(() => {
+          this.error = true;
+          this.errorMessage = error.error?.response || "An unexpected error occurred.";
+        }, 0);
+        this.loginForm.reset({
+          Email: '',
+          Password: ''
+        });
+        setTimeout(()=>{
+          this.error = false;
+          
+        }, 2000)
     }
   
     )
