@@ -6,7 +6,11 @@
             <p>Let's get started</p>
             <form class="inputs" [formGroup] = "registerForm" (ngSubmit) = "register()">
                 <div class="form-control">
-                    <input required="" type="value" formControlName="Firstname">
+                    <input 
+                    required 
+                    type="value" 
+                    formControlName="Firstname" 
+                   >
                     <label>
                         <span style="transition-delay:400ms">F</span>
                         <span style="transition-delay:350ms">i</span>
@@ -18,9 +22,12 @@
                         <span style="transition-delay:50ms">m</span>
                         <span style="transition-delay:0ms">e</span>
                     </label>
+                    <div *ngIf="registerForm.get('Firstname')?.invalid && registerForm.get('Firstname')?.touched" class="invalid-feedback">
+                        First Name is required.
+                    </div>
                 </div>
                 <div class="form-control">
-                    <input required="" type="value" formControlName="Lastname">
+                    <input required type="value" formControlName="Lastname">
                     <label>
                         <span style="transition-delay:350ms">L</span>
                         <span style="transition-delay:300ms">a</span>
@@ -31,9 +38,12 @@
                         <span style="transition-delay:50ms">m</span>
                         <span style="transition-delay:0ms">e</span>
                     </label>
+                    <div *ngIf="registerForm.get('Lastname')?.invalid && registerForm.get('Lastname')?.touched" class="invalid-feedback">
+                        First Name is required.
+                    </div>
                 </div>
                 <div class="form-control">
-                    <input required="" type="value" formControlName="Username">
+                    <input required type="value" formControlName="Username">
                     <label>
                         <span style="transition-delay:350ms">U</span>
                         <span style="transition-delay:300ms">s</span>
@@ -44,9 +54,12 @@
                         <span style="transition-delay:50ms">m</span>
                         <span style="transition-delay:0ms">e</span>
                     </label>
+                    <div *ngIf="registerForm.get('Username')?.invalid && registerForm.get('Username')?.touched" class="invalid-feedback">
+                       Username is required
+                    </div>
                 </div>
                 <div class="form-control">
-                    <input required="" type="value" formControlName="Email">
+                    <input required type="value" formControlName="Email">
                     <label>
                         <span style="transition-delay:200ms">E</span>
                         <span style="transition-delay:150ms">m</span>
@@ -55,9 +68,15 @@
                         <span style="transition-delay:0ms">l</span>
                         
                     </label>
+                    <div *ngIf="registerForm.get('Email')?.hasError('required') && registerForm.get('Email')?.touched" class="invalid-feedback">
+                        Email is required!
+                    </div>
+                    <div *ngIf="registerForm.get('Email')?.hasError('pattern')" class="invalid-feedback">
+                        Email format is wrong!
+                    </div>
                 </div>
                 <div class="form-control">
-                    <input required="" type="password" formControlName="Password">
+                    <input required type="password" formControlName="Password">
                     <label>
                         <span style="transition-delay:350ms">P</span>
                         <span style="transition-delay:300ms">a</span>
@@ -68,8 +87,14 @@
                         <span style="transition-delay:50ms">r</span>
                         <span style="transition-delay:0ms">d</span>
                     </label>
+                    <div *ngIf="registerForm.get('Password')?.hasError('required') && registerForm.get('Password')?.touched" class="invalid-feedback">
+                        Password is required
+                    </div>
+                    <div *ngIf="registerForm.get('Password')?.hasError('pattern')" class="invalid-feedback">
+                        Password format is wrong!
+                    </div>
                 </div>
-                <button type="submit"><h1>REGISTER</h1></button>
+                <button type="submit" [ngClass]="enabled ? 'enabled' : ''"><h1>REGISTER</h1></button>
                 <p (click)="navigateToLogin()">Already Have An Account? Log in!</p>
             </form>
         </div>

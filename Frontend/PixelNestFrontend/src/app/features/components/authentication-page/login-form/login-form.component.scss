@@ -52,6 +52,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                     justify-content: center;
                     align-items: center;
                     font-size: 25px;
+                    cursor: pointer;
+                    transition: 300ms ease-in-out;
                     h1{
                         margin: 0;
                         padding: 0;
@@ -61,6 +63,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                     }
                   
                     
+                }
+                button:hover{
+                  transform: scale(0.98);
                 }
                 p{
                     font-size: 0.7em;

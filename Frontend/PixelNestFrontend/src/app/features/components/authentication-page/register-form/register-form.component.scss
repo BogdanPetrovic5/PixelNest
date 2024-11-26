@@ -32,12 +32,19 @@ $HFONT: "Roboto Condensed", sans-serif;
                 font-family: $PFONT;
             }
             .inputs{
-                margin-top: 50px;
+                
+                .invalid-feedback{
+                  color: red;
+                  font-size: 0.65em;
+                  font-family: $PFONT;
+                  margin-top: 10px;
+                }
                 button{
                     width: 100%;
                     padding-top: 15px;
                     padding-bottom: 15px;
                     background-color: $H1COLOR;
+                    margin-top: 40px;
                     border-radius: 50px;
                     border: none;
                     outline: none;
@@ -45,15 +52,20 @@ $HFONT: "Roboto Condensed", sans-serif;
                     justify-content: center;
                     align-items: center;
                     font-size: 25px;
+                    transition: 300ms ease-in-out;
+                    cursor: pointer;
                     h1{
                         margin: 0;
                         padding: 0;
                         font-family: $HFONT;
                         letter-spacing: 2px;
                         font-size: .9em;
+                        color: rgb(255, 255, 255);
                     }
-                  
-                    
+                }
+                
+                .enabled:hover{
+                  transform: scale(0.97);
                 }
                 p{
                     cursor: pointer;
@@ -64,7 +76,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 }
                 .form-control {
                     position: relative;
-                    margin: 20px 0 40px;
+                    margin: 20px 0 25px;
                     width: 100%;
                   }
                   
@@ -75,7 +87,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     display: block;
                     width: 100%;
                     padding: 15px 0;
-                    font-size: 18px;
+                    font-size: 14px;
                     color: #fff;
                   }
                   

@@ -12,6 +12,8 @@ import { LottieStateService } from 'src/app/core/services/states/lottie-state.se
 })
 export class RegisterFormComponent {
   registerForm:FormGroup;
+
+  enabled:boolean = false;
   constructor(
     private _router:Router,
     private _formBuilder:FormBuilder,
@@ -22,10 +24,15 @@ export class RegisterFormComponent {
       Firstname: ['', Validators.required],
       Lastname: ['', Validators.required],
       Username: ['', Validators.required],
-      Password: ['', [Validators.required, Validators.minLength(6)]],
-      Email: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      Password: ['', [Validators.required, Validators.pattern(/^.{6,}$/)]],
+      Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       
     })
+  }
+  ngDoCheck():void{
+    if(this.registerForm.valid){
+      this.enabled = true;
+    }else this.enabled = false;
   }
   navigateToLogin(){
     this._router.navigate(['/Authentication/Login'])
@@ -47,13 +54,16 @@ export class RegisterFormComponent {
 
   register(){
     const formValues = this.registerForm.value;
-    this._authService.register(formValues).subscribe((response)=>{
-      this._lottieState.setIsSuccess(true)
-      setTimeout(() => {
-        this._lottieState.setIsSuccess(false)
-      }, 1500);
-    },(error:HttpErrorResponse) =>{
-      console.log(error);
-    })
+    if(this.registerForm.valid){
+      this._authService.register(formValues).subscribe((response)=>{
+        this._lottieState.setIsSuccess(true)
+        setTimeout(() => {
+          this._lottieState.setIsSuccess(false)
+        }, 1500);
+      },(error:HttpErrorResponse) =>{
+        console.log(error);
+      })
+    }else this.registerForm.markAllAsTouched()
+    
   }
 }
