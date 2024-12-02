@@ -38,14 +38,17 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     ){}
 
     ngOnInit(): void {    
+     
       this.storySubscription = this._storyState.currentStory$.subscribe({
         next:response=>{
           this.userIndex = response
-          
+          console.log("Current index: ", this.currentIndex)
+          console.log("User index: ", this.userIndex);
+          console.log("List index: " , this.listIndex);
           if(this.userIndex == this.listIndex) {
             if(!this.stories[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
            
-            this._startAnimation()
+            // this._startAnimation()
           }else {
             this._stopAnimation()
           }
@@ -55,8 +58,10 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
 
     ngOnDestroy(): void {
       this._stopAnimation();
+     
       this.storySubscription?.unsubscribe();
       this._storyState.resetCurrentState();
+     
     }
 
    
@@ -93,16 +98,17 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     private _updateCurrentIndex(value:number){
       this.storyCurrentLength = 0;
       this.currentIndex += value;
-      if(!this.stories[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
+      console.log(this.currentIndex, this.stories.length);
+      if(this.currentIndex < this.stories.length && !this.stories[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
     }
 
     private animate = () => {
         
       this.storyCurrentLength += this.step;
       if (this.storyCurrentLength >= this.targetValue) {
-       
+     
         this._updateCurrentIndex(1);
-       
+     
         if (this.currentIndex >= this.stories.length) {
           this._resetParameters();
           this._stopAnimation()
@@ -123,10 +129,12 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
         }
       })
     }
+
     private _resetParameters(){
       this.storyCurrentLength = 0;
       this.currentIndex = 0;
     }
+    
     private _startAnimation() {
       this._resetParameters();
       this.animate();

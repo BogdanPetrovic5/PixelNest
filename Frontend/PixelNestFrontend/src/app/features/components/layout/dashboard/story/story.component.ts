@@ -17,11 +17,12 @@ export class StoryComponent implements OnInit{
   username:String = ""
   groupedStories:StoriesDto[] = []
 
-  storiesByUser:StoriesDto[] = [];
+  storiesByUser:StoryDto[] = [];
 
   
   storyPreview:boolean = false;
   newStory:boolean = false;
+  default:boolean = true;
   selectedStoryIndex!:number 
   subscription:Subscription = new Subscription();
   isStorySeen:boolean = false;
@@ -65,10 +66,13 @@ export class StoryComponent implements OnInit{
         storiesByUser:this._storyService.getStories(this.username, true)
       }).subscribe({
         next:({groupedStories, storiesByUser})=>{
+          
           this.groupedStories = groupedStories;
-          this.storiesByUser = storiesByUser;
-          console.log(this.groupedStories);
-          console.log(this.storiesByUser);
+    
+          if(storiesByUser.length > 0){
+            this.storiesByUser = this.extractFromResponse(storiesByUser);
+            console.log(storiesByUser)
+          }
         }
       })
     )
@@ -80,6 +84,11 @@ export class StoryComponent implements OnInit{
           }
         })
     )
+  }
+  private extractFromResponse(storiesByUser:StoriesDto[]) : StoryDto[]{
+      let extractedStories = storiesByUser[0].stories
+      if(extractedStories.length > 0) this.default = false;
+      return extractedStories;
   }
 
 }

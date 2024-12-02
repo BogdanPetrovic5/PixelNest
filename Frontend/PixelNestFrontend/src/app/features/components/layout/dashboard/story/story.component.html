@@ -1,8 +1,11 @@
 <div class="container">
     <div class="story-section">
         <div class="personal">
-            <div class="box" (click)="openNewStory()">
+            <div *ngIf="default && storiesByUser.length == 0" class="box" (click)="openNewStory()">
                 +
+            </div>
+            <div class="box" *ngIf="storiesByUser.length > 0" [ngStyle]="{'border': (storiesByUser.length > 0 && !storiesByUser[storiesByUser.length - 1].seenByUser) ? '2px solid red':'2px solid gray'} ">
+                <img src="./assets/images/user.png" alt="">
             </div>
             <h1>You</h1>
         </div>
