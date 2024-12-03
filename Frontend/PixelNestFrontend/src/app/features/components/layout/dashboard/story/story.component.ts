@@ -15,17 +15,23 @@ import { StoryService } from 'src/app/core/services/story/story.service';
 })
 export class StoryComponent implements OnInit{
   username:String = ""
+
   groupedStories:StoriesDto[] = []
+  storiesByUser:StoriesDto[]= [];
+  extractedStories?:StoryDto[] = [];
+  activeStoryList:StoriesDto[] = [];
 
-  storiesByUser:StoryDto[] = [];
 
-  
   storyPreview:boolean = false;
   newStory:boolean = false;
   default:boolean = true;
-  selectedStoryIndex!:number 
-  subscription:Subscription = new Subscription();
   isStorySeen:boolean = false;
+
+  selectedStoryIndex!:number 
+  
+  subscription:Subscription = new Subscription();
+
+
   constructor(
     private _storyService:StoryService,
     private _cookieService:CookieService,
@@ -44,14 +50,23 @@ export class StoryComponent implements OnInit{
   }
 
   openStories(index: number){
+   this.activeStoryList = this.groupedStories; 
    this.selectedStoryIndex = index; 
    this._dashboardState.setStoryPrewiew(true)
    this._stateService.setCurrentStoryState(index);
   }
 
+  openUserStories(index: number){
+    this.activeStoryList = this.storiesByUser;
+    this.selectedStoryIndex = index; 
+    this._dashboardState.setStoryPrewiew(true)
+    this._stateService.setCurrentStoryState(index);
+  }
+
   private _initilizeComponent() {
     this._initilizeSubscriptions();
   }
+
   private _initilizeSubscriptions() {
     this.subscription.add(
       this._dashboardState.newStoryTab$.subscribe({
@@ -70,7 +85,8 @@ export class StoryComponent implements OnInit{
           this.groupedStories = groupedStories;
     
           if(storiesByUser.length > 0){
-            this.storiesByUser = this.extractFromResponse(storiesByUser);
+            this.storiesByUser = storiesByUser;
+            this.extractFromResponse(storiesByUser);
             console.log(storiesByUser)
           }
         }
@@ -85,10 +101,10 @@ export class StoryComponent implements OnInit{
         })
     )
   }
-  private extractFromResponse(storiesByUser:StoriesDto[]) : StoryDto[]{
-      let extractedStories = storiesByUser[0].stories
-      if(extractedStories.length > 0) this.default = false;
-      return extractedStories;
+  private extractFromResponse(storiesByUser:StoriesDto[]){
+      this.extractedStories = storiesByUser[0].stories
+      if(  this.extractedStories != undefined &&  this.extractedStories.length > 0) this.default = false;
+     
   }
 
 }

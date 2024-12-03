@@ -1,10 +1,13 @@
 <div class="container">
     <div class="story-section">
         <div class="personal">
-            <div *ngIf="default && storiesByUser.length == 0" class="box" (click)="openNewStory()">
+            <div *ngIf="default && storiesByUser?.length == 0" class="box" (click)="openNewStory()">
                 +
             </div>
-            <div class="box" *ngIf="storiesByUser.length > 0" [ngStyle]="{'border': (storiesByUser.length > 0 && !storiesByUser[storiesByUser.length - 1].seenByUser) ? '2px solid red':'2px solid gray'} ">
+            <div class="new-story" *ngIf="!default && storiesByUser.length > 0" (click)="openNewStory()">
+                +
+            </div>
+            <div class="box" (click)="openUserStories(0)" *ngIf="extractedStories != undefined && extractedStories.length > 0" [ngStyle]="{'border': (extractedStories!.length > 0 && !extractedStories[extractedStories.length - 1].seenByUser) ? '2px solid red':'2px solid gray'} ">
                 <img src="./assets/images/user.png" alt="">
             </div>
             <h1>You</h1>
@@ -13,7 +16,7 @@
             <div class="following-list">
                 <div class="user-box" *ngFor="let story of groupedStories; let i = index" (click)="openStories(i)">
                     
-                    <div class="box" [ngStyle]="{'border':story.stories[story.stories.length - 1].seenByUser ? '2px solid gray':'2px solid red'} ">
+                    <div class="box" [ngStyle]="{'border':story?.stories?.[story.stories!.length - 1]?.seenByUser ? '2px solid gray':'2px solid red'} ">
                         <img src="./assets/images/user.png" alt="">
                         <!-- <div class="new"></div> -->
                     </div>
@@ -25,4 +28,4 @@
     </div>
 </div>
 <app-new-story *ngIf="newStory"></app-new-story>
-<app-story-list *ngIf="storyPreview" [storyList]="groupedStories" [userIndex]="selectedStoryIndex"></app-story-list>
+<app-story-list *ngIf="storyPreview" [storyList]="activeStoryList" [userIndex]="selectedStoryIndex"></app-story-list>

@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { StoriesDto } from 'src/app/core/dto/stories.dto';
+import { StoryDto } from 'src/app/core/dto/story.dto';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { StoryStateService } from 'src/app/core/services/states/story-state.service';
 
@@ -13,6 +14,8 @@ import { StoryStateService } from 'src/app/core/services/states/story-state.serv
 })
 export class StoryListComponent implements OnInit, OnDestroy{
   @Input() storyList:StoriesDto[] = []
+  @Input() storiesByUser:StoryDto[] | undefined = [];
+
   @Input() userIndex!:number;
   marginStep = 28;
   margin:number = 37.5;

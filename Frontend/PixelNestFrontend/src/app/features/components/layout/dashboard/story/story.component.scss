@@ -23,6 +23,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         justify-content: left;
         align-items: center;
         font-size: 25px;
+        position: relative;
         .box{
             height: 60px;
             width: 60px;
@@ -42,6 +43,23 @@ $HFONT: "Roboto Condensed", sans-serif;
                 height: 55px;
                 align-self: center;
             }
+        }
+        .new-story{
+            width: 25px;
+            height: 25px;
+            background-color: $H1COLOR;
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            position: absolute;
+            top: -10%;
+            left: 20%;
+            cursor: pointer;
+            z-index: 3;
         }
         .box:hover{
             transform: scale(1.1);

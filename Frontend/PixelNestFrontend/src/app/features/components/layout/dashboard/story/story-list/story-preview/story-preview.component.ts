@@ -14,7 +14,7 @@ import { StoryService } from 'src/app/core/services/story/story.service';
   styleUrls: ['./story-preview.component.scss']
 })
 export class StoryPreviewComponent implements OnInit, OnDestroy{
-    @Input() stories:StoryDto[] = [];  
+    @Input() stories:StoryDto[] | undefined = [];  
     @Input() listIndex!:number 
     userIndex:number = 0;
     currentIndex = 0;
@@ -42,13 +42,10 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
       this.storySubscription = this._storyState.currentStory$.subscribe({
         next:response=>{
           this.userIndex = response
-          console.log("Current index: ", this.currentIndex)
-          console.log("User index: ", this.userIndex);
-          console.log("List index: " , this.listIndex);
           if(this.userIndex == this.listIndex) {
-            if(!this.stories[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
+            if(this.stories != undefined && !this.stories?.[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
            
-            // this._startAnimation()
+            this._startAnimation()
           }else {
             this._stopAnimation()
           }
@@ -78,7 +75,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
       }
 
       if(direction == "right"){
-        if(this.currentIndex + 1 < this.stories.length){
+        if(this.currentIndex + 1 < this.stories!.length){
          this._updateCurrentIndex(1)
         }else{
           this._resetParameters();
@@ -98,8 +95,8 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     private _updateCurrentIndex(value:number){
       this.storyCurrentLength = 0;
       this.currentIndex += value;
-      console.log(this.currentIndex, this.stories.length);
-      if(this.currentIndex < this.stories.length && !this.stories[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
+      console.log(this.currentIndex, this.stories!.length);
+      if(this.currentIndex < this.stories!.length && !this.stories![this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories![this.currentIndex].storyID);
     }
 
     private animate = () => {
@@ -109,7 +106,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
      
         this._updateCurrentIndex(1);
      
-        if (this.currentIndex >= this.stories.length) {
+        if (this.currentIndex >= this.stories!.length) {
           this._resetParameters();
           this._stopAnimation()
           this._storyState.setCurrentStoryState(1);
