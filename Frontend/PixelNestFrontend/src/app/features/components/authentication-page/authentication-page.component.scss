@@ -15,6 +15,7 @@ $BGCOLOR:#040F16;
         justify-content: left;
         align-items: center;
         .form{
+            
             width: 40%;
             height: 100%;
             box-shadow: 17px 0px 15px 1px rgba(0,0,0,1);
@@ -23,6 +24,9 @@ $BGCOLOR:#040F16;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            .background{
+                display: none;
+            }
             .router-wrapper{
                 width: 80%;
                 height: 80%;
@@ -42,5 +46,103 @@ $BGCOLOR:#040F16;
             }
         }
        
+    }
+}
+
+@media only screen and (min-width:0px) and (max-width:1023px){
+    .container{
+     
+        .content{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+              
+            .form{
+                width: 90%;
+                height: 100%;
+                box-shadow: none;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                
+                .router-wrapper{
+                    width: 80%;
+                    height: 80%;
+                }
+            }
+            .background-image{
+                display: none;
+            }
+           
+        }
+        .content::before{
+            width: 100%;
+            height: 40%;
+            content: '';
+            top: 0;
+            left: 0;
+            position: absolute;
+            background-image: url('/assets/images/background.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    }
+}
+
+@media only screen and (min-width:1024px) and (max-width:1200px){
+    .container{
+        background-color: $BGCOLOR;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        .content{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+            align-items: center;
+            .form{
+                width: 60%;
+                height: 100%;
+                box-shadow: 17px 0px 15px 1px rgba(0,0,0,1);
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                .router-wrapper{
+                    width: 80%;
+                    height: 80%;
+                }
+            }
+            .background-image{
+                width: 40%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+
+                justify-content: flex-end;
+                align-items: center;
+                overflow: hidden;
+             
+                img{
+                    width:280%;
+                    height: 80%;
+                    margin-right: -40px;
+                }
+            }
+           
+        }
     }
 }

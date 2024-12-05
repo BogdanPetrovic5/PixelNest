@@ -18,6 +18,9 @@ $HFONT: "Roboto Condensed", sans-serif;
         .wrap{
             margin-top: 40px;
             font-size: 25px;
+            img{
+              display: none;
+            }
             h1{
                 font-size: 1.5em;
                 font-family: $HFONT;
@@ -33,7 +36,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 font-family: $PFONT;
             }
             .inputs{
-                margin-top: 50px;
+                
                 .error{
                   color: red;
                   font-size: 0.7em;
@@ -120,4 +123,166 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
         }
     }
+}
+@media only screen and (min-width: 768px) and (max-width:1023px){
+  .form-wrap{
+    width: 100%;
+    height: 100%;
+    
+    .form-wrap-content{
+        width: 98%;
+        img{
+            display: none;
+            width: 150px;
+            height: 30px;
+        }
+        .wrap{
+          width: 100%;
+            margin-top: 40px;
+            font-size: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            h1{
+                font-size: 1.4em;
+                font-family: $HFONT;
+                color: $PCOLOR;
+                margin: 0;
+            }
+            p{
+                margin: 0;
+                margin-top: 10px !important;
+                font-size: 0.9em;
+                color: $PCOLOR;
+                font-family: $PFONT;
+            }
+            .inputs{
+                width: 95%;
+                .invalid-feedback{
+                  color: red;
+                  font-size: 0.65em;
+                  font-family: $PFONT;
+                  margin-top: 10px;
+                }
+                button{
+                    width: 100%;
+                    padding-top: 15px;
+                    padding-bottom: 15px;
+                    background-color: $H1COLOR;
+                    margin-top: 40px;
+                    border-radius: 50px;
+                    border: none;
+                    outline: none;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 25px;
+                    transition: 300ms ease-in-out;
+                    cursor: pointer;
+                    h1{
+                        margin: 0;
+                        padding: 0;
+                        font-family: $HFONT;
+                        letter-spacing: 2px;
+                        font-size: .9em;
+                        color: rgb(255, 255, 255);
+                    }
+                }
+                
+                .enabled:hover{
+                  transform: scale(0.97);
+                }
+                p{
+                    cursor: pointer;
+                    font-size: 0.7em;
+                    align-self: center;
+                    text-align: center;
+                    margin-top: 25px !important;
+                }
+                .form-control {
+                    position: relative;
+                    margin: 20px 0 25px;
+                    width: 100%;
+                  }
+                  
+                  .form-control input {
+                    background-color: transparent;
+                    border: 0;
+                    border-bottom: 2px #fff solid;
+                    display: block;
+                    width: 100%;
+                    padding: 15px 0;
+                    font-size: 14px;
+                    color: #fff;
+                  }
+                  
+                  .form-control input:focus,
+                  .form-control input:valid {
+                    outline: 0;
+                    border-bottom-color: lightblue;
+                  }
+                  
+                  .form-control label {
+                    position: absolute;
+                    font-family: $PFONT;
+                    top: 15px;
+                    left: 0;
+                    pointer-events: none;
+                  }
+                  
+                  .form-control label span {
+                    display: inline-block;
+                    font-size: 15px;
+                    min-width: 5px;
+                    color: #fff;
+                    transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                  }
+                  
+                  .form-control input:focus+label span,
+                  .form-control input:valid+label span {
+                    color: lightblue;
+                    transform: translateY(-30px);
+                  }
+            }
+        }
+    }
+}
+}
+@media only screen and (min-width:0px) and (max-width:1023px){
+  .form-wrap{
+    width: 100%;
+    height: 100%;
+    position: relative;
+  
+    .form-wrap-content{
+        width: 98%;
+        img{
+            display: none;
+            width: 150px;
+            height: 30px;
+        }
+        .wrap{
+          width: 100%;
+            
+            font-size: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            img{
+              display: inline-flex;
+              height: 150px;
+              width: 150px;
+              margin-bottom: 15px;
+            }
+            .inputs{
+                width: 95%;
+                
+            }
+        }
+    }
+}
 }
