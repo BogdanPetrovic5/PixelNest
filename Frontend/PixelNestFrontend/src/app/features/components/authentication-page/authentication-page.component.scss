@@ -1,37 +1,62 @@
 $BGCOLOR:#040F16;
+
 .container{
     background-color: $BGCOLOR;
     width: 100%;
-    height: 100vh;
+    
+    min-height: 100vh;
+ 
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    .content::before{
+        position: absolute;
+        min-height: 100%;
+        width: 40%;
+        top: 0;
+        left: 0;
+        box-shadow: 17px 0px 15px 1px rgba(0,0,0,1);
+        content: '';
+    }
     .content{
         width: 90%;
-        height: 100%;
+        
+        position: relative;
+        min-height: 100vh;
         display: flex;
         flex-direction: row;
         justify-content: left;
         align-items: center;
-        .form{
-            
+        overflow-y: hidden;
+        div.form-wrapper{
             width: 40%;
-            height: 100%;
-            box-shadow: 17px 0px 15px 1px rgba(0,0,0,1);
+           
+            min-height: 80vh;
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            .background{
-                display: none;
-            }
-            .router-wrapper{
-                width: 80%;
-                height: 80%;
+            flex-direction: column;
+            justify-content:flex-start;
+            
+            .form{
+            
+                width: 100%;
+              
+                min-height: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+              
+                .background{
+                    display: none;
+                }
+                .router-wrapper{
+                    width: 70%;
+                    height: 100%;
+                }
             }
         }
+       
         .background-image{
             width: 60%;
             height: 100%;
@@ -48,7 +73,9 @@ $BGCOLOR:#040F16;
        
     }
 }
-
+@media only screen and (min-width: 768px) and (max-width:1023px){
+    
+}
 @media only screen and (min-width:0px) and (max-width:1023px){
     .container{
      
@@ -61,19 +88,31 @@ $BGCOLOR:#040F16;
             align-items: center;
             position: relative;
               
-            .form{
-                width: 90%;
-                height: 100%;
-                box-shadow: none;
+            div.form-wrapper{
+                width: 100%;
+               
+                min-height: 80vh;
                 display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                overflow: hidden;
+                flex-direction: column;
+                justify-content:flex-start;
                 
-                .router-wrapper{
-                    width: 80%;
-                    height: 80%;
+                .form{
+                
+                    width: 100%;
+                  
+                    min-height: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                  
+                    .background{
+                        display: none;
+                    }
+                    .router-wrapper{
+                        width: 70%;
+                        height: 100%;
+                    }
                 }
             }
             .background-image{
@@ -100,7 +139,7 @@ $BGCOLOR:#040F16;
     .container{
         background-color: $BGCOLOR;
         width: 100%;
-        height: 100vh;
+       
         display: flex;
         justify-content: center;
         align-items: center;
@@ -112,18 +151,31 @@ $BGCOLOR:#040F16;
             flex-direction: row;
             justify-content: left;
             align-items: center;
-            .form{
-                width: 60%;
-                height: 100%;
-                box-shadow: 17px 0px 15px 1px rgba(0,0,0,1);
+            div.form-wrapper{
+                width: 40%;
+               
+                min-height: 80vh;
                 display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                overflow: hidden;
-                .router-wrapper{
-                    width: 80%;
-                    height: 80%;
+                flex-direction: column;
+                justify-content:flex-start;
+                
+                .form{
+                
+                    width: 100%;
+                  
+                    min-height: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                  
+                    .background{
+                        display: none;
+                    }
+                    .router-wrapper{
+                        width: 70%;
+                        height: 100%;
+                    }
                 }
             }
             .background-image{
