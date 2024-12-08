@@ -7,24 +7,27 @@ $PFONT:"Josefin Sans", sans-serif;
 $HFONT: "Roboto Condensed", sans-serif;
 .container{
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     background-color: $BGCOLOR;
-    overflow: hidden;
+    overflow: auto;
     .container-content{
         width: 100%;
         height: 100%;
-        position: relative;
+       
         display: flex;
         flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
         .header{
             width: 80%;
-            position: fixed;
-            height: 100px;
-            z-index: 1;
+            
+            height: 70px;
+           position: absolute;
+           z-index: 1;
             display: flex;
             flex-direction: row;
             align-self: center;
@@ -57,7 +60,7 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
         }
         .content{
-            height: 80%;
+            min-height: 80%;
             width: 100%;
             display: flex;
             flex-direction: row;
@@ -88,6 +91,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                 flex-direction: column;
                 justify-content: center;
                 align-items: flex-start;
+                margin-top: 160px;
+                margin-bottom: 150px;
                 h1{
                     font-size: 2.4em;
                     color: $H1COLOR;
@@ -142,12 +147,15 @@ $HFONT: "Roboto Condensed", sans-serif;
 @media only screen and (min-width: 280px) and (max-width:339px){
     .container{
         .container-content{
+            position: relative;
             .header{
                 width: 90%;
                 gap:0px;
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
+                position: absolute;
+                z-index: 1;
                 .logo{
                     width: 80%;
                     display: flex;
@@ -167,7 +175,22 @@ $HFONT: "Roboto Condensed", sans-serif;
                     }
                 }
             }
+            .content::before{
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 100%;
+               background-color: #041f2bd7;
+                left: 0;
+                content: '';
+            
+
+            }
             .content{
+                position: relative;
+                width: 100%;
+                height: 100%;
+                background-image: url("/assets/images/background1.jpg");
                 .content-left-section{
                     width: 95%;
                     display: flex;
@@ -175,6 +198,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                     justify-content: center;
                     align-items: center;
                     text-align: center;
+                    position: relative;
+                    z-index: 1;
                     h1{
                         font-size: 1.3em;
                         color: $H1COLOR;
@@ -228,14 +253,17 @@ $HFONT: "Roboto Condensed", sans-serif;
 @media only screen and (min-width: 340px) and (max-width: 479px) {
     .container{
         .container-content{
+            position: relative;
             .header{
                 width: 90%;
                 gap:0px;
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
+                position: absolute;
+                z-index: 1;
                 .logo{
-                    width: 50%;
+                    width:60%;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -253,7 +281,22 @@ $HFONT: "Roboto Condensed", sans-serif;
                     }
                 }
             }
+            .content::before{
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 100%;
+               background-color: #041f2bd7;
+                left: 0;
+                content: '';
+            
+
+            }
             .content{
+                position: relative;
+                width: 100%;
+                height: 100%;
+                background-image: url("/assets/images/background1.jpg");
                 .content-left-section{
                     width: 90%;
                     display: flex;
@@ -261,15 +304,17 @@ $HFONT: "Roboto Condensed", sans-serif;
                     justify-content: center;
                     align-items: center;
                     text-align: center;
+                    position: relative;
+                    z-index: 1;
                     h1{
                         font-size: 1.3em;
                         color: $H1COLOR;
                         font-family: $HFONT;
-                        width: 60%;
+                        width: 80%;
                         margin: 0;
                     }
                     p{
-                        font-size: 0.6em;
+                        font-size: 0.7em;
                         color: $PCOLOR;
                         font-family: $PFONT;
                         opacity: 0.8;
@@ -313,12 +358,15 @@ $HFONT: "Roboto Condensed", sans-serif;
 @media only screen and (min-width: 480px) and (max-width: 767px){
     .container{
         .container-content{
+            position: relative;
             .header{
                 width: 90%;
                 gap:0px;
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
+                position: absolute;
+                z-index: 1;
                 .logo{
                     width: 50%;
                     display: flex;
@@ -338,14 +386,32 @@ $HFONT: "Roboto Condensed", sans-serif;
                     }
                 }
             }
+            .content::before{
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 100%;
+               background-color: #041f2bd7;
+                left: 0;
+                content: '';
+            
+
+            }
             .content{
+               
+                position: relative;
+                width: 100%;
+                height: 100%;
+                background-image: url("/assets/images/background1.jpg");
                 .content-left-section{
                     width: 90%;
                     display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    position: relative;
+                    z-index: 1;
                     h1{
                         font-size: 1.6em;
                         color: $H1COLOR;
@@ -439,6 +505,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 }
             }
             .content{
+                width: 100%;
                 .content-left-section{
                     width: 90%;
                     h1{

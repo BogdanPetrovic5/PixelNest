@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { StoriesDto } from 'src/app/core/dto/stories.dto';
 import { StoryDto } from 'src/app/core/dto/story.dto';
@@ -26,12 +26,14 @@ export class StoryListComponent implements OnInit, OnDestroy{
     private _storyState:StoryStateService,
     private _dashboardState:DashboardStateService
   ){}
+
   ngOnDestroy():void{
-    this.margin = 37.5
+    
     this.storySubscription?.unsubscribe();
     ///Check for bugs!
   }
   ngOnInit(): void {
+    this.setMarginViewPort();
     this.margin = this.margin - this.marginStep * this.userIndex
     this.storySubscription = this._storyState.currentStory$.subscribe({
         next:response=>{
@@ -43,6 +45,25 @@ export class StoryListComponent implements OnInit, OnDestroy{
           this.userIndex = response
         }
       })
-  
   }
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.setMarginViewPort();
+  }
+  setMarginViewPort():void{
+    const width = window.innerWidth;
+
+    if(width >= 769 && width <= 1300){
+      this.marginStep = 56;
+      this.margin = 25;
+    }else if(width >= 467 && width <= 768){
+      this.marginStep = 82;
+      this.margin = 15;
+    }else if(width >= 0 && width <= 466){
+      this.marginStep = 97;
+      this.margin = 7.5;
+    }
+  }
+  
+
 }

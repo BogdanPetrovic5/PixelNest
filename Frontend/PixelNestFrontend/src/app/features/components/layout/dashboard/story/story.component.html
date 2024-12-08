@@ -4,10 +4,11 @@
             <div *ngIf="default && storiesByUser?.length == 0" class="box" (click)="openNewStory()">
                 +
             </div>
-            <div class="new-story" *ngIf="!default && storiesByUser.length > 0" (click)="openNewStory()">
-                +
-            </div>
+           
             <div class="box" (click)="openUserStories(0)" *ngIf="extractedStories != undefined && extractedStories.length > 0" [ngStyle]="{'border': (extractedStories!.length > 0 && !extractedStories[extractedStories.length - 1].seenByUser) ? '2px solid red':'2px solid gray'} ">
+                <div class="new-story" *ngIf="!default && storiesByUser.length > 0" (click)="openNewStory()">
+                    +
+                </div>
                 <img src="./assets/images/user.png" alt="">
             </div>
             <h1>You</h1>

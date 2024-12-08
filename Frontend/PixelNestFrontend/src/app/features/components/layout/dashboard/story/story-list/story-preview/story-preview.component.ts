@@ -45,7 +45,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
           if(this.userIndex == this.listIndex) {
             if(this.stories != undefined && !this.stories?.[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
            
-            this._startAnimation()
+            // this._startAnimation()
           }else {
             this._stopAnimation()
           }

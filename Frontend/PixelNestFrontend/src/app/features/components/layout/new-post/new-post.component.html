@@ -47,6 +47,9 @@
         <span class="close" (click)="closeCreateNewPost()">
             Close
         </span>
+        <button class="next" *ngIf="selectedFiles.length > 0">
+            Next
+        </button>
     </div>
     <app-lottie-success *ngIf="isShared"></app-lottie-success>
     <app-lottie-fail *ngIf="isError"></app-lottie-fail>

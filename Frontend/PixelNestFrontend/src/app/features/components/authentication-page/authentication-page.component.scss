@@ -73,21 +73,18 @@ $BGCOLOR:#040F16;
        
     }
 }
-@media only screen and (min-width: 768px) and (max-width:1023px){
-    
-}
-@media only screen and (min-width:0px) and (max-width:1023px){
+@media only screen and (min-width: 0px) and (max-width:767px){
     .container{
      
         .content{
             width: 100%;
             height: 100%;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
-              
+            
             div.form-wrapper{
                 width: 100%;
                
@@ -110,28 +107,110 @@ $BGCOLOR:#040F16;
                         display: none;
                     }
                     .router-wrapper{
-                        width: 70%;
+                        width: 90%;
                         height: 100%;
                     }
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width:1023px){
+    .container{
+     
+        .content{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            
+            div.form-wrapper{
+                width: 100%;
+               
+                min-height: 80vh;
+                display: flex;
+                flex-direction: column;
+                justify-content:flex-start;
+                
+                .form{
+                
+                    width: 100%;
+                  
+                    min-height: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                  
+                    .background{
+                        display: none;
+                    }
+                    .router-wrapper{
+                        width: 90%;
+                        height: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width:0px) and (max-width:1023px){
+    .container{
+     
+        .content{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            
+            div.form-wrapper{
+                width: 100%;
+               
+                min-height: 80vh;
+                display: flex;
+                flex-direction: column;
+                justify-content:flex-start;
+                
+                .form{
+                
+                    width: 100%;
+                  
+                    min-height: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                  
+                 
                 }
             }
             .background-image{
                 display: none;
             }
+            .form-wrapper::before{
+                width: 100%;
+                height: 50%;
+                content: '';
+                top: -5%;
+                left: 0;
+                position: absolute;
+                background-image: url('/assets/images/background.png');
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
            
         }
         .content::before{
-            width: 100%;
-            height: 40%;
-            content: '';
-            top: 0;
-            left: 0;
-            position: absolute;
-            background-image: url('/assets/images/background.png');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+            display: none;
         }
+       
     }
 }
 
