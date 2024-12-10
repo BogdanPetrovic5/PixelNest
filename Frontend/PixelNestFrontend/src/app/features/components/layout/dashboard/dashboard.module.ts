@@ -12,7 +12,7 @@ import { NewStoryComponent } from './story/new-story/new-story.component';
 
 import { StoryListComponent } from './story/story-list/story-list.component';
 import { StoryPreviewComponent } from './story/story-list/story-preview/story-preview.component';
-
+import { HammerModule } from '@angular/platform-browser';
 
 
 @NgModule({
@@ -29,7 +29,8 @@ import { StoryPreviewComponent } from './story/story-list/story-preview/story-pr
     CommonModule,
     SharedModule,
     RouterOutlet,
-    FormsModule
+    FormsModule,
+    HammerModule
   ]
   
 })

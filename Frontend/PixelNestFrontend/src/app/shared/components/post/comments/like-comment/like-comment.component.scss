@@ -4,3 +4,19 @@ img.like{
     margin-right: 0;
     cursor: pointer;
 }
+@media only screen and (min-width: 0px) and (max-width:466px){
+    img.like{
+        width: 15px;
+        height: 15px;
+        margin-right: 0;
+        cursor: pointer;
+    }
+}
+@media only screen and (min-width: 467px) and (max-width:769px){
+    img.like{
+        width: 17px;
+        height: 17px;
+        margin-right: 0;
+        cursor: pointer;
+    }
+}

@@ -1,6 +1,6 @@
 import { query } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import axios from 'axios';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
@@ -15,7 +15,7 @@ import { LottieStateService } from 'src/app/core/services/states/lottie-state.se
 })
 export class NewPostComponent implements OnInit{
 
-  @ViewChild('descriptionDiv') descriptionDiv: ElementRef<HTMLDivElement> | undefined
+  @ViewChildren('descriptionDiv') descriptionDiv: ElementRef<HTMLDivElement> | undefined
   apiKey: string = 'aqR39NWYQyZAdFc6KtYh'; 
   geocodeUrl: string = 'https://api.maptiler.com/geocoding/';
   suggestions: any[] = [];
@@ -31,6 +31,7 @@ export class NewPostComponent implements OnInit{
   imageDisplay:boolean = false;
   anim:boolean = false;
   isFocus:boolean = false;
+  next:boolean = false;
 
   locationValue:string = ""
   locationCenter:string = ""
@@ -38,7 +39,7 @@ export class NewPostComponent implements OnInit{
   selectedFiles:File[] = []
   imageSrc: string | ArrayBuffer | null = null;
   imageUrls: string[] = [];
-  description:string = ""
+  // description:string = ""
 
   
   constructor(
@@ -84,6 +85,9 @@ export class NewPostComponent implements OnInit{
   inFocus(){
     return this.locationValue.length >= 3
   }
+  navigateThroughNewPost(){
+    this.next = !this.next;
+  }
   sharePost(){
     const text = this._takeText()
     const username = this._userSessionService.getFromCookie("username");
@@ -106,9 +110,11 @@ export class NewPostComponent implements OnInit{
     })
 
   }
+
   toggleObjectFit(): void {
     this.objectFit = this.objectFit === 'cover' ? 'contain' : 'cover';
   }
+
   async onFileSelected(event: Event){
     const inputElement = event.target as HTMLInputElement;
     const files = inputElement.files;
@@ -163,13 +169,13 @@ export class NewPostComponent implements OnInit{
     if(text?.length == 0) this.isCaption = true
   }
 
-  updateCharCount(event:any){
+  updateCharCount(event:any, tabIndex:number){
     
     const element = event.target as HTMLElement;
     const content = element.innerText;
 
     if (content.length > this.maxChar) {
-      element.innerText = content.substring(0, this.maxChar);
+      element.innerText = content.substring(tabIndex, this.maxChar);
       this._setCaretAtEnd(element);
     
     } else {

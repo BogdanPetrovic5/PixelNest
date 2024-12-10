@@ -14,7 +14,7 @@ $HFONT: "Roboto Condensed", sans-serif;
     width: 90%;
     height: 100%;
     display: flex;
-    
+    gap: 10px;
     flex-direction: row;
     align-items: center;
     justify-self: center;
@@ -86,19 +86,22 @@ $HFONT: "Roboto Condensed", sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
-      
+        overflow: hidden;
         .following-list{
-            width: 90%;
+            width: unset;
+            min-width: 90%;
             display: flex;
             flex-direction: row;
            gap: 20px;
             align-items: center;
+            transition: margin-left 0.3s ease-in-out;
             .user-box{
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
                 align-items: center;
                 gap: 5px;
+          
                 .box{
                     width: 60px;
                     height: 60px;
@@ -155,9 +158,146 @@ $HFONT: "Roboto Condensed", sans-serif;
             align-items: center;
             font-size: 25px;
             position: relative;
+            
             .box{
                 height: 40px;
                 width: 40px;
+                border: 1px dashed rgb(87, 87, 87);;
+                border-radius: 50%;
+                font-size: 35px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color:rgb(87, 87, 87);
+                font-weight: 300;
+                flex: 0 0 auto;
+                font-family: $PFONT;
+                transition: 300ms;
+                cursor: pointer;
+                position: relative;
+                img{
+                    width: 100%;
+                    height: 100%;
+                    align-self: center;
+                }
+                .new-story{
+                    width: 15px;
+                    height: 15px;
+                    background-color: $H1COLOR;
+                    color: white;
+                    font-size: 0.5em;
+                    font-weight: bold;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 50%;
+                    position: absolute;
+                    top: -20%;
+                    left: -5%;
+                    cursor: pointer;
+                    z-index: 3;
+                }
+            }
+        
+            .box:hover{
+                transform: scale(1.1);
+            }
+            .box:hover ~ h1{
+                transform: scale(1.1);
+            }
+            h1{
+                font-size: 0.6em;
+                color: $PCOLOR;
+                font-family: $HFONT;
+                font-weight: 300;
+                margin: 0;
+                transition: 300ms;
+            }
+        }
+        .following{
+            width: 85%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          
+            .following-list{
+                width: unset;
+                min-width: 90%;
+                display: flex;
+                flex-direction: row;
+               gap: 20px;
+                align-items: center;
+                .user-box{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    align-items: center;
+                    gap: 5px;
+                    width: 45px;
+                    height: 65px;
+                    flex: 0 0 auto;
+                    .box{
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        position: relative;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        
+                        cursor: pointer;
+                        img{
+                            width: 100%;
+                            height: 100%;
+                            align-self: center;
+                        }
+                        .new{
+                            // top: 0;
+                            // left: 0;
+                            // width:105%;
+                            // height: 105%;
+                            // align-self: center;
+                            // outline: 2px solid red;
+                            // border-radius: 50%;
+                            // position: absolute;
+                        }
+                    }
+                   
+                    font-size: 25px;
+                    h1{
+                        overflow: hidden;
+                        font-size: 0.5em;
+                        color: $PCOLOR;
+                        font-family: $HFONT;
+                        font-weight: 300;
+                        margin: 0;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width:468px) and (max-width:767px){
+    .story-section{
+        width: 98%;
+        height: 100%;
+        display: flex;
+        
+        flex-direction: row;
+        align-items: center;
+        justify-self: center;
+        .personal{
+            width: 15%;
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+            align-items: center;
+            font-size: 25px;
+            position: relative;
+            .box{
+                height: 50px;
+                width: 50px;
                 border: 1px dashed rgb(87, 87, 87);;
                 border-radius: 50%;
                 font-size: 35px;
@@ -216,7 +356,8 @@ $HFONT: "Roboto Condensed", sans-serif;
             align-items: center;
           
             .following-list{
-                width: 90%;
+                width: unset;
+                min-width: 90%;
                 display: flex;
                 flex-direction: row;
                gap: 20px;
@@ -228,10 +369,10 @@ $HFONT: "Roboto Condensed", sans-serif;
                     align-items: center;
                     gap: 5px;
                     width: 45px;
-                    height: 65px;
+                    height: 70px;
                     .box{
-                        width: 40px;
-                        height: 40px;
+                        width: 50px;
+                        height: 50px;
                         border-radius: 50%;
                         position: relative;
                         display: flex;
@@ -265,135 +406,6 @@ $HFONT: "Roboto Condensed", sans-serif;
                         font-weight: 300;
                         margin: 0;
                         width: 100%;
-                    }
-                }
-            }
-        }
-    }
-}
-@media only screen and (min-width:468px) and (max-width:767px){
-    .story-section{
-        width: 95%;
-        height: 100%;
-        display: flex;
-        
-        flex-direction: row;
-        align-items: center;
-        justify-self: center;
-        .personal{
-            width: 10%;
-            display: flex;
-            flex-direction: column;
-            justify-content: left;
-            align-items: center;
-            font-size: 25px;
-            position: relative;
-            .box{
-                height: 50px;
-                width: 50px;
-                border: 1px dashed rgb(87, 87, 87);;
-                border-radius: 50%;
-                font-size: 35px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color:rgb(87, 87, 87);
-                font-weight: 300;
-                font-family: $PFONT;
-                transition: 300ms;
-                cursor: pointer;
-                position: relative;
-                img{
-                    width: 100%;
-                    height: 100%;
-                    align-self: center;
-                }
-                .new-story{
-                    width: 25px;
-                    height: 25px;
-                    background-color: $H1COLOR;
-                    color: white;
-                    font-size: 1em;
-                    font-weight: bold;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius: 50%;
-                    position: absolute;
-                    top: -20%;
-                    left: -5%;
-                    cursor: pointer;
-                    z-index: 3;
-                }
-            }
-        
-            .box:hover{
-                transform: scale(1.1);
-            }
-            .box:hover ~ h1{
-                transform: scale(1.1);
-            }
-            h1{
-                font-size: 0.8em;
-                color: $PCOLOR;
-                font-family: $HFONT;
-                font-weight: 300;
-                margin: 0;
-                transition: 300ms;
-            }
-        }
-        .following{
-            width: 90%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          
-            .following-list{
-                width: 90%;
-                display: flex;
-                flex-direction: row;
-               gap: 20px;
-                align-items: center;
-                .user-box{
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-end;
-                    align-items: center;
-                    gap: 5px;
-                    .box{
-                        width: 50px;
-                        height: 50px;
-                        border-radius: 50%;
-                        position: relative;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        
-                        cursor: pointer;
-                        img{
-                            width: 100%;
-                            height: 100%;
-                            align-self: center;
-                        }
-                        .new{
-                            // top: 0;
-                            // left: 0;
-                            // width:105%;
-                            // height: 105%;
-                            // align-self: center;
-                            // outline: 2px solid red;
-                            // border-radius: 50%;
-                            // position: absolute;
-                        }
-                    }
-                   
-                    font-size: 25px;
-                    h1{
-                        font-size: 0.65em;
-                        color: $PCOLOR;
-                        font-family: $HFONT;
-                        font-weight: 300;
-                        margin: 0;
                     }
                 }
             }

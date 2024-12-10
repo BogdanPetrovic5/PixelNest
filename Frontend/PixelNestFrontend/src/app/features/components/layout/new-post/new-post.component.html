@@ -24,7 +24,7 @@
             </div>
             <div class="post-options">
                 <span class="caption" *ngIf="isCaption">Write caption...</span>
-                <div tabindex="0" class="description" contenteditable="true" aria-placeholder="description" (input)="updateCharCount($event)" (focus)="hideCaption()" (blur)="showCaption()" #descriptionDiv>
+                <div tabindex="0" class="description" contenteditable="true" aria-placeholder="description" (input)="updateCharCount($event,0)" (focus)="hideCaption()" (blur)="showCaption()" #descriptionDiv>
                    
                 </div>
                 <span>
@@ -47,9 +47,37 @@
         <span class="close" (click)="closeCreateNewPost()">
             Close
         </span>
-        <button class="next" *ngIf="selectedFiles.length > 0">
+        <button class="next" (click)="navigateThroughNewPost()" *ngIf="selectedFiles.length > 0">
             Next
         </button>
+        <div class="new-post-modal" *ngIf="next">
+             <div class="new-post-modal-wrapper">
+                <span class="caption" *ngIf="isCaption">Write caption...</span>
+                <div tabindex="2" class="description" contenteditable="true" aria-placeholder="description" (input)="updateCharCount($event, 2)" (focus)="hideCaption()" (blur)="showCaption()" #descriptionDiv>
+                   
+                </div>
+                <span class="char-count">
+                    {{charCount}}/{{maxChar}}
+                </span>
+                <div class="options">
+                    <div class="location">
+                        <input type="text" id="locationInput" placeholder="Enter a location" (input)="onLocationInput($event)" [value]="locationCenter" (focus)="setFocus()" [(ngModel)]="locationValue" />
+                        <div id="suggestionsList" *ngIf="inFocus()">
+                            <div *ngFor="let suggestion of suggestions" (click)="setLocation(suggestion)">{{ suggestion.place_name }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-wrap">
+                    <button (click)="sharePost()">
+                        Share
+                    </button>
+                    <button (click)="navigateThroughNewPost()">
+                        Back
+                    </button>
+                </div>
+               
+             </div>
+        </div>
     </div>
     <app-lottie-success *ngIf="isShared"></app-lottie-success>
     <app-lottie-fail *ngIf="isError"></app-lottie-fail>

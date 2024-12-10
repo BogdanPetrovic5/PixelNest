@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { forkJoin, Subscription } from 'rxjs';
+import { forkJoin, Subscription, switchMap } from 'rxjs';
 import { StoriesDto } from 'src/app/core/dto/stories.dto';
 import { StoryDto } from 'src/app/core/dto/story.dto';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { StoryStateService } from 'src/app/core/services/states/story-state.service';
 import { StoryService } from 'src/app/core/services/story/story.service';
-
+import 'hammerjs';
 @Component({
   selector: 'app-story',
   templateUrl: './story.component.html',
@@ -14,6 +14,8 @@ import { StoryService } from 'src/app/core/services/story/story.service';
   standalone:false
 })
 export class StoryComponent implements OnInit{
+  @ViewChild('storyList', { static: false }) storyList!: ElementRef<HTMLDivElement>
+  @ViewChild('storyListWrapper', { static: false }) storyListWrapper!: ElementRef<HTMLDivElement>
   username:String = ""
 
   groupedStories:StoriesDto[] = []
@@ -28,7 +30,9 @@ export class StoryComponent implements OnInit{
   isStorySeen:boolean = false;
 
   selectedStoryIndex!:number 
-  
+  marginLeft:number = 0;
+  stepSize:number = 0;
+  currentPage = 1;
   subscription:Subscription = new Subscription();
 
 
@@ -36,14 +40,30 @@ export class StoryComponent implements OnInit{
     private _storyService:StoryService,
     private _cookieService:CookieService,
     private _dashboardState:DashboardStateService,
-    private _stateService:StoryStateService
+    private _stateService:StoryStateService,
+    private _storyState:StoryStateService,
+    private changeDetectorRef: ChangeDetectorRef
   ){}  
+
   ngOnInit(): void {
     this.username = this._cookieService.get("username");
     this._initilizeComponent();
     
   }
 
+  onSwipeLeft() {
+    this.changeDetectorRef.detectChanges();
+    const limit = this.storyListWrapper.nativeElement.getBoundingClientRect().right
+    const right = this.storyList.nativeElement.getBoundingClientRect().right;
+    if (right >= limit) {
+      this.marginLeft -= this.stepSize;
+    }
+  }
+  onSwipeRight() {
+    if (this.marginLeft < 0) {
+      this.marginLeft += this.stepSize;
+    }
+  }
   openNewStory(){
    
     this._dashboardState.setIsNewStoryTabOpen(true)
@@ -61,6 +81,18 @@ export class StoryComponent implements OnInit{
     this.selectedStoryIndex = index; 
     this._dashboardState.setStoryPrewiew(true)
     this._stateService.setCurrentStoryState(index);
+  }
+  private initializeStepSize() {
+    const containerWidth = this.storyList.nativeElement.offsetWidth;
+    const numberOfVisibleStories = Math.floor(containerWidth / this._getStoryBoxWidth());
+    this.stepSize = (100+numberOfVisibleStories) / numberOfVisibleStories;
+    
+  }
+  private _getStoryBoxWidth(): number{
+    const storyBox = this.storyList.nativeElement.querySelector('.user-box');
+    const width = storyBox ? storyBox.getBoundingClientRect().width : 0;
+    
+    return width;
   }
 
   private _initilizeComponent() {
@@ -83,7 +115,9 @@ export class StoryComponent implements OnInit{
         next:({groupedStories, storiesByUser})=>{
           
           this.groupedStories = groupedStories;
-    
+          setTimeout(() => {
+            this.initializeStepSize();
+          }, 0);
           if(storiesByUser.length > 0){
             this.storiesByUser = storiesByUser;
             this.extractFromResponse(storiesByUser);
@@ -92,7 +126,33 @@ export class StoryComponent implements OnInit{
         }
       })
     )
- 
+    
+    // this.subscription.add(
+    //   this._storyState.currentPage$
+    //     .pipe(
+    //       switchMap((page) =>
+    //         forkJoin({
+    //           groupedStories: this._storyService.getStories(this.username, false, page),
+    //           storiesByUser: this._storyService.getStories(this.username, true, 1),
+    //         })
+    //       )
+    //     )
+    //     .subscribe({
+    //       next: ({ groupedStories, storiesByUser }) => {
+    //         this.groupedStories = this.groupedStories.concat(groupedStories);
+            
+    //         if (storiesByUser.length > 0) {
+    //           this.storiesByUser = storiesByUser;
+    //           this.extractFromResponse(storiesByUser);
+              
+    //         }
+    //       },
+    //     })
+    // );
+
+
+
+
     this.subscription.add(
         this._dashboardState.storyPreview$.subscribe({
           next:response=>{

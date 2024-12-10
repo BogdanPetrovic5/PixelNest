@@ -119,3 +119,348 @@ $HFONT: "Roboto Condensed", sans-serif;
         }
     }
 }
+@media only screen and (min-width: 0px) and (max-width:466px){
+    .container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 2;
+        background-color: rgba(0, 0, 0, 0.747);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .wrap{
+            width:95%;
+            height: 70%;
+            border-radius: 25px;
+            background-color: $TABCOLOR;
+            display: flex;
+            flex-direction: column;
+            .header, .footer{
+                font-size: 25px;
+                
+                width: 100%;
+                height: 40px;
+                border-bottom: 1px solid #484f53;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                img{
+                    width: 20px;
+                    height: 20px;
+                    cursor: pointer;
+                }
+                .title{
+                    width: 80%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 25px;
+                    h1{
+                        font-size: 0.6em;
+                        font-weight: 500;
+                        color: $PCOLOR;
+                        font-family: $PFONT;
+                        margin: 0;
+        
+                    }
+                }
+               
+                .helper{
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+            .new-comment{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-top: 1px solid #484f53;
+                margin-top: 30px;
+                input{
+                    width: 95%;
+                    height: 50px;
+                    background-color: transparent;
+                    outline: none;
+                    border: none;
+                    color:#a3a3a3;
+                   
+                }
+                
+            }
+            .footer{
+                border-bottom: none !important;
+                border-top: 1px solid #484f53;
+                h1{
+                    cursor: pointer;
+                }
+            }
+            .usernames::-webkit-scrollbar {
+                width: 8px;
+            }
+            .usernames::-webkit-scrollbar-thumb {
+                background-color: rgba(255, 255, 255, 0.5); 
+                border-radius: 10px; 
+            }
+            .usernames{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                width: 100%;
+                height: calc(100% - 80px);
+                padding-top: 20px;
+                overflow-y: scroll;
+                .username{
+                    width: 95%;
+                    font-size: 25px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    
+                    app-comment{
+                        width: 100%;
+                    }
+                 
+                }
+    
+            }
+        }
+    }
+}
+@media only screen and (min-width: 467px) and (max-width:768px){
+    .container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 2;
+        background-color: rgba(0, 0, 0, 0.747);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .wrap{
+            width:90%;
+            height: 80%;
+            border-radius: 25px;
+            background-color: $TABCOLOR;
+            display: flex;
+            flex-direction: column;
+            .header, .footer{
+                font-size: 25px;
+                
+                width: 100%;
+                height: 40px;
+                border-bottom: 1px solid #484f53;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                img{
+                    width: 20px;
+                    height: 20px;
+                    cursor: pointer;
+                }
+                .title{
+                    width: 80%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 25px;
+                    h1{
+                        font-size: 0.6em;
+                        font-weight: 500;
+                        color: $PCOLOR;
+                        font-family: $PFONT;
+                        margin: 0;
+        
+                    }
+                }
+               
+                .helper{
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+            .new-comment{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-top: 1px solid #484f53;
+                margin-top: 30px;
+                input{
+                    width: 95%;
+                    height: 50px;
+                    background-color: transparent;
+                    outline: none;
+                    border: none;
+                    color:#a3a3a3;
+                   
+                }
+                
+            }
+            .footer{
+                border-bottom: none !important;
+                border-top: 1px solid #484f53;
+                h1{
+                    cursor: pointer;
+                }
+            }
+            .usernames::-webkit-scrollbar {
+                width: 8px;
+            }
+            .usernames::-webkit-scrollbar-thumb {
+                background-color: rgba(255, 255, 255, 0.5);  /* Color of the scrollbar */
+                border-radius: 10px;  /* Rounded scrollbar */
+            }
+            .usernames{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                width: 100%;
+                height: calc(100% - 80px);
+                padding-top: 20px;
+                overflow-y: scroll;
+                .username{
+                    width: 95%;
+                    font-size: 25px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    
+                    app-comment{
+                        width: 100%;
+                    }
+                 
+                }
+    
+            }
+        }
+    }
+}
+@media only screen and (min-width: 769px) and (max-width:1024px){
+    .container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 2;
+        background-color: rgba(0, 0, 0, 0.747);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .wrap{
+            width:70%;
+            height: 60%;
+            border-radius: 25px;
+            background-color: $TABCOLOR;
+            display: flex;
+            flex-direction: column;
+            .header, .footer{
+                font-size: 25px;
+                
+                width: 100%;
+                height: 40px;
+                border-bottom: 1px solid #484f53;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                img{
+                    width: 20px;
+                    height: 20px;
+                    cursor: pointer;
+                }
+                .title{
+                    width: 80%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 25px;
+                    h1{
+                        font-size: 0.6em;
+                        font-weight: 500;
+                        color: $PCOLOR;
+                        font-family: $PFONT;
+                        margin: 0;
+        
+                    }
+                }
+               
+                .helper{
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+            .new-comment{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-top: 1px solid #484f53;
+                margin-top: 30px;
+                input{
+                    width: 95%;
+                    height: 50px;
+                    background-color: transparent;
+                    outline: none;
+                    border: none;
+                    color:#a3a3a3;
+                   
+                }
+                
+            }
+            .footer{
+                border-bottom: none !important;
+                border-top: 1px solid #484f53;
+                h1{
+                    cursor: pointer;
+                }
+            }
+            .usernames::-webkit-scrollbar {
+                width: 8px;
+            }
+            .usernames::-webkit-scrollbar-thumb {
+                background-color: rgba(255, 255, 255, 0.5);  /* Color of the scrollbar */
+                border-radius: 10px;  /* Rounded scrollbar */
+            }
+            .usernames{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                width: 100%;
+                height: calc(100% - 80px);
+                padding-top: 20px;
+                overflow-y: scroll;
+                .username{
+                    width: 95%;
+                    font-size: 25px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    
+                    app-comment{
+                        width: 100%;
+                    }
+                 
+                }
+    
+            }
+        }
+    }
+}

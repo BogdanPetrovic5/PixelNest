@@ -3,6 +3,7 @@ $SECTIONLEFT:#062938;
 $H1COLOR:#01BAEF;
 $PCOLOR:#FBFBFF;
 $TABCOLOR:#32373a;
+$BORDERCOLOR:rgb(87, 87, 87);
 $HOVERTABCOLOR:#32373aa1;
 $PFONT:"Josefin Sans", sans-serif;
 $HFONT: "Roboto Condensed", sans-serif;
@@ -20,7 +21,9 @@ $HFONT: "Roboto Condensed", sans-serif;
         background-color: $TABCOLOR;
         border-radius: 25px;
         position: relative;
-    
+        .new-post-modal{
+            display: none;
+        }
         .header{
             font-size: 25px;
             width: 100%;
@@ -196,8 +199,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                     outline: none;
                     padding: 5px;
                     overflow-y: auto;
-                    word-break: break-word;  /* Ensure long words break */
-                    word-wrap: break-word;   /* Wrap text to the next line */
+                    word-break: break-word;  
+                    word-wrap: break-word;  
                     font-size: 0.6em;
                     white-space: pre-wrap;   
                     position: relative;
@@ -243,7 +246,8 @@ $HFONT: "Roboto Condensed", sans-serif;
     }
 }
 @media only screen and (min-width:0px) and (max-width:466px){
-    .container{
+
+     .container{
         height: 100%;
         width: 100%;
         background-color: rgba(0, 0, 0, 0.452);
@@ -253,125 +257,81 @@ $HFONT: "Roboto Condensed", sans-serif;
     
         .content{
             width: 90%;
-            
+            height: 70%;
             background-color: $TABCOLOR;
             border-radius: 25px;
             position: relative;
+            flex-direction: column;
             .post{
-
-                height: calc(100% - 40px);
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
                 .image{
+                    height: 100%;
                     width: 100%;
-                    height: 70%;
-                    border-right: 1px solid #484f53;;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    overflow: hidden;
-                    position: relative;
-                    .image-display-variant{
-                        position: absolute;
-                        bottom: 5px;
-                        right: 5px;
-                        height: 70px;
-                        width: 70px;
-                        border-radius: 50%;
-                        border: none;
-                        outline: none;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        /* From https://css.glass */
-                        background: rgba(4, 15, 22, 0.29);
-                      
-                        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-                        backdrop-filter: blur(10.5px);
-                        -webkit-backdrop-filter: blur(10.5px);
-                        img{
-                            width: 50px;
-                            height: 50px;
-                            transform: rotate(180deg);
-                        }
-                    }
-                    img{
-                        border-bottom-left-radius: 25px;
-                        
-                    }
-                    .open-image{
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        gap: 20px;
-                        div{
-                            position: relative;
-                            font-size: 25px;
-                            cursor: pointer;
-                            width: fit-content;
-                            input{
-                                position: absolute;
-                                width: 100%;
-                                height: 100%;
-                                opacity:  0;
-                                display: none;
-                            }
-                            button{
-                                padding: 5px 30px; 
-                                border-radius: 10px;
-                                border: none;
-                                outline: none;
-                                font-size: 0.6em;
-                                background-color: #64A3B9;
-                                font-family: $HFONT;
-                                font-weight: 400;
-                                cursor: pointer;
-    
-                            }
-                        }
-                        
-                    }
-                    img{
-                        width: 80px;
-                        height: 80px;
-                    }
+                    border-right: none;
                 }
                 .post-options{
-                    width: 100%;
-                    height: 30%;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-end;
+                    display: none;
+                }
+            }
+            .close{
+                right: 50%;
+                bottom: -30px;
+                transform: translateX(50%);
+        
+            }
+            .next{
+                position: absolute;
+                bottom: 20px;
+                padding: 15px 25px;
+                align-self: center;
+                right: 50%;
+                transform: translateX(50%);
+                border-radius: 25px;
+                background-color: #01BAEF;
+                color: white;
+                font-family: $PFONT;
+                font-size: 0.9em;
+                border: none;
+            }
+            .new-post-modal{
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.301);
+                z-index: 1;
+                position: absolute;
+                top:0;
+                right: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+               
+                .new-post-modal-wrapper{
+                    border: 1px solid $BORDERCOLOR;
+                    width: 90%;
+                    height: 90%;
+                    background-color: $TABCOLOR;
+                    border-radius: 15px;
                     font-size: 25px;
                     position: relative;
-                    margin-bottom: 50px;
-                    span.caption{
-                        position: absolute;
-                        color: white;
-                        font-family: $PFONT;
-                        font-size: 0.6em;
-                        font-weight: 300;
-                        left: 10px;
-                        opacity: 0.4;
-                        
-                    }
+                    display: flex;
+                    flex-direction: column;
+                   
+                    align-items: flex-start;
                     .options{
+                        width: 100%;
                         margin-bottom: 20px;
                         .location{
                             width: 100%;
                             input{
                                 width: 100%;
+                                box-sizing: border-box;
                                 background-color: transparent !important;
                                 border: none;
                                 border-bottom: 1px solid #484f53;
                                 outline:none;
                                 color: white;
                                 font-family:$PFONT;
-                                text-indent: 10px;
+                                text-indent: 0px !important;
+                                padding-left: 10px;
                                 height: 20px;
                               
                             }
@@ -385,6 +345,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                                     gap: 10px;
                                     background-color: #06293817;
                                     div{
+                                        box-sizing: border-box;
                                         list-style: none;
                                         border-bottom: 1px solid #484f53;
                                         font-size: 0.7em;
@@ -405,6 +366,17 @@ $HFONT: "Roboto Condensed", sans-serif;
                             
                         }
                     }
+                    span.caption{
+                        position: absolute;
+                        color: white;
+                        font-family: $PFONT;
+                        font-size: 0.6em;
+                        font-weight: 300;
+                        left: 10px;
+                        top: 10px;
+                        opacity: 0.4;
+                        
+                    }
                     .description{
                         color: white;
                         width: calc(100% - 10px);
@@ -421,7 +393,12 @@ $HFONT: "Roboto Condensed", sans-serif;
                         font-size: 0.6em;
                         white-space: pre-wrap;   
                         position: relative;
-                       
+                        font-family: $PFONT;
+                        margin-top: 10px;
+                    }
+                    span.char-count{
+                        font-size: 0.5em;
+                        margin-left: 10px;
                     }
                     span{
                         margin-top: 5px;
@@ -430,28 +407,45 @@ $HFONT: "Roboto Condensed", sans-serif;
                         font-weight: 300;
                         font-family: $PFONT;
                         font-size: 0.6em;
+                        left: 10px;
                     }
                     .options{
                         margin-top: 30px;
                         width: 100%;
                         
                     }
-                    button{
-                        width: 90%;
-                        padding-top: 10px;
-                        padding-bottom: 10px;
-                        font-size: 0.6em;
-                        border-radius: 15px;
-                        background-color: #01BAEF;
-                        border: none;
-                        outline: none;
-                        align-self: center;
+                    .button-wrap{
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-end;
+                        
+                        width: 100%;
+                        height: 100%;
+                        button{
+                            width: 90%;
+                            padding-top: 10px;
+                            padding-bottom: 10px;
+                            font-size: 0.6em;
+                            border-radius: 15px;
+                            background-color: #01BAEF;
+                            border: none;
+                            outline: none;
+                            align-self: center;
+                            margin-bottom: 20px;
+                            font-family: $PFONT;
+                        }
+                        button:last-child{
+                            background-color: rgb(255, 255, 255);
+                            
+                        }
                     }
+                   
+
                 }
-              
             }
         }
-    }    
+       
+    }   
 }
 @media only screen and (min-width:467px) and (max-width:766px){
     .container{
@@ -498,6 +492,157 @@ $HFONT: "Roboto Condensed", sans-serif;
                 font-family: $PFONT;
                 font-size: 0.9em;
                 border: none;
+            }
+            .new-post-modal{
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.301);
+                z-index: 1;
+                position: absolute;
+                top:0;
+                right: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                .new-post-modal-wrapper{
+                    
+                    width: 70%;
+                    height: 90%;
+                    background-color: $TABCOLOR;
+                    border-radius: 15px;
+                    font-size: 25px;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                   
+                    align-items: flex-start;
+                    .options{
+                        width: 100%;
+                        margin-bottom: 20px;
+                        .location{
+                            width: 100%;
+                            input{
+                                width: 100%;
+                                box-sizing: border-box;
+                                background-color: transparent !important;
+                                border: none;
+                                border-bottom: 1px solid #484f53;
+                                outline:none;
+                                color: white;
+                                font-family:$PFONT;
+                                text-indent: 0px !important;
+                                padding-left: 10px;
+                                height: 20px;
+                              
+                            }
+                           
+                                #suggestionsList{
+                                    width: 100%;
+                                    font-size: 25px;
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: flex-start;
+                                    gap: 10px;
+                                    background-color: #06293817;
+                                    div{
+                                        box-sizing: border-box;
+                                        list-style: none;
+                                        border-bottom: 1px solid #484f53;
+                                        font-size: 0.7em;
+                                        color: white;
+                                        font-family: $PFONT;
+                                        color: $PCOLOR;
+                                        font-weight: 300;
+                                        position: relative;
+                                        z-index: 1;
+                                        width: 100%;
+                                        cursor: pointer;
+                                        padding-bottom: 5px;
+                                        padding-left: 5px;
+                                        padding-top: 5px;
+                                    }
+                                }
+                               
+                            
+                        }
+                    }
+                    span.caption{
+                        position: absolute;
+                        color: white;
+                        font-family: $PFONT;
+                        font-size: 0.6em;
+                        font-weight: 300;
+                        left: 10px;
+                        top: 10px;
+                        opacity: 0.4;
+                        
+                    }
+                    .description{
+                        color: white;
+                        width: calc(100% - 10px);
+                        border-bottom:1px solid #484f53;;
+                        display: flex;
+                        max-width: calc(100% - 10px); 
+                        height: 100px;
+                        max-height: 100px;
+                        outline: none;
+                        padding: 5px;
+                        overflow-y: auto;
+                        word-break: break-word;  /* Ensure long words break */
+                        word-wrap: break-word;   /* Wrap text to the next line */
+                        font-size: 0.6em;
+                        white-space: pre-wrap;   
+                        position: relative;
+                        font-family: $PFONT;
+                        margin-top: 10px;
+                    }
+                    span.char-count{
+                        font-size: 0.5em;
+                        margin-left: 10px;
+                    }
+                    span{
+                        margin-top: 5px;
+                        margin-right: 5px;
+                        color:#b9b9b9;;;
+                        font-weight: 300;
+                        font-family: $PFONT;
+                        font-size: 0.6em;
+                        left: 10px;
+                    }
+                    .options{
+                        margin-top: 30px;
+                        width: 100%;
+                        
+                    }
+                    .button-wrap{
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-end;
+                        
+                        width: 100%;
+                        height: 100%;
+                        button{
+                            width: 90%;
+                            padding-top: 10px;
+                            padding-bottom: 10px;
+                            font-size: 0.6em;
+                            border-radius: 15px;
+                            background-color: #01BAEF;
+                            border: none;
+                            outline: none;
+                            align-self: center;
+                            margin-bottom: 20px;
+                            font-family: $PFONT;
+                        }
+                        button:last-child{
+                            background-color: rgb(255, 255, 255);
+                            
+                        }
+                    }
+                   
+
+                }
             }
         }
        

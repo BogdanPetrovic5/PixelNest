@@ -46,7 +46,7 @@ export class NewStoryComponent {
 
     this._storyService.publishStory(formData).subscribe({
       next:response=>{
-        console.log(response)
+        
         this._lottieState.setIsSuccess(true);
         this._dashboardState.setIsNewStoryTabOpen(false);
         setTimeout(()=>{
@@ -73,13 +73,13 @@ export class NewStoryComponent {
         try {
  
           const compressedFile = await this._imageCompressorService.compressImage(file);
-          console.log(compressedFile.size / 1024)
+          
           
           const reader = new FileReader();
           reader.onload = (e: ProgressEvent<FileReader>) => {
             if (e.target?.result) {
               this.imageSrc = e.target.result as string;
-              alert(this.imageSrc)
+             
               this.img = false; 
             }
           };
