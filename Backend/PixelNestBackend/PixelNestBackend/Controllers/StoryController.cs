@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
@@ -18,9 +19,10 @@ namespace PixelNestBackend.Controllers
             _storyService = storyService;
         }
         [HttpGet("GetStories")]
-        public async Task<ActionResult<GroupedStoriesDto>> GetStories(bool forCurrentUser, string username)
+        public async Task<ActionResult<GroupedStoriesDto>> GetStories(bool forCurrentUser, string username, int currentPage, int maximum = 10)
         {
             ICollection<GroupedStoriesDto> stories = await _storyService.GetStories(forCurrentUser, username);
+         
             if (stories != null)
             {
                 return Ok(stories);

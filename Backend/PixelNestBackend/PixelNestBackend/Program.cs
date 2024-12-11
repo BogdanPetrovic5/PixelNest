@@ -14,6 +14,7 @@ using System.Text;
 using PixelNestBackend.Security;
 using PixelNestBackend.Utility;
 using PixelNestBackend.Gateaway;
+using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,16 @@ builder.Services.AddScoped<UserUtility>();
 builder.Services.AddScoped<PostUtility>();
 builder.Services.AddScoped<CommentUtility>();
 builder.Services.AddScoped<TokenGenerator>();
+
+builder.Services.AddScoped(x =>
+{
+    var configuration = x.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetSection("AzureBlobStorage:ConnectionString").Value;
+    var containerName = configuration.GetSection("AzureBlobStorage:ContainerName").Value;
+    var dataContext = x.GetRequiredService<DataContext>();
+    var blobServiceClient = new BlobServiceClient(connectionString);
+    return new BlobStorageUpload(dataContext,blobServiceClient, containerName);
+});
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -85,7 +96,7 @@ builder.Services.AddAuthentication(options =>
         OnMessageReceived = context =>
         {
             var token = context.Request.Cookies["jwtToken"];
-            Console.WriteLine("Token", token);
+           
             if (!string.IsNullOrEmpty(token))
             {
                 context.Token = token;

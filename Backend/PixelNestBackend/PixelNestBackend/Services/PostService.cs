@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
+using PixelNestBackend.Gateaway;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Repository;
@@ -21,12 +22,14 @@ namespace PixelNestBackend.Services
         public readonly IFileUpload _fileUpload;
         private readonly string _basedFolderPath;
         private readonly ILogger<PostService> _ILogger;
+        private readonly BlobStorageUpload _blobStorageUpload;
 
         public PostService(
 
             UserUtility userUtility,
             PostUtility postUtility,
             FolderGenerator folderGenerator,
+            BlobStorageUpload blobStorageUpload,
             IPostRepository postRepository,
             IFileUpload fileUpload,
             ILogger<PostService> logger
@@ -40,6 +43,7 @@ namespace PixelNestBackend.Services
             _postRepository = postRepository;
             _fileUpload = fileUpload;
             _ILogger = logger;
+            _blobStorageUpload = blobStorageUpload;
         }
         public bool SavePost(SavePostDto savePostDto)
         {
@@ -100,8 +104,9 @@ namespace PixelNestBackend.Services
                 if (response.IsSuccessfull)
                 {
                     int postID = response.PostID;
-                    bool isUploaded = await _fileUpload.StoreImages(postDto, null, userFolderPath, postID);
-                    if (isUploaded) return new PostResponse { 
+                    //bool isUploaded = await _fileUpload.StoreImages(postDto, null, userFolderPath, postID);
+                    bool isUploadedBlob = await _blobStorageUpload.StoreImages(postDto, null, postDto.OwnerUsername, postID);
+                    if (isUploadedBlob) return new PostResponse { 
                         IsSuccessfull = true,
                         Message = "Post was successfully added to your feed."
                     };

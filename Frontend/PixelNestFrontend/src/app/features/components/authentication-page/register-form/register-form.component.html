@@ -25,7 +25,7 @@
                         <span style="transition-delay:0ms">e</span>
                     </label>
                     <div *ngIf="registerForm.get('Firstname')?.invalid && registerForm.get('Firstname')?.touched" class="invalid-feedback">
-                        First Name is required.
+                        Firstname is required.
                     </div>
                 </div>
                 <div class="form-control">
@@ -41,7 +41,7 @@
                         <span style="transition-delay:0ms">e</span>
                     </label>
                     <div *ngIf="registerForm.get('Lastname')?.invalid && registerForm.get('Lastname')?.touched" class="invalid-feedback">
-                        Last Name is required.
+                        Lastname is required.
                     </div>
                 </div>
                 <div class="form-control">
@@ -74,7 +74,7 @@
                         Email is required!
                     </div>
                     <div *ngIf="registerForm.get('Email')?.hasError('pattern')" class="invalid-feedback">
-                        Email format is wrong!
+                        Email format must be example&#64;email.com
                     </div>
                 </div>
                 <div class="form-control">

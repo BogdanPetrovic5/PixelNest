@@ -63,9 +63,16 @@ namespace PixelNestBackend.Controllers
                 return BadRequest();
             }
             var response = _authenticationService.Login(loginDto);
-            if(response == null || response.IsSuccessful == false)
+            if (response == null)
             {
                 return NotFound();
+            }
+            if(response != null && response.IsSuccessful == false)
+            {
+                return NotFound(new LoginResponse { 
+                    IsSuccessful = response.IsSuccessful,
+                    Response=response.Response
+                });
             }
           
             var cookieOptions = new CookieOptions

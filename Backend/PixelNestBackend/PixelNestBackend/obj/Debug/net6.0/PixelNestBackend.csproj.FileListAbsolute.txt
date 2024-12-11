@@ -181,3 +181,7 @@ C:\Users\petro\OneDrive\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBack
 C:\Users\petro\OneDrive\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\obj\Debug\net6.0\PixelNestBackend.pdb
 C:\Users\petro\OneDrive\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\obj\Debug\net6.0\PixelNestBackend.genruntimeconfig.cache
 C:\Users\petro\OneDrive\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\obj\Debug\net6.0\ref\PixelNestBackend.dll
+C:\Users\petro\OneDrive\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\bin\Debug\net6.0\Azure.Storage.Blobs.dll
+C:\Users\petro\OneDrive\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\bin\Debug\net6.0\Azure.Storage.Common.dll
+C:\Users\petro\OneDrive\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\bin\Debug\net6.0\System.ClientModel.dll
+C:\Users\petro\OneDrive\Desktop\PixelNest\Backend\PixelNestBackend\PixelNestBackend\bin\Debug\net6.0\System.IO.Hashing.dll

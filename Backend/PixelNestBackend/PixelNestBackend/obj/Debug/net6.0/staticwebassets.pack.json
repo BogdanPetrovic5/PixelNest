@@ -5,6 +5,14 @@
       "PackagePath": "staticwebassets\\Photos\\Bogdan1\\1\\alexander-redl-qo1pyCD02t4-unsplash.jpg"
     },
     {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\Stories\\10\\aaron-burden-IIcj-56W_T8-unsplash.jpg",
+      "PackagePath": "staticwebassets\\Photos\\Bogdan1\\Stories\\10\\aaron-burden-IIcj-56W_T8-unsplash.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\Stories\\11\\aaron-burden-IIcj-56W_T8-unsplash.jpg",
+      "PackagePath": "staticwebassets\\Photos\\Bogdan1\\Stories\\11\\aaron-burden-IIcj-56W_T8-unsplash.jpg"
+    },
+    {
       "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Bogdan1\\Stories\\2\\ac-geeb7a9a7c_1920.jpg",
       "PackagePath": "staticwebassets\\Photos\\Bogdan1\\Stories\\2\\ac-geeb7a9a7c_1920.jpg"
     },
@@ -33,12 +41,44 @@
       "PackagePath": "staticwebassets\\Photos\\JohnFive\\Stories\\9\\barbarian_warrior___27_by_mjranum_stock_d1ac5s0.jpg"
     },
     {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\MichaelMike5\\Stories\\12\\aaron-burden-IIcj-56W_T8-unsplash.jpg",
+      "PackagePath": "staticwebassets\\Photos\\MichaelMike5\\Stories\\12\\aaron-burden-IIcj-56W_T8-unsplash.jpg"
+    },
+    {
       "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\Nikola6\\Stories\\1\\6.jpg",
       "PackagePath": "staticwebassets\\Photos\\Nikola6\\Stories\\1\\6.jpg"
     },
     {
       "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\david5\\Stories\\7\\DRSDD.jpg",
       "PackagePath": "staticwebassets\\Photos\\david5\\Stories\\7\\DRSDD.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\ivikivi5\\2\\aaron-burden-IIcj-56W_T8-unsplash.jpg",
+      "PackagePath": "staticwebassets\\Photos\\ivikivi5\\2\\aaron-burden-IIcj-56W_T8-unsplash.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\ivikivi5\\3\\ac-geeb7a9a7c_1920.jpg",
+      "PackagePath": "staticwebassets\\Photos\\ivikivi5\\3\\ac-geeb7a9a7c_1920.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\ivikivi5\\4\\ambitious-studio-rick-barrett-uwk8IS-HfJ8-unsplash.jpg",
+      "PackagePath": "staticwebassets\\Photos\\ivikivi5\\4\\ambitious-studio-rick-barrett-uwk8IS-HfJ8-unsplash.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\ivikivi5\\Stories\\13\\barbarian_warrior___27_by_mjranum_stock_d1ac5s0.jpg",
+      "PackagePath": "staticwebassets\\Photos\\ivikivi5\\Stories\\13\\barbarian_warrior___27_by_mjranum_stock_d1ac5s0.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\ivikivi5\\Stories\\14\\delatnost.jpg",
+      "PackagePath": "staticwebassets\\Photos\\ivikivi5\\Stories\\14\\delatnost.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\ivikivi5\\Stories\\15\\202108013822249824270977702.jpg",
+      "PackagePath": "staticwebassets\\Photos\\ivikivi5\\Stories\\15\\202108013822249824270977702.jpg"
+    },
+    {
+      "Id": "C:\\Users\\petro\\OneDrive\\Desktop\\PixelNest\\Backend\\PixelNestBackend\\PixelNestBackend\\wwwroot\\Photos\\ivikivi5\\Stories\\16\\annie-spratt-hX_hf2lPpUU-unsplash.jpg",
+      "PackagePath": "staticwebassets\\Photos\\ivikivi5\\Stories\\16\\annie-spratt-hX_hf2lPpUU-unsplash.jpg"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.PixelNestBackend.Microsoft.AspNetCore.StaticWebAssets.props",

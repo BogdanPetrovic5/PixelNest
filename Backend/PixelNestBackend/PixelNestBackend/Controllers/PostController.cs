@@ -21,7 +21,7 @@ namespace PixelNestBackend.Controllers
             _postService = postService;
 
         }
-        [Authorize]
+        //[Authorize]
         [HttpPost("PublishPost")]
         public async Task<ActionResult<PostResponse>> PublishPost([FromForm] PostDto postDto)
         {
