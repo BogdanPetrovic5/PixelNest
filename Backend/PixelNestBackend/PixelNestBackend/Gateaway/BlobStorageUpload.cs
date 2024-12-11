@@ -59,6 +59,32 @@ namespace PixelNestBackend.Gateaway
                         
                     }
                     return true;
+                }else if(storyDto != null)
+                {
+                    string storyID = folder.ToString();
+                    var formFile = storyDto.StoryImage;
+                    if (formFile != null)
+                    {
+                        var blobName = $"{userFolder}/Story/{storyID}/{formFile.FileName}";
+                        var blobClient = containerClient.GetBlobClient(blobName);
+
+                        using (var stream = formFile.OpenReadStream())
+                        {
+                            await blobClient.UploadAsync(stream, overwrite: true);
+                        }
+                        var imagePaths = new ImagePath
+                        {
+                            StoryID = folder,
+                            PhotoDisplay = storyDto.PhotoDisplay,
+                            Path = blobName
+                        };
+
+                        _dataContext.ImagePaths.Add(imagePaths);
+                        await _dataContext.SaveChangesAsync();
+                    }
+
+                    
+                    return true;
                 }
             }
             catch (Exception ex)
