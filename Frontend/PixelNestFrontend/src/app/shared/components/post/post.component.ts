@@ -9,7 +9,7 @@ import { SavedPosts } from 'src/app/core/dto/savePost.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
-
+import { environment } from 'src/environments/environment.development';
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -26,7 +26,8 @@ export class PostComponent implements OnInit{
 
   formattedDate:string = ""
   username:string = ""
-  
+  baseUrl:string = "";
+
   isLiked:boolean | null = null;
   isLikesTabOpen:boolean = false;
   areCommentsOpened:boolean = false;
@@ -43,6 +44,7 @@ export class PostComponent implements OnInit{
   }
 
   ngOnInit():void{
+    this.baseUrl = environment.blobStorageBaseUrl;
     this._initilizeComponent();
   }
 

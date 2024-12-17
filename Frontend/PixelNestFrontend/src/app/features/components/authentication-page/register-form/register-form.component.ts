@@ -25,7 +25,7 @@ export class RegisterFormComponent {
       Lastname: ['', Validators.required],
       Username: ['', Validators.required],
       Password: ['', [Validators.required, Validators.pattern(/^.{6,}$/)]],
-      Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
+      Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[email]+\.[a-zA-Z]{2,}$/)]],
       
     })
   }
@@ -59,6 +59,7 @@ export class RegisterFormComponent {
         this._lottieState.setIsSuccess(true)
         setTimeout(() => {
           this._lottieState.setIsSuccess(false)
+          this.navigateToLogin();
         }, 1500);
       },(error:HttpErrorResponse) =>{
         console.log(error);

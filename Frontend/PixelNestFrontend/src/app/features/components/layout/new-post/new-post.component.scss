@@ -21,6 +21,9 @@ $HFONT: "Roboto Condensed", sans-serif;
         background-color: $TABCOLOR;
         border-radius: 25px;
         position: relative;
+        .next{
+            display: none;
+        }
         .new-post-modal{
             display: none;
         }
@@ -204,6 +207,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     font-size: 0.6em;
                     white-space: pre-wrap;   
                     position: relative;
+                    font-family: $PFONT !important;
                    
                 }
                 span{
@@ -279,6 +283,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         
             }
             .next{
+                display: block;
                 position: absolute;
                 bottom: 20px;
                 padding: 15px 25px;
@@ -480,6 +485,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         
             }
             .next{
+                display: block;
                 position: absolute;
                 bottom: 20px;
                 padding: 15px 25px;

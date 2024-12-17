@@ -73,10 +73,11 @@ export class NavigationComponent implements OnInit{
   logout(){
     let email = this._userSessionService.getFromCookie("email");
     this._authService.logout(email).subscribe(response =>{
-      console.log(response)
-      this._router.navigate(["/Authentication/Login"])
+      
       this._userSessionService.clearCookies();
       this._userSessionService.clearStorage();
+      this._router.navigate(["/Authentication/Login"])
+    
     },(error:HttpErrorResponse)=>{
       console.log(error)
     })

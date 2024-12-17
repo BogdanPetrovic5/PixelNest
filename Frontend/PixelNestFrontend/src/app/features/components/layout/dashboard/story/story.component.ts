@@ -120,6 +120,7 @@ export class StoryComponent implements OnInit{
           }, 0);
           if(storiesByUser.length > 0){
             this.storiesByUser = storiesByUser;
+            
             this.extractFromResponse(storiesByUser);
             console.log(storiesByUser)
           }

@@ -137,3 +137,136 @@ $HFONT: "Roboto Condensed", sans-serif;
     
     
 }
+@media only screen and (min-width:0px) and (max-width:1024px){
+    .container{
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: $BGCOLOR;
+    
+       
+            .wrap{
+                height: 92%;
+                width: 100%;
+                display: flex;
+                border-radius: 25px;
+                flex-direction: column;
+               overflow: hidden;
+                #map{
+                    align-self: center;
+                    border-top-left-radius: 25px;
+                    border-top-right-radius: 25px;
+                    
+                }
+           
+                .posts{
+                    width: 100%;
+                    height: 70%;
+                    background-color: $BGCOLOR;
+                    margin-bottom: 40px;
+                    .header{
+                        font-size: 25px;
+                        height: 70px;
+                        display: flex;
+                        
+                        align-items: center;
+                        h1{
+                            color: white;
+                            font-size: 1.4em;
+                            font-family: $PFONT;
+        
+                        }
+                    }
+                    .posts-list{
+                        width: 100%;
+                        height: calc(100% - 70px);
+                       
+                        overflow-y: scroll;
+                       
+                        ::ng-deep app-feed  {
+                            width: 100%;
+                            .container {
+                                .content {
+                                    .posts {
+                                        .posts-list {
+                                            display: flex;
+                                            flex-direction: row !important;
+                                            flex-wrap: wrap;
+                                            gap: 1.5%;
+                                            width: 100%;
+                                        }
+                                    }
+                                    .posts-option{
+                                        .option{
+                                            width: 50%;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ::ng-deep app-post  {
+                            width: 100% !important;
+                            
+                            .container{
+                                .content{
+                                    .image-holder{
+                                        height: 250px !important;
+                                    }
+                                    .post-options{
+                                        .option{
+                                            
+                                            font-size: 25px;
+                                            display: flex;
+                                            flex-direction: row;
+                                            gap: 10px;
+                                            width: 40%;
+                                            
+                                        }   
+                                }
+                                }
+                            }
+                        }
+                        .post{
+                            width: 100%;
+                            display: flex;
+                           
+                            justify-content: center;
+                            align-items: center;
+                           
+                            div{
+                               width: 100%;
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: left;
+                                flex-wrap: wrap;
+                                gap: 6%;
+                                app-post{
+                                    width: 47%;
+                                    margin-bottom: 50px;
+                                    
+                                }
+                            }
+                           
+                        }
+                      
+                    }
+                    .posts-list::-webkit-scrollbar {
+                        width: 8px;
+                    }
+                    .posts-list::-webkit-scrollbar-thumb {
+                        background-color: rgba(255, 255, 255, 0.5); 
+                        border-radius: 10px;  
+                    }
+                }
+            }
+        
+        
+        
+    }
+}

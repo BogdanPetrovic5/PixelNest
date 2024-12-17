@@ -1,6 +1,6 @@
 import { query } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import axios from 'axios';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
@@ -8,6 +8,8 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
 import { ImageCompressorService } from 'src/app/uitility/image-compressor.service';
 import { Map, Marker, geocoding, config } from '@maptiler/sdk'; 
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
+import { PostStateService } from 'src/app/core/services/states/post-state.service';
+
 @Component({
   selector: 'app-new-post',
   templateUrl: './new-post.component.html',
@@ -15,8 +17,8 @@ import { LottieStateService } from 'src/app/core/services/states/lottie-state.se
 })
 export class NewPostComponent implements OnInit{
 
-  @ViewChildren('descriptionDiv') descriptionDiv: ElementRef<HTMLDivElement> | undefined
-  apiKey: string = 'aqR39NWYQyZAdFc6KtYh'; 
+  @ViewChildren('descriptionDiv') descriptionDiv: QueryList<ElementRef> | undefined; 
+
   geocodeUrl: string = 'https://api.maptiler.com/geocoding/';
   suggestions: any[] = [];
 
@@ -46,6 +48,7 @@ export class NewPostComponent implements OnInit{
     private _dashboardStateMenagment:DashboardStateService,
     private _userSessionService:UserSessionService,
     private _postService:PostService,
+    private _postState:PostStateService,
     private _imageCompressorService:ImageCompressorService,
     private _lottieState:LottieStateService
   ){
@@ -59,7 +62,7 @@ export class NewPostComponent implements OnInit{
     const query = event.target.value;
     if(query.length > 3){
       const response = await geocoding.forward(query)
-      console.log(response)
+    
       this.suggestions = response.features.map((feature:any)=>({
         
           
@@ -71,7 +74,7 @@ export class NewPostComponent implements OnInit{
   }
   setLocation(location:any){
     this.locationCenter = location.place_name;
-    console.log(this.locationCenter)
+    
     this.suggestions = [];
     this.removeFocus();
   }
@@ -98,11 +101,14 @@ export class NewPostComponent implements OnInit{
       this._lottieState.setIsSuccess(true);
       this._dashboardStateMenagment.setIsTabSelected(false);
       setTimeout(()=>{
+        
         this._lottieState.setIsSuccess(false);
+        this._postState.setPosts([]);
+        this._postState.loadPosts(1);
       }, 1600)
     }, (error:HttpErrorResponse) =>{
       this.newPostForm = false
-      console.log(error)
+     
       this.isError = true;
       setTimeout(()=>{
         this._dashboardStateMenagment.setIsTabSelected(false);
@@ -125,11 +131,11 @@ export class NewPostComponent implements OnInit{
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        console.log(file.size / 1024)
+       
         try {
  
           const compressedFile = await this._imageCompressorService.compressImage(file);
-          console.log(compressedFile.size / 1024)
+          
           
           const reader = new FileReader();
           reader.onload = (e: ProgressEvent<FileReader>) => {
@@ -169,13 +175,13 @@ export class NewPostComponent implements OnInit{
     if(text?.length == 0) this.isCaption = true
   }
 
-  updateCharCount(event:any, tabIndex:number){
+  updateCharCount(event:any){
     
     const element = event.target as HTMLElement;
     const content = element.innerText;
 
     if (content.length > this.maxChar) {
-      element.innerText = content.substring(tabIndex, this.maxChar);
+      element.innerText = content.substring(0, this.maxChar);
       this._setCaretAtEnd(element);
     
     } else {
@@ -194,9 +200,12 @@ export class NewPostComponent implements OnInit{
     selection?.addRange(range);
   }
   private _takeText(){
-    const description = this.descriptionDiv?.nativeElement
-    const text = description?.innerHTML
-    return text;
+    const description = this.descriptionDiv?.find(desc => {
+      const text = desc.nativeElement?.innerHTML.trim();
+      return text && text.length > 0; 
+    });
+  
+    return description ? description.nativeElement.innerHTML : null;
   }
   private _appendToForm(description:any, username:string):FormData{
     const FORM_DATA = new FormData()

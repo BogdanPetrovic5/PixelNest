@@ -10,6 +10,7 @@ $BGCOLOR:#040F16;
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow: hidden;
     .content::before{
         position: absolute;
         min-height: 100%;
@@ -66,8 +67,8 @@ $BGCOLOR:#040F16;
             overflow: hidden;
          
             img{
-                width:200%;
-                height: 100%;
+                width:185%;
+                height: 80%;
             }
         }
        

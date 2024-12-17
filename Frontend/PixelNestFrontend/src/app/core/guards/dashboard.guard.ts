@@ -20,7 +20,7 @@ export class DashboardGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       return this._authenticationService.isLoggedIn().pipe(
         map(loggedIn => {
-          if (loggedIn) {
+          if (loggedIn != null && loggedIn != undefined && loggedIn) {
             
             return true; 
           }else {

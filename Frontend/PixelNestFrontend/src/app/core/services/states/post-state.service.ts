@@ -38,7 +38,6 @@ export class PostStateService{
   }
 
   loadMore(currentPage:number){
-    
     this.loadPosts(currentPage);
   }
 
@@ -48,7 +47,7 @@ export class PostStateService{
     this._postService.getPosts(currentPage, currentQuery).subscribe({
       next:response=>{
         this.posts = this.posts.concat(response);
-        console.log(this.posts)
+        
         this._postsSubject.next(this.posts);
         this.setLoading(false)
       }

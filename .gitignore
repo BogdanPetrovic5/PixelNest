@@ -4,3 +4,7 @@ Frontend/PixelNestFrontend/src/assets/images/profile.png
 *.jpeg
 *.jpg
 .vs/
+Backend/PixelNestBackend/PixelNestBackend/bin/Debug/net6.0/appsettings.json
+Backend/PixelNestBackend/PixelNestBackend/bin/Debug/net6.0/appsettings.json
+Backend/PixelNestBackend/PixelNestBackend/bin/Debug/net6.0/appsettings.json
+Backend/PixelNestBackend/PixelNestBackend/appsettings.json

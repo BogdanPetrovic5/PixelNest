@@ -34,6 +34,18 @@ $HFONT: "Roboto Condensed", sans-serif;
                 color: $PCOLOR;
                 font-family: $PFONT;
             }
+            .switch{
+              width: 100%;
+              background-color: transparent;
+              cursor: pointer;
+              font-size: 0.6em;
+              padding: 0 !important;
+              color: $PCOLOR;
+              align-self: center;
+              text-align: center;
+              margin-top: 20px !important;
+              border: none;
+            }
             .inputs{
                 position: relative;
                 
@@ -79,6 +91,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     text-align: center;
                     margin-top: 25px !important;
                 }
+              
                 .form-control {
                     position: relative;
                     margin: 30px 0 30px;

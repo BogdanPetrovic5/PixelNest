@@ -29,7 +29,7 @@ $HFONT: "Roboto Condensed", sans-serif;
             .posts-list{
                 display: flex;
                 flex-direction: row;
-                justify-content: left;
+                justify-content: center;
                
                 flex-wrap: wrap;
                 align-self: center;
@@ -38,14 +38,25 @@ $HFONT: "Roboto Condensed", sans-serif;
                 overflow-y: scroll;
                 -ms-overflow-style: none;  
                 scrollbar-width: none; 
-                
+                .no-posts{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    font-size: 25px;
+                    h1{
+                        color: $PCOLOR;
+                        font-family: $PFONT;
+                        font-size: 1em;
+                    }
+                }
                 app-post{
                     width: 100%;
-                    margin-top: 20px;
-                }
-                app-post:first-child{
                     margin-top: 0px;
                 }
+                // app-post:first-child{
+                //     margin-top: 0px;
+                // }
             }
         }
     }

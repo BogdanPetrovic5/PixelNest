@@ -97,8 +97,9 @@
                     </div>
                 </div>
                 <button type="submit" [ngClass]="enabled ? 'enabled' : ''"><h1>REGISTER</h1></button>
-                <p (click)="navigateToLogin()">Already Have An Account? Log in!</p>
+                
             </form>
+            <button class="switch" (click)="navigateToLogin()">Already Have An Account? Log in!</button>
         </div>
     </div>
 </div>

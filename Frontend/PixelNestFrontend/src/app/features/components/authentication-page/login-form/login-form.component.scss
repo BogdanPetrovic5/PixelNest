@@ -35,6 +35,19 @@ $HFONT: "Roboto Condensed", sans-serif;
                 color: $PCOLOR;
                 font-family: $PFONT;
             }
+            .switch{
+              width: 100%;
+              background-color: transparent;
+              cursor: pointer;
+              font-size: 0.6em;
+              padding: 0 !important;
+              color: $PCOLOR;
+              align-self: center;
+              text-align: center;
+              margin-top: 20px !important;
+              border: none;
+              user-select: none;
+            }
             .inputs{
                 
                 .error{
@@ -75,6 +88,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                     align-self: center;
                     text-align: center;
                     margin-top: 25px !important;
+                    user-select: none;
+                    -webkit-user-select: none; 
+                    -ms-user-select: none;
                 }
                 .form-control {
                     position: relative;
@@ -158,6 +174,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 color: $PCOLOR;
                 font-family: $PFONT;
             }
+           
             .inputs{
                 width: 95%;
                 .invalid-feedback{
@@ -199,8 +216,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                   font-size: 0.6em;
                   align-self: center;
                   text-align: center;
-                  margin-top: 25px !important;
+                  margin-top: 15px !important;
                 }
+              
                 .form-control {
                     position: relative;
                     margin: 20px 0 25px;

@@ -24,7 +24,7 @@
             </div>
             <div class="post-options">
                 <span class="caption" *ngIf="isCaption">Write caption...</span>
-                <div tabindex="0" class="description" contenteditable="true" aria-placeholder="description" (input)="updateCharCount($event,0)" (focus)="hideCaption()" (blur)="showCaption()" #descriptionDiv>
+                <div tabindex="0" class="description" contenteditable="true" aria-placeholder="description" (input)="updateCharCount($event)" (focus)="hideCaption()" (blur)="showCaption()" #descriptionDiv>
                    
                 </div>
                 <span>
@@ -53,7 +53,7 @@
         <div class="new-post-modal" *ngIf="next">
              <div class="new-post-modal-wrapper">
                 <span class="caption" *ngIf="isCaption">Write caption...</span>
-                <div tabindex="2" class="description" contenteditable="true" aria-placeholder="description" (input)="updateCharCount($event, 2)" (focus)="hideCaption()" (blur)="showCaption()" #descriptionDiv>
+                <div tabindex="0" class="description" contenteditable="true" aria-placeholder="description" (input)="updateCharCount($event)" (focus)="hideCaption()" (blur)="showCaption()" #descriptionDiv>
                    
                 </div>
                 <span class="char-count">

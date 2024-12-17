@@ -7,6 +7,7 @@ import { StoryDto } from 'src/app/core/dto/story.dto';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { StoryStateService } from 'src/app/core/services/states/story-state.service';
 import { StoryService } from 'src/app/core/services/story/story.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-story-preview',
@@ -26,7 +27,8 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     step = this.targetValue / (this.storyDuration / 33.67);
     animationFrameId: any | undefined;
     storySubscription: Subscription | undefined;
-  
+
+    baseUrl:string = ""
 
     constructor(
       private _dashboardState:DashboardStateService,
@@ -38,14 +40,14 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     ){}
 
     ngOnInit(): void {    
-     
+      this.baseUrl = environment.blobStorageBaseUrl;
       this.storySubscription = this._storyState.currentStory$.subscribe({
         next:response=>{
           this.userIndex = response
           if(this.userIndex == this.listIndex) {
             if(this.stories != undefined && !this.stories?.[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
            
-            // this._startAnimation()
+            this._startAnimation()
           }else {
             this._stopAnimation()
           }
@@ -95,7 +97,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     private _updateCurrentIndex(value:number){
       this.storyCurrentLength = 0;
       this.currentIndex += value;
-      console.log(this.currentIndex, this.stories!.length);
+     
       if(this.currentIndex < this.stories!.length && !this.stories![this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories![this.currentIndex].storyID);
     }
 
@@ -122,7 +124,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
       const username = this._cookieService.get("username");
       this._storyService.marStoryAsSeen(storyID, username).subscribe({
         next:response=>{
-          console.log(response)
+          
         }
       })
     }
