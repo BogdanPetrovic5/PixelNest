@@ -1,5 +1,9 @@
 <div class="container">
     <app-lottie-success *ngIf="isSuccess"></app-lottie-success>
+    <div *ngIf="isInitialized" class="is-initialized">
+        <app-lottie-loading ></app-lottie-loading>
+    </div>
+    
     <div class="content">
         <div class="form-wrapper">
             <div class="form">

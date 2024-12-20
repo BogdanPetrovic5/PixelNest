@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
       this._postState.posts$.subscribe({
         next:response=>{
           this.posts = response;
-          console.log(this.posts);
+          
           
         },error:error=>{
           console.error(error.message);

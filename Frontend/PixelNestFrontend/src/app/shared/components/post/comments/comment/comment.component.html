@@ -6,7 +6,13 @@
                 <h1 (click)="navigateToProfile(comment.username)">{{comment.username}}</h1>
                <p>{{comment.commentText}} </p>
                <span (click)="openParentReply()">Reply</span>
-               <input (keydown.enter)="replyComment(comment.commentID)" type="text" placeholder="Reply here..."  [(ngModel)]="replyText" *ngIf="isReplyBox">
+               <div *ngIf="isReplyBox">
+                <input (keydown.enter)="replyComment(comment.commentID)" type="text" placeholder="Reply here..."  [(ngModel)]="replyText" >
+                <span class="reply-button" (click)="replyComment(comment.commentID)">
+                    <img src="/assets/images/arrow.png" alt="">
+                </span>
+               </div>
+               
             </div>
         </div>
         <app-like-comment [commentID]="comment.commentID" [likedByUsers] = "comment.likedByUsers" [commentUsername]="comment.username"></app-like-comment>

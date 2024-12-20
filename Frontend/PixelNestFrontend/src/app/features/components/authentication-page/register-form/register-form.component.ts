@@ -12,7 +12,8 @@ import { LottieStateService } from 'src/app/core/services/states/lottie-state.se
 })
 export class RegisterFormComponent {
   registerForm:FormGroup;
-
+  error:boolean = false
+  errorMessage:string = "";
   enabled:boolean = false;
   constructor(
     private _router:Router,
@@ -30,9 +31,7 @@ export class RegisterFormComponent {
     })
   }
   ngDoCheck():void{
-    if(this.registerForm.valid){
-      this.enabled = true;
-    }else this.enabled = false;
+    
   }
   navigateToLogin(){
     this._router.navigate(['/Authentication/Login'])
@@ -54,16 +53,38 @@ export class RegisterFormComponent {
 
   register(){
     const formValues = this.registerForm.value;
+    
     if(this.registerForm.valid){
-      this._authService.register(formValues).subscribe((response)=>{
-        this._lottieState.setIsSuccess(true)
-        setTimeout(() => {
-          this._lottieState.setIsSuccess(false)
-          this.navigateToLogin();
-        }, 1500);
-      },(error:HttpErrorResponse) =>{
-        console.log(error);
-      })
+      this.enabled = true;
+      this._lottieState.setIsInitialized(true);
+      this._authService.register(formValues).subscribe({
+        next: (response) => {
+          this.registerForm.reset({
+            Firstname:'',
+            Lastname:'',
+            Email:'',
+            Username:'',
+            Password:'',
+
+          })
+          this._lottieState.setIsInitialized(false);
+          this._lottieState.setIsSuccess(true);
+         
+          setTimeout(() => {
+            this._lottieState.setIsSuccess(false);
+            this.enabled = true;
+            this.navigateToLogin();
+          }, 1500);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.error = true;
+          this.enabled = true;
+          this.errorMessage = error.error?.message || "An unexpected error occurred.";
+          setTimeout(() => {
+            this.error = false;
+          }, 2000);
+        }
+      });
     }else this.registerForm.markAllAsTouched()
     
   }

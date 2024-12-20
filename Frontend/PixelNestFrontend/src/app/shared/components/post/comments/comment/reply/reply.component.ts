@@ -45,7 +45,7 @@ export class ReplyComponent {
     this.isReplyBox = !this.isReplyBox
   }
   replyToComment(){
-    console.log(this.commentID);
+    
     this.username = this._userSession.getFromCookie("username")
     this.postID = this._userSession.getFromLocalStorage("postID");
     

@@ -280,7 +280,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                                         .posts-list {
                                             display: flex;
                                             flex-direction: row;
-                                            
+                                            justify-content: left;
                                             gap: 1.5%;
                                             width: 100%;
                                            
@@ -316,6 +316,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                                     }
                                 }
                             }
+                        }
+                        ::ng-deep app-post:last-child  {
+                            margin-bottom: 5%;
                         }
                         // .feed-posts-list{
                         //     display: flex;

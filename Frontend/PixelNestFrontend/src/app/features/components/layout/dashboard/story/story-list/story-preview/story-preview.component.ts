@@ -1,12 +1,13 @@
 import { animate } from '@angular/animations';
 import { ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
+
 import { Subscription } from 'rxjs';
 
 import { StoryDto } from 'src/app/core/dto/story.dto';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { StoryStateService } from 'src/app/core/services/states/story-state.service';
 import { StoryService } from 'src/app/core/services/story/story.service';
+import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { environment } from 'src/environments/environment.development';
 
 @Component({
@@ -27,7 +28,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     step = this.targetValue / (this.storyDuration / 33.67);
     animationFrameId: any | undefined;
     storySubscription: Subscription | undefined;
-
+    username:string = "";
     baseUrl:string = ""
 
     constructor(
@@ -35,12 +36,13 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
       private _storyState:StoryStateService,
       private _storyService:StoryService,
       private _cdr: ChangeDetectorRef,
-      private _cookieService:CookieService
+      private _userService:UserSessionService
      
     ){}
 
     ngOnInit(): void {    
       this.baseUrl = environment.blobStorageBaseUrl;
+      this.username = this._userService.getFromCookie("username")
       this.storySubscription = this._storyState.currentStory$.subscribe({
         next:response=>{
           this.userIndex = response
@@ -121,7 +123,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     };
   
     private _markStoryAsSeen(storyID:number){
-      const username = this._cookieService.get("username");
+      const username = this._userService.getFromCookie("username");
       this._storyService.marStoryAsSeen(storyID, username).subscribe({
         next:response=>{
           

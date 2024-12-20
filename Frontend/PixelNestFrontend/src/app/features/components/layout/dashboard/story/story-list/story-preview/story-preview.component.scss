@@ -10,6 +10,7 @@ $HFONT: "Roboto Condensed", sans-serif;
 .container{
     width: 100%;
     height: 100%;
+  
     .active{
         
         transform: scale(1.1);
@@ -38,7 +39,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         justify-content: center;
         align-items: center;
         transition: 300ms ease-in-out;
-        span{
+        span.close{
             position: absolute;
             bottom: 10px;
             color: white;
@@ -111,13 +112,27 @@ $HFONT: "Roboto Condensed", sans-serif;
                                 width: 100%;
                             }
                         }
-                        h1{
-                            font-size: 0.6em;
-                            color: $PCOLOR;
-                            font-family: $PFONT;
-                            stroke: 1px solid black;
-                            font-weight: 600;
+                        div.info{
+                            width: 100%;
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            justify-content: space-between;
+                            span{
+                                font-size:0.6em;
+                                font-family: $PFONT;
+                                color: $PCOLOR
+                        
+                            }
+                            h1{
+                                font-size: 0.6em;
+                                color: $PCOLOR;
+                                font-family: $PFONT;
+                                stroke: 1px solid black;
+                                font-weight: 600;
+                            }
                         }
+                       
                    }
             }
            

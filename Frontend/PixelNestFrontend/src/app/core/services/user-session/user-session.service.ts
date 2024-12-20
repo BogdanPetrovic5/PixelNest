@@ -19,7 +19,9 @@ export class UserSessionService {
     localStorage.clear()
   }
   setToCookie(key:any, value:any){
-    this._cookieService.set(key, value, {path:"/"});
+    const expiryDate = new Date();
+    expiryDate.setMinutes(expiryDate.getMinutes() + 30);
+    this._cookieService.set(key, value,expiryDate, '/');
   }
 
   setToLocalStorage(key:string, value:any){

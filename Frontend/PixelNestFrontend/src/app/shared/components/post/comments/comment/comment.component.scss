@@ -61,15 +61,33 @@ $HFONT: "Roboto Condensed", sans-serif;
                 font-size: 25px;
                 color: $PCOLOR;
                 font-family: $PFONT;
-                input{
-                    width: 90%;
-                    background-color: transparent;
-                    outline: none;
-                    border: none;
-                    border-bottom: 1px solid #484f53 !important;
+                div{
+                    position: relative;
+                    width: 100%;
+                    color: $PCOLOR;
                     font-family: $PFONT;
-                    color: white;
-                    margin-top: 10px;
+                    span{
+                        padding: 2px 10px;
+                        background-color: #01BAEF;
+                        border-radius: 15px;
+                        right: 30px;
+                        bottom: 5px;
+                        position: absolute;
+                        img{
+                            width: 15px;
+                            height: 15px;
+                        }
+                    }
+                    input{
+                        width: 90%;
+                        background-color: transparent;
+                        outline: none;
+                        border: none;
+                        border-bottom: 1px solid #484f53 !important;
+                        font-family: $PFONT;
+                        color: white;
+                        margin-top: 10px;
+                    }
                 }
                 h1{
                     margin: 0;
@@ -170,16 +188,35 @@ app-reply{
                     font-size: 22px;
                     color: $PCOLOR;
                     font-family: $PFONT;
-                    input{
-                        width: 90%;
-                        background-color: transparent;
-                        outline: none;
-                        border: none;
-                        border-bottom: 1px solid #484f53 !important;
+                    div{
+                        position: relative;
+                        width: 100%;
+                        color: $PCOLOR;
                         font-family: $PFONT;
-                        color: white;
-                        margin-top: 10px;
+                        span{
+                            padding: 2px 10px;
+                            background-color: #01BAEF;
+                            border-radius: 15px;
+                            right: 30px;
+                            bottom: 5px;
+                            position: absolute;
+                            img{
+                                width: 15px;
+                                height: 15px;
+                            }
+                        }
+                        input{
+                            width: 90%;
+                            background-color: transparent;
+                            outline: none;
+                            border: none;
+                            border-bottom: 1px solid #484f53 !important;
+                            font-family: $PFONT;
+                            color: white;
+                            margin-top: 10px;
+                        }
                     }
+                  
                     h1{
                         margin: 0;
                         font-size: 0.7em;

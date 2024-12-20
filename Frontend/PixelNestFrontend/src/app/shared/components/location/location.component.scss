@@ -66,6 +66,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                                     .posts-list {
                                         display: flex;
                                         flex-direction: row !important;
+                                        justify-content: left;
                                         flex-wrap: wrap;
                                         gap: 1.5%;
                                         width: 100%;

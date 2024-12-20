@@ -13,6 +13,7 @@ import { NewStoryComponent } from './story/new-story/new-story.component';
 import { StoryListComponent } from './story/story-list/story-list.component';
 import { StoryPreviewComponent } from './story/story-list/story-preview/story-preview.component';
 import { HammerModule } from '@angular/platform-browser';
+import { ViewerListComponent } from './story/story-list/story-preview/viewer-list/viewer-list.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { HammerModule } from '@angular/platform-browser';
   
     StoryListComponent,
     StoryPreviewComponent,
+    ViewerListComponent,
     
   ],
   imports: [

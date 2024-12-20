@@ -17,8 +17,11 @@ export class AuthenticationPageComponent implements OnInit{
 
   isSuccess:boolean = false;
 
+  isInitialized:boolean = false;
+
   subscriptions: Subscription = new Subscription();
 
+  
   constructor(
     private _route:ActivatedRoute,
     private _userSession:UserSessionService,
@@ -32,6 +35,13 @@ export class AuthenticationPageComponent implements OnInit{
       this._lottieState.isSuccess$.subscribe({
         next:response=>{
           this.isSuccess = response;
+        }
+      })
+    )
+    this.subscriptions.add(
+      this._lottieState.isInitialized$.subscribe({
+        next:response=>{
+          this.isInitialized = response;
         }
       })
     )

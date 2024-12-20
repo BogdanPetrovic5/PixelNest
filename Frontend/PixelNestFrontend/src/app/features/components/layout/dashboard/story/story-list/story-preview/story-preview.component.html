@@ -18,13 +18,20 @@
                     <div class="img">
                         <img src="/assets/images/user.png">
                     </div>
-                    <h1>{{stories?.[0]?.ownerUsername}}</h1>
+                    <div class="info">
+                        <h1>{{stories?.[0]?.ownerUsername}}</h1>
+                        <span *ngIf="stories?.[0]?.ownerUsername == username">
+                            Viewers list
+                        </span>
+                    </div>
+                    
                 </div>
             </div>
             
         </div>
+        <!-- <img src="http://localhost:7157/Photos/{{stories?.[currentIndex]!.imagePaths[0].path}}" [style]="{'object-fit': stories?.[currentIndex]!.imagePaths[0].photoDisplay}"> -->
         <img src="{{baseUrl}}{{stories?.[currentIndex]!.imagePaths[0].path}}" [style]="{'object-fit': stories?.[currentIndex]!.imagePaths[0].photoDisplay}">
-        <span (click)="close()" *ngIf="listIndex == userIndex">close</span>
+        <span class="close" (click)="close()" *ngIf="listIndex == userIndex">close</span>
     </div>
-    
+   
 </div>
