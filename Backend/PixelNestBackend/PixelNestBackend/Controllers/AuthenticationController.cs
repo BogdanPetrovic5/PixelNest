@@ -49,7 +49,10 @@ namespace PixelNestBackend.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.Now.AddMinutes(-1)
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                Expires = DateTime.Now.AddMinutes(-1),
+                Path = "/"
             };
             Response.Cookies.Append("jwtToken", token, cookieOptions);
             return Ok();
@@ -75,14 +78,17 @@ namespace PixelNestBackend.Controllers
                 });
             }
           
-            var cookieOptions = new CookieOptions
+            var tokenCookieOption = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.Now.AddMinutes(30)
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                Expires = DateTime.Now.AddMinutes(30),
+                Path = "/"
 
             };
-
-            Response.Cookies.Append("jwtToken", response.Token, cookieOptions);
+            
+            Response.Cookies.Append("jwtToken", response.Token, tokenCookieOption);
             return Ok(new LoginResponse
             {
                 Response = response.Response,

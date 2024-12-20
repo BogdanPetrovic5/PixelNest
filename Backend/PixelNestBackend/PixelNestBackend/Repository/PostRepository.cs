@@ -7,6 +7,7 @@ using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Security;
 
 
 namespace PixelNestBackend.Repository
@@ -16,16 +17,18 @@ namespace PixelNestBackend.Repository
         private readonly DataContext _dataContext;
         private readonly IConfiguration _configuration;
         private readonly ILogger<PostRepository> _logger;
-
+        private readonly SASTokenGenerator _SAStokenGenerator;
         public PostRepository(
             DataContext dataContext,
             IConfiguration configuration,
-            ILogger<PostRepository> logger
+            ILogger<PostRepository> logger,
+            SASTokenGenerator SASTokenGenerator
             )
         {
             _dataContext = dataContext;
             _configuration = configuration;
             _logger = logger;
+            _SAStokenGenerator = SASTokenGenerator;
         }
 
         public bool SavePost(int userID, SavePostDto savePostDto, bool isDuplicate)
@@ -134,7 +137,7 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var posts = await _dataContext.Posts
+                ICollection<ResponsePostDto> posts = await _dataContext.Posts
                     .Where(u => u.OwnerUsername == username)
                    .Select(a => new ResponsePostDto
                    {
@@ -165,7 +168,10 @@ namespace PixelNestBackend.Repository
                    })
                 .AsSplitQuery()
                 .ToListAsync();
-
+                foreach (var post in posts)
+                {
+                    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                }
                 _logger.LogInformation("Posts retrieved successfully.");
                 return posts;
             }
@@ -184,7 +190,7 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var posts = await _dataContext.Posts
+                ICollection<ResponsePostDto> posts = await _dataContext.Posts
                    .Where(l => l.Location.ToLower().Contains(location.ToLower()))
                    .Select(a => new ResponsePostDto
                    {
@@ -215,6 +221,10 @@ namespace PixelNestBackend.Repository
                    })
                 .AsSplitQuery()
                 .ToListAsync();
+                foreach (var post in posts)
+                {
+                    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                }
 
                 _logger.LogInformation("Posts retrieved successfully.");
                 return posts;
@@ -234,7 +244,7 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var posts = await _dataContext.Posts
+                ICollection<ResponsePostDto> posts = await _dataContext.Posts
                    .Select(a => new ResponsePostDto
                    {
                        PostDescription = a.PostDescription,
@@ -243,11 +253,11 @@ namespace PixelNestBackend.Repository
                        TotalLikes = a.TotalLikes,
                        PostID = a.PostID,
                        PublishDate = a.PublishDate,
-                       ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto { 
-                            Path = l.Path,
-                            PhotoDisplay = l.PhotoDisplay,
-                            PathID = l.PathID
-                       
+                       ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto {
+                           Path = l.Path,
+                           PhotoDisplay = l.PhotoDisplay,
+                           PathID = l.PathID
+
                        }).ToList(),
                        Location = a.Location,
                        LikedByUsers = a.LikedPosts.Select(l => new LikeDto
@@ -263,7 +273,10 @@ namespace PixelNestBackend.Repository
                    })
                 .AsSplitQuery() 
                 .ToListAsync();
-
+                foreach (var post in posts)
+                {
+                    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                }
                 _logger.LogInformation("Posts retrieved successfully.");
                 return posts;
             }

@@ -15,6 +15,8 @@ using PixelNestBackend.Security;
 using PixelNestBackend.Utility;
 using PixelNestBackend.Gateaway;
 using Azure.Storage.Blobs;
+using Microsoft.Extensions.Azure;
+using PixelNestBackend.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,15 @@ builder.Services.AddScoped(x =>
     var configuration = x.GetRequiredService<IConfiguration>();
     var connectionString = configuration.GetSection("AzureBlobStorage:ConnectionString").Value;
     var containerName = configuration.GetSection("AzureBlobStorage:ContainerName").Value;
+
+    return new SASTokenGenerator(containerName, connectionString);
+});
+
+builder.Services.AddScoped(x =>
+{
+    var configuration = x.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetSection("AzureBlobStorage:ConnectionString").Value;
+    var containerName = configuration.GetSection("AzureBlobStorage:ContainerName").Value;
     var dataContext = x.GetRequiredService<DataContext>();
     var blobServiceClient = new BlobServiceClient(connectionString);
     return new BlobStorageUpload(dataContext,blobServiceClient, containerName);
@@ -60,7 +71,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins("http://localhost:4200")
+        builder.WithOrigins("https://pixelnest.netlify.app/", "http://localhost:4200")
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();
@@ -69,7 +80,7 @@ builder.Services.AddCors(options =>
    options.AddPolicy("AllowAll",
             builder =>
             {
-                builder.WithOrigins("http://localhost:4200")
+                builder.WithOrigins("https://pixelnest.netlify.app/", "http://localhost:4200")
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials();
@@ -114,11 +125,16 @@ builder.Services.AddAuthentication(options =>
 
 }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 {
-    options.LoginPath = "/GetStarted";  // Update path as needed
+    options.LoginPath = "/GetStarted"; 
     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     options.SlidingExpiration = true;
 });
 builder.Services.AddAuthorization();
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration["AzureBlobStorage:ConnectionString:blob"]!, preferMsi: true);
+    clientBuilder.AddQueueServiceClient(builder.Configuration["AzureBlobStorage:ConnectionString:queue"]!, preferMsi: true);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -128,7 +144,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseStaticFiles();
-
+app.UseMiddleware<APICallLimiter>();
 app.UseCors("AllowAll");
 /*app.UseHttpsRedirection();*/
 app.UseAuthentication();

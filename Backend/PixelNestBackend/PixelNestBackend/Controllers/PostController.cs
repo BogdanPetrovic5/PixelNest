@@ -21,7 +21,7 @@ namespace PixelNestBackend.Controllers
             _postService = postService;
 
         }
-        //[Authorize]
+        [Authorize]
         [HttpPost("PublishPost")]
         public async Task<ActionResult<PostResponse>> PublishPost([FromForm] PostDto postDto)
         {
@@ -46,7 +46,7 @@ namespace PixelNestBackend.Controllers
            
           
         }
-
+        [Authorize]
         [HttpPost("SavePost")]
         public IActionResult SavePost(SavePostDto savePostDto)
         {
@@ -55,6 +55,7 @@ namespace PixelNestBackend.Controllers
             if (result) return Ok();
             return NotFound();
         }
+        [Authorize]
         [HttpGet("GetPosts")]
         public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPosts(string? username,string? location, int page = 1, int maximumPosts = 5){
             try
@@ -76,7 +77,7 @@ namespace PixelNestBackend.Controllers
                 return StatusCode(500, new { message = "An error occurred while retrieving posts.", error = ex.Message });
             }
         }
-
+        [Authorize]
         [HttpPost("LikePost")]
         public IActionResult LikePost(LikeDto likeDto)
         {
@@ -90,6 +91,7 @@ namespace PixelNestBackend.Controllers
                 return Ok();
             } else return NotFound();
         }
+        [Authorize]
         [HttpPost("Comment")]
         public ActionResult<PostResponse> Comment(CommentDto commentDto)
         {

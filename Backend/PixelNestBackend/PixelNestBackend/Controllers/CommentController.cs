@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
@@ -17,6 +18,7 @@ namespace PixelNestBackend.Controllers
         {
             _commentService = commentService;
         }
+        [Authorize]
         [HttpGet("GetReplies")]
         public ActionResult<ICollection<ResponseReplyCommentDto>> GetReplies(int initialParentID)
         {
@@ -27,6 +29,7 @@ namespace PixelNestBackend.Controllers
             }
             return NotFound();
         }
+        [Authorize]
         [HttpGet("GetComments")]
         public ActionResult<ICollection<ResponseCommentDto>?> GetComments(int postID)
         {
@@ -38,6 +41,7 @@ namespace PixelNestBackend.Controllers
             }
             else return NotFound();
         }
+        [Authorize]
         [HttpPost("LikeComment")]
         public IActionResult Like(LikeCommentDto likeCommentDto)
         {

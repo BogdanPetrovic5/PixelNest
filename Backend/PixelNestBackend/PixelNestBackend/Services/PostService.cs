@@ -8,6 +8,7 @@ using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Repository;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Security;
 using PixelNestBackend.Utility;
 
 namespace PixelNestBackend.Services
@@ -23,13 +24,14 @@ namespace PixelNestBackend.Services
         private readonly string _basedFolderPath;
         private readonly ILogger<PostService> _ILogger;
         private readonly BlobStorageUpload _blobStorageUpload;
-
+        private readonly SASTokenGenerator _SAStokenGenerator;
         public PostService(
 
             UserUtility userUtility,
             PostUtility postUtility,
             FolderGenerator folderGenerator,
             BlobStorageUpload blobStorageUpload,
+            SASTokenGenerator SASTokenGenerator,
             IPostRepository postRepository,
             IFileUpload fileUpload,
             ILogger<PostService> logger
@@ -44,6 +46,7 @@ namespace PixelNestBackend.Services
             _fileUpload = fileUpload;
             _ILogger = logger;
             _blobStorageUpload = blobStorageUpload;
+            _SAStokenGenerator = SASTokenGenerator;
         }
         public bool SavePost(SavePostDto savePostDto)
         {
@@ -59,6 +62,7 @@ namespace PixelNestBackend.Services
         public async Task<ICollection<ResponsePostDto>> GetPosts(string? username, string? location)
         {
             ICollection<ResponsePostDto> posts;
+            
             if (!string.IsNullOrEmpty(username) && string.IsNullOrEmpty(location))
             {
                 posts = await _postRepository.GetPostsByUsername(username);
@@ -106,10 +110,16 @@ namespace PixelNestBackend.Services
                     int postID = response.PostID;
                     //bool isUploaded = await _fileUpload.StoreImages(postDto, null, userFolderPath, postID);
                     bool isUploadedBlob = await _blobStorageUpload.StoreImages(postDto, null, postDto.OwnerUsername, postID);
-                    if (isUploadedBlob) return new PostResponse { 
+                    if (isUploadedBlob) return new PostResponse
+                    {
                         IsSuccessfull = true,
                         Message = "Post was successfully added to your feed."
                     };
+                    //if (isUploaded) return new PostResponse
+                    //{
+                    //    IsSuccessfull = true,
+                    //    Message = "Post was successfully added to your feed."
+                    //};
                     return new PostResponse
                     {
                         IsSuccessfull = false,

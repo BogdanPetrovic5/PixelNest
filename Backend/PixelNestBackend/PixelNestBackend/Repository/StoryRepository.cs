@@ -1,20 +1,24 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Security;
 
 namespace PixelNestBackend.Repository
 {
     public class StoryRepository : IStoryRepository
     {
         private readonly DataContext _dataContext;
-        public StoryRepository(DataContext dataContext)
+        private readonly SASTokenGenerator _SASTokenGenerator;
+        public StoryRepository(DataContext dataContext, SASTokenGenerator sASTokenGenerator)
         {
             _dataContext = dataContext;
+            _SASTokenGenerator = sASTokenGenerator;
         }
 
         public async Task<ICollection<GroupedStoriesDto>> GetStories(string username)
@@ -23,7 +27,7 @@ namespace PixelNestBackend.Repository
             {
                     var groupedStories = await _dataContext
                .Stories
-               .Where(s => s.Username != username)
+               .Where(s => s.Username != username && s.ExpirationDate >= DateTime.Now)
                .GroupBy(s => s.Username)
                .Select(group => new GroupedStoriesDto
                {
@@ -42,7 +46,17 @@ namespace PixelNestBackend.Repository
                })
                .AsSplitQuery()
                .ToListAsync();
+                foreach (var post in groupedStories)
+                {
+                    foreach (var story in post.Stories)
+                    {
+                        if (story.ImagePaths != null)
+                        {
+                            _SASTokenGenerator.appendSasToken(story.ImagePaths);
+                        }
 
+                    }
+                }
                 return groupedStories;
             }
             catch(SqlException ex)
@@ -75,8 +89,18 @@ namespace PixelNestBackend.Repository
                 })
                 .AsSplitQuery()
                 .ToListAsync();
+                foreach (var post in groupedStories)
+                {
+                    foreach (var story in post.Stories)
+                    {
+                        if (story.ImagePaths != null)
+                        {
+                            _SASTokenGenerator.appendSasToken(story.ImagePaths);
+                        }
 
-                    return groupedStories;
+                    }
+                }
+                return groupedStories;
             }
             catch (SqlException ex)
             {

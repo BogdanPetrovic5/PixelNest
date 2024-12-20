@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,6 +19,7 @@ namespace PixelNestBackend.Controllers
         {
             _storyService = storyService;
         }
+        [Authorize]
         [HttpGet("GetStories")]
         public async Task<ActionResult<GroupedStoriesDto>> GetStories(bool forCurrentUser, string username, int currentPage, int maximum = 10)
         {
@@ -28,7 +30,7 @@ namespace PixelNestBackend.Controllers
                 return Ok(stories);
             } else return NotFound();
         }
-
+       
         [HttpPost("PublishStory")]
         public async Task<ActionResult<StoryResponse>> PublishStory([FromForm] StoryDto storyDto)
         {
@@ -47,7 +49,7 @@ namespace PixelNestBackend.Controllers
             }
             else return NotFound(new StoryResponse { IsSuccessful = false, Message = "No response." });
         }
-
+        [Authorize]
         [HttpPost("MarkStoryAsSeen")]
         public ActionResult<StoryResponse> MarkStoryAsSeen(SeenDto seenDto){
             StoryResponse storyResponse = _storyService.MarkStoryAsSeen(seenDto);
