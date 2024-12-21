@@ -34,27 +34,30 @@ export class LoginFormComponent {
   login(){
     const loginFormValues = this.loginForm.value;
     if(!this.loginForm.hasError('required')){
+      this._lottieState.setIsInitialized(true);
       this._authService.login(loginFormValues).subscribe((response) =>{
+        this._lottieState.setIsInitialized(false);
         this._lottieState.setIsSuccess(true)
         setTimeout(() => {
+          
           this._lottieState.setIsSuccess(false)
           this._router.navigate(["/Dashboard"])
         }, 1500);
        
       },(error:HttpErrorResponse)=>{
+        this._lottieState.setIsInitialized(false);  
         this.errorMessage = "";
-          setTimeout(() => {
+        setTimeout(() => {
             this.error = true;
             this.errorMessage = error.error?.response || "An unexpected error occurred.";
-          }, 0);
-          this.loginForm.reset({
+        }, 0);
+        this.loginForm.reset({
             Email: '',
             Password: ''
-          });
-          setTimeout(()=>{
-            this.error = false;
-            
-          }, 2000)
+        });
+        setTimeout(()=>{
+            this.error = false;    
+        }, 2000)
       }
     
       )

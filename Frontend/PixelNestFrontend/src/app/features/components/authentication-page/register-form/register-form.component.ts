@@ -77,6 +77,7 @@ export class RegisterFormComponent {
           }, 1500);
         },
         error: (error: HttpErrorResponse) => {
+          this._lottieState.setIsInitialized(false);
           this.error = true;
           this.enabled = true;
           this.errorMessage = error.error?.message || "An unexpected error occurred.";

@@ -17,7 +17,7 @@
            
         </div>
         <div class="new-comment">
-            <input type="text" [(ngModel)]="commentText" placeholder="Comment here..." (keydown.enter)="addComment()">
+            <input type="text" #commentInput [(ngModel)]="commentText" placeholder="Comment here..." (keydown.enter)="addComment(commentInput)">
         </div>
         
     </div>

@@ -29,7 +29,7 @@ export class CommentsComponent {
      this._initilizeApp();
   }
   
-  addComment(){
+  addComment(inputElement: HTMLInputElement){
 
     // this._postService.addComment(this.commentText, this.username, this.postID).subscribe({
     //   next:(response)=>{
@@ -40,8 +40,11 @@ export class CommentsComponent {
     // })
     this._postService.addComment(this.commentText, this.username, this.postID).pipe(
       tap((response)=>{
-        console.log(response.message);
+       
+
         this.comments.push({username:this.username, commentText:this.commentText})
+        this.commentText = ""
+        inputElement.blur();
       }),
       switchMap(()=>this.getComments()),
       catchError((error: HttpErrorResponse) => {
@@ -54,20 +57,9 @@ export class CommentsComponent {
       }
     })
   }
-
+  
   getComments(){
-    // console.log(this.postID)
-    // this._commentService.getComments(this.postID).pipe(
-    //   catchError((error:HttpErrorResponse) =>{
-    //       console.log(error)
-    //       return throwError(()=>error);
-    //     }
-    //   )
-      
-    // ).subscribe((response)=>{
-    //   console.log(response)
-    //   this.comments = response;
-    // })
+
    return this._commentService.getComments(this.postID).pipe(
 
       tap((response)=>{
