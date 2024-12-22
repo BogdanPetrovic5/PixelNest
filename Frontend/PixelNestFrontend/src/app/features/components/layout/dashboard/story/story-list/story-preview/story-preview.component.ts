@@ -9,7 +9,7 @@ import { StoryStateService } from 'src/app/core/services/states/story-state.serv
 import { StoryService } from 'src/app/core/services/story/story.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { environment } from 'src/environments/environment.development';
-
+import 'hammerjs';
 @Component({
   selector: 'app-story-preview',
   templateUrl: './story-preview.component.html',
@@ -27,45 +27,67 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     interval = 4.16;
     step = this.targetValue / (this.storyDuration / 33.67);
     animationFrameId: any | undefined;
-    storySubscription: Subscription | undefined;
+    subscriptions: Subscription = new Subscription();
+
     username:string = "";
     baseUrl:string = ""
-
+    isViewerList:boolean = false;
     constructor(
       private _dashboardState:DashboardStateService,
       private _storyState:StoryStateService,
       private _storyService:StoryService,
-      private _cdr: ChangeDetectorRef,
+      private _cdr: ChangeDetectorRef, 
       private _userService:UserSessionService
      
     ){}
-
+    
     ngOnInit(): void {    
       this.baseUrl = environment.blobStorageBaseUrl;
       this.username = this._userService.getFromCookie("username")
-      this.storySubscription = this._storyState.currentStory$.subscribe({
-        next:response=>{
-          this.userIndex = response
-          if(this.userIndex == this.listIndex) {
-            if(this.stories != undefined && !this.stories?.[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
-           
-            this._startAnimation()
-          }else {
-            this._stopAnimation()
+      this.subscriptions?.add(
+        this._storyState.currentStory$.subscribe({
+          next:response=>{
+            this.userIndex = response
+            if(this.userIndex == this.listIndex) {
+              if(this.stories != undefined && !this.stories?.[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
+             
+              // this._startAnimation()
+            }else {
+              this._stopAnimation()
+            }
           }
-        }
-       })
+         })
+      )
+      this.subscriptions?.add(
+        this._storyState.isViewerList$.subscribe({
+          next:response=>{
+            this.isViewerList = response;
+            
+          }
+        })
+      )
     }
 
     ngOnDestroy(): void {
       this._stopAnimation();
      
-      this.storySubscription?.unsubscribe();
+      this.subscriptions?.unsubscribe();
       this._storyState.resetCurrentState();
      
     }
 
-   
+    openViewers(){
+      if(this._storyState.getViewerListState() == true){
+        this._storyState.setViewerListAnim(false);
+        setTimeout(()=>{
+          this._storyState.setIsViewerList(!this._storyState.getViewerListState());
+        }, 1000)
+      }else {
+        this._storyState.setViewerListAnim(true);
+        this._storyState.setIsViewerList(!this._storyState.getViewerListState());
+      }
+      
+    }
     navigate(direction:string){
       if(direction == "left"){
         if(this.currentIndex - 1 >= 0){

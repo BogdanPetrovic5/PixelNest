@@ -1,6 +1,6 @@
 <div class="container">
     <div class="story-wrapper" [ngClass]="listIndex == userIndex ? 'active' : 'un-active'">
-        
+        <app-viewer-list *ngIf="isViewerList" [storyID]="stories?.[currentIndex]?.storyID" class=""></app-viewer-list>
         <img src="/assets/images/left.png" class="left" (click)="navigate('left')" *ngIf="listIndex == userIndex">
         <img src="/assets/images/right.png" class="right" (click)="navigate('right')" *ngIf="listIndex == userIndex">
         <div class="story-header">
@@ -20,7 +20,7 @@
                     </div>
                     <div class="info">
                         <h1>{{stories?.[0]?.ownerUsername}}</h1>
-                        <span *ngIf="stories?.[0]?.ownerUsername == username">
+                        <span *ngIf="stories?.[0]?.ownerUsername == username" (click) = "openViewers()">
                             Viewers list
                         </span>
                     </div>
@@ -29,9 +29,9 @@
             </div>
             
         </div>
-        <!-- <img src="http://localhost:7157/Photos/{{stories?.[currentIndex]!.imagePaths[0].path}}" [style]="{'object-fit': stories?.[currentIndex]!.imagePaths[0].photoDisplay}"> -->
-        <img src="{{baseUrl}}{{stories?.[currentIndex]!.imagePaths[0].path}}" [style]="{'object-fit': stories?.[currentIndex]!.imagePaths[0].photoDisplay}">
+        <img src="http://localhost:7157/Photos/{{stories?.[currentIndex]!.imagePaths[0].path}}" [style]="{'object-fit': stories?.[currentIndex]!.imagePaths[0].photoDisplay}">
+        <!-- <img src="{{baseUrl}}{{stories?.[currentIndex]!.imagePaths[0].path}}" [style]="{'object-fit': stories?.[currentIndex]!.imagePaths[0].photoDisplay}"> -->
         <span class="close" (click)="close()" *ngIf="listIndex == userIndex">close</span>
     </div>
-   
+  
 </div>

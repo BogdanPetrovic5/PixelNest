@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { StoryDto } from '../../dto/story.dto';
 import { environment } from 'src/environments/environment.development';
 import { StoriesDto } from '../../dto/stories.dto';
+import { ViewersDto } from '../../dto/viewers.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,10 @@ export class StoryService {
         StoryID:storyID,
         Username:username
     });
+  }
+
+  getViewers(username:string, storyID:number):Observable<ViewersDto[]>{
+    const url = `${environment.apiUrl}/api/Story/GetViewers?username=${username}&storyID=${storyID}`;
+    return this._httpClient.get<ViewersDto[]>(url);
   }
 }

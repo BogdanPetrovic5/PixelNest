@@ -1,1 +1,15 @@
+<div class="container animate__animated animate__slideInUp animate__faster" (pan)="close($event)" [ngClass]="!anim ? 'animate__slideOutDown animate__faster' : ''">
+    
+    <div class="wrapper">
+        <div class="bar">
 
+        </div>
+        <h1 class="title">Views</h1>
+        <div class="list">
+            <div class="user-wrapper" *ngFor="let user of viewers">
+                <img src="/assets/images/user.png" alt="">
+                <h1>{{user.username}}</h1>
+            </div>
+        </div>
+    </div>
+</div>
