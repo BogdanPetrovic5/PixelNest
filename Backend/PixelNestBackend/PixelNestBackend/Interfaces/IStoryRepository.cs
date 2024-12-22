@@ -11,5 +11,6 @@ namespace PixelNestBackend.Interfaces
         Task<ICollection<GroupedStoriesDto>> GetCurrentUserStories(string username);
         Task<StoryResponse> PublishStory(StoryDto storyDto,int userID);
         StoryResponse MarkStoryAsSeen(Seen seen);
+        ICollection<ResponseViewersDto> GetViewers(ViewersDto viewersDto);
     }
 }

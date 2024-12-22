@@ -10,5 +10,6 @@ namespace PixelNestBackend.Interfaces
        
         Task<StoryResponse> PublishStory(StoryDto storyDto);
         StoryResponse MarkStoryAsSeen(SeenDto seenDto);
+        ICollection<ResponseViewersDto> GetViewers(ViewersDto viewersDto);
     }
 }

@@ -183,5 +183,29 @@ namespace PixelNestBackend.Repository
                 Message = "Story failed to upload!"
             };
         }
+
+        public ICollection<ResponseViewersDto> GetViewers(ViewersDto viewersDto)
+        {
+            try
+            {
+                ICollection<ResponseViewersDto> viewers = this._dataContext.Seen
+                    .Where(a => a.Username != viewersDto.Username && viewersDto.StoryID == a.StoryID)
+                    .Select(v => new ResponseViewersDto
+                    {
+                        Username = v.Username
+                    }).ToList();
+                return viewers;
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
     }
 }

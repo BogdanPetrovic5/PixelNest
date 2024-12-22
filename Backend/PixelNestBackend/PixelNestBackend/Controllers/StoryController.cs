@@ -61,5 +61,18 @@ namespace PixelNestBackend.Controllers
             return Ok(new StoryResponse { IsSuccessful = true, Message = storyResponse.Message });
             
         }
+        [Authorize]
+        [HttpGet("GetViewers")]
+        public ActionResult<ICollection<ResponseViewersDto>> GetViewers([FromQuery]ViewersDto viewersDto)
+        {
+            if (viewersDto == null) return BadRequest(new { message = "Bad request" });
+            
+            ICollection<ResponseViewersDto> viewers = _storyService.GetViewers(viewersDto);
+            if (viewers != null)
+            {
+                return Ok(viewers);
+            }
+            else return NotFound(new { message = "No data!" });
+        }
     }
 }

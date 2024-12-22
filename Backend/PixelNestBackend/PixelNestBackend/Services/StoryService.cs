@@ -42,6 +42,11 @@ namespace PixelNestBackend.Services
             return await _storyRepository.GetStories(username);
         }
 
+        public ICollection<ResponseViewersDto> GetViewers(ViewersDto viewersDto)
+        {
+            return this._storyRepository.GetViewers(viewersDto);
+        }
+
         public StoryResponse MarkStoryAsSeen(SeenDto seenDto)
         {
             int userID = _userUtility.GetUserID(seenDto.Username);
