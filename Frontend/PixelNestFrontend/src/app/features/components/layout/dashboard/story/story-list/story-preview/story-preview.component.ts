@@ -51,7 +51,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
             if(this.userIndex == this.listIndex) {
               if(this.stories != undefined && !this.stories?.[this.currentIndex].seenByUser) this._markStoryAsSeen(this.stories[this.currentIndex].storyID);
              
-              // this._startAnimation()
+              this._startAnimation()
             }else {
               this._stopAnimation()
             }
@@ -62,7 +62,8 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
         this._storyState.isViewerList$.subscribe({
           next:response=>{
             this.isViewerList = response;
-            
+            if(this.isViewerList == true) this._pauseAnimation();
+            else this._resumeAnimation();
           }
         })
       )
@@ -76,13 +77,15 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
      
     }
 
-    openViewers(){
+    handleViwersTab(){
       if(this._storyState.getViewerListState() == true){
+       
         this._storyState.setViewerListAnim(false);
         setTimeout(()=>{
           this._storyState.setIsViewerList(!this._storyState.getViewerListState());
         }, 1000)
       }else {
+       
         this._storyState.setViewerListAnim(true);
         this._storyState.setIsViewerList(!this._storyState.getViewerListState());
       }
@@ -113,10 +116,13 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
       }
     }
 
+  
     close() {
       this._stopAnimation();
       this._dashboardState.setStoryPrewiew(false);
     }
+
+
 
     private _updateCurrentIndex(value:number){
       this.storyCurrentLength = 0;
@@ -143,7 +149,20 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
       }
       this.animationFrameId = requestAnimationFrame(this.animate);
     };
-  
+
+    private _resumeAnimation() {
+      if (!this.animationFrameId) {
+        this.animationFrameId = requestAnimationFrame(this.animate); 
+      }
+    }
+
+    private _pauseAnimation(){
+      if (this.animationFrameId) {
+        cancelAnimationFrame(this.animationFrameId); 
+        this.animationFrameId = null;
+      }
+    }
+
     private _markStoryAsSeen(storyID:number){
       const username = this._userService.getFromCookie("username");
       this._storyService.marStoryAsSeen(storyID, username).subscribe({

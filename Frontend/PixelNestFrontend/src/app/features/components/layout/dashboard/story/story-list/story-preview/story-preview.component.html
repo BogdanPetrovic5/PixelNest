@@ -20,7 +20,7 @@
                     </div>
                     <div class="info">
                         <h1>{{stories?.[0]?.ownerUsername}}</h1>
-                        <span *ngIf="stories?.[0]?.ownerUsername == username" (click) = "openViewers()">
+                        <span *ngIf="stories?.[0]?.ownerUsername == username" (click) = "handleViwersTab()">
                             Viewers list
                         </span>
                     </div>

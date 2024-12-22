@@ -11,7 +11,7 @@ $HFONT: "Roboto Condensed", sans-serif;
     height: 100%;
 }
 .story-section{
-    width: 90%;
+    width: 98%;
     height: 100%;
     display: flex;
     gap: 10px;
@@ -20,13 +20,32 @@ $HFONT: "Roboto Condensed", sans-serif;
     justify-self: center;
     overflow: hidden;
     .personal{
-        width: 10%;
+        width: 15%;
         display: flex;
         flex-direction: column;
         justify-content: left;
         align-items: center;
         font-size: 25px;
         position: relative;
+        .new-story{
+            width: 20px;
+            height: 20px;
+            background-color: $H1COLOR;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bolder;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            z-index: 3;
+            border: 3px solid $BGCOLOR;
+        }
         .box{
             height: 60px;
             width: 60px;
@@ -47,23 +66,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 height: 55px;
                 align-self: center;
             }
-            .new-story{
-                width: 25px;
-                height: 25px;
-                background-color: $H1COLOR;
-                color: white;
-                font-size: 1em;
-                font-weight: bold;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border-radius: 50%;
-                position: absolute;
-                top: -20%;
-                left: -5%;
-                cursor: pointer;
-                z-index: 3;
-            }
+           
         }
     
         .box:hover{
@@ -82,7 +85,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         }
     }
     .following{
-        width: 90%;
+        width: 85%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -158,10 +161,27 @@ $HFONT: "Roboto Condensed", sans-serif;
             align-items: center;
             font-size: 25px;
             position: relative;
-            
+            .new-story{
+                width: 17px;
+                height: 17px;
+                background-color: $H1COLOR;
+                color: white;
+                font-size: 0.8em;
+                font-weight: bolder;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                position: absolute;
+                bottom: 25%;
+                left: 50%;
+                transform: translateX(-50%);
+                cursor: pointer;
+                z-index: 3;
+            }
             .box{
-                height: 40px;
-                width: 40px;
+                height: 45px;
+                width: 45px;
                 border: 1px dashed rgb(87, 87, 87);;
                 border-radius: 50%;
                 font-size: 35px;
@@ -180,23 +200,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     height: 100%;
                     align-self: center;
                 }
-                .new-story{
-                    width: 15px;
-                    height: 15px;
-                    background-color: $H1COLOR;
-                    color: white;
-                    font-size: 0.5em;
-                    font-weight: bold;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius: 50%;
-                    position: absolute;
-                    top: -20%;
-                    left: -5%;
-                    cursor: pointer;
-                    z-index: 3;
-                }
+             
             }
         
             .box:hover{
@@ -295,6 +299,24 @@ $HFONT: "Roboto Condensed", sans-serif;
             align-items: center;
             font-size: 25px;
             position: relative;
+            .new-story{
+                width: 15px;
+                height: 15px;
+                background-color: $H1COLOR;
+                color: white;
+                font-size: 0.8em;
+                font-weight: bolder;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+                position: absolute;
+                bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+                cursor: pointer;
+                z-index: 3;
+            }
             .box{
                 height: 50px;
                 width: 50px;
@@ -315,23 +337,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     height: 100%;
                     align-self: center;
                 }
-                .new-story{
-                    width: 15px;
-                    height: 15px;
-                    background-color: $H1COLOR;
-                    color: white;
-                    font-size: 0.5em;
-                    font-weight: bold;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius: 50%;
-                    position: absolute;
-                    top: -20%;
-                    left: -5%;
-                    cursor: pointer;
-                    z-index: 3;
-                }
+               
             }
         
             .box:hover{
