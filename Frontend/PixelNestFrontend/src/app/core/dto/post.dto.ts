@@ -8,6 +8,7 @@ export interface PostDto {
     ownerUsername: string;
     postDescription: string;
     totalComments: number;
+    isDeletable:boolean;
     totalLikes: number;
     likedByUsers:LikedByUsers[];
     allComments:CommentDto[];

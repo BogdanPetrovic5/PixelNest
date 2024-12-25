@@ -26,7 +26,10 @@ export class PostService {
       Username:username
     })
   }
-  
+  deletePost(postID:number):Observable<any>{
+    const url = `${environment.apiUrl}/api/Post/DeletePost?postID=${postID}`;
+    return this._httpClient.delete<any>(url)
+  }
   savePost(username:string, postID:number){
     const url = `${environment.apiUrl}/api/Post/SavePost`
     return this._httpClient.post<any>(url,{

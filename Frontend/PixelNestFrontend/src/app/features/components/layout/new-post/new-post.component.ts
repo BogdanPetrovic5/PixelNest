@@ -205,7 +205,7 @@ export class NewPostComponent implements OnInit{
       return text && text.length > 0; 
     });
   
-    return description ? description.nativeElement.innerHTML : null;
+    return description ? description.nativeElement.innerHTML : '';
   }
   private _appendToForm(description:any, username:string):FormData{
     const FORM_DATA = new FormData()

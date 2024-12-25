@@ -9,4 +9,8 @@
         </div>
     </div>
     <app-lottie-success *ngIf="isSuccess"></app-lottie-success>
+    <div class="is-initialized" *ngIf="isLoading">
+        <app-lottie-loading ></app-lottie-loading>
+    </div>
+  
 </div>

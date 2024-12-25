@@ -1,23 +1,33 @@
 <app-likes *ngIf="isLikesTabOpen" [likes]="likedByUsers"  (closeLikesTab)="closeLikesTab()"></app-likes>
 <app-comments *ngIf="areCommentsOpened" [comments]="post.allComments" (closeCommentsTab)="closeCommentsTab()"></app-comments>
+
+<app-delete-dialog *ngIf="deleteDialog" [postID] = "post.postID" (closeDeleteDialog)="closeDeleteDialog()"></app-delete-dialog>
+
 <div class="container">
     <div class="content">
         <div class="basic-info">
-            <img src="./assets/images/user.png" alt="">
+            
             <div class="info">
-                <h1 (click)="navigateToUserProfile(post.ownerUsername)">
-                   {{post.ownerUsername}} 
-                </h1>
-                <p>
-                    {{formattedDate}}
-                    <span (click)="navigate(post.location)" *ngIf="post.location">
-                        <span class="material-symbols-outlined">
-                            location_on
-                        </span> 
-                        {{post.location}}
-                    </span>
-                </p>
+                <img src="./assets/images/user.png" alt="">
+                <div class="info-wrapper">
+                    <h1 (click)="navigateToUserProfile(post.ownerUsername)">
+                        {{post.ownerUsername}} 
+                     </h1>
+                     <p>
+                         {{formattedDate}}
+                         <span (click)="navigate(post.location)" *ngIf="post.location">
+                             <span class="material-symbols-outlined">
+                                 location_on
+                             </span> 
+                             {{post.location}}
+                         </span>
+                     </p>
+                </div>
                 
+                
+            </div>
+            <div class="delete" *ngIf="post.isDeletable" (click)="openDeleteDialog()">
+                <img src="/assets/images/trash-bin.png">
             </div>
         </div>
         <div class="image-holder">
@@ -25,7 +35,7 @@
             <img *ngIf="post.imagePaths.length > 0" src="{{baseUrl}}{{ post.imagePaths[0].path }}" loading="lazy" [ngStyle]="{'object-fit':post.imagePaths[0].photoDisplay}" alt="">
         </div>
        <div class="description">
-            <p>{{post.postDescription}}</p>
+            <p>{{ post.postDescription }}</p>
        </div>
        <div class="hl">
 
@@ -50,4 +60,5 @@
            </div>
        </div>
     </div>
+    
 </div>

@@ -15,6 +15,7 @@ import { LikeCommentComponent } from './components/post/comments/like-comment/li
 import { LottieLoadingComponent } from './components/lottie-loading/lottie-loading.component';
 import { LocationComponent } from './components/location/location.component';
 import { FeedComponent } from './components/feed/feed.component';
+import { DeleteDialogComponent } from './components/post/delete-dialog/delete-dialog.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { FeedComponent } from './components/feed/feed.component';
     ReplyComponent,
     LikeCommentComponent,
     LocationComponent,
-    FeedComponent
+    FeedComponent,
+    DeleteDialogComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,8 @@ import { FeedComponent } from './components/feed/feed.component';
     LottieSuccessComponent,
     LottieFailComponent,
     LottieLoadingComponent,
-    FeedComponent
+    FeedComponent,
+    DeleteDialogComponent
   ]
 })
 export class SharedModule { }

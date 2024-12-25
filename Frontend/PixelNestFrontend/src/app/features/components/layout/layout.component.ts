@@ -13,6 +13,8 @@ export class LayoutComponent implements OnInit{
   subscriptions: Subscription = new Subscription();
 
   isSuccess:boolean = false
+  isLoading:boolean = false;
+  deleteDialog:boolean = false;
   constructor(
     private _dashboardStateMenagment:DashboardStateService,
     private _lottieState:LottieStateService
@@ -34,6 +36,14 @@ export class LayoutComponent implements OnInit{
         }
       })
     )
+    this.subscriptions.add(
+      this._lottieState.isInitialized$.subscribe({
+        next:response=>{
+          this.isLoading =response;
+        }
+      })
+    )
+  
   }
   
 }

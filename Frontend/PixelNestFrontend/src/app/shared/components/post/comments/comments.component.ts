@@ -30,14 +30,6 @@ export class CommentsComponent {
   }
   
   addComment(inputElement: HTMLInputElement){
-
-    // this._postService.addComment(this.commentText, this.username, this.postID).subscribe({
-    //   next:(response)=>{
-    //     console.log(response.message)
-    //     this.comments.push({username:this.username, commentText:this.commentText})
-    //     this.getComments();
-    //   }
-    // })
     this._postService.addComment(this.commentText, this.username, this.postID).pipe(
       tap((response)=>{
        

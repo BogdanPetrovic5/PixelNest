@@ -38,4 +38,10 @@ export class UserService {
       FollowingUsername:following
     })
   }
+
+  validateUser(postOwner:string):Observable<boolean>{
+    const url = `${environment.apiUrl}/api/User/IsValid?postOwner=${postOwner}`
+
+    return this._httpClient.get<boolean>(url);
+  }
 }

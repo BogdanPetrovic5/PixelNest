@@ -16,6 +16,24 @@ $HFONT: "Roboto Condensed", sans-serif;
     background-color: $BGCOLOR;
     position: relative;
     overflow: auto;
+    .is-initialized{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 3;
+        background-color: rgba(0, 0, 0, 0.651);
+        ::ng-deep app-lottie-loading{
+            .alert{
+                position: relative;
+            }
+        }
+      
+    }
     .content{
         width: 90%;
         height: 100%;
@@ -43,6 +61,8 @@ $HFONT: "Roboto Condensed", sans-serif;
 }
 @media only screen and (min-width:768px) and (max-width:1023px) {
     .container{
+     
+       
         .content{
             width: 95%;
             .navigation{
@@ -59,7 +79,7 @@ $HFONT: "Roboto Condensed", sans-serif;
 }
 @media only screen and (min-width:0px) and (max-width:467px){
     .container{
-    
+       
         .content{
           width: 95%;
          
@@ -94,7 +114,8 @@ $HFONT: "Roboto Condensed", sans-serif;
 }
 @media only screen and (min-width:468px) and (max-width:767px){
     .container{
-    
+        
+        
         .content{
           width: 95%;
          

@@ -8,8 +8,12 @@ import { PostDto } from 'src/app/core/dto/post.dto';
 import { SavedPosts } from 'src/app/core/dto/savePost.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
+import { PostStateService } from 'src/app/core/services/states/post-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
+import { UserService } from 'src/app/core/services/user/user.service';
 import { environment } from 'src/environments/environment.development';
+import { LottieLoadingComponent } from '../lottie-loading/lottie-loading.component';
+import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -31,14 +35,18 @@ export class PostComponent implements OnInit{
   isLiked:boolean | null = null;
   isLikesTabOpen:boolean = false;
   areCommentsOpened:boolean = false;
-
+  deleteDialog:boolean = false;
+  isVisible:boolean = false;
   subscription:Subscription = new Subscription;
   constructor(
     private _datePipe:DatePipe,
     private _postService:PostService,
     private _userSession:UserSessionService,
+    private _userService:UserService,
     private _dashboardState:DashboardStateService,
-    private _router:Router
+    private _router:Router,
+    private _postState:PostStateService,
+    private _lottie:LottieStateService
   ){
    
   }
@@ -46,22 +54,28 @@ export class PostComponent implements OnInit{
   ngOnInit():void{
     this.baseUrl = environment.blobStorageBaseUrl;
     this._initilizeComponent();
+    
   }
 
   navigateToUserProfile(username:string){
 
     this._router.navigate([`/Profile/${username}`])
   }
+
   navigate(url:string){
     this._router.navigate([`Location/${url}`])
     this._dashboardState.setNewLocation(url);
   }
+
   closeLikesTab() {
     this.isLikesTabOpen = false
   }
 
   closeCommentsTab(){
     this.areCommentsOpened = false;
+  }
+  closeDeleteDialog(){
+    this.deleteDialog = false;
   }
 
   showLikes(){
@@ -72,7 +86,9 @@ export class PostComponent implements OnInit{
     this.areCommentsOpened = true;
     this._userSession.setToLocalStorage("postID",this.post.postID);
   }
-
+  openDeleteDialog(){
+    this.deleteDialog = true;
+  }
   likePost(postID:number){
     this._postService.likePost(postID, this.username).pipe(
       tap((response)=>{
@@ -102,13 +118,7 @@ export class PostComponent implements OnInit{
     this.likedByUsers = this.post.likedByUsers;
     this.savedByUsers = this.post.savedByUsers;
 
-    this.subscription.add(
-      this._dashboardState.isLikesTab$.subscribe((response)=>{
-        if(response) this.isLikesTabOpen = response
-        
-      })
-    )
-
+   
     this._formatDate()
     this._checkIsLiked()
   }

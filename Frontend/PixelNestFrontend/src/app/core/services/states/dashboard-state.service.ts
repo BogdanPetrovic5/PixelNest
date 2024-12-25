@@ -20,6 +20,9 @@ export class DashboardStateService {
   private _storyPreview = new BehaviorSubject<boolean>(false)
   storyPreview$ = this._storyPreview.asObservable();
 
+  private _deleteDialog = new BehaviorSubject<boolean>(false)
+  deleteDialog$ = this._deleteDialog.asObservable();
+
   constructor() { }
 
   setIsNewStoryTabOpen(isSelected:boolean){
@@ -38,5 +41,9 @@ export class DashboardStateService {
   }
   setStoryPrewiew(value:boolean){
     this._storyPreview.next(value);
+  }
+
+  setDeleteDialog(value:boolean){
+    this._deleteDialog.next(value);
   }
 }
