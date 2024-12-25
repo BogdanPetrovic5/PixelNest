@@ -172,5 +172,24 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
+
+        public string GetUsername(string email)
+        {
+            try
+            {
+                var user = _dataContext.Users.Where(e => e.Email == email).FirstOrDefault();
+
+                if(user == null)
+                {
+                    return string.Empty;
+                }
+                return user.Username;
+            }catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return string.Empty;
+            }
+
+        }
     }
 }

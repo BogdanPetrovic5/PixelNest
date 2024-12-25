@@ -9,12 +9,14 @@ namespace PixelNestBackend.Interfaces
     public interface IPostRepository
     {
         Task<PostResponse> PublishPost(PostDto postDto, int userID);
-        Task<ICollection<ResponsePostDto>> GetPosts();
-        Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username);
-        Task<ICollection<ResponsePostDto>> GetPostsByLocation(string username);
+        Task<ICollection<ResponsePostDto>> GetPosts(string username);
+        Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username,string currentLoggedUser);
+        Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location, string username);
         bool SavePost(int userID, SavePostDto savePostDto, bool isDuplicate);
         bool LikePost(LikeDto likeDto, bool isLiked, int userID);
         PostResponse Comment(Comment comment);
-
+        Task<DeleteResponse> DeletePost(int postID);
+        string ExtractUsername(int postID);
+        bool CheckIntegrity(string username, string email);
     }
 }

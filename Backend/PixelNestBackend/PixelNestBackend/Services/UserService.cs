@@ -6,6 +6,7 @@ using PixelNestBackend.Mappers;
 using PixelNestBackend.Models;
 using PixelNestBackend.Repository;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Utility;
 
 namespace PixelNestBackend.Services
 {
@@ -15,16 +16,19 @@ namespace PixelNestBackend.Services
         readonly private IMapper _userMapper;
         readonly private IAuthenticationRepository _authenticationRepository;
         readonly private IUserRepository _userRepository;
+        readonly private UserUtility _userUtility;
 
         public UserService(
             IMapper mapper,
             IAuthenticationRepository authenticationRepository,
-            IUserRepository userRepository
+            IUserRepository userRepository,
+            UserUtility userUtility
             )
         {
             _userMapper = mapper;
             _authenticationRepository = authenticationRepository;
             _userRepository = userRepository;
+            _userUtility = userUtility;
         }
         public User ConvertRegisterDto(RegisterDto registerDto)
         {
@@ -68,5 +72,7 @@ namespace PixelNestBackend.Services
         {
             return _userRepository.IsFollowing(followDto);
         }
+
+       
     }
 }

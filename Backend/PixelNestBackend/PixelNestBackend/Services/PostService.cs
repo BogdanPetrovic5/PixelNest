@@ -59,21 +59,21 @@ namespace PixelNestBackend.Services
             if (result) return true;
             return false;
         }
-        public async Task<ICollection<ResponsePostDto>> GetPosts(string? username, string? location)
+        public async Task<ICollection<ResponsePostDto>> GetPosts(string? username, string? location, string email)
         {
             ICollection<ResponsePostDto> posts;
-            
+            string currentLoggedUser = _userUtility.GetUserName(email);
             if (!string.IsNullOrEmpty(username) && string.IsNullOrEmpty(location))
             {
-                posts = await _postRepository.GetPostsByUsername(username);
+                posts = await _postRepository.GetPostsByUsername(username, currentLoggedUser);
             }
             else if (string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(location))
             {
-                posts = await _postRepository.GetPostsByLocation(location);
+                posts = await _postRepository.GetPostsByLocation(location,currentLoggedUser);
             }
             else
             {
-                posts = await _postRepository.GetPosts();
+                posts = await _postRepository.GetPosts(currentLoggedUser);
             }
             return posts;
         }
@@ -173,6 +173,25 @@ namespace PixelNestBackend.Services
             }
            
         }
-      
+        public bool CheckIntegrity(string email, int postID)
+        {
+
+            string username = _postRepository.ExtractUsername(postID);
+            if (username != null) { 
+                bool isValid = _postRepository.CheckIntegrity(username, email);
+                if (!isValid)
+                {
+                    return false;
+                }return true;
+            }return false;
+        }
+        public async Task<DeleteResponse> DeletePost(string email, int postID)
+        {
+            if (CheckIntegrity(email, postID))
+            {
+                return await _postRepository.DeletePost(postID);
+            }
+            return new DeleteResponse { IsSuccess = false, IsValid = false, Message = "You do not have authority to do this!" };
+        }
     }
 }

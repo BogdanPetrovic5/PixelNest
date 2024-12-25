@@ -44,13 +44,13 @@ namespace PixelNestBackend.Data
                 .HasOne(post => post.Post)
                 .WithMany(comment => comment.Comments)
                 .HasForeignKey(post => post.PostID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Comment>()
                .HasOne(c => c.User)
                .WithMany(u => u.Comments)
                .HasForeignKey(c => c.UserID)
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ImagePath>()
                 .HasOne(imagePath => imagePath.Post)

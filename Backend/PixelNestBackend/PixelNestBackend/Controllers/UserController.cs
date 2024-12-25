@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Responses;
+using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
@@ -74,5 +76,6 @@ namespace PixelNestBackend.Controllers
             }
             else return NotFound();
         }
-    }
+    
+    } 
 }

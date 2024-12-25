@@ -13,8 +13,8 @@
                 "/api/Authentication/Register",
                 "/api/Post/PublishPost",
                 "/api/Post/LikePost",
-                "/api/Post/SavePost"
-
+                "/api/Post/SavePost",
+                "/api/Post/DeletePost"
             };
         }
         public async Task Invoke(HttpContext context)
@@ -32,6 +32,7 @@
                         var lastRequestTime = _lastRequestTimes[userIdentifier];
                         if (DateTime.UtcNow - lastRequestTime < TimeSpan.FromSeconds(1))
                         {
+                            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
                             context.Response.StatusCode = 429; 
                             await context.Response.WriteAsync("Too many requests. Please wait.");
                             return;

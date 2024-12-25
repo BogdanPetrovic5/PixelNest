@@ -31,6 +31,7 @@ namespace PixelNestBackend.Repository
             _SAStokenGenerator = SASTokenGenerator;
         }
 
+
         public bool SavePost(int userID, SavePostDto savePostDto, bool isDuplicate)
         {
             var obj = new SavedPosts
@@ -133,7 +134,7 @@ namespace PixelNestBackend.Repository
                 };
             }
         }
-        public async Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username)
+        public async Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username, string currentLoggedUser)
         {
             try
             {
@@ -146,6 +147,7 @@ namespace PixelNestBackend.Repository
                        TotalComments = a.TotalComments,
                        TotalLikes = a.TotalLikes,
                        PostID = a.PostID,
+                       IsDeletable = a.OwnerUsername == currentLoggedUser,
                        PublishDate = a.PublishDate,
                        ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
                        {
@@ -186,7 +188,7 @@ namespace PixelNestBackend.Repository
                 throw;
             }
         }
-        public async Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location)
+        public async Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location, string username)
         {
             try
             {
@@ -198,6 +200,7 @@ namespace PixelNestBackend.Repository
                        OwnerUsername = a.OwnerUsername,
                        TotalComments = a.TotalComments,
                        TotalLikes = a.TotalLikes,
+                       IsDeletable = a.OwnerUsername == username,
                        PostID = a.PostID,
                        PublishDate = a.PublishDate,
                        ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
@@ -240,7 +243,7 @@ namespace PixelNestBackend.Repository
                 throw;
             }
         }
-        public async Task<ICollection<ResponsePostDto>> GetPosts()
+        public async Task<ICollection<ResponsePostDto>> GetPosts(string username)
         {
             try
             {
@@ -252,6 +255,7 @@ namespace PixelNestBackend.Repository
                        TotalComments = a.TotalComments,
                        TotalLikes = a.TotalLikes,
                        PostID = a.PostID,
+                       IsDeletable = a.OwnerUsername == username,
                        PublishDate = a.PublishDate,
                        ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto {
                            Path = l.Path,
@@ -376,7 +380,76 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
-    
-        
+
+        public async Task<DeleteResponse> DeletePost(int postID)
+        {
+            try
+            {
+                var post = _dataContext.Posts.FirstOrDefault(a => a.PostID == postID);
+                var username = _dataContext.Posts
+                    .Where(p => p.PostID == postID)
+                    .Select(p => p.OwnerUsername)
+                    .FirstOrDefault();
+                if (post == null)
+                {
+                    return new DeleteResponse
+                    {
+                        IsSuccess = false,
+                        IsValid = true,
+                        Message = "No post found!"
+                    };
+                }
+                
+                _dataContext.Comments.Where(a => a.PostID == postID).ExecuteDelete();
+                _dataContext.LikedPosts.Where(a => a.PostID == postID).ExecuteDelete();
+                _dataContext.SavedPosts.Where(a => a.PostID == postID).ExecuteDelete();
+                _dataContext.ImagePaths.Where(a => a.PostID == postID).ExecuteDelete();
+                User? user = _dataContext.Users.FirstOrDefault(u => u.Username == username);
+                if (user != null) user.TotalPosts -= 1;
+                _dataContext.Posts.Remove(post);
+                
+                await _dataContext.SaveChangesAsync();
+
+                return new DeleteResponse
+                {
+                    IsSuccess = true,
+                    IsValid = true,
+                    Message = "Successfuly deleted!"
+                };
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new DeleteResponse
+                {
+                    IsSuccess = false,
+                    IsValid = true,
+                    Message = "Server failed!"
+                };
+            }
+        }
+
+        public string ExtractUsername(int postID)
+        {
+            string? username = _dataContext.Posts.Where(a => a.PostID == postID)
+                .Select(username => username.OwnerUsername).FirstOrDefault();
+
+            return username;
+        }
+
+        public bool CheckIntegrity(string username, string email)
+        {
+            try
+            {
+                bool isValid = _dataContext.Users.Where(u => u.Username == username).Any(e => e.Email == email);
+                return isValid;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
     }
 }

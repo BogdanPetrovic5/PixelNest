@@ -144,8 +144,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseStaticFiles();
-app.UseMiddleware<APICallLimiter>();
+
 app.UseCors("AllowAll");
+app.UseMiddleware<APICallLimiter>();
 /*app.UseHttpsRedirection();*/
 app.UseAuthentication();
 

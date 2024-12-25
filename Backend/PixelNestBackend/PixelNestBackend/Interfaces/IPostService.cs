@@ -9,11 +9,12 @@ namespace PixelNestBackend.Interfaces
     {
 
         Task<PostResponse> PublishPost(PostDto postDto);
-        Task<ICollection<ResponsePostDto>> GetPosts(string? username, string? location);
+        Task<ICollection<ResponsePostDto>> GetPosts(string? username, string? location, string email);
    
         bool SavePost(SavePostDto savePostDto);
         bool LikePost(LikeDto likeDto);
         PostResponse Comment(CommentDto commentDto);
-        
+        Task<DeleteResponse> DeletePost(string email, int postID);
+        bool CheckIntegrity(string email, int postID);
     }
 }
