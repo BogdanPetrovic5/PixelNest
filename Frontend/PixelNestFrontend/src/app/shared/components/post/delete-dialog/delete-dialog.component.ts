@@ -11,6 +11,7 @@ import { PostStateService } from 'src/app/core/services/states/post-state.servic
 export class DeleteDialogComponent {
   @Input() postID!:number
   @Output() closeDeleteDialog: EventEmitter<void> = new EventEmitter<void>();
+  anim:boolean = false;
   constructor(
     
       private _postService:PostService,
@@ -39,6 +40,11 @@ export class DeleteDialogComponent {
   }
 
   close(){
-    this.closeDeleteDialog.emit()
+    this.anim = true;
+    setTimeout(() => {
+      this.closeDeleteDialog.emit()
+      this.anim = false
+    }, 500);
+    
   }
 }
