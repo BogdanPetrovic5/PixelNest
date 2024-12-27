@@ -7,104 +7,122 @@
             <h1>Create an account: </h1>
             <p>Let's get started</p>
             <form class="inputs" [formGroup] = "registerForm" (ngSubmit) = "register()">
-                <div class="form-control">
-                    <input 
-                    required 
-                    type="value" 
-                    formControlName="Firstname" 
-                   >
-                    <label>
-                        <span style="transition-delay:400ms">F</span>
-                        <span style="transition-delay:350ms">i</span>
-                        <span style="transition-delay:300ms">r</span>
-                        <span style="transition-delay:250ms">s</span>
-                        <span style="transition-delay:200ms">t</span>
-                        <span style="transition-delay:150ms">n</span>
-                        <span style="transition-delay:100ms">a</span>
-                        <span style="transition-delay:50ms">m</span>
-                        <span style="transition-delay:0ms">e</span>
-                    </label>
-                    <div *ngIf="registerForm.get('Firstname')?.invalid && registerForm.get('Firstname')?.touched" class="invalid-feedback">
-                        Firstname is required.
+                <div class="firt-slide" *ngIf="!pivot">
+                    <div class="form-control">
+                        <input 
+                        required 
+                        type="value" 
+                        formControlName="Firstname" 
+                       >
+                        <label>
+                            <span style="transition-delay:400ms">F</span>
+                            <span style="transition-delay:350ms">i</span>
+                            <span style="transition-delay:300ms">r</span>
+                            <span style="transition-delay:250ms">s</span>
+                            <span style="transition-delay:200ms">t</span>
+                            <span style="transition-delay:150ms">n</span>
+                            <span style="transition-delay:100ms">a</span>
+                            <span style="transition-delay:50ms">m</span>
+                            <span style="transition-delay:0ms">e</span>
+                        </label>
+                        <div *ngIf="registerForm.get('Firstname')?.invalid && registerForm.get('Firstname')?.touched" class="invalid-feedback">
+                            Firstname is required.
+                        </div>
                     </div>
-                </div>
-                <div class="form-control">
-                    <input required type="value" formControlName="Lastname">
-                    <label>
-                        <span style="transition-delay:350ms">L</span>
-                        <span style="transition-delay:300ms">a</span>
-                        <span style="transition-delay:250ms">s</span>
-                        <span style="transition-delay:200ms">t</span>
-                        <span style="transition-delay:150ms">n</span>
-                        <span style="transition-delay:100ms">a</span>
-                        <span style="transition-delay:50ms">m</span>
-                        <span style="transition-delay:0ms">e</span>
-                    </label>
-                    <div *ngIf="registerForm.get('Lastname')?.invalid && registerForm.get('Lastname')?.touched" class="invalid-feedback">
-                        Lastname is required.
+                    <div class="form-control">
+                        <input required type="value" formControlName="Lastname">
+                        <label>
+                            <span style="transition-delay:350ms">L</span>
+                            <span style="transition-delay:300ms">a</span>
+                            <span style="transition-delay:250ms">s</span>
+                            <span style="transition-delay:200ms">t</span>
+                            <span style="transition-delay:150ms">n</span>
+                            <span style="transition-delay:100ms">a</span>
+                            <span style="transition-delay:50ms">m</span>
+                            <span style="transition-delay:0ms">e</span>
+                        </label>
+                        <div *ngIf="registerForm.get('Lastname')?.invalid && registerForm.get('Lastname')?.touched" class="invalid-feedback">
+                            Lastname is required.
+                        </div>
                     </div>
-                </div>
-                <div class="form-control">
-                    <input required type="value" formControlName="Username">
-                    <label>
-                        <span style="transition-delay:350ms">U</span>
-                        <span style="transition-delay:300ms">s</span>
-                        <span style="transition-delay:250ms">e</span>
-                        <span style="transition-delay:200ms">r</span>
-                        <span style="transition-delay:150ms">n</span>
-                        <span style="transition-delay:100ms">a</span>
-                        <span style="transition-delay:50ms">m</span>
-                        <span style="transition-delay:0ms">e</span>
-                    </label>
-                    <div *ngIf="registerForm.get('Username')?.invalid && registerForm.get('Username')?.touched" class="invalid-feedback">
-                       Username is required
-                    </div>
-                </div>
-                <div class="form-control">
-                    <input required type="value" formControlName="Email">
-                    <label>
-                        <span style="transition-delay:200ms">E</span>
-                        <span style="transition-delay:150ms">m</span>
-                        <span style="transition-delay:100ms">a</span>
-                        <span style="transition-delay:50ms">i</span>
-                        <span style="transition-delay:0ms">l</span>
-                        
-                    </label>
-                    <div *ngIf="registerForm.get('Email')?.hasError('required') && registerForm.get('Email')?.touched" class="invalid-feedback">
-                        Email is required!
-                    </div>
-                    <div *ngIf="registerForm.get('Email')?.hasError('pattern')" class="invalid-feedback">
-                        Email format must be example&#64;email.com
-                    </div>
-                </div>
-                <div class="form-control">
-                    <input required type="password" formControlName="Password">
-                    <label>
-                        <span style="transition-delay:350ms">P</span>
-                        <span style="transition-delay:300ms">a</span>
-                        <span style="transition-delay:250ms">s</span>
-                        <span style="transition-delay:200ms">s</span>
-                        <span style="transition-delay:150ms">w</span>
-                        <span style="transition-delay:100ms">o</span>
-                        <span style="transition-delay:50ms">r</span>
-                        <span style="transition-delay:0ms">d</span>
-                    </label>
-                    <div *ngIf="registerForm.get('Password')?.hasError('required') && registerForm.get('Password')?.touched" class="invalid-feedback">
-                        Password is required
-                    </div>
-                    <div *ngIf="registerForm.get('Password')?.hasError('pattern')" class="invalid-feedback">
-                        Password must have minimum 6 characters!
-                    </div>
-                    <div class="invalid-feedback" *ngIf="!error">
-                        {{errorMessage}}
-                        
+                    <div class="form-control">
+                        <input required type="value" formControlName="Username">
+                        <label>
+                            <span style="transition-delay:350ms">U</span>
+                            <span style="transition-delay:300ms">s</span>
+                            <span style="transition-delay:250ms">e</span>
+                            <span style="transition-delay:200ms">r</span>
+                            <span style="transition-delay:150ms">n</span>
+                            <span style="transition-delay:100ms">a</span>
+                            <span style="transition-delay:50ms">m</span>
+                            <span style="transition-delay:0ms">e</span>
+                        </label>
+                        <div *ngIf="registerForm.get('Username')?.invalid && registerForm.get('Username')?.touched" class="invalid-feedback">
+                           Username is required
+                        </div>
                     </div>
                 </div>
                 
-                <button type="submit" [disabled]="enabled"><h1>REGISTER</h1></button>
+                <div class="second-slide" *ngIf="pivot">
+                    <div class="form-control">
+                        <input required type="value" formControlName="Email">
+                        <label>
+                            <span style="transition-delay:200ms">E</span>
+                            <span style="transition-delay:150ms">m</span>
+                            <span style="transition-delay:100ms">a</span>
+                            <span style="transition-delay:50ms">i</span>
+                            <span style="transition-delay:0ms">l</span>
+                            
+                        </label>
+                        <div *ngIf="registerForm.get('Email')?.hasError('required') && registerForm.get('Email')?.touched" class="invalid-feedback">
+                            Email is required!
+                        </div>
+                        <div *ngIf="registerForm.get('Email')?.hasError('pattern')" class="invalid-feedback">
+                            Email format must be example&#64;email.com
+                        </div>
+                    </div>
+                    <div class="form-control">
+                        <input required type="password" formControlName="Password">
+                        <label>
+                            <span style="transition-delay:350ms">P</span>
+                            <span style="transition-delay:300ms">a</span>
+                            <span style="transition-delay:250ms">s</span>
+                            <span style="transition-delay:200ms">s</span>
+                            <span style="transition-delay:150ms">w</span>
+                            <span style="transition-delay:100ms">o</span>
+                            <span style="transition-delay:50ms">r</span>
+                            <span style="transition-delay:0ms">d</span>
+                        </label>
+                        <div *ngIf="registerForm.get('Password')?.hasError('required') && registerForm.get('Password')?.touched" class="invalid-feedback">
+                            Password is required
+                        </div>
+                        <div *ngIf="registerForm.get('Password')?.hasError('pattern')" class="invalid-feedback">
+                            Password must have minimum 6 characters!
+                        </div>
+                        <div class="invalid-feedback" *ngIf="!error">
+                            {{errorMessage}}
+                            
+                        </div>
+                        <button type="submit"  [disabled]="enabled"><h1>REGISTER</h1></button>
+                    </div>
+                    
+                    
+                </div>
+               
                 
+               
             </form>
+           
             <button class="switch" (click)="navigateToLogin()">Already Have An Account? Log in!</button>
+            <div class="progress">
+                <div class="bar" (click)="togglePivot()" [ngStyle]="{'margin-left': pivot ? '50%':'0%'} ">
+
+                </div>
+            </div>
+            <div class="navigation" >
+                <div (click)="togglePivot()" class="nav-text" [ngStyle]="{'margin-left': pivot ? '50%' : '0', 'text-align': !pivot ? 'left' : 'right'
+                  }">{{navigationText}}</div>
+            </div>
         </div>
     </div>
     

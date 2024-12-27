@@ -2,7 +2,9 @@ $BGCOLOR:#040F16;
 $SECTIONLEFT:#062938;
 $H1COLOR:#01BAEF;
 $PCOLOR:#FBFBFF;
-
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
 $PFONT:"Josefin Sans", sans-serif;
 $HFONT: "Roboto Condensed", sans-serif;
 .form-wrap{
@@ -18,6 +20,38 @@ $HFONT: "Roboto Condensed", sans-serif;
         .wrap{
             margin-top: 40px;
             font-size: 25px;
+            .progress{
+              width: 70%;
+              height: 4px;
+              border-radius: 25px;
+              margin-top: 20px;
+              background-color: $TABCOLOR;
+              .bar{
+                transition: 300ms;
+                width: 50%;
+                height: 100%;
+                background-color: $H1COLOR;
+                border-radius: 25px;
+                cursor: pointer;
+                
+              }
+            }
+            .navigation{
+              width: 70%;
+              font-size: 25px;
+              margin-top: 20px;
+              
+              .nav-text{
+                font-size: 0.66em;
+                color: $PCOLOR !important;
+                font-family: $PFONT;
+                width: 50%;
+                text-align: left;
+                transition: 300ms ease-in-out;
+                cursor: pointer;
+                margin-top:-10px;
+              }
+            }
             img{
               display: none;
             }
@@ -43,7 +77,7 @@ $HFONT: "Roboto Condensed", sans-serif;
               color: $PCOLOR;
               align-self: center;
               text-align: center;
-              margin-top: 20px !important;
+              margin-top: 10px !important;
               border: none;
             }
             .inputs{

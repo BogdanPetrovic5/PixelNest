@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
@@ -10,11 +10,15 @@ import { LottieStateService } from 'src/app/core/services/states/lottie-state.se
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.scss']
 })
-export class RegisterFormComponent {
+export class RegisterFormComponent implements OnInit{
   registerForm:FormGroup;
+
   error:boolean = false
-  errorMessage:string = "";
   enabled:boolean = false;
+  pivot?:boolean = false;
+
+  errorMessage:string = "";
+  navigationText:string = this.pivot ? "< Previous" : "Next >"
   constructor(
     private _router:Router,
     private _formBuilder:FormBuilder,
@@ -30,8 +34,15 @@ export class RegisterFormComponent {
       
     })
   }
+  ngOnInit():void{
+  
+
+  }
   ngDoCheck():void{
-    
+    this.navigationText = this.pivot ? "< Previous" : "Next >"
+  }
+  togglePivot(){
+    this.pivot = !this.pivot
   }
   navigateToLogin(){
     this._router.navigate(['/Authentication/Login'])
