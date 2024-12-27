@@ -22,4 +22,14 @@
            <img src="/assets/images/bgauth.png" alt="">
         </div>
     </div>
+    <div class="note" *ngIf="warning">
+        <div class="note-wrapper">
+            <span (click)="close()">
+                X
+            </span>
+            <img src="/assets/images/warning.png">
+            <h1>Important Notice: </h1>
+            <p>There may be delays in registration and login processes due to the database being on pause after being inactive for more than an hour. The database will automatically resume once activity occurs.</p>
+        </div>
+    </div>
 </div>

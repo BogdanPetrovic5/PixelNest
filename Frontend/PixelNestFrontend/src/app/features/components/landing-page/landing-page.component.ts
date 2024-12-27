@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./landing-page.component.scss']
 })
 export class LandingPageComponent implements OnInit{
+ 
   constructor(private _router:Router){}
   ngOnInit(): void {
       

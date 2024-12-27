@@ -30,7 +30,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
-               
+                
                 flex-wrap: wrap;
                 align-self: center;
                 height:100%;
@@ -43,6 +43,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     justify-content: center;
                     align-items: center;
                     flex-direction: column;
+                    align-self: center !important;
                     font-size: 25px;
                     h1{
                         color: $PCOLOR;

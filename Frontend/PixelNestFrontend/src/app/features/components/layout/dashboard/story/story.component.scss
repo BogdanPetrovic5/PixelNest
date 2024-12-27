@@ -1,4 +1,12 @@
-
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
 .container{
     height: 100%;
 }
@@ -35,7 +43,7 @@
             left: 50%;
             transform: translateX(-50%);
             cursor: pointer;
-            z-index: 3;
+            z-index: 2;
             border: 3px solid $BGCOLOR;
         }
         .box{
@@ -146,10 +154,10 @@
         align-items: center;
         justify-self: center;
         .personal{
-            width: 15%;
+            width: 20%;
             display: flex;
             flex-direction: column;
-            justify-content: left;
+            justify-content: center;
             align-items: center;
             font-size: 25px;
             position: relative;
@@ -165,15 +173,16 @@
                 align-items: center;
                 border-radius: 50%;
                 position: absolute;
-                bottom: 25%;
+                bottom: 22%;
                 left: 50%;
                 transform: translateX(-50%);
                 cursor: pointer;
-                z-index: 3;
+                z-index: 1;
+                border: 3px solid $BGCOLOR;
             }
             .box{
-                height: 45px;
-                width: 45px;
+                height: 55px;
+                width: 55px;
                 border: 1px dashed rgb(87, 87, 87);;
                 border-radius: 50%;
                 font-size: 35px;
@@ -211,7 +220,8 @@
             }
         }
         .following{
-            width: 85%;
+            width: 80%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -219,6 +229,7 @@
             .following-list{
                 width: unset;
                 min-width: 90%;
+                height: 100%;
                 display: flex;
                 flex-direction: row;
                gap: 20px;
@@ -229,12 +240,11 @@
                     justify-content: flex-end;
                     align-items: center;
                     gap: 5px;
-                    width: 45px;
-                    height: 65px;
+                   
                     flex: 0 0 auto;
                     .box{
-                        width: 40px;
-                        height: 40px;
+                        width: 55px;
+                        height: 55px;
                         border-radius: 50%;
                         position: relative;
                         display: flex;
@@ -349,7 +359,9 @@
         }
         .following{
             width: 85%;
+          
             display: flex;
+           
             justify-content: center;
             align-items: center;
           
@@ -366,8 +378,7 @@
                     justify-content: flex-end;
                     align-items: center;
                     gap: 5px;
-                    width: 45px;
-                    height: 70px;
+                
                     .box{
                         width: 50px;
                         height: 50px;

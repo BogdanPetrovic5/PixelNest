@@ -88,6 +88,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                   font-size: 0.65em;
                   font-family: $PFONT;
                   margin-top: 10px;
+                  
                   position: absolute;
                 }
                 .error{
@@ -138,7 +139,7 @@ $HFONT: "Roboto Condensed", sans-serif;
               
                 .form-control {
                     position: relative;
-                    margin: 30px 0 30px;
+                    margin: 30px 0 35px;
                     width: 100%;
                   }
                   .form-control:first-child{

@@ -16,7 +16,7 @@ export class AuthenticationPageComponent implements OnInit{
   defaultRoute:string = 'Register'
 
   isSuccess:boolean = false;
-
+  warning:boolean = true;
   isInitialized:boolean = false;
 
   subscriptions: Subscription = new Subscription();
@@ -46,5 +46,7 @@ export class AuthenticationPageComponent implements OnInit{
       })
     )
   }
-
+  close(){
+    this.warning = false;
+  }
 }
