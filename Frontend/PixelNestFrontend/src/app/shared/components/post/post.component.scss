@@ -42,6 +42,10 @@ $HFONT: "Roboto Condensed", sans-serif;
                 img{
                     width: 23px;
                     height: 23px;
+                    transition: 300ms;
+                }
+                img:hover{
+                    transform: scale(0.95);
                 }
             }
             .info{

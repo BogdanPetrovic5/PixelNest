@@ -121,6 +121,11 @@ $HFONT: "Roboto Condensed", sans-serif;
                         font-family: $PFONT;
                         font-size: 0.7em;
                         margin-top: 40px;
+                        cursor: pointer;
+                        transition: 300ms;
+                    }
+                    button:hover{
+                        transform: scale(0.9);
                     }
                     button:first-child{
                         background-color: $PCOLOR !important;
