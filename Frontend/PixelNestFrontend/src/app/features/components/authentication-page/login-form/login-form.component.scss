@@ -18,6 +18,8 @@ $HFONT: "Roboto Condensed", sans-serif;
         .wrap{
             margin-top: 40px;
             font-size: 25px;
+            position: relative;
+            z-index: 1;
             img{
               display: none;
             }

@@ -16,7 +16,7 @@ export class RegisterFormComponent implements OnInit{
   error:boolean = false
   enabled:boolean = false;
   pivot?:boolean = false;
-
+  marginLeft:number = 0;
   errorMessage:string = "";
   navigationText:string = this.pivot ? "< Previous" : "Next >"
   constructor(
@@ -42,7 +42,10 @@ export class RegisterFormComponent implements OnInit{
     this.navigationText = this.pivot ? "< Previous" : "Next >"
   }
   togglePivot(){
+    if(!this.pivot) this.marginLeft -= 105;
+    if(this.pivot) this.marginLeft += 105;
     this.pivot = !this.pivot
+
   }
   navigateToLogin(){
     this._router.navigate(['/Authentication/Login'])

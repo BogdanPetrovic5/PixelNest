@@ -20,12 +20,17 @@ $HFONT: "Roboto Condensed", sans-serif;
         .wrap{
             margin-top: 40px;
             font-size: 25px;
+            display: flex;
+            flex-direction: column;
+          position: relative;
+           z-index: 1;
             .progress{
               width: 70%;
               height: 4px;
               border-radius: 25px;
               margin-top: 20px;
               background-color: $TABCOLOR;
+              align-self: center;
               .bar{
                 transition: 300ms;
                 width: 50%;
@@ -40,7 +45,7 @@ $HFONT: "Roboto Condensed", sans-serif;
               width: 70%;
               font-size: 25px;
               margin-top: 20px;
-              
+              align-self: center;
               .nav-text{
                 font-size: 0.66em;
                 color: $PCOLOR !important;
@@ -82,7 +87,19 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
             .inputs{
                 position: relative;
-                
+                overflow: hidden;
+                width: 100%;
+                .track{
+                  display: flex;
+                  flex-direction: row;
+                  width: 100%;
+                  gap:5%;
+                 transition: 300ms ease-in-out;
+                  .first-slide, .second-slide{
+                    width: 100%;
+                    flex-shrink: 0;
+                  }
+                }
                 .invalid-feedback{
                   color: red;
                   font-size: 0.65em;
