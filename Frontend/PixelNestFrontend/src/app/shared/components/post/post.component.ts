@@ -22,6 +22,7 @@ import { LottieStateService } from 'src/app/core/services/states/lottie-state.se
 })
 export class PostComponent implements OnInit{
 
+
   @Input() post!:PostDto;
   likedByUsers: LikedByUsers[] = [];
   savedByUsers:SavedPosts[] = []
@@ -37,6 +38,10 @@ export class PostComponent implements OnInit{
   areCommentsOpened:boolean = false;
   deleteDialog:boolean = false;
   isVisible:boolean = false;
+
+  marginLeft = 0;
+  progressBarMargin = 0;
+  index = 0;
   subscription:Subscription = new Subscription;
   constructor(
     private _datePipe:DatePipe,
@@ -56,7 +61,22 @@ export class PostComponent implements OnInit{
     this._initilizeComponent();
     
   }
-
+  onSwipeRight() {
+    console.log(this.index)
+    if(this.index - 1 >= 0){
+      this.marginLeft += 200;
+      this.progressBarMargin = this.progressBarMargin - 100 / (this.post.imagePaths.length)
+      this.index -= 1;
+    }
+  }
+  onSwipeLeft() {
+    console.log(this.index)
+    if(this.index + 1 <= (this.post.imagePaths.length -1)){
+      this.marginLeft -= 200;
+      this.progressBarMargin = this.progressBarMargin + 100 / (this.post.imagePaths.length)
+      this.index += 1;
+    }
+  }
   navigateToUserProfile(username:string){
 
     this._router.navigate([`/Profile/${username}`])

@@ -21,7 +21,7 @@ export class NewPostComponent implements OnInit{
 
   geocodeUrl: string = 'https://api.maptiler.com/geocoding/';
   suggestions: any[] = [];
-
+  imageIndex = 0;
   charCount:number = 0;
   maxChar:number = 1000;
   
@@ -120,27 +120,34 @@ export class NewPostComponent implements OnInit{
   toggleObjectFit(): void {
     this.objectFit = this.objectFit === 'cover' ? 'contain' : 'cover';
   }
-
+  discard(){
+    console.log(this.imageIndex)
+    this.selectedFiles.splice(this.imageIndex, 1)
+    this.imageUrls.splice(this.imageIndex, 1)
+    if(this.imageIndex - 1 >= 0) this.imageIndex -= 1
+    
+  }
+  navigateThroughImages(index:number){
+    
+    this.imageIndex = index;
+  }
   async onFileSelected(event: Event){
     const inputElement = event.target as HTMLInputElement;
     const files = inputElement.files;
 
     if (files && files.length > 0) {
       this.selectedFiles = [];
-      
-
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-       
         try {
- 
           const compressedFile = await this._imageCompressorService.compressImage(file);
-          
           
           const reader = new FileReader();
           reader.onload = (e: ProgressEvent<FileReader>) => {
             if (e.target?.result) {
               this.imageSrc = e.target.result as string;
+              this.imageUrls.push(this.imageSrc)
+              console.log(this.imageUrls)
               this.img = false; 
             }
           };
