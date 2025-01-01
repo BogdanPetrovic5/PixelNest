@@ -15,7 +15,7 @@ namespace PixelNestBackend.Models
         public int? ParentCommentID { get; set; }
         public int TotalLikes { get; set; }
         public int TotalReplies { get; set; } = 0;
-        public string Username { get; set; }
+        
         public User User { get; set; }
         public Post Post { get; set; }
         [NotMapped]

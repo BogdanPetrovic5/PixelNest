@@ -25,37 +25,35 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                    var groupedStories = await _dataContext
-               .Stories
-               .Where(s => s.Username != username && s.ExpirationDate >= DateTime.Now)
-               .GroupBy(s => s.Username)
-               .Select(group => new GroupedStoriesDto
-               {
-                   OwnerUsername = group.Key,
-                   Stories = group.Select(s => new ResponseStoryDto
-                   {
-                       OwnerUsername = s.Username,
-                       SeenByUser = _dataContext.Seen.Any(a => a.Username == username && s.StoryID == a.StoryID),
-                       ImagePaths = s.ImagePath.Select(i => new ResponseImageDto
-                       {
-                           Path = i.Path,
-                           PhotoDisplay = i.PhotoDisplay,
-                       }).ToList(),
-                       StoryID = s.StoryID
-                   }).ToList()
-               })
-               .AsSplitQuery()
-               .ToListAsync();
-                foreach (var post in groupedStories)
+                ICollection<GroupedStoriesDto> groupedStories = null;
+                User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
+                if (user != null)
                 {
-                    foreach (var story in post.Stories)
-                    {
-                        if (story.ImagePaths != null)
-                        {
-                            _SASTokenGenerator.appendSasToken(story.ImagePaths);
-                        }
-
-                    }
+                    groupedStories = await _dataContext
+                         .Stories
+                         .Where(s => s.UserID != user.UserID && s.ExpirationDate >= DateTime.Now)
+                         .GroupBy(s => s.UserID)
+                         .Select(group => new GroupedStoriesDto
+                         {
+                             OwnerUsername = _dataContext.Users
+                                                 .Where(u => u.UserID == group.Key)
+                                                 .Select(u => u.Username)
+                                                 .FirstOrDefault(), // Get the username of the story owner
+                             Stories = group.Select(s => new ResponseStoryDto
+                             {
+                                 OwnerUsername = s.User.Username, // Ensure Stories table has the Username property
+                                 SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
+                                 ImagePaths = s.ImagePath // Assuming Stories has navigation property `ImagePaths`
+                                                .Select(i => new ResponseImageDto
+                                                {
+                                                    Path = i.Path,
+                                                    PhotoDisplay = i.PhotoDisplay,
+                                                }).ToList(),
+                                 StoryID = s.StoryID
+                             }).ToList()
+                         })
+                         .AsSplitQuery()
+                         .ToListAsync();
                 }
                 return groupedStories;
             }
@@ -68,37 +66,35 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                 var groupedStories = await _dataContext
-                .Stories
-                .Where(s => s.Username == username && s.ExpirationDate >= DateTime.Now)
-                .GroupBy(s => s.Username)
-                .Select(group => new GroupedStoriesDto
+                ICollection<GroupedStoriesDto> groupedStories = null;
+                User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
+                if (user != null)
                 {
-                    OwnerUsername = group.Key,
-                    Stories = group.Select(s => new ResponseStoryDto
-                    {
-                        OwnerUsername = s.Username,
-                        SeenByUser = _dataContext.Seen.Any(a => a.Username == username && s.StoryID == a.StoryID),
-                        ImagePaths = s.ImagePath.Select(i => new ResponseImageDto
-                        {
-                            Path = i.Path,
-                            PhotoDisplay = i.PhotoDisplay,
-                        }).ToList(),
-                        StoryID = s.StoryID
-                    }).ToList()
-                })
-                .AsSplitQuery()
-                .ToListAsync();
-                foreach (var post in groupedStories)
-                {
-                    foreach (var story in post.Stories)
-                    {
-                        if (story.ImagePaths != null)
-                        {
-                            _SASTokenGenerator.appendSasToken(story.ImagePaths);
-                        }
-
-                    }
+                    groupedStories = await _dataContext
+                         .Stories
+                         .Where(s => s.UserID == user.UserID && s.ExpirationDate >= DateTime.Now)
+                         .GroupBy(s => s.UserID)
+                         .Select(group => new GroupedStoriesDto
+                         {
+                             OwnerUsername = _dataContext.Users
+                                                 .Where(u => u.UserID == group.Key)
+                                                 .Select(u => u.Username)
+                                                 .FirstOrDefault(),
+                             Stories = group.Select(s => new ResponseStoryDto
+                             {
+                                 OwnerUsername = s.User.Username, 
+                                 SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
+                                 ImagePaths = s.ImagePath 
+                                                .Select(i => new ResponseImageDto
+                                                {
+                                                    Path = i.Path,
+                                                    PhotoDisplay = i.PhotoDisplay,
+                                                }).ToList(),
+                                 StoryID = s.StoryID
+                             }).ToList()
+                         })
+                         .AsSplitQuery()
+                         .ToListAsync();
                 }
                 return groupedStories;
             }
@@ -111,7 +107,7 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                if(!_dataContext.Seen.Any(a => a.Username == seen.Username && a.StoryID == seen.StoryID))
+                if(!_dataContext.Seen.Any(a => a.UserID == seen.UserID && a.StoryID == seen.StoryID))
                 {
                     _dataContext.Seen.Add(seen);
                     int result = _dataContext.SaveChanges();
@@ -159,7 +155,7 @@ namespace PixelNestBackend.Repository
             }
             Story story = new Story
             {
-                Username = storyDto.Username,
+               
                 UserID = userID,
                 CreationDate = DateTime.Now,
                 ExpirationDate = DateTime.Now.AddDays(1)
@@ -188,11 +184,12 @@ namespace PixelNestBackend.Repository
         {
             try
             {
+                User user = _dataContext.Users.Where(u => u.Username.Equals(viewersDto.Username)).FirstOrDefault();
                 ICollection<ResponseViewersDto> viewers = this._dataContext.Seen
-                    .Where(a => a.Username != viewersDto.Username && viewersDto.StoryID == a.StoryID)
+                    .Where(a => a.UserID != user.UserID && viewersDto.StoryID == a.StoryID)
                     .Select(v => new ResponseViewersDto
                     {
-                        Username = v.Username
+                        Username = v.User.Username
                     }).ToList();
                 return viewers;
             }

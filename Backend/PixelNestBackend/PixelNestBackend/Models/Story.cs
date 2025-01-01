@@ -9,7 +9,7 @@ namespace PixelNestBackend.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int StoryID { get; set; }
         public int UserID { get; set; }
-        public string Username { get; set; }
+  
         [NotMapped]
         public ICollection<ImagePath> ImagePath { get; set; }
         public DateTime CreationDate { get; set; }

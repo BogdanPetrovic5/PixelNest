@@ -8,6 +8,7 @@ using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
 using PixelNestBackend.Security;
+using PixelNestBackend.Utility;
 
 
 namespace PixelNestBackend.Repository
@@ -18,17 +19,20 @@ namespace PixelNestBackend.Repository
         private readonly IConfiguration _configuration;
         private readonly ILogger<PostRepository> _logger;
         private readonly SASTokenGenerator _SAStokenGenerator;
+        private readonly UserUtility _userUtility;
         public PostRepository(
             DataContext dataContext,
             IConfiguration configuration,
             ILogger<PostRepository> logger,
-            SASTokenGenerator SASTokenGenerator
+            SASTokenGenerator SASTokenGenerator,
+            UserUtility userUtility
             )
         {
             _dataContext = dataContext;
             _configuration = configuration;
             _logger = logger;
             _SAStokenGenerator = SASTokenGenerator;
+            _userUtility = userUtility;
         }
 
 
@@ -38,7 +42,7 @@ namespace PixelNestBackend.Repository
             {
                 UserID = userID,
                 PostID = savePostDto.PostID,
-                Username = savePostDto.Username
+                
             };
             if (!isDuplicate)
             {
@@ -64,8 +68,8 @@ namespace PixelNestBackend.Repository
                 };
             }
 
-            string newPostQuery = @"INSERT INTO Posts(UserID, OwnerUsername, PostDescription, TotalComments, TotalLikes, PublishDate, Location) 
-                            VALUES(@UserID, @OwnerUsername, @PostDescription, @TotalComments, @TotalLikes, GETDATE(), @Location);
+            string newPostQuery = @"INSERT INTO Posts(UserID, PostDescription, TotalComments, TotalLikes, PublishDate, Location) 
+                            VALUES(@UserID, @PostDescription, @TotalComments, @TotalLikes, GETDATE(), @Location);
                             SELECT CAST(SCOPE_IDENTITY() as int)";
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
@@ -79,7 +83,7 @@ namespace PixelNestBackend.Repository
                     {
                       
                         command.Parameters.AddWithValue("@UserID", userID);
-                        command.Parameters.AddWithValue("@OwnerUsername", postDto.OwnerUsername);
+                       
                         
                         command.Parameters.AddWithValue("@TotalComments", 0);
                         command.Parameters.AddWithValue("@TotalLikes", 0);
@@ -138,16 +142,18 @@ namespace PixelNestBackend.Repository
         {
             try
             {
+                int userID = _userUtility.GetUserID(username);
+                int currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
                 ICollection<ResponsePostDto> posts = await _dataContext.Posts
-                    .Where(u => u.OwnerUsername == username)
+                    .Where(u => u.UserID == userID)
                    .Select(a => new ResponsePostDto
                    {
                        PostDescription = a.PostDescription,
-                       OwnerUsername = a.OwnerUsername,
+                       OwnerUsername = a.User.Username,
                        TotalComments = a.TotalComments,
                        TotalLikes = a.TotalLikes,
                        PostID = a.PostID,
-                       IsDeletable = a.OwnerUsername == currentLoggedUser,
+                       IsDeletable = a.UserID == currentLoggedUserID,
                        PublishDate = a.PublishDate,
                        ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
                        {
@@ -159,12 +165,12 @@ namespace PixelNestBackend.Repository
                        Location = a.Location,
                        LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                        {
-                           Username = l.Username
+                           Username = l.User.Username
 
                        }).ToList(),
                        SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
                        {
-                           Username = s.Username
+                           Username = s.User.Username
 
                        }).ToList()
                    })
@@ -192,15 +198,17 @@ namespace PixelNestBackend.Repository
         {
             try
             {
+                
+                int userID = _userUtility.GetUserID(username);
                 ICollection<ResponsePostDto> posts = await _dataContext.Posts
                    .Where(l => l.Location.ToLower().Contains(location.ToLower()))
                    .Select(a => new ResponsePostDto
                    {
                        PostDescription = a.PostDescription,
-                       OwnerUsername = a.OwnerUsername,
+                       OwnerUsername = a.User.Username,
                        TotalComments = a.TotalComments,
                        TotalLikes = a.TotalLikes,
-                       IsDeletable = a.OwnerUsername == username,
+                       IsDeletable = a.UserID == userID,
                        PostID = a.PostID,
                        PublishDate = a.PublishDate,
                        ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
@@ -213,12 +221,12 @@ namespace PixelNestBackend.Repository
                        Location = a.Location,
                        LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                        {
-                           Username = l.Username
+                           Username = l.User.Username
 
                        }).ToList(),
                        SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
                        {
-                           Username = s.Username
+                           Username = s.User.Username
 
                        }).ToList()
                    })
@@ -247,15 +255,17 @@ namespace PixelNestBackend.Repository
         {
             try
             {
+                
                 ICollection<ResponsePostDto> posts = await _dataContext.Posts
                    .Select(a => new ResponsePostDto
                    {
                        PostDescription = a.PostDescription,
-                       OwnerUsername = a.OwnerUsername,
+                      
                        TotalComments = a.TotalComments,
                        TotalLikes = a.TotalLikes,
+                       OwnerUsername = a.User.Username,
                        PostID = a.PostID,
-                       IsDeletable = a.OwnerUsername == username,
+                       IsDeletable = a.User.Username == username,
                        PublishDate = a.PublishDate,
                        ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto {
                            Path = l.Path,
@@ -266,12 +276,12 @@ namespace PixelNestBackend.Repository
                        Location = a.Location,
                        LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                        {
-                           Username = l.Username
+                           Username = l.User.Username
 
                        }).ToList(),
                        SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
                        {
-                           Username = s.Username
+                           Username = s.User.Username
 
                        }).ToList()
                    })
@@ -304,7 +314,7 @@ namespace PixelNestBackend.Repository
             string query;
             if (!isLiked)
             {
-                query = "INSERT INTO LikedPosts (UserID, PostID, Username, DateLiked) Values(@UserID, @PostID, @Username, GETDATE())";
+                query = "INSERT INTO LikedPosts (UserID, PostID, DateLiked) Values(@UserID, @PostID,GETDATE())";
             }
             else query = "DELETE FROM LikedPosts WHERE PostID = @PostID AND UserID = @UserID";
 
@@ -317,7 +327,7 @@ namespace PixelNestBackend.Repository
                         connection.Open();
                         command.Parameters.AddWithValue("@UserID", userID);
                         command.Parameters.AddWithValue("@PostID", likeDto.PostID);
-                        command.Parameters.AddWithValue("@Username", likeDto.Username);
+                    
                         int i = command.ExecuteNonQuery();
                         connection.Close();
                         if (i > 0)
@@ -386,9 +396,9 @@ namespace PixelNestBackend.Repository
             try
             {
                 var post = _dataContext.Posts.FirstOrDefault(a => a.PostID == postID);
-                var username = _dataContext.Posts
+                var userID = _dataContext.Posts
                     .Where(p => p.PostID == postID)
-                    .Select(p => p.OwnerUsername)
+                    .Select(p => p.UserID)
                     .FirstOrDefault();
                 if (post == null)
                 {
@@ -404,7 +414,7 @@ namespace PixelNestBackend.Repository
                 _dataContext.LikedPosts.Where(a => a.PostID == postID).ExecuteDelete();
                 _dataContext.SavedPosts.Where(a => a.PostID == postID).ExecuteDelete();
                 _dataContext.ImagePaths.Where(a => a.PostID == postID).ExecuteDelete();
-                User? user = _dataContext.Users.FirstOrDefault(u => u.Username == username);
+                User? user = _dataContext.Users.FirstOrDefault(u => u.UserID == userID);
                 if (user != null) user.TotalPosts -= 1;
                 _dataContext.Posts.Remove(post);
                 
@@ -430,19 +440,19 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public string ExtractUsername(int postID)
+        public int ExtractUserID(int postID)
         {
-            string? username = _dataContext.Posts.Where(a => a.PostID == postID)
-                .Select(username => username.OwnerUsername).FirstOrDefault();
+            int userID = _dataContext.Posts.Where(a => a.PostID == postID)
+                .Select(userID => userID.UserID).FirstOrDefault();
 
-            return username;
+            return userID;
         }
 
-        public bool CheckIntegrity(string username, string email)
+        public bool CheckIntegrity(int userID, string email)
         {
             try
             {
-                bool isValid = _dataContext.Users.Where(u => u.Username == username).Any(e => e.Email == email);
+                bool isValid = _dataContext.Users.Where(u => u.UserID == userID).Any(e => e.Email == email);
                 return isValid;
             }
             catch (Exception ex)

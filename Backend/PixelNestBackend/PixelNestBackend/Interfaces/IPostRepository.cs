@@ -16,7 +16,7 @@ namespace PixelNestBackend.Interfaces
         bool LikePost(LikeDto likeDto, bool isLiked, int userID);
         PostResponse Comment(Comment comment);
         Task<DeleteResponse> DeletePost(int postID);
-        string ExtractUsername(int postID);
-        bool CheckIntegrity(string username, string email);
+        int ExtractUserID(int postID);
+        bool CheckIntegrity(int userID, string email);
     }
 }

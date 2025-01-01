@@ -23,15 +23,13 @@ namespace PixelNestBackend.Services
         public readonly IFileUpload _fileUpload;
         private readonly string _basedFolderPath;
         private readonly ILogger<PostService> _ILogger;
-        private readonly BlobStorageUpload _blobStorageUpload;
-        private readonly SASTokenGenerator _SAStokenGenerator;
+       
         public PostService(
 
             UserUtility userUtility,
             PostUtility postUtility,
             FolderGenerator folderGenerator,
-            BlobStorageUpload blobStorageUpload,
-            SASTokenGenerator SASTokenGenerator,
+           
             IPostRepository postRepository,
             IFileUpload fileUpload,
             ILogger<PostService> logger
@@ -45,8 +43,7 @@ namespace PixelNestBackend.Services
             _postRepository = postRepository;
             _fileUpload = fileUpload;
             _ILogger = logger;
-            _blobStorageUpload = blobStorageUpload;
-            _SAStokenGenerator = SASTokenGenerator;
+          
         }
         public bool SavePost(SavePostDto savePostDto)
         {
@@ -91,9 +88,11 @@ namespace PixelNestBackend.Services
 
         public async Task<PostResponse> PublishPost(PostDto postDto)
         {
-            string userFolderName = postDto.OwnerUsername;
-            string userFolderPath = Path.Combine(_basedFolderPath, userFolderName);
             int userID = _userUtility.GetUserID(postDto.OwnerUsername);
+            string userFolderName = userID.ToString();
+
+            string userFolderPath = Path.Combine(_basedFolderPath, userFolderName);
+            
 
             if (!_folderGenerator.CheckIfFolderExists(userFolderPath))
             {
@@ -108,18 +107,18 @@ namespace PixelNestBackend.Services
                 if (response.IsSuccessfull)
                 {
                     int postID = response.PostID;
-                    //bool isUploaded = await _fileUpload.StoreImages(postDto, null, userFolderPath, postID);
-                    bool isUploadedBlob = await _blobStorageUpload.StoreImages(postDto, null, postDto.OwnerUsername, postID);
-                    if (isUploadedBlob) return new PostResponse
-                    {
-                        IsSuccessfull = true,
-                        Message = "Post was successfully added to your feed."
-                    };
-                    //if (isUploaded) return new PostResponse
+                    bool isUploaded = await _fileUpload.StoreImages(postDto, null,null, userFolderPath, postID, null);
+                    //bool isUploadedBlob = await _blobStorageUpload.StoreImages(postDto, null, postDto.OwnerUsername, postID);
+                    //if (isUploadedBlob) return new PostResponse
                     //{
                     //    IsSuccessfull = true,
                     //    Message = "Post was successfully added to your feed."
                     //};
+                    if (isUploaded) return new PostResponse
+                    {
+                        IsSuccessfull = true,
+                        Message = "Post was successfully added to your feed."
+                    };
                     return new PostResponse
                     {
                         IsSuccessfull = false,
@@ -153,7 +152,7 @@ namespace PixelNestBackend.Services
                 {
                     UserID = userID,
                     CommentText = commentDto.CommentText,
-                    Username = commentDto.Username,
+                    
                     PostID = commentDto.PostID,
                     TotalLikes = 0,
                     ParentCommentID = commentDto.ParentCommentID
@@ -176,9 +175,9 @@ namespace PixelNestBackend.Services
         public bool CheckIntegrity(string email, int postID)
         {
 
-            string username = _postRepository.ExtractUsername(postID);
-            if (username != null) { 
-                bool isValid = _postRepository.CheckIntegrity(username, email);
+            int userID = _postRepository.ExtractUserID(postID);
+            if (userID != null) { 
+                bool isValid = _postRepository.CheckIntegrity(userID, email);
                 if (!isValid)
                 {
                     return false;

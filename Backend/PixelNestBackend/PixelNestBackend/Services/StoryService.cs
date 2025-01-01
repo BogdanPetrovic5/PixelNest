@@ -16,13 +16,13 @@ namespace PixelNestBackend.Services
         private readonly FolderGenerator _folderGenerator;
         private readonly IStoryRepository _storyRepository;
         private readonly UserUtility _userUtility;
-        private readonly BlobStorageUpload _blobStorageUpload;
+  
         public StoryService(
             IFileUpload fileUpload,
             FolderGenerator folderGenerator,
             IStoryRepository storyRepository,
-            UserUtility userUtility,
-            BlobStorageUpload blobStorageUpload
+            UserUtility userUtility
+      
             )
         {
             _basedFolderPath = Path.Combine("wwwroot", "Photos");
@@ -30,7 +30,7 @@ namespace PixelNestBackend.Services
             _folderGenerator = folderGenerator;
             _storyRepository = storyRepository;
             _userUtility = userUtility;
-            _blobStorageUpload = blobStorageUpload; 
+          
         }
 
         public async Task<ICollection<GroupedStoriesDto>> GetStories(bool forCurrentUser, string username)
@@ -53,7 +53,7 @@ namespace PixelNestBackend.Services
             Seen seen = new Seen
             {
                 StoryID = seenDto.StoryID,
-                Username = seenDto.Username,
+               
                 UserID = userID
             };
             return _storyRepository.MarkStoryAsSeen(seen);
@@ -61,14 +61,15 @@ namespace PixelNestBackend.Services
 
         public async Task<StoryResponse> PublishStory(StoryDto storyDto)
         {
-            string userFolderName = storyDto.Username;
+            int userID = _userUtility.GetUserID(storyDto.Username);
+            string userFolderName =userID.ToString();
             string userFolderPath = Path.Combine(_basedFolderPath, userFolderName, "Stories");
 
             if (!_folderGenerator.CheckIfFolderExists(userFolderPath))
             {
                 _folderGenerator.GenerateNewFolder(userFolderPath);
             }
-            int userID = _userUtility.GetUserID(storyDto.Username);
+            
             StoryResponse response = await _storyRepository
                 .PublishStory(storyDto, userID);
             if(response != null)
@@ -76,8 +77,8 @@ namespace PixelNestBackend.Services
                 if (response.IsSuccessful)
                 {
                     int storyID = response.StoryID;
-                    //bool isUploaded = await _fileUpload.StoreImages(null, storyDto,userFolderPath, storyID);
-                    bool isUploaded = await _blobStorageUpload.StoreImages(null, storyDto, storyDto.Username, storyID);
+                    bool isUploaded = await _fileUpload.StoreImages(null, storyDto,null, userFolderPath, storyID,null);
+                    //bool isUploaded = await _blobStorageUpload.StoreImages(null, storyDto, storyDto.Username, storyID);
 
                     if (isUploaded)
                     {

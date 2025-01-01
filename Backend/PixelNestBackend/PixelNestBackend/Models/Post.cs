@@ -13,7 +13,7 @@ namespace PixelNestBackend.Models
        
         public int PostID { get; set; }
         public int UserID { get; set; }
-        public string? OwnerUsername { get; set; }
+        
         public string? PostDescription { get; set; }
         public int TotalComments { get; set; }
         public int TotalLikes { get; set; }

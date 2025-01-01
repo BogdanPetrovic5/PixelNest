@@ -21,7 +21,7 @@ namespace PixelNestBackend.Data
         public DbSet<Seen> Seen { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<LikeDto>().HasNoKey();
+           
             modelBuilder.Entity<User>().HasKey(u => u.UserID);
             modelBuilder.Entity<Post>().HasKey(p => p.PostID);
             modelBuilder.Entity<ImagePath>().HasKey(p => p.PathID);
@@ -51,6 +51,7 @@ namespace PixelNestBackend.Data
                .WithMany(u => u.Comments)
                .HasForeignKey(c => c.UserID)
                .OnDelete(DeleteBehavior.Cascade);
+                
 
             modelBuilder.Entity<ImagePath>()
                 .HasOne(imagePath => imagePath.Post)
@@ -66,6 +67,17 @@ namespace PixelNestBackend.Data
             modelBuilder.Entity<ImagePath>()
                 .Property(pi => pi.PostID)
                 .IsRequired(false);
+            modelBuilder.Entity<ImagePath>()
+              .Property(uid => uid.UserID)
+              .IsRequired(false);
+            modelBuilder.Entity<ImagePath>()
+              .Property(sid => sid.StoryID)
+              .IsRequired(false);
+            modelBuilder.Entity<ImagePath>()
+                .HasOne(user => user.User)
+                .WithOne(profilePhoto => profilePhoto.ProfilePhoto)
+                .HasForeignKey<ImagePath>(user => user.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<LikedPosts>()
                 .HasOne(user => user.User)

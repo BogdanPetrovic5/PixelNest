@@ -32,6 +32,7 @@ namespace PixelNestBackend.Models
         public ICollection<Follow>? FollowingsList { get; set; }
         public ICollection<Follow>? FollowersList { get; set; }
         public ICollection<Seen>? SeenList { get; set; }
+        public ImagePath? ProfilePhoto { get; set; }
 
     }
 }

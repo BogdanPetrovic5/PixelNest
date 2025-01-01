@@ -28,13 +28,27 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                bool isFollowing =  _dataContext.Follow.Any(a => a.FollowerUsername == follow.FollowerUsername && a.FollowingUsername == follow.FollowingUsername);
+                User followerUser = _dataContext.Users.Where(u => u.Username.Equals(follow.FollowerUsername)).FirstOrDefault();
+                User followingUser = _dataContext.Users.Where(u => u.Username.Equals(follow.FollowingUsername)).FirstOrDefault();
+
+                if (followerUser != null && followingUser != null) {
+                    bool isFollowing = _dataContext.Follow.Any(a => a.UserFollowerID == followerUser.UserID && a.UserFollowingID == followingUser.UserID);
+
+                    return new FollowResponse
+                    {
+                        IsFollowing = isFollowing,
+                        IsSuccessful = true
+                    };
+                }
                 return new FollowResponse
                 {
-                    IsFollowing = isFollowing,
+                    IsFollowing = false,
                     IsSuccessful = true
                 };
-            }catch(SqlException ex)
+
+
+            }
+            catch(SqlException ex)
             {
                 Console.WriteLine(ex.Message);
                 return new FollowResponse
@@ -56,15 +70,20 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                ICollection<ResponseFollowingDto> users = _dataContext
+                User user = _dataContext.Users.Where(u => u.Username.Equals(username)).FirstOrDefault();
+                if (user != null)
+                {
+                    ICollection<ResponseFollowingDto> users = _dataContext
                     .Follow
-                    .Where(follower => follower.FollowerUsername == username && follower.FollowingUsername != username)
+                    .Where(follower => follower.UserFollowerID == user.UserID && follower.UserFollowingID != user.UserID)
                     .Select(f => new ResponseFollowingDto
                     {
-                        FollowingUsername = f.FollowingUsername
+                        FollowingUsername = f.UserFollowing.Username
 
                     }).ToList();
-                return users;
+                    return users;
+                }return null;
+                
             }
             catch (Exception ex)
             {
@@ -76,12 +95,13 @@ namespace PixelNestBackend.Repository
         {
             try
             {
+                User user = _dataContext.Users.Where(u => u.Username.Equals(username)).FirstOrDefault();
                 ICollection<ResponseFollowersDto> users = _dataContext
                     .Follow
-                    .Where(follower => follower.FollowingUsername == username && follower.FollowerUsername != username)
+                    .Where(follower => follower.UserFollowingID == user.UserID && follower.UserFollowerID != user.UserID)
                     .Select(f => new ResponseFollowersDto
                     {
-                        FollowerUsername = f.FollowerUsername
+                        FollowerUsername = f.UserFollower.Username
 
                     }).ToList();
                 return users;
@@ -98,8 +118,7 @@ namespace PixelNestBackend.Repository
             {
                 Follow follow = new Follow {
 
-                    FollowerUsername = followDto.FollowerUsername,
-                    FollowingUsername = followDto.FollowingUsername,
+                
                     UserFollowerID = _userUtility.GetUserID(followDto.FollowerUsername),
                     UserFollowingID = _userUtility.GetUserID(followDto.FollowingUsername)
                    
@@ -190,6 +209,41 @@ namespace PixelNestBackend.Repository
                 return string.Empty;
             }
 
+        }
+        public string GetPicture(int userID)
+        {
+            try
+            {
+                var image = _dataContext.ImagePaths.Where(u => u.UserID == userID).FirstOrDefault();
+                if (image != null)
+                {
+                    return image.Path;
+                }
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return string.Empty;
+            }
+        }
+
+        public bool ChangeUsername(string username, string newUsername)
+        {
+            try
+            {
+                var user = _dataContext.Users.Where(u => u.Username == username).FirstOrDefault();
+                if (user != null) {
+                    user.Username = newUsername;
+                    return true;
+                }
+                return false;
+
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                return false;
+                
+            }
         }
     }
 }

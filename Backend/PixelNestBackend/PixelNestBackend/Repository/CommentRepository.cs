@@ -33,14 +33,14 @@ namespace PixelNestBackend.Repository
                     CommentText = r.CommentText,
                     TotalLikes = r.TotalLikes,
                     UserID = r.UserID,
-                    Username = r.Username,
+                    Username = r.User.Username,
                     PostID = r.PostID,
                     ParentCommentID = r.ParentCommentID,
                     TotalReplies = r.TotalReplies,
                     LikedByUsers = r.LikedComments != null
                              ? r.LikedComments.Select(l => new LikeCommentDto
                              {
-                                 Username = l.Username
+                                 Username = l.User.Username
                              }).ToList()
                              : new List<LikeCommentDto>(),
                     Replies = _GetReplies(r.CommentID, allComments)
@@ -57,7 +57,7 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var allComments = _dataContext.Comments.Include(c => c.LikedComments).Where(c => c.PostID == postID).ToList();
+                var allComments = _dataContext.Comments.Include(c => c.LikedComments).Include(c => c.User).Where(c => c.PostID == postID).ToList();
 
           
                 return allComments
@@ -68,14 +68,14 @@ namespace PixelNestBackend.Repository
                         CommentText = c.CommentText,
                         TotalLikes = c.TotalLikes,
                         UserID = c.UserID,
-                        Username = c.Username,
+                        Username = c.User != null ? c.User.Username : "Unknown",
                         PostID = c.PostID,
                         ParentCommentID = c.ParentCommentID,
                         TotalReplies = c.TotalReplies,
                         LikedByUsers = c.LikedComments != null
                             ? c.LikedComments.Select(l => new LikeCommentDto
                             {
-                                Username = l.Username
+                                Username = l.User.Username
                             }).ToList()
                             : new List<LikeCommentDto>(),
                         
@@ -84,6 +84,7 @@ namespace PixelNestBackend.Repository
             }
             catch(Exception ex)
             {
+                Console.WriteLine("Exception: "+ ex.Message);
                 return null;
             }
         }
@@ -95,12 +96,12 @@ namespace PixelNestBackend.Repository
                 {
                     UserID = userID,
                     CommentID = likeCommentDto.CommentID,
-                    Username = likeCommentDto.Username
+                  
 
                 };
                 if (!isDuplicate)
                 {
-                    Console.WriteLine("Nije duplikat");
+                    
 
 
                     _dataContext.LikeComments.Add(likeObj);
@@ -143,13 +144,13 @@ namespace PixelNestBackend.Repository
                     CommentText = reply.CommentText,
                     TotalLikes = reply.TotalLikes,
                     UserID = reply.UserID,
-                    Username = reply.Username,
+                    Username = reply.User.Username,
                     PostID = reply.PostID,
                     ParentCommentID = reply.ParentCommentID,
                     LikedByUsers = reply.LikedComments != null
                         ? reply.LikedComments.Select(l => new LikeCommentDto
                         {
-                            Username = l.Username
+                            Username = l.User.Username
                         }).ToList()
                         : new List<LikeCommentDto>(),
 

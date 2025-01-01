@@ -76,6 +76,44 @@ namespace PixelNestBackend.Controllers
             }
             else return NotFound();
         }
+        [Authorize]
+        [HttpPut("ChangeProfilePicture")]
+        public async Task<ActionResult<bool>> ChangePicture([FromForm] ProfileDto profileDto)
+        {
+            
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (email == null) return Unauthorized();
+
+            bool response = await this._userService.ChangePicture(profileDto, email);
+            if (response) return Ok(new { message = "Profile picture changed successfully" });
+            return NotFound();
+            
+        }
+        [Authorize]
+        [HttpPut("ChangeUsername")]
+        public ActionResult<bool> ChangeUsername([FromForm] ProfileDto profileDto)
+        {
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (email == null) return Unauthorized();
+
+            bool response = _userService.ChangeUsername(email, profileDto.Username);
+
+            if (response) return Ok(new { message = "Username changed successfully"} );
+            return NotFound(new { message = "Error!" });
+            
+        }
+        [Authorize]
+        [HttpGet("GetProfilePicture")]
+        public ActionResult<string> GetProfilePicture(string username)
+        {
+            string? pictureUrl = _userService.GetPicture(username);
+            if(pictureUrl != null)
+            {
+                return Ok(new {path = pictureUrl });
+            }
+            return NotFound(new { path = string.Empty });
+            
+        }
     
     } 
 }
