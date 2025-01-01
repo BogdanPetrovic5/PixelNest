@@ -108,7 +108,7 @@ namespace PixelNestBackend.Services
                 {
                     int postID = response.PostID;
                     bool isUploaded = await _fileUpload.StoreImages(postDto, null,null, userFolderPath, postID, null);
-                    //bool isUploadedBlob = await _blobStorageUpload.StoreImages(postDto, null, postDto.OwnerUsername, postID);
+                    //bool isUploadedBlob = await _blobStorageUpload.StoreImages(postDto, null, userID, postID);
                     //if (isUploadedBlob) return new PostResponse
                     //{
                     //    IsSuccessfull = true,

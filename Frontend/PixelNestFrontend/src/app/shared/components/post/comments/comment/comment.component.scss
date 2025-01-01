@@ -61,7 +61,21 @@ $HFONT: "Roboto Condensed", sans-serif;
                 font-size: 25px;
                 color: $PCOLOR;
                 font-family: $PFONT;
+                position: relative;
+                ::ng-deep app-user-tag{
+                    
+                    .container{
+                        .image-holder{
+                            width: 40px;
+                            height: 40px;
+                        }
+                        .info-wrapper{
+                            font-size: 19px;
+                        }
+                    }
+                }
                 div{
+                    
                     position: relative;
                     width: 100%;
                     color: $PCOLOR;
@@ -94,9 +108,11 @@ $HFONT: "Roboto Condensed", sans-serif;
                     font-size: 0.7em;
                     font-weight: 400;
                     cursor: pointer;
+                    
                 }
                 p{
-                    margin: 0;
+                    margin-top: -20px !important;
+                    margin-left: 50px !important;
                     font-size: 0.7em;
                     font-weight: 300;
                    span{
@@ -112,6 +128,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                     color: $PCOLOR;
                     opacity: 0.7;
                     cursor: pointer;
+                    margin-top: -20px !important;
+                    margin-left: 50px !important;
                 }
             }
             img{
@@ -188,6 +206,18 @@ app-reply{
                     font-size: 22px;
                     color: $PCOLOR;
                     font-family: $PFONT;
+                    ::ng-deep app-user-tag{
+                    
+                        .container{
+                            .image-holder{
+                                width: 40px;
+                                height: 40px;
+                            }
+                            .info-wrapper{
+                                font-size: 23px;
+                            }
+                        }
+                    }
                     div{
                         position: relative;
                         width: 100%;
@@ -224,7 +254,7 @@ app-reply{
                         cursor: pointer;
                     }
                     p{
-                        margin: 0;
+                        
                         font-size: 0.7em;
                         font-weight: 300;
                        span{
@@ -331,7 +361,7 @@ app-reply{
                         cursor: pointer;
                     }
                     p{
-                        margin: 0;
+                        
                         font-size: 0.7em;
                         font-weight: 300;
                        span{

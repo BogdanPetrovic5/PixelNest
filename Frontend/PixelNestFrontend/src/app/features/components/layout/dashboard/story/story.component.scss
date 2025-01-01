@@ -61,6 +61,10 @@ $HFONT: "Roboto Condensed", sans-serif;
             transition: 300ms;
             cursor: pointer;
             position: relative;
+            app-profile-image{
+                width: 90%;
+                height: 90%;
+            }
             img{
                 width: 55px;
                 height: 55px;
@@ -115,6 +119,10 @@ $HFONT: "Roboto Condensed", sans-serif;
                     align-items: center;
                     
                     cursor: pointer;
+                    app-profile-image{
+                        width: 100%;
+                        height: 100%;
+                    }
                     img{
                         width: 100%;
                         height: 100%;

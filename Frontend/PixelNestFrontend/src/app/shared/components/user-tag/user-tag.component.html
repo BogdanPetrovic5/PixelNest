@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="image-holder">
+        <!-- <img [src]="stringUrl ? 'http://localhost:7157/Photos/'+ stringUrl : '/assets/images/user.png'" alt="" 
+        [ngStyle]="stringUrl ? { transform: 'scale(1)', objectFit:'cover', width:'100%', height:'100%' } : {width:'100%', height:'100%'}"> -->
+        <app-profile-image [username] = "username"></app-profile-image>
+    </div>
+    
+    <div class="info-wrapper">
+        <h1 (click)="navigateToUserProfile(username)">
+            {{username}} 
+        </h1>
+        <p>
+            {{formattedDate}}
+            <span (click)="navigate(location)" *ngIf="location">
+                <span class="material-symbols-outlined">
+                    location_on
+                </span> 
+                {{location}}
+            </span>
+        </p>
+    </div>
+</div>

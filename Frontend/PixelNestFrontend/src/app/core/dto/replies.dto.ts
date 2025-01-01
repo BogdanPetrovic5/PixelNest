@@ -7,9 +7,9 @@ export interface Replies {
     likedByUsers?: LikedByUsers[];
     parentCommentID?: number;
     postID?: number;
-    replies?: Replies[] | [];
+    replies: Replies[] | [];
     totalLikes?: number;
     userID?: number;
-    username?: string;
+    username: string;
 }
   

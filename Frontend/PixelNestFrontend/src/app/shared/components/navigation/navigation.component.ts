@@ -13,7 +13,7 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
 })
 export class NavigationComponent implements OnInit{
   public selectedTab!:number
-  public username:string | null = this._userSessionService.getFromCookie("username")
+  public username:string = this._userSessionService.getFromCookie("username")
 
   routeToTabMap: { [key: string]: number } = {
     'Dashboard/Feed': 1,

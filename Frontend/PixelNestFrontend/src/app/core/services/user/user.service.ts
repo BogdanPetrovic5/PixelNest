@@ -44,4 +44,21 @@ export class UserService {
 
     return this._httpClient.get<boolean>(url);
   }
+
+  changeProfilePicture(formData:FormData):Observable<boolean>{
+    const url = `${environment.apiUrl}/api/User/ChangeProfilePicture`
+
+    return this._httpClient.put<boolean>(url,formData);
+  }
+  changeUsername(formData:FormData):Observable<boolean>{
+    const url = `${environment.apiUrl}/api/User/ChangeUsername`
+    return this._httpClient.put<boolean>(url,formData)
+  }
+  
+  getProfilePicture(username:string):Observable<any>{
+    const url = `${environment.apiUrl}/api/User/GetProfilePicture?username=${username}`
+
+    return this._httpClient.get<any>(url);
+  }
+
 }

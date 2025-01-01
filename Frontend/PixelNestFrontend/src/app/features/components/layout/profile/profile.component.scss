@@ -148,7 +148,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                                     margin-top: 20px;
                                     margin-bottom: 20px;
                                     font-size: 25px;
+                                    
                                     button.follow{
+                                    
                                        width: 150px;
                                        height: 50px;
                                        font-size: 0.65em;
@@ -205,6 +207,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                                         display: flex;
                                         flex-direction: row;
                                         align-items: center;
+                                        cursor: pointer;
                                         justify-content: center;
                                         h1{
                                             font-size: 1em;
@@ -283,7 +286,10 @@ $HFONT: "Roboto Condensed", sans-serif;
                                             justify-content: left;
                                             gap: 1.5%;
                                             width: 100%;
-                                           
+                                            app-post{
+                                                flex-shrink: 0;
+                                                width: 49.25%;
+                                            }
                                         }
                                         .no-posts{
                                             margin: 0 auto !important;
@@ -297,29 +303,29 @@ $HFONT: "Roboto Condensed", sans-serif;
                                 }
                             }
                         }
-                        ::ng-deep app-post  {
-                            width: 49.25%;
-                            flex-shrink: 0;
-                            .container{
+                        // ::ng-deep app-post  {
+                        //     width: 49.25%;
+                        //     flex-shrink: 0;
+                        //     .container{
                                 
-                                .content{
-                                    .image-holder{
-                                        height: 350px;
-                                    }
-                                    .post-options{
-                                            .option{
+                        //         .content{
+                        //             .image-holder{
+                        //                 height: 350px;
+                        //             }
+                        //             .post-options{
+                        //                     .option{
                                                 
-                                                font-size: 25px;
-                                                display: flex;
-                                                flex-direction: row;
-                                                gap: 10px;
-                                                width: 40%;
+                        //                         font-size: 25px;
+                        //                         display: flex;
+                        //                         flex-direction: row;
+                        //                         gap: 10px;
+                        //                         width: 40%;
                                                 
-                                            }   
-                                    }
-                                }
-                            }
-                        }
+                        //                     }   
+                        //             }
+                        //         }
+                        //     }
+                        // }
                         ::ng-deep app-post:last-child  {
                             margin-bottom: 5%;
                         }
@@ -387,73 +393,93 @@ $HFONT: "Roboto Condensed", sans-serif;
                 padding-bottom: 80px;
             }
         }
-        ::ng-deep app-post  {
+        // ::ng-deep app-post  {
            
-            .container{
+        //     .container{
                 
-                .content{
-                    .image-holder{
-                        height: 250px !important;
-                    }
-                    .post-options{
-                            .option{
+        //         .content{
+        //             .image-holder{
+        //                 height: 250px !important;
+        //             }
+        //             .post-options{
+        //                     .option{
                                 
                             
                                 
-                            }   
-                    }
-                }
-            }
-        }
-        ::ng-deep app-post:last-child  {
-            margin-bottom: 5%;
-        }
+        //                     }   
+        //             }
+        //         }
+        //     }
+        // }
+        // ::ng-deep app-post:last-child  {
+        //     margin-bottom: 5%;
+        // }
     }
 }
 @media only screen and (min-width: 0px) and (max-width: 1300px)
-{
-    ::ng-deep app-feed  {
-        .container {
-            .content {
-                .posts {
-                    .posts-list {
-                        display: flex;
-                        flex-direction: row !important;
-                        
-                        gap: 1.5%;
-                        width: 100%;
-                       
-                    }
-                }
-                .posts-option{
-                    .option{
-                        width: 50%;
+{   
+    .container{
+        .content{
+            .wrap{
+                .profile-section{
+                    .feed{
+                        .feed-content{
+                            .feed-posts{
+                                ::ng-deep app-feed  {
+                                    .container {
+                                        .content {
+                                            .posts {
+                                                .posts-list {
+                                                    display: flex;
+                                                    flex-direction: row !important;
+                                                    
+                                                    gap: 1.5%;
+                                                    width: 100%;
+                                                    
+                                                    app-post{
+                                                        width: 100%;
+                                                        flex-shrink: 0;
+                                                    }
+                                                   
+                                                }
+                                            }
+                                            .posts-option{
+                                                .option{
+                                                    width: 50%;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
-    ::ng-deep app-post  {
-        width: 100% !important;
-        flex-shrink: 0;
-        .container{
+   
+    // ::ng-deep app-post  {
+    //     width: 100% !important;
+    //     flex-shrink: 0;
+    //     .container{
             
-            .content{
-                .image-holder{
-                    height: 350px;
-                }
-                .post-options{
-                        .option{
+    //         .content{
+    //             .image-holder{
+    //                 height: 350px;
+    //             }
+    //             .post-options{
+    //                     .option{
                             
-                            font-size: 25px;
-                            display: flex;
-                            flex-direction: row;
-                            gap: 10px;
-                            width: 40%;
+    //                         font-size: 25px;
+    //                         display: flex;
+    //                         flex-direction: row;
+    //                         gap: 10px;
+    //                         width: 40%;
                             
-                        }   
-                }
-            }
-        }
-    }
+    //                     }   
+    //             }
+    //         }
+    //     }
+    // }
 }

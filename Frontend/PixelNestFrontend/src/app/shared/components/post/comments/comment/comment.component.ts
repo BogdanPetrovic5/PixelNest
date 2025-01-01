@@ -40,7 +40,8 @@ export class CommentComponent implements OnInit{
 
   isDisabled:boolean = false;
   ngOnInit(): void {
-    
+    this.username = this._userSession.getFromCookie("username")
+    this.postID = this._userSession.getFromLocalStorage("postID");
     
   }
   navigateToProfile(username?:string){
@@ -48,8 +49,7 @@ export class CommentComponent implements OnInit{
   }
   replyComment(parentCommentID?:number){
     
-    this.username = this._userSession.getFromCookie("username")
-    this.postID = this._userSession.getFromLocalStorage("postID");
+   
 
     this._postService.addComment(this.replyText, this.username, this.postID, parentCommentID).subscribe({
       next:(response)=>{

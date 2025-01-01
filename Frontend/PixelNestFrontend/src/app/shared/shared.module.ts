@@ -17,6 +17,9 @@ import { LocationComponent } from './components/location/location.component';
 import { FeedComponent } from './components/feed/feed.component';
 import { DeleteDialogComponent } from './components/post/delete-dialog/delete-dialog.component';
 
+import { UserTagComponent } from './components/user-tag/user-tag.component';
+import { ProfileImageComponent } from './components/profile-image/profile-image.component';
+
 @NgModule({
   declarations: [
     BannerComponent,
@@ -33,7 +36,9 @@ import { DeleteDialogComponent } from './components/post/delete-dialog/delete-di
     LikeCommentComponent,
     LocationComponent,
     FeedComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    UserTagComponent,
+    ProfileImageComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +57,9 @@ import { DeleteDialogComponent } from './components/post/delete-dialog/delete-di
     LottieFailComponent,
     LottieLoadingComponent,
     FeedComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    UserTagComponent,
+    ProfileImageComponent
   ]
 })
 export class SharedModule { }

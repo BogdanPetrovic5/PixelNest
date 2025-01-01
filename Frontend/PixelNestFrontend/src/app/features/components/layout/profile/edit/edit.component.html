@@ -1,0 +1,43 @@
+<div class="container">
+   <div class="wrap">
+        <div class="title">
+            <div class="title-wrap">
+                <img src="/assets/images/back.png" alt="" (click)="close()">
+                <h1>Edit profile</h1>
+                <div></div>
+            </div>
+           
+        </div>
+        <div class="picture">
+            <div class="picture-wrap">
+                <div class="picture-holder">
+                    <app-profile-image [stringUrl]="imageSrc" [username]="username"></app-profile-image>
+                </div>
+                <div class="open-file">
+                    <input type="file" #fileInput (change)="onFileSelected($event)">
+                    <h1>Edit picture</h1>
+                </div>
+                
+            </div>
+        </div>
+        <div class="general">
+            <div class="info">
+                <div>
+                    <span>Name</span>
+                    <input [placeholder]="name" [(ngModel)]="name" disabled>
+                </div>
+                <div>
+                    <span>Username</span>
+                    <input [placeholder]="newUsername" [(ngModel)]="username" disabled>
+                </div>
+                <div>
+                    <span>Description</span>
+                    <input placeholder="Feature not available" disabled>
+                </div>
+                
+            </div>
+        </div>
+
+        <button (click)="saveChanges()">Save changes</button>
+   </div>
+</div>

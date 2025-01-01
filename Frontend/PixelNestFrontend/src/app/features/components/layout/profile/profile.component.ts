@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   followingsTab:boolean = false;
   empty:boolean = false;
   isFollowing:boolean = false;
-  
+  editProfile:boolean = false;
   currentPage:number = 1;
 
   subscribe:Subscription = new Subscription;
@@ -45,7 +45,9 @@ export class ProfileComponent implements OnInit, OnDestroy{
       this._postState.setPosts([]);
       this._postState.setQuery(undefined);
   }
-
+  toggleEdit(){
+    this.editProfile = !this.editProfile;
+  }
   follow(){
     this.isFollowing = !this.isFollowing
     let currentUsername = this._userSessions.getFromCookie("username")

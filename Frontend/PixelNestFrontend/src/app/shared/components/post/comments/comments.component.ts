@@ -5,6 +5,7 @@ import { CommentDto } from 'src/app/core/dto/comment.dto';
 import { CommentService } from 'src/app/core/services/comment/comment.service';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
+import { UserService } from 'src/app/core/services/user/user.service';
 
 @Component({
   selector: 'app-comments',
@@ -15,13 +16,14 @@ export class CommentsComponent {
   comments: CommentDto[] = [];
   @Output() closeCommentsTab: EventEmitter<void> = new EventEmitter<void>();
   username:string = ""
-
+  stringUrl:string | undefined = undefined
   commentText:string = ""
   postID:number = 0;
   constructor(
     private _commentService:CommentService,
     private _postService:PostService,
-    private _userSession:UserSessionService
+    private _userSession:UserSessionService,
+    private _userService:UserService
   ){
 
   }
@@ -75,6 +77,12 @@ export class CommentsComponent {
         console.error('Error fetching comments:', error);
       }
     });
+    this._userService.getProfilePicture(this.username).subscribe({
+      next:response=>{
+        this.stringUrl = response.path;
+        console.log(response)
+      }
+    })
   }
   close(){
     this.closeCommentsTab.emit()

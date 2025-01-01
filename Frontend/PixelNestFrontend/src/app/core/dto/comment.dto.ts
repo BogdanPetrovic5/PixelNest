@@ -11,7 +11,7 @@ export interface CommentDto {
     replies?: Replies[] | [];
     totalLikes?: number;
     userID?: number;
-    username?: string;
+    username: string;
     totalReplies?:number;
 }
   

@@ -16,11 +16,11 @@ import 'hammerjs';
 export class StoryComponent implements OnInit{
   @ViewChild('storyList', { static: false }) storyList!: ElementRef<HTMLDivElement>
   @ViewChild('storyListWrapper', { static: false }) storyListWrapper!: ElementRef<HTMLDivElement>
-  username:String = ""
+  username:string = ""
 
   groupedStories:StoriesDto[] = []
   storiesByUser:StoriesDto[]= [];
-  extractedStories?:StoryDto[] = [];
+  extractedStories:StoryDto[] = [];
   activeStoryList:StoriesDto[] = [];
 
 

@@ -77,15 +77,7 @@ export class PostComponent implements OnInit{
       this.index += 1;
     }
   }
-  navigateToUserProfile(username:string){
-
-    this._router.navigate([`/Profile/${username}`])
-  }
-
-  navigate(url:string){
-    this._router.navigate([`Location/${url}`])
-    this._dashboardState.setNewLocation(url);
-  }
+  
 
   closeLikesTab() {
     this.isLikesTabOpen = false
@@ -139,7 +131,7 @@ export class PostComponent implements OnInit{
     this.savedByUsers = this.post.savedByUsers;
 
    
-    this._formatDate()
+    
     this._checkIsLiked()
   }
 
@@ -158,15 +150,7 @@ export class PostComponent implements OnInit{
     }else this.isLiked = false
   }
 
-  private _formatDate(){
-    const date = this.post.publishDate;
-      const dateObject = new Date(date)
-      if (isNaN(dateObject.getTime())) {
-        this.formattedDate = 'Invalid Date';
-      } else {
-        this.formattedDate = this._datePipe.transform(dateObject, 'd MMM \'at\' HH:mm') || 'Invalid Format';
-      }
-  }
+
 
   
   private _handleLikeArray(){

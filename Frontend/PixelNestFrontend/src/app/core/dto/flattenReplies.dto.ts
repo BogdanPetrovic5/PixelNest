@@ -8,6 +8,6 @@ export interface FlattenReplies {
     replies?: [];
     totalLikes?: number;
     userID?: number;
-    username?: string;
+    username: string;
     isReplyBox?:boolean;
 }

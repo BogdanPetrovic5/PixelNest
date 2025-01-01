@@ -4,16 +4,19 @@ import { FollowersComponent } from './followers/followers.component';
 import { FollowingsComponent } from './followings/followings.component';
 import { ProfileComponent } from './profile.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-
+import { EditComponent } from './edit/edit.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     FollowersComponent,
     FollowingsComponent,
-    ProfileComponent
+    ProfileComponent,
+    EditComponent
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ]
 })
 export class ProfileModule { }

@@ -34,6 +34,18 @@ $HFONT: "Roboto Condensed", sans-serif;
         font-size: 25px;
         color: $PCOLOR;
         font-family: $PFONT;
+        ::ng-deep app-user-tag{
+                    
+            .container{
+                .image-holder{
+                    width: 40px;
+                    height: 40px;
+                }
+                .info-wrapper{
+                    font-size: 19px;
+                }
+            }
+        }
         div{
             position: relative;
             width: 100%;
@@ -70,22 +82,26 @@ $HFONT: "Roboto Condensed", sans-serif;
             cursor: pointer;
         }
         p{
-            margin: 0;
+            margin-top: -20px ;
+            margin-left: 50px ; 
             font-size: 0.7em;
             font-weight: 300;
            span{
             font-size: 1em !important;
             font-weight: 400 !important;
             opacity: 0.7 !important;
+            
            }
         }
-        span{
+        span.reply{
             font-size: 0.55em;
             font-family: $PFONT;
             font-weight: 300;
             color: $PCOLOR;
             opacity: 0.7;
             cursor: pointer;
+            margin-top: -20px ;
+            margin-left: 50px ;
         }
     }
 
@@ -117,6 +133,18 @@ $HFONT: "Roboto Condensed", sans-serif;
                     font-size: 22px;
                     color: $PCOLOR;
                     font-family: $PFONT;
+                    ::ng-deep app-user-tag{
+                    
+                        .container{
+                            .image-holder{
+                                width: 30px;
+                                height: 30px;
+                            }
+                            .info-wrapper{
+                                font-size: 23px;
+                            }
+                        }
+                    }
                     div{
                         position: relative;
                         width: 100%;
@@ -153,22 +181,27 @@ $HFONT: "Roboto Condensed", sans-serif;
                         cursor: pointer;
                     }
                     p{
-                        margin: 0;
+                       
                         font-size: 0.7em;
                         font-weight: 300;
+                        margin-top: -17px ;
+                        margin-left: 40px ;
                        span{
                         font-size: 1em !important;
                         font-weight: 400 !important;
                         opacity: 0.7 !important;
+                        
                        }
                     }
-                    span{
+                    span.reply{
                         font-size: 0.55em;
                         font-family: $PFONT;
                         font-weight: 300;
                         color: $PCOLOR;
                         opacity: 0.7;
                         cursor: pointer;
+                        margin-top: -17px ;
+                        margin-left: 40px ;
                     }
                 }
                 img{
@@ -239,7 +272,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                         cursor: pointer;
                     }
                     p{
-                        margin: 0;
+                       
                         font-size: 0.7em;
                         font-weight: 300;
                        span{

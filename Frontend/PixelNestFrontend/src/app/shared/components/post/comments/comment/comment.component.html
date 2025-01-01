@@ -1,11 +1,12 @@
 <div class="container">
     <div class="comment-wrap">
         <div class="comment">
-            <img src="./assets/images/user.png" alt="">
+            <!-- <img src="./assets/images/user.png" alt=""> -->
             <div class="details">
-                <h1 (click)="navigateToProfile(comment.username)">{{comment.username}}</h1>
-               <p>{{comment.commentText}} </p>
-               <span (click)="openParentReply()">Reply</span>
+                <!-- <h1 (click)="navigateToProfile(comment.username)">{{comment.username}}</h1> -->
+                <app-user-tag [username]="comment.username"></app-user-tag>
+                <p>{{comment.commentText}} </p>
+                <span (click)="openParentReply()">Reply</span>
                <div *ngIf="isReplyBox">
                 <input (keydown.enter)="replyComment(comment.commentID)" type="text" placeholder="Reply here..."  [(ngModel)]="replyText" >
                 <span class="reply-button" (click)="replyComment(comment.commentID)">

@@ -1,0 +1,192 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+
+.container{
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.682);
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .wrap{
+        width: 30%;
+        
+        background-color: $TABCOLOR;
+        border: 1px solid $BORDERCOLOR;
+        border-radius: 25px;
+        .title{
+            width: 100%;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+            border-bottom: 1px solid $BORDERCOLOR;
+            .title-wrap{
+                width: 90%;
+                font-size: 25px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                img{
+                    height: 20px;
+                    width: 20px;
+                    gap: 20px;
+                    cursor: pointer;
+                }
+                h1{
+                    font-size: 0.7em;
+                    font-family: $PFONT;
+                    color: $PCOLOR;
+    
+                }
+            }
+         
+
+        }
+        .picture{
+            width: 100%;
+           
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .picture-wrap{
+                margin-top: 50px;
+                font-size: 25px;
+                width: 90%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                .picture-holder{
+                    width: 80px;
+                    height: 80px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    app-profile-image{
+                        width: 100%;
+                        height: 100%;
+                    }
+                    img{
+                      
+                        border-radius: 50%;
+                        
+                    }
+                }
+                .open-file{
+                    display: flex;
+                    margin-top: 10px;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 25px;
+                    position: relative;
+                    input{
+                        width: 100%;
+                        z-index: 2;
+                        position: relative;
+                        opacity: 0;
+                        cursor: pointer;
+                    }
+                    h1{
+                        position: absolute;
+                        font-size: 0.7em;
+                        font-family: $PFONT;
+                        color: $PCOLOR;text-align: center;
+                        cursor: pointer;
+                    }
+                }
+               
+            }
+        }
+        .general{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .info{
+                margin-top: 50px;
+                width: 90%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+               
+                gap: 50px;
+                div{
+                    font-size: 25px;
+                    width: 100%;
+                    position: relative;
+                    span{
+                        position: absolute;
+                        top: -20px;
+                        left: 0;
+                        font-size: 0.7em;
+                        font-family: $PFONT;
+                        color: $PCOLOR;
+                    }
+                    input{
+                        width: 100%;
+                        height: 50px;
+                        font-size: 1em;
+                        font-family: $PFONT;
+                        background-color: transparent;
+                        border: none;
+                        border-bottom: 2px solid $BORDERCOLOR !important;
+                        outline: none;
+                       color: $PCOLOR;
+                    }
+                    ::placeholder{
+                        color: $PCOLOR !important;
+                        opacity: 0.8;
+                    }
+                }
+                
+            }
+        }
+        button{
+            font-size: 1.3em;
+            font-family: $PFONT;
+            color: $PCOLOR;
+            background-color: $H1COLOR;
+            border-radius: 25px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            padding:20px 30px;
+            margin-left: 5%;
+            border: none;
+            outline: none;
+        }
+    }
+}
+@media only screen and (min-width:0px) and (max-width:1023px){
+    .container{
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.682);
+        top: 0;
+        left: 0;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .wrap{
+            width: 90%;
+        }
+    }  
+}

@@ -8,21 +8,7 @@
         <div class="basic-info">
             
             <div class="info">
-                <img src="./assets/images/user.png" alt="">
-                <div class="info-wrapper">
-                    <h1 (click)="navigateToUserProfile(post.ownerUsername)">
-                        {{post.ownerUsername}} 
-                     </h1>
-                     <p>
-                         {{formattedDate}}
-                         <span (click)="navigate(post.location)" *ngIf="post.location">
-                             <span class="material-symbols-outlined">
-                                 location_on
-                             </span> 
-                             {{post.location}}
-                         </span>
-                     </p>
-                </div>
+                <app-user-tag [post]="post" [username]="post.ownerUsername" [date]="post.publishDate" [location]="post.location"></app-user-tag>
                 
                 
             </div>
