@@ -62,7 +62,7 @@ export class PostComponent implements OnInit{
     
   }
   onSwipeRight() {
-    console.log(this.index)
+ 
     if(this.index - 1 >= 0){
       this.marginLeft += 200;
       this.progressBarMargin = this.progressBarMargin - 100 / (this.post.imagePaths.length)
@@ -70,7 +70,7 @@ export class PostComponent implements OnInit{
     }
   }
   onSwipeLeft() {
-    console.log(this.index)
+   
     if(this.index + 1 <= (this.post.imagePaths.length -1)){
       this.marginLeft -= 200;
       this.progressBarMargin = this.progressBarMargin + 100 / (this.post.imagePaths.length)
@@ -105,8 +105,7 @@ export class PostComponent implements OnInit{
     this._postService.likePost(postID, this.username).pipe(
       tap((response)=>{
         this._handleLikeArray();
-        
-        console.log("Successfully liked the post")
+      
       }),
       catchError((error:HttpErrorResponse)=>{
         console.log(error)
@@ -120,7 +119,7 @@ export class PostComponent implements OnInit{
   savePost(){
     this._postService.savePost(this.username, this.post.postID).subscribe({
       next:response=>{
-        console.log(response)
+       
         this._handleSavedArray()
       }
     })
@@ -159,4 +158,5 @@ export class PostComponent implements OnInit{
     this.isLiked = !this.isLiked
 
   }
+
 }

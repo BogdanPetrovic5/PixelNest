@@ -27,7 +27,7 @@ export class UserTagComponent implements OnInit{
     this._userService.getProfilePicture(this.username).subscribe({
       next:response=>{
         this.stringUrl = response.path;
-        console.log(response)
+        
       }
     })
   

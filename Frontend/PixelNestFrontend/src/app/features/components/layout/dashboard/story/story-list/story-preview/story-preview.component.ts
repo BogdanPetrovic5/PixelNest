@@ -16,7 +16,7 @@ import 'hammerjs';
   styleUrls: ['./story-preview.component.scss']
 })
 export class StoryPreviewComponent implements OnInit, OnDestroy{
-    @Input() stories:StoryDto[] | undefined = [];  
+    @Input() stories:StoryDto[] = [];  
     @Input() listIndex!:number 
     userIndex:number = 0;
     currentIndex = 0;

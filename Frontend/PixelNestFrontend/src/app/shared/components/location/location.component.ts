@@ -46,7 +46,7 @@ export class LocationComponent implements OnInit, OnDestroy{
     this._postService.getPosts(1,parameter).subscribe({
       next:response=>{
         this.posts = response
-        console.log(this.posts);
+      
       },
       error:error=>{
         console.log(error.message)

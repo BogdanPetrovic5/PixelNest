@@ -27,7 +27,7 @@ export class FollowersComponent implements OnInit{
     this._userService.getFollowers(this.username).subscribe({
       next:response=>{
         this.followers = response
-        console.log(this.followers);
+      
       },
       error:error=>{
         console.log(error);

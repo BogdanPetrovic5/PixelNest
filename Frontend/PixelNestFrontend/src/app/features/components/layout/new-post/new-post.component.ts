@@ -147,7 +147,7 @@ export class NewPostComponent implements OnInit{
             if (e.target?.result) {
               this.imageSrc = e.target.result as string;
               this.imageUrls.push(this.imageSrc)
-              console.log(this.imageUrls)
+              
               this.img = false; 
             }
           };

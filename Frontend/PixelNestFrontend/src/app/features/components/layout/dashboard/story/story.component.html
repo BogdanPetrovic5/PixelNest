@@ -13,7 +13,10 @@
                           '2px solid red' : '2px solid gray'
               }">
                
-                <app-profile-image [username]="username"></app-profile-image>
+                <app-profile-image [username]="username" [ngStyle]="{
+                    'width': extractedStories.length === 0 ? '100%' : '',
+                    'height': extractedStories.length === 0 ? '100%' : ''
+                  }"></app-profile-image>
             </div>
             <h1>You</h1>
         </div>
@@ -21,7 +24,7 @@
             <div class="following-list"  #storyList [ngStyle]="{'margin-left':marginLeft + '%'}" (swipeleft)="onSwipeLeft()" (swipeRight)="onSwipeRight()">
                 <div class="user-box" *ngFor="let story of groupedStories; let i = index" (click)="openStories(i)">
                     
-                    <div class="box" [ngStyle]="{'border':story?.stories?.[story.stories!.length - 1]?.seenByUser ? '2px solid gray':'2px solid red'} ">
+                    <div class="box" [ngStyle]="{'border': story?.stories?.[story.stories!.length - 1]?.seenByUser ? '2px solid gray':'2px solid red'} ">
                         <app-profile-image [username]="story.ownerUsername"></app-profile-image>
                         <!-- <div class="new"></div> -->
                     </div>

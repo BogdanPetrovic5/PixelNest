@@ -33,7 +33,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _userService:UserService,
     private _postService:PostService,
     private _route:ActivatedRoute,
-    private _postState:PostStateService
+    private _postState:PostStateService,
+    private _cdr:ChangeDetectorRef
   ){}
   ngOnInit(): void {
     this._postState.setPosts([]);
@@ -47,6 +48,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   }
   toggleEdit(){
     this.editProfile = !this.editProfile;
+    if(this.editProfile == false) this._cdr.detectChanges();
   }
   follow(){
     this.isFollowing = !this.isFollowing
@@ -56,7 +58,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
         next:response=>{
           if(!this.isFollowing) this.user.followers -= 1;
           else this.user.followers += 1;
-          console.log(response);
+          
         }
       })
     )
@@ -96,7 +98,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
         switchMap(() => this._postState.posts$), 
         tap(posts => {
           this.posts = posts;
-          console.log(this.posts);
+          
         }),
         catchError(err => {
           console.error('Error:', err);

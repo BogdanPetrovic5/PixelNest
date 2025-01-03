@@ -33,7 +33,7 @@ export class LikeCommentComponent implements OnInit{
   likeComment(){
     this._commentService.likeComment(this.commentID, this.currentUsername).subscribe({
       next:(response)=>{
-        console.log(response)
+      
         this._handleLikedByUsersArray()
       }
       

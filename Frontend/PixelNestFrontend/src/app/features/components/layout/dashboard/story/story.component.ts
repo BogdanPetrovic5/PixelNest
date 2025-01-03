@@ -122,7 +122,7 @@ export class StoryComponent implements OnInit{
             this.storiesByUser = storiesByUser;
             
             this.extractFromResponse(storiesByUser);
-            console.log(storiesByUser)
+            
           }
         }
       })

@@ -96,6 +96,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                         height: 100%;
                         flex-shrink: 0;
                         border-radius: 25px;
+                        touch-action: pan-y;
                     }
                 }
             }

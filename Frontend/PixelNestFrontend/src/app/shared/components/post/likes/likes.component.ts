@@ -17,7 +17,7 @@ export class LikesComponent implements OnInit{
     private _router:Router
   ){}
   ngOnInit(): void {
-    console.log(this.likes);
+   
   }
   close(){
     this.closeLikesTab.emit()

@@ -57,7 +57,7 @@ export class CommentsComponent {
    return this._commentService.getComments(this.postID).pipe(
 
       tap((response)=>{
-        console.log('Fetched comments:', response)
+        
        
       }),
       catchError((error: HttpErrorResponse) => {
@@ -80,7 +80,7 @@ export class CommentsComponent {
     this._userService.getProfilePicture(this.username).subscribe({
       next:response=>{
         this.stringUrl = response.path;
-        console.log(response)
+      
       }
     })
   }

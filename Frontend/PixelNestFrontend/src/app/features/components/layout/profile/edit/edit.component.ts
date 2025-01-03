@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
+import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { UserService } from 'src/app/core/services/user/user.service';
 import { ImageCompressorService } from 'src/app/uitility/image-compressor.service';
@@ -8,7 +10,7 @@ import { ImageCompressorService } from 'src/app/uitility/image-compressor.servic
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class EditComponent implements OnInit{
+export class EditComponent implements OnInit, OnDestroy{
   @Input() name!:string
   username:string = "";
   newUsername:string = ""
@@ -20,7 +22,10 @@ export class EditComponent implements OnInit{
   constructor(
     private _userSession:UserSessionService, 
     private _imageCompression:ImageCompressorService,
-    private _userService:UserService
+    private _userService:UserService,
+    private _lottieState:LottieStateService,
+    private _cdr:ChangeDetectorRef,
+    private _profileState:ProfileStateService
   ){}  
   ngOnInit(): void {
     this.username = this._userSession.getFromCookie("username")
@@ -32,6 +37,9 @@ export class EditComponent implements OnInit{
     //     console.log(response)
     //   }
     // })
+  }
+  ngOnDestroy(): void {
+    
   }
   async onFileSelected(event:any){
     const inputElement = event.target as HTMLInputElement;
@@ -54,20 +62,30 @@ export class EditComponent implements OnInit{
       }
     }
   }
+  
   close(){
     this.closeEditTab.emit();
   }
+
   saveChanges(){
     const FORM_DATA = new FormData();
     
-    
- 
     FORM_DATA.append("ProfilePicture", this.selectedFile[0])
-
+    this._lottieState.setIsInitialized(true);
     if(this.selectedFile){
       this._userService.changeProfilePicture(FORM_DATA).subscribe({
         next:response=>{
-          console.log(response);
+          this._lottieState.setIsInitialized(false);
+          this._lottieState.setIsSuccess(true);
+          setTimeout(() => {
+            this._lottieState.setIsSuccess(false)
+            this._profileState.setCurrentUrl(this.imageSrc)
+          }, 1600);
+          this._cdr.detectChanges()
+        },
+        error:error=>{
+          this._lottieState.setIsInitialized(false);
+          alert(error.message)
         }
       })
     }

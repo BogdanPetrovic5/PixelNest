@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: row;
   align-items: center;
-    z-index: 4;
+    z-index: 4 !important;
     left: 0;
     top: 0;
     overflow: hidden;
@@ -46,7 +46,7 @@
         display: flex;
         flex-direction: row;
       align-items: center;
-        z-index: 1;
+      
         left: 0;
         top: 0;
         overflow: hidden;
@@ -89,7 +89,7 @@
         display: flex;
         flex-direction: row;
       align-items: center;
-        z-index: 1;
+     
         left: 0;
         top: 0;
         overflow: hidden;

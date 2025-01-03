@@ -69,7 +69,7 @@ export class NewStoryComponent {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        console.log(file.size / 1024)
+       
         try {
  
           const compressedFile = await this._imageCompressorService.compressImage(file);
