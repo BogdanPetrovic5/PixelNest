@@ -7,7 +7,7 @@ namespace PixelNestBackend.Proxy
     [ApiController]
     public class ProxyContoller : ControllerBase
     {
-        private readonly string _mapTilerApiKey = "aqR39NWYQyZAdFc6KtYh";
+        
         [HttpGet("GetLocation")]
         public IActionResult GetLocation()
         {
