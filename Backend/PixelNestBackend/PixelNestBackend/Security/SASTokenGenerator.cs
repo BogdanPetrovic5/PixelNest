@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Sas;
 using PixelNestBackend.Dto.Projections;
+using PixelNestBackend.Models;
 namespace PixelNestBackend.Security
 {
     public class SASTokenGenerator
@@ -41,12 +42,19 @@ namespace PixelNestBackend.Security
           
             return sasToken;
         }
+        public void appendSasToken(ImagePath image) { 
+        
+                image.Path = $"{image.Path.Replace('\\', '/')}{this._GenerateTokenForImage()}";
+            
+
+        }
         public void appendSasToken(ICollection<ResponseImageDto> imagePaths)
         {
          
             
                 foreach (var image in imagePaths)
                 {
+
                     image.Path = $"{image.Path.Replace('\\', '/')}{this._GenerateTokenForImage()}";
                 }
             

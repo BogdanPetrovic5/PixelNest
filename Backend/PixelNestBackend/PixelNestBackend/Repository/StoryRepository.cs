@@ -38,12 +38,12 @@ namespace PixelNestBackend.Repository
                              OwnerUsername = _dataContext.Users
                                                  .Where(u => u.UserID == group.Key)
                                                  .Select(u => u.Username)
-                                                 .FirstOrDefault(), // Get the username of the story owner
+                                                 .FirstOrDefault(), 
                              Stories = group.Select(s => new ResponseStoryDto
                              {
-                                 OwnerUsername = s.User.Username, // Ensure Stories table has the Username property
+                                 OwnerUsername = s.User.Username, 
                                  SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
-                                 ImagePaths = s.ImagePath // Assuming Stories has navigation property `ImagePaths`
+                                 ImagePaths = s.ImagePath 
                                                 .Select(i => new ResponseImageDto
                                                 {
                                                     Path = i.Path,
@@ -54,6 +54,7 @@ namespace PixelNestBackend.Repository
                          })
                          .AsSplitQuery()
                          .ToListAsync();
+                    this._appendToken(groupedStories);
                 }
                 return groupedStories;
             }
@@ -95,6 +96,7 @@ namespace PixelNestBackend.Repository
                          })
                          .AsSplitQuery()
                          .ToListAsync();
+                    this._appendToken(groupedStories);
                 }
                 return groupedStories;
             }
@@ -204,5 +206,23 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
+        private void _appendToken(ICollection<GroupedStoriesDto> groupedStories)
+        {
+            foreach(var stories in groupedStories)
+            {
+                foreach(var story in stories.Stories)
+                {
+                    if (story.ImagePaths != null)
+                    {
+                        _SASTokenGenerator.appendSasToken(story.ImagePaths);
+                    }
+                }
+            }
+            
+        }
+
     }
+
+
+
 }

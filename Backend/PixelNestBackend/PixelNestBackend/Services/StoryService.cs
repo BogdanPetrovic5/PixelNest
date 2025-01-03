@@ -16,13 +16,15 @@ namespace PixelNestBackend.Services
         private readonly FolderGenerator _folderGenerator;
         private readonly IStoryRepository _storyRepository;
         private readonly UserUtility _userUtility;
-  
+        private readonly BlobStorageUpload _blobStorageUpload;
         public StoryService(
             IFileUpload fileUpload,
             FolderGenerator folderGenerator,
             IStoryRepository storyRepository,
-            UserUtility userUtility
-      
+            UserUtility userUtility,
+            BlobStorageUpload blobStorageUpload
+
+
             )
         {
             _basedFolderPath = Path.Combine("wwwroot", "Photos");
@@ -30,7 +32,7 @@ namespace PixelNestBackend.Services
             _folderGenerator = folderGenerator;
             _storyRepository = storyRepository;
             _userUtility = userUtility;
-          
+            _blobStorageUpload = blobStorageUpload;
         }
 
         public async Task<ICollection<GroupedStoriesDto>> GetStories(bool forCurrentUser, string username)
@@ -77,8 +79,8 @@ namespace PixelNestBackend.Services
                 if (response.IsSuccessful)
                 {
                     int storyID = response.StoryID;
-                    bool isUploaded = await _fileUpload.StoreImages(null, storyDto,null, userFolderPath, storyID,null);
-                    //bool isUploaded = await _blobStorageUpload.StoreImages(null, storyDto, storyDto.Username, storyID);
+                    //bool isUploaded = await _fileUpload.StoreImages(null, storyDto,null, userFolderPath, storyID,null);
+                    bool isUploaded = await _blobStorageUpload.StoreImages(null, storyDto,null, userID, storyID);
 
                     if (isUploaded)
                     {

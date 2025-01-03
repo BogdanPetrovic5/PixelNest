@@ -4,6 +4,7 @@ using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace PixelNestBackend.Gateaway
 {
@@ -22,7 +23,7 @@ namespace PixelNestBackend.Gateaway
         }
        
 
-        public async Task<bool> StoreImages(PostDto? postDto, StoryDto? storyDto, string userFolder, int folder)
+        public async Task<bool> StoreImages(PostDto? postDto, StoryDto? storyDto, ProfileDto profileDto, int userFolder, int? folder)
         {
 
             try
@@ -39,7 +40,7 @@ namespace PixelNestBackend.Gateaway
                     {
                         if(formFile != null && formFile.Length > 0)
                         {
-                            var blobName = $"{userFolder}/Posts/{postID}/{formFile.FileName}";
+                            var blobName = $"{userFolder.ToString()}/Posts/{postID}/{formFile.FileName}";
                             var blobClient = containerClient.GetBlobClient(blobName);
 
                             using (var stream = formFile.OpenReadStream())
@@ -65,7 +66,7 @@ namespace PixelNestBackend.Gateaway
                     var formFile = storyDto.StoryImage;
                     if (formFile != null)
                     {
-                        var blobName = $"{userFolder}/Story/{storyID}/{formFile.FileName}";
+                        var blobName = $"{userFolder.ToString()}/Story/{storyID}/{formFile.FileName}";
                         var blobClient = containerClient.GetBlobClient(blobName);
 
                         using (var stream = formFile.OpenReadStream())
@@ -85,6 +86,42 @@ namespace PixelNestBackend.Gateaway
 
                     
                     return true;
+                }else
+                {
+                    string userID = userFolder.ToString();
+                    var formFile = profileDto.ProfilePicture;
+                    if (formFile != null) { 
+                        var blobName = $"{userID}/Profile/{formFile.FileName}";
+                        var blobClient = containerClient.GetBlobClient(blobName);
+
+                        using (var stream = formFile.OpenReadStream())
+                        {
+                            await blobClient.UploadAsync(stream, overwrite: true);
+                        }
+
+                        var existingImagePath = await _dataContext.ImagePaths.FirstOrDefaultAsync(ip => ip.UserID == userFolder);
+                        if (existingImagePath != null)
+                        {
+                            existingImagePath.Path = blobName;
+                            existingImagePath.PhotoDisplay = "cover";
+                            _dataContext.ImagePaths.Update(existingImagePath);
+                        }
+                        else
+                        {
+                            var imagePaths = new ImagePath
+                            {
+                                UserID = userFolder,
+                                PhotoDisplay = "cover",
+                                Path = blobName
+                            };
+                            _dataContext.ImagePaths.Add(imagePaths);
+                        }
+                       
+
+                       
+                       await _dataContext.SaveChangesAsync();
+                       return true;
+                    }
                 }
             }
             catch (Exception ex)

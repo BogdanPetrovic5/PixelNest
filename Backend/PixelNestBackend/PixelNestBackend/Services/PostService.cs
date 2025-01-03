@@ -23,13 +23,13 @@ namespace PixelNestBackend.Services
         public readonly IFileUpload _fileUpload;
         private readonly string _basedFolderPath;
         private readonly ILogger<PostService> _ILogger;
-       
+        private readonly BlobStorageUpload _blobStorageUpload;
         public PostService(
 
             UserUtility userUtility,
             PostUtility postUtility,
             FolderGenerator folderGenerator,
-           
+           BlobStorageUpload blobStorageUpload,
             IPostRepository postRepository,
             IFileUpload fileUpload,
             ILogger<PostService> logger
@@ -43,6 +43,7 @@ namespace PixelNestBackend.Services
             _postRepository = postRepository;
             _fileUpload = fileUpload;
             _ILogger = logger;
+            _blobStorageUpload = blobStorageUpload;
           
         }
         public bool SavePost(SavePostDto savePostDto)
@@ -107,18 +108,18 @@ namespace PixelNestBackend.Services
                 if (response.IsSuccessfull)
                 {
                     int postID = response.PostID;
-                    bool isUploaded = await _fileUpload.StoreImages(postDto, null,null, userFolderPath, postID, null);
-                    //bool isUploadedBlob = await _blobStorageUpload.StoreImages(postDto, null, userID, postID);
-                    //if (isUploadedBlob) return new PostResponse
-                    //{
-                    //    IsSuccessfull = true,
-                    //    Message = "Post was successfully added to your feed."
-                    //};
-                    if (isUploaded) return new PostResponse
+                    //bool isUploaded = await _fileUpload.StoreImages(postDto, null,null, userFolderPath, postID, null);
+                    bool isUploadedBlob = await _blobStorageUpload.StoreImages(postDto, null,null, userID, postID);
+                    if (isUploadedBlob) return new PostResponse
                     {
                         IsSuccessfull = true,
                         Message = "Post was successfully added to your feed."
                     };
+                    //if (isUploaded) return new PostResponse
+                    //{
+                    //    IsSuccessfull = true,
+                    //    Message = "Post was successfully added to your feed."
+                    //};
                     return new PostResponse
                     {
                         IsSuccessfull = false,

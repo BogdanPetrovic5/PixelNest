@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
+using PixelNestBackend.Gateaway;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Mappers;
 using PixelNestBackend.Models;
@@ -22,14 +23,17 @@ namespace PixelNestBackend.Services
         public readonly IFileUpload _fileUpload;
         private readonly string _basedFolderPath;
         private readonly FolderGenerator _folderGenerator;
+        private readonly BlobStorageUpload _blobStorageUpload;
         public UserService(
             IMapper mapper,
             IAuthenticationRepository authenticationRepository,
             IUserRepository userRepository,
             IFileUpload fileUpload,
             UserUtility userUtility,
-            FolderGenerator folderGenerator
-            
+            FolderGenerator folderGenerator,
+            BlobStorageUpload blobStorageUpload
+
+
             )
         {
             _userMapper = mapper;
@@ -39,6 +43,7 @@ namespace PixelNestBackend.Services
             _basedFolderPath = Path.Combine("wwwroot", "Photos");
             _folderGenerator = folderGenerator;
             _fileUpload = fileUpload;
+            _blobStorageUpload = blobStorageUpload;
         }
         public User ConvertRegisterDto(RegisterDto registerDto)
         {
@@ -97,8 +102,9 @@ namespace PixelNestBackend.Services
                 _folderGenerator.GenerateNewFolder(userFolderPath);
             }
 
-            
-            bool response = await _fileUpload.StoreImages(null, null, profileDto, userFolderPath, null, userID);
+
+            //bool response = await _fileUpload.StoreImages(null, null, profileDto, userFolderPath, null, userID);
+            bool response = await _blobStorageUpload.StoreImages(null, null, profileDto, userID, null);
             if (response) return true;
             return false;
 

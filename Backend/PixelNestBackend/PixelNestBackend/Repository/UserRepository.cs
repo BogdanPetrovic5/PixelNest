@@ -5,6 +5,7 @@ using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Security;
 using PixelNestBackend.Utility;
 
 namespace PixelNestBackend.Repository
@@ -14,15 +15,18 @@ namespace PixelNestBackend.Repository
         private readonly DataContext _dataContext;
         private readonly ILogger<UserRepository> _logger;
         private readonly UserUtility _userUtility;
+        private readonly SASTokenGenerator _sasTokenGenerator;
         public UserRepository(
             DataContext dataContext,
             ILogger<UserRepository> logger,
-            UserUtility userUtility
+            UserUtility userUtility,
+            SASTokenGenerator SASTokenGenerator
             )
         {
             _dataContext = dataContext;
             _logger = logger;
             _userUtility = userUtility;
+            _sasTokenGenerator = SASTokenGenerator;
         }
         public FollowResponse IsFollowing(FollowDto follow)
         {
@@ -214,11 +218,13 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var image = _dataContext.ImagePaths.Where(u => u.UserID == userID).FirstOrDefault();
+                ImagePath image = _dataContext.ImagePaths.Where(u => u.UserID == userID).FirstOrDefault();
                 if (image != null)
                 {
+                    _sasTokenGenerator.appendSasToken(image);
                     return image.Path;
                 }
+
                 return string.Empty;
             }
             catch (Exception ex)
