@@ -19,15 +19,80 @@ $HFONT: "Roboto Condensed", sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
+   
     .wrap{
         width: 30%;
         
         background-color: $TABCOLOR;
         border: 1px solid $BORDERCOLOR;
         border-radius: 25px;
+        position: relative;
+     
+        .image-cropper-container {
+            width: 100%;
+            height: calc(100% - 223px);
+         
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            top: 223px;
+            border-radius: 25px;
+            background-color: $TABCOLOR;
+            left: 0;
+            .image-cropper-wrapper{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                border-radius: 25px;
+                height: 90%;
+                width: 90%;
+                background-color: $TABCOLOR;
+                gap: 10px;
+               
+                --cropper-overlay-color: rgba(0, 0, 0, 0);
+                opacity: 1 !important;
+                h1{
+                    color: $PCOLOR;
+                    font-family: $PFONT;
+                  }
+                    image-cropper{
+                       width: 90%;
+                        height: 300px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 0px !important;
+                        background-color: $TABCOLOR !important;
+                        
+                       
+                    
+                    }
+                    button{
+                        padding: 15px 25px;
+                        background-color: $H1COLOR;
+                        color: white;
+                        font-family: $PFONT;
+                        font-size: 1em;
+                        cursor: pointer;
+                        margin: 0;
+                    }
+            }
+          
+          }
+         
+          img {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+          }
         .title{
             width: 100%;
            display: flex;
+           height: 40px;
            justify-content: center;
            align-items: center;
             border-bottom: 1px solid $BORDERCOLOR;

@@ -39,5 +39,22 @@
         </div>
 
         <button (click)="saveChanges()">Save changes</button>
-   </div>
+        <div class="image-cropper-container" *ngIf="isOpened">
+            <div class="image-cropper-wrapper">
+                <h1>Please crop the image.</h1>
+                <image-cropper
+                  [imageChangedEvent]="imageChangedEvent"
+                  [maintainAspectRatio]="true"
+                  [aspectRatio]="4 / 3"
+                  (imageCropped)="onImageCropped($event)"
+                
+                   [format]="'jpeg'" 
+                  >
+                  
+                </image-cropper>
+               <button (click)="applyCrop()">Apply crop</button>
+            </div>
+            
+        </div>
+    </div>
 </div>

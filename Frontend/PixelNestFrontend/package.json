@@ -26,6 +26,7 @@
     "mapbox-gl": "^2.14.1",
     "maplibre-gl": "^4.7.1",
     "ngx-cookie-service": "^13.2.0",
+    "ngx-image-cropper": "^7.2.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

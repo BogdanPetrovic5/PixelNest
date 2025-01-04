@@ -6,17 +6,26 @@ import { ProfileComponent } from './profile.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EditComponent } from './edit/edit.component';
 import { FormsModule } from '@angular/forms';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { ImageCropperModule } from 'ngx-image-cropper';
+
+
 @NgModule({
   declarations: [
     FollowersComponent,
     FollowingsComponent,
     ProfileComponent,
-    EditComponent
+    EditComponent,
+   
   ],
   imports: [
     CommonModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+   
+    BrowserModule,
+    ImageCropperModule,
   ]
 })
 export class ProfileModule { }

@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ImageCroppedEvent,base64ToFile  } from 'ngx-image-cropper';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
@@ -17,7 +18,10 @@ export class EditComponent implements OnInit, OnDestroy{
   description:string = "";
   imageSrc:string = "/assets/images/user.png"
   selectedFile:File[] = [];
-
+  imageChangedEvent: any = '';
+  croppedImage:any;
+  compressedFile:any;
+  isOpened:boolean = false;
   @Output() closeEditTab:EventEmitter<void> = new EventEmitter<void>();
   constructor(
     private _userSession:UserSessionService, 
@@ -30,13 +34,7 @@ export class EditComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.username = this._userSession.getFromCookie("username")
     this.newUsername = this.username;
-    // this._userService.getProfilePicture(this.username).subscribe({
-    //   next:response=>{
-     
-    //     this.imageSrc = "http://localhost:7157/Photos/" + response.path
-    //     console.log(response)
-    //   }
-    // })
+
   }
   ngOnDestroy(): void {
     
@@ -44,25 +42,32 @@ export class EditComponent implements OnInit, OnDestroy{
   async onFileSelected(event:any){
     const inputElement = event.target as HTMLInputElement;
     const file = inputElement.files;
-
-    if(file){
-        try{
-          const compressedFile = await this._imageCompression.compressImage(file[0])
-          const reader = new FileReader();
-          reader.onload = (e: ProgressEvent<FileReader>) => {
-            if (e.target?.result) {
-              this.imageSrc = e.target.result as string;
-            
-            }
-          }
-          reader.readAsDataURL(compressedFile);
-          this.selectedFile?.push(compressedFile);
-      }catch(error) {
-        console.error('Error processing file:', error);
-      }
-    }
+    this.isOpened = true;
+    this.imageChangedEvent = event;
+    // if(file){
+    //     this._applyCompression(file)
+    // }
   }
-  
+  private async _applyCompression(file:any){
+    try{
+      console.log("Not cropped: " ,this.compressedFile)
+      this.compressedFile = await this._imageCompression.compressImage(file[0])
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          this.imageSrc = e.target.result as string;
+         
+        }
+      }
+      reader.readAsDataURL(this.compressedFile);
+      
+    
+      this.selectedFile?.push(this.croppedImage);
+
+  }catch(error) {
+    console.error('Error processing file:', error);
+  }
+  }
   close(){
     this.closeEditTab.emit();
   }
@@ -91,5 +96,33 @@ export class EditComponent implements OnInit, OnDestroy{
     }
   
     
+  }
+
+
+  
+  fileChangeEvent(event: any): void {
+    this.isOpened = true;
+    this.imageChangedEvent = event;
+  }
+
+
+  async onImageCropped(event: ImageCroppedEvent) {
+    if(event.blob){
+    
+      const fileName = `cropped-image-${Date.now()}.jpeg`; 
+      const croppedFile = new File([event.blob], fileName, { type: event.blob.type });
+  
+      this.croppedImage = await this._imageCompression.compressImage(croppedFile);
+
+      this.imageSrc = URL.createObjectURL(this.croppedImage);
+  
+  
+      this.selectedFile = [this.croppedImage];
+    }
+    
+  }
+
+  applyCrop(){
+    this.isOpened = false;
   }
 }
