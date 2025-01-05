@@ -71,16 +71,7 @@ export class NavigationComponent implements OnInit{
 
   }
   logout(){
-    let email = this._userSessionService.getFromCookie("email");
-    this._authService.logout(email).subscribe(response =>{
-      
-      this._userSessionService.clearCookies();
-      this._userSessionService.clearStorage();
-      this._router.navigate(["/Authentication/Login"])
-    
-    },(error:HttpErrorResponse)=>{
-      console.log(error)
-    })
+    this._userSessionService.setLogOutDialog(true)
   }
   private _initilize(){
     this.username = this._userSessionService.getFromCookie("username")

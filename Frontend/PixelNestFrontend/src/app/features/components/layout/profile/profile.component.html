@@ -1,5 +1,5 @@
-<app-edit [name]="user.name + ' ' + user.lastname" *ngIf="editProfile" (closeEditTab)="toggleEdit()"></app-edit>
 <div class="container">
+    <app-edit [name]="user.name + ' ' + user.lastname" *ngIf="editProfile" (closeEditTab)="toggleEdit()"></app-edit>
 
     <app-followers *ngIf="followersTab" [username]="username" (closeFollowersTab)="toggleFollowers()"></app-followers>
     <app-followings *ngIf="followingsTab" [username]="username" (closeFollowingTab)="toggleFollowings()"></app-followings>
@@ -13,7 +13,8 @@
                     <div class="banner-wrap">
                         <div class="profile-image">
                             <div>
-                               <app-profile-image [username]="username"></app-profile-image>
+                               <!-- <img [src]="stringUrl.length > 0 ? stringUrl : '/assets/images/user.png'" [ngStyle]="stringUrl ? { transform: 'scale(1)', objectFit:'cover', width:'100%', height:'100%' } : {width:'100%', height:'100%'}"> -->
+                                <app-profile-image [username]="username"></app-profile-image>
                             </div>
                           
                         </div>

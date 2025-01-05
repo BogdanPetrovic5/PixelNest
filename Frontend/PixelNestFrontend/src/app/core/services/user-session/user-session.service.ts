@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserSessionService {
+  private _logOutDialog = new BehaviorSubject<boolean>(false);
+  logOutDialog$ = this._logOutDialog.asObservable();
 
   constructor(private _cookieService:CookieService) { }
 
@@ -33,5 +36,8 @@ export class UserSessionService {
     return null;
   }
 
+  setLogOutDialog(value:boolean){
+    this._logOutDialog.next(value);
+  }
   
 }

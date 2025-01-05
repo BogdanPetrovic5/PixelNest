@@ -5,7 +5,7 @@
         </div>
         <div class="usernames">
             <div class="username" *ngFor="let username of followings">
-               <img src="./assets/images/user.png" alt=""> <h1>{{username.followingUsername}}</h1>
+               <app-profile-image [username]="username.followingUsername"></app-profile-image><h1>{{username.followingUsername}}</h1>
             </div>
         </div>
         <div class="footer">

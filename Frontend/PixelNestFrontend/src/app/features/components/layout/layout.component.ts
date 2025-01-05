@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
+import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
 @Component({
   selector: 'app-layout',
@@ -15,9 +16,11 @@ export class LayoutComponent implements OnInit{
   isSuccess:boolean = false
   isLoading:boolean = false;
   deleteDialog:boolean = false;
+  logOutDialog:boolean = false;
   constructor(
     private _dashboardStateMenagment:DashboardStateService,
-    private _lottieState:LottieStateService
+    private _lottieState:LottieStateService,
+    private _userSession:UserSessionService
   ){
     
   }
@@ -40,6 +43,13 @@ export class LayoutComponent implements OnInit{
       this._lottieState.isInitialized$.subscribe({
         next:response=>{
           this.isLoading =response;
+        }
+      })
+    )
+    this.subscriptions.add(
+      this._userSession.logOutDialog$.subscribe({
+        next:response=>{
+          this.logOutDialog = response;
         }
       })
     )

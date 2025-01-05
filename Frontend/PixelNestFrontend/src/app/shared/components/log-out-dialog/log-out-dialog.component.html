@@ -1,0 +1,9 @@
+<div class="log-out-dialog " >
+    <div class="log-out-wrap animate__animated animate__zoomIn animate__faster" [ngClass]="anim ? 'animate__zoomOut animate__faster' : ''">
+        <h1>Are you sure you want to log out?</h1>
+        <div>
+            <button class="yes" (click)="choose('yes')">Yes</button>
+            <button class="no" (click)="choose('no')">No</button>
+        </div>
+    </div>
+</div>
