@@ -23,7 +23,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     CommonModule,
     SharedModule,
     FormsModule,
-   
+    
     BrowserModule,
     ImageCropperModule,
   ]

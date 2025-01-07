@@ -37,6 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _userService:UserService,
     private _postService:PostService,
     private _route:ActivatedRoute,
+    private _router:Router,
     private _postState:PostStateService,
     private _cdr:ChangeDetectorRef
   ){}
@@ -158,13 +159,24 @@ export class ProfileComponent implements OnInit, OnDestroy{
     //   }
     // });
 
+    this._router.events
+      .pipe(
+  
+        filter((event): event is NavigationStart => event instanceof NavigationStart)
+      )
+      .subscribe((event: NavigationStart) => {
+       this.editProfile = false;
+       this.followersTab = false;
+       this.followingsTab = false;
+       
+    });
 
     this._route.paramMap
     .pipe(
       takeUntil(this.destroy$), 
       tap(params => {
+       
         this.username = params.get('username') ?? this._userSessions.getFromCookie('username');
-        
         
         this._resetProfileState();
         this._loadData();

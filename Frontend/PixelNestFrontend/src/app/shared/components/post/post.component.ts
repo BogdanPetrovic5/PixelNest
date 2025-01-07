@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, finalize, Subscription, tap, throwError } from 'rxjs';
 import { LikedByUsers } from 'src/app/core/dto/likedByUsers.dto';
@@ -14,16 +14,20 @@ import { UserService } from 'src/app/core/services/user/user.service';
 import { environment } from 'src/environments/environment.development';
 import { LottieLoadingComponent } from '../lottie-loading/lottie-loading.component';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
+import Hammer from 'hammerjs';
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss'],
-  providers:[DatePipe]
+  providers:[DatePipe],
+
 })
 export class PostComponent implements OnInit{
 
 
   @Input() post!:PostDto;
+  @Input() postIndex!:number
+  
   likedByUsers: LikedByUsers[] = [];
   savedByUsers:SavedPosts[] = []
 
@@ -38,10 +42,16 @@ export class PostComponent implements OnInit{
   areCommentsOpened:boolean = false;
   deleteDialog:boolean = false;
   isVisible:boolean = false;
+  isDragging = false;
+  containerWidth = 0;
+  
+  marginLeft:number = 0;
+  currentMargin:number = 0;
+  startX:number = 0;
 
-  marginLeft = 0;
-  progressBarMargin = 0;
-  index = 0;
+  progressBarMargin:number = 0;
+  index:number = 0;
+  
   subscription:Subscription = new Subscription;
   constructor(
     private _datePipe:DatePipe,
@@ -55,29 +65,101 @@ export class PostComponent implements OnInit{
   ){
    
   }
-
+  ngAfterViewInit() {
+  
+    this.containerWidth = this.getImageWidth();
+  }
   ngOnInit():void{
     this.baseUrl = environment.blobStorageBaseUrl;
     this._initilizeComponent();
     
-  }
-  onSwipeRight() {
- 
-    if(this.index - 1 >= 0){
-      this.marginLeft += 200;
-      this.progressBarMargin = this.progressBarMargin - 100 / (this.post.imagePaths.length)
-      this.index -= 1;
+    const element = document.getElementById(`image-slider-${this.postIndex}`); 
+    if(element){
+      const hammer = new Hammer(element);
+      hammer.get('pan').set({
+        threshold: 3,   
+        velocity: 0.5    
+      });
+
     }
+   
+  }
+  
+
+  onPanStart(event:any, index:number){
+  
+  
+    this.isDragging = true;
+    this.startX = event.touches[0].clientX;
+    this.currentMargin = this.marginLeft
+  }
+  onPanMove(event:any,index:number){
+  
+    if (!this.isDragging) return;
+
+    const delta = (event.touches[0].clientX - this.startX) *  1.3;
+    const potentialMargin = this.currentMargin + delta;
+  
+
+    const maxMargin = 0;
+    const minMargin = -(this.post.imagePaths.length - 1) * this.containerWidth;
+  
+    this.marginLeft = Math.max(minMargin, Math.min(maxMargin, potentialMargin));
+     
+    this.updateSliderTransform(false);
+  }
+  onPanEnd(event: any,index:number) {
+   
+      this.isDragging = false;
+      const threshold = this.containerWidth * 0.25; 
+      const delta = event.changedTouches[0].clientX - this.startX;
+      
+      if (delta < -threshold && this.index < this.post.imagePaths.length - 1) {
+        this.moveProggressBar(delta)
+        this.index++;
+       
+      } else if (delta > threshold && this.index > 0) {
+        this.moveProggressBar(delta)
+        this.index--;
+      }
+      this.marginLeft = -this.index * this.containerWidth;
+ 
+      this.updateSliderTransform(true);
+  }
+  updateSliderTransform(smooth: boolean) {
+    const slider = document.getElementById(`image-slider-${this.postIndex}`);
+    if (slider) {
+     
+      slider.style.transition = smooth ? 'transform 0.2s ease-out' : 'none';
+      slider.style.transform = `translateX(${this.marginLeft}px)`;
+    }
+  }
+  moveProggressBar(delta:number){
+    if(delta > 0 && this.index - 1 >= 0){
+      this.progressBarMargin = this.progressBarMargin - 100 / (this.post.imagePaths.length)
+     }else if(this.index + 1 <= (this.post.imagePaths.length - 1) && delta < 0) this.progressBarMargin = this.progressBarMargin + 100 / (this.post.imagePaths.length)
+  }
+  getImageWidth(): number {
+    const imageWrapper = document.querySelector('.image-wrapper') as HTMLElement;
+    return imageWrapper ? imageWrapper.offsetWidth : 200;
   }
   onSwipeLeft() {
    
     if(this.index + 1 <= (this.post.imagePaths.length -1)){
-      this.marginLeft -= 200;
+      this.marginLeft -= this.containerWidth;
       this.progressBarMargin = this.progressBarMargin + 100 / (this.post.imagePaths.length)
       this.index += 1;
     }
   }
-  
+
+  onSwipeRight() {
+ 
+    if(this.index - 1 >= 0){
+      this.marginLeft += this.containerWidth;
+      this.progressBarMargin = this.progressBarMargin - 100 / (this.post.imagePaths.length)
+      this.index -= 1;
+    }
+  }
 
   closeLikesTab() {
     this.isLikesTabOpen = false

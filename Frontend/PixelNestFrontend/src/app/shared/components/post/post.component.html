@@ -16,19 +16,27 @@
                 <img src="/assets/images/trash-bin.png" (click)="openDeleteDialog()">
             </div>
         </div>
-        <div class="image-holder">
-            <div class="image-slider" 
+        <div class="image-holder"  
+            >
             
-            [ngStyle]="{'margin-left': marginLeft + '%'}">
-                <div class="image-wrapper" *ngFor="let src of post.imagePaths">
+            <div class="image-slider" [id]="'image-slider-'+this.postIndex"
+               
+                (touchstart)="onPanStart($event, postIndex)" 
+                (touchmove)="onPanMove($event, postIndex)" 
+                (touchend)="onPanEnd($event, postIndex)"
+
+               
+                [ngStyle]="{'transform': 'translateX(' + marginLeft + 'px)'}"
+                >
+                <div  class="image-wrapper" *ngFor="let src of post.imagePaths" >
                     <img *ngIf="post.imagePaths.length > 0" 
                     src="http://localhost:7157/Photos/{{src.path}}" 
                     loading="lazy" [ngStyle]="{'object-fit':post.imagePaths[0].photoDisplay}" alt=""
-                    (swipeleft)="onSwipeLeft()" 
-                    (swipeRight)="onSwipeRight()"
+                    
+                    
                     >
                 </div>
-            </div>
+        </div>
             <div class="nav-bar" *ngIf="post.imagePaths.length > 1">
                 <div class="bar-progress" [ngStyle]="{'margin-left': progressBarMargin + '%'}" [style.width]="'calc(100% / ' + post.imagePaths.length + ')'">
 
