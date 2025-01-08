@@ -20,12 +20,12 @@ namespace PixelNestBackend.Repository
             _dataContext = dataContext;
             _logger = logger;
         }
-        public  ICollection<ResponseReplyCommentDto> GetReplies(int? initialParentID)
+        public ICollection<ResponseReplyCommentDto> GetReplies(int? initialParentID)
         {
 
             try
             {
-                var allComments = _dataContext.Comments.Include(c => c.LikedComments).ToList();
+                var allComments = _dataContext.Comments.Include(c => c.LikedComments).Include(u => u.User).ToList();
                 var replies = allComments.Where(c => c.ParentCommentID == initialParentID).ToList();
                 return replies.Select(r => new ResponseReplyCommentDto
                 {
