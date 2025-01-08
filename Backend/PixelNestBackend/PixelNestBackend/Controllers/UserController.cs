@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
@@ -113,6 +114,17 @@ namespace PixelNestBackend.Controllers
             }
             return NotFound(new { path = string.Empty });
             
+        }
+      
+        [HttpGet("FindUsers")]
+        public ActionResult<ICollection<ResponseUsersDto>> FindUsers(string username)
+        {
+            if(username.IsNullOrEmpty()) return BadRequest(string.Empty);
+            ICollection<ResponseUsersDto> responseUsers = _userService.FindUsers(username);
+            if(responseUsers != null)
+            {
+                return Ok(responseUsers);
+            }else return NotFound();
         }
     
     } 

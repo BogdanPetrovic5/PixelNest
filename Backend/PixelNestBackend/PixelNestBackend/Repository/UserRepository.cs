@@ -251,5 +251,32 @@ namespace PixelNestBackend.Repository
                 
             }
         }
+
+        public ICollection<ResponseUsersDto> FindUsers(string username)
+        {
+            try
+            {
+                ICollection<ResponseUsersDto> responseUsersDto = _dataContext.Users
+                    .Where(u => u.Username.Contains(username))
+                    .Select(u => new ResponseUsersDto
+                    {
+                        Username = u.Username
+
+                    }).ToList();
+                return responseUsersDto;
+            }
+            catch (SqlException ex)
+            {
+                
+                _logger.LogError(ex.Message);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
+            
+        }
     }
 }

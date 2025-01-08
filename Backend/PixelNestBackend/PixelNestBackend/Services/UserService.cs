@@ -123,5 +123,10 @@ namespace PixelNestBackend.Services
             string username = _userUtility.GetUserName(email);
             return _userRepository.ChangeUsername(username, newUsername);
         }
+
+        public ICollection<ResponseUsersDto> FindUsers(string username)
+        {
+            return _userRepository.FindUsers(username);
+        }
     }
 }
