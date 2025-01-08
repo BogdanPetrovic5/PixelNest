@@ -20,6 +20,7 @@ import { DeleteDialogComponent } from './components/post/delete-dialog/delete-di
 import { UserTagComponent } from './components/user-tag/user-tag.component';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { LogOutDialogComponent } from './components/log-out-dialog/log-out-dialog.component';
+import { TopNavigationComponent } from './components/top-navigation/top-navigation.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { LogOutDialogComponent } from './components/log-out-dialog/log-out-dialo
     DeleteDialogComponent,
     UserTagComponent,
     ProfileImageComponent,
-    LogOutDialogComponent
+    LogOutDialogComponent,
+    TopNavigationComponent
   ],
   imports: [
     CommonModule,
@@ -62,7 +64,8 @@ import { LogOutDialogComponent } from './components/log-out-dialog/log-out-dialo
     DeleteDialogComponent,
     UserTagComponent,
     ProfileImageComponent,
-    LogOutDialogComponent
+    LogOutDialogComponent,
+    TopNavigationComponent
   ]
 })
 export class SharedModule { }

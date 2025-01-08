@@ -18,7 +18,8 @@
         </div>
         <div class="image-holder"  
             >
-            
+            <img class="right" src="/assets/images/next.png" (click)="onSwipeLeft()" *ngIf="post.imagePaths.length > 1">
+            <img class="left" src="/assets/images/prev.png" (click)="onSwipeRight()" *ngIf="post.imagePaths.length > 1">
             <div class="image-slider" [id]="'image-slider-'+this.postIndex"
                
                 (touchstart)="onPanStart($event, postIndex)" 

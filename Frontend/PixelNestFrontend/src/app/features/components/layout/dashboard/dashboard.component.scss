@@ -10,17 +10,20 @@ $HFONT: "Roboto Condensed", sans-serif;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
    
     align-self: center;
     .wrapper{
         width: 100%;
-        height: 95%;
+        height: calc(100% - 60px);
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
+        app-top-navigation{
+            display: none;
+        }
         app-story{
             height: 120px;
             width: 100%;
@@ -49,9 +52,20 @@ $HFONT: "Roboto Condensed", sans-serif;
     
  
 }
+@media only screen and (min-width:0px) and (max-width:767px){
+    .container{
+        .wrapper{
+            app-top-navigation{
+                width: 100%;
+                display: flex;
+            }
+        }
+    }
+}
 @media only screen and (min-width:0px) and (max-width:1023px) {
     .container{
         .wrapper{
+         
             app-story{
                 height: 90px;
                 width: 100%;

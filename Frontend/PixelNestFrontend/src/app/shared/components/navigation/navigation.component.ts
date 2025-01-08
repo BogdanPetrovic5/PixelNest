@@ -20,6 +20,7 @@ export class NavigationComponent implements OnInit{
     ["Profile/"+this.username]: 4,
     'Messages': 2,
     'Notifications': 3,
+    'Search': 5
 
   };
   constructor(

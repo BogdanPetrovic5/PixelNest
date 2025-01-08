@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { FollowersDto } from '../../dto/followers.dto';
 import { FollowingsDto } from '../../dto/followings.dto';
+import { Users } from '../../dto/users.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,11 @@ export class UserService {
     const url = `${environment.apiUrl}/api/User/GetProfilePicture?username=${username}`
 
     return this._httpClient.get<any>(url);
+  }
+  findUsers(username:string):Observable<Users[]>{
+    const url = `${environment.apiUrl}/api/User/FindUsers?username=${username}`
+
+    return this._httpClient.get<Users[]>(url);
   }
 
 }

@@ -7,10 +7,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { LayoutComponent } from './layout.component';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { SearchComponent } from './search/search.component';
 @NgModule({
   declarations: [
     NewPostComponent,
-    LayoutComponent
+    LayoutComponent,
+    SearchComponent
   ],
   imports: [
     CommonModule,

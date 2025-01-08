@@ -64,6 +64,28 @@ $HFONT: "Roboto Condensed", sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
+            .left, .right{
+                font-family: $PFONT;
+                width: 30px;
+                height: 30px;
+                display: flex; 
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(0, 0, 0, 0.204);
+                border-radius: 50%;
+                color: $PCOLOR;
+                font-size: 25px;
+                position: absolute;
+                z-index: 4;
+                cursor: pointer;
+            }
+            .left{
+                left: 10px;
+
+            }
+            .right{
+                right: 10px;
+            }
             .nav-bar{
                 height: 5px;
                 width: 60%;

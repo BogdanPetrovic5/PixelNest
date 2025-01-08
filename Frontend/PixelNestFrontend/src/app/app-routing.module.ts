@@ -11,6 +11,7 @@ import { DashboardGuard } from './core/guards/dashboard.guard';
 import { ProfileComponent } from './features/components/layout/profile/profile.component';
 import { LocationComponent } from './shared/components/location/location.component';
 import { LayoutComponent } from './features/components/layout/layout.component';
+import { SearchComponent } from './features/components/layout/search/search.component';
 
 
 const routes: Routes = [
@@ -48,6 +49,10 @@ const routes: Routes = [
         path:"Location/:location",
         component:LocationComponent
       },
+      {
+        path:"Search",
+        component:SearchComponent
+      }
     ]
   },
   {

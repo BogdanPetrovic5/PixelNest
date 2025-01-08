@@ -187,6 +187,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                 width: 100%;
                 flex-shrink: 0;
                align-self: center;
+               .messages, .notifications{
+                display: none !important;
+            }
                 .nav-sec{
                     padding:5px;
                     display: flex;
@@ -217,10 +220,11 @@ $HFONT: "Roboto Condensed", sans-serif;
     .navigation-container{
         
         .content{
-            width: 80%;
+            width: 100%;
             height: 90%;
             display: flex;
             flex-direction: row;
+            justify-content: center;
             align-self: center;
             
             align-items: center;
@@ -230,15 +234,18 @@ $HFONT: "Roboto Condensed", sans-serif;
             .navigation{
                 display: flex;
                 flex-direction: row;
-                justify-content: center;
+                justify-content: space-evenly;
                 margin: 0;
+                .messages, .notifications{
+                    display: none !important;
+                }
                 .nav-sec{
                     padding:10px;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
-                    
+                   
                     font-size: 25px;
                     cursor: pointer;
     
