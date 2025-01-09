@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" >
     <div class="content">
         <div class="input-wrapper">
             <div class="input" [ngStyle]="{'outline': focus ? '2px solid gray':''}">
@@ -11,7 +11,7 @@
         </div>
         <div class="users">
             <div class="content">
-                <div class="user-wrap" *ngFor="let user of users" (click)="navigate(user.username)">
+                <div class="user-wrap animate__animated animate__fadeInLeft animate__faster" [ngClass]="user.anim ? 'animate__fadeOutRight animate__faster':''" *ngFor="let user of users" (click)="navigate(user.username)" >
                     <app-profile-image  [username]="user.username"></app-profile-image>
                     <h1>{{user.username}}</h1>
                 </div>
