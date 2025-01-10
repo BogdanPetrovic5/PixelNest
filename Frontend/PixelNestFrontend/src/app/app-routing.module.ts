@@ -43,17 +43,20 @@ const routes: Routes = [
       {
         path:"Profile/:username",
         component:ProfileComponent,
-        
+        canActivate:[DashboardGuard]
       },
       {
         path:"Location/:location",
-        component:LocationComponent
+        component:LocationComponent,
+        canActivate:[DashboardGuard]
       },
       {
         path:"Search",
-        component:SearchComponent
+        component:SearchComponent,
+        canActivate:[DashboardGuard]
       }
-    ]
+    ],
+    canActivate:[DashboardGuard]
   },
   {
     path:"**", 
