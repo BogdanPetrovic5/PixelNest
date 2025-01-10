@@ -28,13 +28,7 @@ export class ProfileImageComponent implements OnInit{
     }
   }
    ngOnInit(): void {
-      this.subscription.add(
-        this._profileState.currentProfileUrl$.subscribe({
-          next:response =>{
-            this.stringUrl = response
-          }
-        })
-      )
+     
       // this._userService.getProfilePicture(this.username).subscribe({next:response=>{
       //   if(response.path.length > 0){
       //     this.stringUrl = environment.blobStorageBaseUrl + response.path;
@@ -50,7 +44,7 @@ export class ProfileImageComponent implements OnInit{
     
     this._userService.getProfilePicture(username).subscribe({next:response=>{
       if(response.path.length > 0){
-        this.stringUrl = environment.blobStorageBaseUrl + response.path;
+        this.stringUrl = 'http://localhost:7157/Photos/' + response.path;
       }
     }}) 
    }
