@@ -54,14 +54,10 @@ export class PostComponent implements OnInit{
   
   subscription:Subscription = new Subscription;
   constructor(
-    private _datePipe:DatePipe,
+
     private _postService:PostService,
     private _userSession:UserSessionService,
-    private _userService:UserService,
-    private _dashboardState:DashboardStateService,
-    private _router:Router,
-    private _postState:PostStateService,
-    private _lottie:LottieStateService
+   
   ){
    
   }

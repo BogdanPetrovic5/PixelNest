@@ -5,6 +5,7 @@ import { PostDto } from 'src/app/core/dto/post.dto';
 import { ProfileUser } from 'src/app/core/dto/profileUser.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { PostStateService } from 'src/app/core/services/states/post-state.service';
+import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { UserService } from 'src/app/core/services/user/user.service';
 import { ProfileImageComponent } from 'src/app/shared/components/profile-image/profile-image.component';
@@ -39,7 +40,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _route:ActivatedRoute,
     private _router:Router,
     private _postState:PostStateService,
-    private _cdr:ChangeDetectorRef
+    private _cdr:ChangeDetectorRef,
+    private _profileState:ProfileStateService
   ){}
   ngOnInit(): void {
     this._postState.setPosts([]);
@@ -187,7 +189,13 @@ export class ProfileComponent implements OnInit, OnDestroy{
         console.error('Error during profile setup:', err);
       }
     });
-    
+    this.subscribe.add(
+      this._profileState.currentProfileUrl$.subscribe({
+        next:response =>{
+          this.stringUrl = response
+        }
+      })
+    )
   }
   private _resetProfileState() {
     this._postState.setPosts([]);

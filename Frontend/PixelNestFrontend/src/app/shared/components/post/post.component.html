@@ -31,7 +31,7 @@
                 >
                 <div  class="image-wrapper" *ngFor="let src of post.imagePaths" >
                     <img *ngIf="post.imagePaths.length > 0" 
-                    src="http://localhost:7157/Photos/{{src.path}}" 
+                    src="{{baseUrl}}{{src.path}}" 
                     loading="lazy" [ngStyle]="{'object-fit':post.imagePaths[0].photoDisplay}" alt=""
                     
                     

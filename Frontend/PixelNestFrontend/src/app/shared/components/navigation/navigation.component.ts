@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
+import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
 @Component({
@@ -14,7 +15,8 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
 export class NavigationComponent implements OnInit{
   public selectedTab!:number
   public username:string = this._userSessionService.getFromCookie("username")
-
+  subscription:Subscription = new Subscription();
+  stringUrl = ""
   routeToTabMap: { [key: string]: number } = {
     'Dashboard/Feed': 1,
     ["Profile/"+this.username]: 4,
@@ -29,7 +31,8 @@ export class NavigationComponent implements OnInit{
     private _authService:AuthenticationService,
     private _router:Router,
     private cdr: ChangeDetectorRef,
-    private _route:ActivatedRoute
+    private _route:ActivatedRoute,
+    private _profileState:ProfileStateService
   ){
 
   }
@@ -77,5 +80,13 @@ export class NavigationComponent implements OnInit{
   private _initilize(){
     this.username = this._userSessionService.getFromCookie("username")
     this.cdr.detectChanges()
+
+    this.subscription.add(
+      this._profileState.currentProfileUrl$.subscribe({
+        next:response =>{
+          this.stringUrl = response
+        }
+      })
+    )
   }
 }
