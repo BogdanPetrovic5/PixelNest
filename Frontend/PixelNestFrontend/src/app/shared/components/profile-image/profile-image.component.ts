@@ -33,7 +33,16 @@ export class ProfileImageComponent implements OnInit{
     this.subscription.unsubscribe();
   }
    ngOnInit(): void {
-     
+      if(this.username == this._userSession.getFromCookie("username")){
+        this.subscription.add(
+          this._profileState.currentProfileUrl$.subscribe({
+            next:response =>{
+              this.stringUrl = response
+            }
+          })
+        )
+      }
+      
       // this._userService.getProfilePicture(this.username).subscribe({next:response=>{
       //   if(response.path.length > 0){
       //     this.stringUrl = environment.blobStorageBaseUrl + response.path;
