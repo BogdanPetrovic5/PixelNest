@@ -17,6 +17,9 @@ using PixelNestBackend.Gateaway;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Azure;
 using PixelNestBackend.Middleware;
+using System.Net.WebSockets;
+using PixelNestBackend.Services.Menagers;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,8 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(UserMapper));
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped<PasswordEncoder>();
 builder.Services.AddScoped<PasswordHasher<string>>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
@@ -39,12 +44,14 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IStoryRepository, StoryRepository>();
 
+
 builder.Services.AddScoped<FolderGenerator>();
 builder.Services.AddScoped<UserUtility>();
 builder.Services.AddScoped<PostUtility>();
 builder.Services.AddScoped<CommentUtility>();
 builder.Services.AddScoped<TokenGenerator>();
 
+builder.Services.AddSingleton<WebSocketConnectionMenager>();
 builder.Services.AddScoped(x =>
 {
     var configuration = x.GetRequiredService<IConfiguration>();
@@ -147,11 +154,21 @@ app.UseStaticFiles();
 
 app.UseCors("AllowAll");
 app.UseMiddleware<APICallLimiter>();
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+app.UseWebSockets(webSocketOptions);
+
+
+app.UseMiddleware<WebSocketMiddleware>();
 /*app.UseHttpsRedirection();*/
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();

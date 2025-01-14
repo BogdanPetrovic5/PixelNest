@@ -5,6 +5,8 @@ using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Services.Menagers;
+using PixelNestBackend.Utility;
 using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
@@ -15,10 +17,27 @@ namespace PixelNestBackend.Controllers
     {
 
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly UserUtility _userUtility;
+        private readonly WebSocketConnectionMenager _webSocketConnection;
+        public UserController(IUserService userService, WebSocketConnectionMenager webSocketConnectionMenager, UserUtility userUtility)
         {
             _userService = userService;
+            _webSocketConnection = webSocketConnectionMenager;
+            _userUtility = userUtility;
         }
+  
+        [Authorize]
+        [HttpPost("CloseConnection")]
+        public ActionResult CloseConnectionWithSocket()
+        {
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (email == null) return Unauthorized();
+            int userID = _userService.GetUserID(email);
+           string username=  _userUtility.GetUserName(userID);
+            _webSocketConnection.CloseConnection(username);
+            return Ok();
+        }
+
         [HttpGet("GetFollowings")]
         public ICollection<ResponseFollowingDto>? GetFollowings(string username)
         {

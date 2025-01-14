@@ -19,6 +19,7 @@ namespace PixelNestBackend.Data
         public DbSet<Follow> Follow { get; set; }
         public DbSet<Story> Stories { get; set; }
         public DbSet<Seen> Seen { get; set; }
+        public DbSet<Message> Messages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            
@@ -32,7 +33,19 @@ namespace PixelNestBackend.Data
             modelBuilder.Entity<Follow>().HasKey(f => new {f.UserFollowerID, f.UserFollowingID});
             modelBuilder.Entity<Story>().HasKey(s => s.StoryID);
             modelBuilder.Entity<Seen>().HasKey(s => new {s.StoryID, s.UserID});
+         
 
+            modelBuilder.Entity<Message>()
+                .HasOne(user => user.Sender)
+                .WithMany(message => message.SentMessages)
+                .HasForeignKey(user => user.SenderID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()
+               .HasOne(user => user.Receiver)
+               .WithMany(message => message.ReceivedMessages)
+               .HasForeignKey(user => user.ReceiverID)
+               .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Post>()
                 .HasOne(user => user.User)

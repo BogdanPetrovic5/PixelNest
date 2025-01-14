@@ -16,6 +16,6 @@ namespace PixelNestBackend.Interfaces
         string GetPicture(int userID);
         bool ChangeUsername(string username, string newUsername);
         ICollection<ResponseUsersDto> FindUsers(string username);
-
+        
     }
 }

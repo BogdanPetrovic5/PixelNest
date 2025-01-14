@@ -60,7 +60,10 @@ namespace PixelNestBackend.Services
             }
             return null;
         }
-
+        public int GetUserID(string email)
+        {
+            return _userUtility.GetUserID(email);
+        }
         public bool IsEmailRegistered(User user)
         {
             return _authenticationRepository.IsEmailRegistered(user);
