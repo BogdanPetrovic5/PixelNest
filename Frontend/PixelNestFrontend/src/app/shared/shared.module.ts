@@ -21,6 +21,9 @@ import { UserTagComponent } from './components/user-tag/user-tag.component';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { LogOutDialogComponent } from './components/log-out-dialog/log-out-dialog.component';
 import { TopNavigationComponent } from './components/top-navigation/top-navigation.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { MessageComponent } from './components/message/message.component';
+import { TimeAgoPipe } from './pipes/time-ago.pipe';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,10 @@ import { TopNavigationComponent } from './components/top-navigation/top-navigati
     UserTagComponent,
     ProfileImageComponent,
     LogOutDialogComponent,
-    TopNavigationComponent
+    TopNavigationComponent,
+    ChatComponent,
+    MessageComponent,
+    TimeAgoPipe
   ],
   imports: [
     CommonModule,
@@ -65,7 +71,10 @@ import { TopNavigationComponent } from './components/top-navigation/top-navigati
     UserTagComponent,
     ProfileImageComponent,
     LogOutDialogComponent,
-    TopNavigationComponent
+    TopNavigationComponent,
+    ChatComponent,
+    MessageComponent,
+    TimeAgoPipe
   ]
 })
 export class SharedModule { }

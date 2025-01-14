@@ -39,5 +39,7 @@ export class UserSessionService {
   setLogOutDialog(value:boolean){
     this._logOutDialog.next(value);
   }
+
+  
   
 }

@@ -1,0 +1,25 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+    width: fit-content;
+    height: fit-content;
+    padding-left: 15px;
+    padding-right:15px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    word-break: break-all;
+    word-wrap: break-word;
+    color: white;
+    font-family: $PFONT;
+    border-radius: 25px;
+    font-size: 0.9em;
+    display: flex;
+    flex-direction: row;
+}

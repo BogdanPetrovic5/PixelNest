@@ -1,0 +1,33 @@
+
+<div class="container">
+    <div class="content">
+        <div class="header">
+            <img src="/assets/images/back.png" alt="">
+            <h1>{{currentUser}}</h1>
+        </div>
+        <div class="search-bar">
+            <div class="input-wrapper">
+                <input type="text" placeholder="Search conversations...">
+            </div>
+        </div>
+        <div class="users">
+            <div class="chat-wrapper" *ngFor="let chat of chats" (click)="chatNavigation(chat.messages[0].source)">
+                <div class="chat-wrapper-content">
+                    <app-profile-image 
+                    [username]="chat.messages[0].source">
+                    </app-profile-image>
+                    <div class="chat-info">
+                        <div>
+                            <h1>
+                                {{chat.messages[0].source}}
+                            </h1>
+                            <p>{{chat.messages[0].dateSent | timeAgo}}</p>
+                        </div>
+                        
+                        <p>{{chat.messages[0].message}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

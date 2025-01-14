@@ -14,18 +14,14 @@ import { LayoutModule } from './components/layout/layout.module';
 
 
 
+
+
 @NgModule({
   declarations: [
     LandingPageComponent,
     AuthenticationPageComponent,
     LoginFormComponent,
     RegisterFormComponent,
-   
-
-    
-   
-   
-    
   ],
   imports: [
     CommonModule,

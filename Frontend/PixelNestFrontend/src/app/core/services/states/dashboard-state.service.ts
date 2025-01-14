@@ -23,6 +23,14 @@ export class DashboardStateService {
   private _deleteDialog = new BehaviorSubject<boolean>(false)
   deleteDialog$ = this._deleteDialog.asObservable();
 
+  private _notification = new BehaviorSubject<boolean>(false)
+  notification$ = this._notification.asObservable();
+
+  private _notificationSender = new BehaviorSubject<string>("")
+  notificationSender$ = this._notificationSender.asObservable();
+
+  private _notificationMessage = new BehaviorSubject<string>("")
+  notificationMessage$ = this._notificationMessage.asObservable();
   constructor() { }
 
   setIsNewStoryTabOpen(isSelected:boolean){
@@ -45,5 +53,14 @@ export class DashboardStateService {
 
   setDeleteDialog(value:boolean){
     this._deleteDialog.next(value);
+  }
+  setIsNotification(value:boolean){
+    this._notification.next(value);
+  }
+  setMessage(value:string){
+    this._notificationMessage.next(value)
+  }
+  setSender(value:string){
+    this._notificationSender.next(value);
   }
 }

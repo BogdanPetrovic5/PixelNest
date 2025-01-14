@@ -1,0 +1,195 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+    width: 100%;
+    height: calc(100dvh - 110px);
+    color: white;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    .content{
+        width: 100%;
+        height: calc(100% - 60px);
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .user-overview{
+            width: 100%;
+            height: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            app-profile-image{
+                width: 150px;
+                height: 150px;
+            }
+            .user-info{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: 25px;
+                h2{
+                    font-size: 0.8em;
+                    font-family: $PFONT;
+                    color: $PCOLOR;
+                    font-weight: 200;
+                    margin: 0;
+                    margin-top: 5px;
+                    margin-bottom: 10px;
+                }
+                h1{
+                    font-size: 1em;
+                    font-family: $PFONT;
+                    color: $PCOLOR;
+                    font-weight: bold;
+                    margin: 0;
+                }
+                .stats{
+                    font-size: 0.6em;
+                    color: $PCOLOR;
+                    font-family: $PFONT;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 5px;
+
+                }
+            }
+           
+        }
+        .messages{
+            height: 60%;
+            width: 100%;
+            display: flex;
+            
+            flex-direction: column;
+            gap: 10px;
+            div{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                max-width: 50%;
+                gap: 5px;
+
+                app-profile-image{
+                    width: 30px;
+                    height: 30px;
+                }
+                app-message{
+                    background-color: rgb(0, 140, 255);
+                    border-radius: 25px;
+                    width: calc(100% - 30px);
+                    height: fit-content;
+                }
+            }
+           
+        }
+        .input{
+            position: absolute;
+            width: 98%;  
+            border-radius: 25px;
+            height: 40px;
+            background-color: #32373a;  
+            bottom: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            input{
+                width: 96%;
+                height: 100%;
+                border: none;
+                outline: none;
+                border-radius: 25px;
+                background-color: transparent;
+                color: white;
+            }
+            img{
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                right: 10px;
+            }
+        }
+    }
+}
+@media only screen and (min-width:1024px) {
+    ::-webkit-scrollbar {
+        width: 10px; 
+        
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+        border-radius: 5px; 
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+    .container{
+       
+        .content{
+           
+            height: 100%;
+            .user-overview{
+              
+                app-profile-image{
+                 
+                }
+                .user-info{
+                 
+                    h2{
+                       
+                    }
+                    h1{
+                       
+                    }
+                    .stats{
+                      
+    
+                    }
+                }
+               
+            }
+            .messages{
+               
+                div{
+                  
+                    app-profile-image{
+                      
+                    }
+                    app-message{
+                      
+                    }
+                }
+               
+            }
+            .input{
+                width: 50%;
+                input{
+                   
+                }
+                img{
+                  
+                }
+            }
+        }
+    }
+}

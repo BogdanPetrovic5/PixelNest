@@ -19,7 +19,7 @@
 
             <div class="feed nav-sec"(click)="changeTab(4)" [ngClass]="{'selected':selectedTab == 4}" (click)="navigateToUserProfile()"><app-profile-image [stringUrl]="stringUrl" [username]="username"></app-profile-image><p>Profile</p></div>
 
-            <div class="messages nav-sec"(click)="changeTab(2)"  [ngClass]="{'selected':selectedTab == 2}" ><img src="./assets/images/chatbubble.png"><p>Messages</p></div>
+            <div class="messages nav-sec"(click)="changeTab(2)"  [ngClass]="{'selected':selectedTab == 2}" (click)="navigate('/Inbox')"><img src="./assets/images/chatbubble.png"><p>Messages</p></div>
 
             <div class="notifications nav-sec" (click)="changeTab(3)" [ngClass]="{'selected':selectedTab == 3}"><img src="./assets/images/notification.png"><p>Notifications</p></div>
             

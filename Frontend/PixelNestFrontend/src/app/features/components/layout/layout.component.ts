@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
+import { WebsocketService } from 'src/app/core/services/websockets/websocket.service';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })
-export class LayoutComponent implements OnInit{
+export class LayoutComponent implements OnInit, OnDestroy{
   newPost:boolean | null = false;
   subscriptions: Subscription = new Subscription();
 
@@ -17,12 +18,17 @@ export class LayoutComponent implements OnInit{
   isLoading:boolean = false;
   deleteDialog:boolean = false;
   logOutDialog:boolean = false;
+  isNotification:boolean = false;
   constructor(
     private _dashboardStateMenagment:DashboardStateService,
     private _lottieState:LottieStateService,
-    private _userSession:UserSessionService
+    private _userSession:UserSessionService,
+    private _websocketService:WebsocketService
   ){
     
+  }
+  ngOnDestroy(): void {
+    this._websocketService.close()
   }
   ngOnInit(): void {
     this.subscriptions.add(
@@ -53,7 +59,17 @@ export class LayoutComponent implements OnInit{
         }
       })
     )
-  
+    this.subscriptions.add(
+      this._dashboardStateMenagment.notification$.subscribe({
+        next:response=>{
+          this.isNotification = response;
+          setTimeout(()=>{
+            this.isNotification = false;
+          }, 1300)
+        }
+      })
+    )
+    this._websocketService.connect(this._userSession.getFromCookie("username"))
   }
   
 }

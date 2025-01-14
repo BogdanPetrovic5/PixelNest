@@ -8,11 +8,16 @@ import { LayoutComponent } from './layout.component';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { SearchComponent } from './search/search.component';
+import { InboxComponent } from './inbox/inbox.component';
+import { NotificationComponent } from './notification/notification.component';
+
 @NgModule({
   declarations: [
     NewPostComponent,
     LayoutComponent,
-    SearchComponent
+    SearchComponent,
+    InboxComponent,
+    NotificationComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +25,8 @@ import { SearchComponent } from './search/search.component';
     DashboardModule,
     SharedModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+   
   ]
 })
 export class LayoutModule { }

@@ -12,6 +12,8 @@ import { ProfileComponent } from './features/components/layout/profile/profile.c
 import { LocationComponent } from './shared/components/location/location.component';
 import { LayoutComponent } from './features/components/layout/layout.component';
 import { SearchComponent } from './features/components/layout/search/search.component';
+import { InboxComponent } from './features/components/layout/inbox/inbox.component';
+import { ChatComponent } from './shared/components/chat/chat.component';
 
 
 const routes: Routes = [
@@ -54,7 +56,18 @@ const routes: Routes = [
         path:"Search",
         component:SearchComponent,
         canActivate:[DashboardGuard]
-      }
+      },
+      {
+        path:"Inbox",
+        component:InboxComponent,
+        
+        
+      },
+      {
+        path:'Chat/:username',
+        component:ChatComponent
+      },
+      
     ],
     canActivate:[DashboardGuard]
   },

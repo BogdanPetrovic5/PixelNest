@@ -16,9 +16,11 @@ import { CustomHammerConfig } from './hammer-config';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
+   
    
 
 

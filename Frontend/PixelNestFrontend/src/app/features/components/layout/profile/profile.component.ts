@@ -4,6 +4,7 @@ import { catchError, debounceTime, filter, of, Subject, Subscription, switchMap,
 import { PostDto } from 'src/app/core/dto/post.dto';
 import { ProfileUser } from 'src/app/core/dto/profileUser.dto';
 import { PostService } from 'src/app/core/services/post/post.service';
+import { ChatStateService } from 'src/app/core/services/states/chat-state.service';
 import { PostStateService } from 'src/app/core/services/states/post-state.service';
 import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
@@ -41,7 +42,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _router:Router,
     private _postState:PostStateService,
     private _cdr:ChangeDetectorRef,
-    private _profileState:ProfileStateService
+    private _profileState:ProfileStateService,
+    private _chatState:ChatStateService
   ){}
   ngOnInit(): void {
     this._postState.setPosts([]);
@@ -53,6 +55,12 @@ export class ProfileComponent implements OnInit, OnDestroy{
       this._postState.setPosts([]);
       this._postState.setQuery(undefined);
       
+  }
+
+  navigate(route:string){
+    console.log(route)
+    this._router.navigate([`/Chat/${route}`])
+    this._chatState.setUser(this.user);
   }
   toggleEdit(){
     this.editProfile = !this.editProfile;
