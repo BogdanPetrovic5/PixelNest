@@ -20,7 +20,7 @@ export class LayoutComponent implements OnInit, OnDestroy{
   logOutDialog:boolean = false;
   isNotification:boolean = false;
   constructor(
-    private _dashboardStateMenagment:DashboardStateService,
+    private _dashboardStateManagement:DashboardStateService,
     private _lottieState:LottieStateService,
     private _userSession:UserSessionService,
     private _websocketService:WebsocketService
@@ -28,48 +28,60 @@ export class LayoutComponent implements OnInit, OnDestroy{
     
   }
   ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
     this._websocketService.close()
   }
   ngOnInit(): void {
-    this.subscriptions.add(
-      this._dashboardStateMenagment.newPostTab$.subscribe(response =>{
-        if(this.newPost != null && response != null){
-          this.newPost = response
-        }
-      })
-    )
-    this.subscriptions.add(
-      this._lottieState.isSuccess$.subscribe({
-        next:response=>{
-          this.isSuccess = response
-        }
-      })
-    )
-    this.subscriptions.add(
-      this._lottieState.isInitialized$.subscribe({
-        next:response=>{
-          this.isLoading =response;
-        }
-      })
-    )
-    this.subscriptions.add(
-      this._userSession.logOutDialog$.subscribe({
-        next:response=>{
-          this.logOutDialog = response;
-        }
-      })
-    )
-    this.subscriptions.add(
-      this._dashboardStateMenagment.notification$.subscribe({
-        next:response=>{
-          this.isNotification = response;
-          setTimeout(()=>{
-            this.isNotification = false;
-          }, 1700)
-        }
-      })
-    )
-    this._websocketService.connect(this._userSession.getFromCookie("username"))
+    this.initSubscriptions();
+    this._websocketService.connect(this._userSession.getFromCookie('username'))
   }
+
+  private initSubscriptions(): void {
+    const subscriptionsList = [
+      {
+        observable$: this._dashboardStateManagement.newPostTab$,
+        handler: (response: any) => {
+          if (this.newPost != null && response != null) {
+            this.newPost = response;
+          }
+        },
+      },
+      {
+        observable$: this._lottieState.isSuccess$,
+        handler: (response: boolean | null) => {
+          this.isSuccess = response ?? false; // Default to false if null
+        },
+      },
+      {
+        observable$: this._lottieState.isInitialized$,
+        handler: (response: boolean | null) => {
+          this.isLoading = response ?? false; // Default to false if null
+        },
+      },
+      {
+        observable$: this._userSession.logOutDialog$,
+        handler: (response: boolean | null) => {
+          this.logOutDialog = response ?? false; // Default to false if null
+        },
+      },
+      {
+        observable$: this._dashboardStateManagement.notification$,
+        handler: (response: boolean | null) => {
+          this.isNotification = response ?? false; // Default to false if null
+          if (this.isNotification) {
+            setTimeout(() => {
+              this.isNotification = false;
+            }, 1700);
+          }
+        },
+      },
+    ];
+  
+    subscriptionsList.forEach(({ observable$, handler }) => {
+      this.subscriptions.add(observable$.subscribe(handler));
+    });
+  }
+  
+
   
 }

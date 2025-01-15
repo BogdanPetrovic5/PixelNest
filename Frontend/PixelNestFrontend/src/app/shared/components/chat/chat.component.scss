@@ -78,29 +78,55 @@ $HFONT: "Roboto Condensed", sans-serif;
             gap: 10px;
             div{
                 display: flex;
-                flex-direction: row;
-                align-items: center;
-                max-width: 50%;
+                flex-direction: column;
+               
+                
+                width: 100%;
                 gap: 5px;
-                flex-shrink: 0;
-                div{
-                    width: 30px;
-                    height: 30px;
-                    app-profile-image{
+                
+                .time{
+                    max-width: 50%;
+                    display: flex;
+                    flex-direction: row;
+                    span{
+                    
+                  
+                        font-size: 0.8em;
+                        font-family: $PFONT;
+                        font-weight: 100;
+                        
+                        
+                    }
+                }
+                
+                .message-user-wrapper{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    max-width: 50%;
+                    gap: 5px;
+                    flex-shrink: 0;
+                    div{
                         width: 30px;
                         height: 30px;
+                        app-profile-image{
+                            width: 30px;
+                            height: 30px;
+                            flex-shrink: 0;
+                        }
+                    }
+                   
+                    app-message{
+                        background-color: rgb(0, 140, 255);
+                        border-radius: 25px;
+                        max-width: calc(100% - 30px);
+                        height: fit-content;
                         flex-shrink: 0;
+                       
+                        
                     }
                 }
                
-                app-message{
-                    background-color: rgb(0, 140, 255);
-                    border-radius: 25px;
-                    width: calc(100% - 30px);
-                    height: fit-content;
-                    flex-shrink: 0;
-                    
-                }
             }
            
         }

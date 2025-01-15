@@ -21,17 +21,28 @@
             </div>
         </div>
         <div class="messages">
-            <div *ngFor="let message of messages; let i = index"  [ngStyle]="{
-                'align-self': message.sender === username ? 'flex-start' : 'flex-end',
-                'flex-direction': message.sender !== username ? 'row-reverse' : ''
-                
-                }" >
-                <div>
-                    <app-profile-image [username]="message.sender" *ngIf="messages[i+1] == undefined || messages[i].sender != messages[i+1].sender"></app-profile-image>
-
+            <div *ngFor="let message of messages; let i = index"   >
+                <div class="message-user-wrapper" [ngStyle]="{
+                    'align-self': message.sender === username ? 'flex-start' : 'flex-end',
+                    'flex-direction': message.sender !== username ? 'row-reverse' : ''
+                    
+                    }">
+                    <div>
+                        <app-profile-image [username]="message.sender" *ngIf="messages[i+1] == undefined || messages[i].sender != messages[i+1].sender"></app-profile-image>
+    
+                    </div>
+                    <app-message [message]="message.message" [ngStyle]="{ 'background-color': message.sender === username ? 'rgb(124, 196, 255)' : ''}" [senderUsername]="message.sender" >
+                    </app-message>
                 </div>
-                <app-message [message]="message.message" [ngStyle]="{ 'background-color': message.sender === username ? 'rgb(124, 196, 255)' : ''}" [senderUsername]="message.sender" >
-                </app-message>
+                <div [ngStyle]="{
+                    'align-self': message.sender === username ? 'flex-start' : 'flex-end',
+                    'flex-direction': message.sender !== username ? 'row-reverse' : ''
+                    
+                    }"  class="time" *ngIf="messages[i+1] == undefined || messages[i].sender != messages[i+1].sender">
+                    <span >{{formatDate(message.dateSent)}}
+                    </span>
+                </div>
+               
             </div>
            
         </div>

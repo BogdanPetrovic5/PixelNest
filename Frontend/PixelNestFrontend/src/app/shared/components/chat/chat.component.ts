@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, tap } from 'rxjs';
@@ -11,7 +12,8 @@ import { UserService } from 'src/app/core/services/user/user.service';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.scss'],
+  providers:[DatePipe],
 })
 export class ChatComponent implements OnInit, OnDestroy{
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
@@ -44,7 +46,8 @@ export class ChatComponent implements OnInit, OnDestroy{
     private _route:ActivatedRoute,
     private _userService:UserService,
     private _chatService:ChatService,
-    private _userSession:UserSessionService
+    private _userSession:UserSessionService,
+    private _datePipe:DatePipe
   ){}
   ngOnDestroy(): void {
       this._chatService.leaveRoom(this.username).subscribe({
@@ -133,5 +136,19 @@ export class ChatComponent implements OnInit, OnDestroy{
         this._subsribeToWebSocket();
       }
     })
+  }
+  formatDate(date:Date){
+    let formattedDate = ""
+    if(date){
+      const dateCopy = date;
+      const dateObject = new Date(dateCopy)
+      
+      if (isNaN(dateObject.getTime())) {
+        formattedDate = 'Invalid Date';
+      } else {
+        formattedDate = this._datePipe.transform(dateObject, 'd MMM \'at\' HH:mm') || 'Invalid Format';
+      }
+    }
+    return formattedDate
   }
 }
