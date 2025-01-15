@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, tap } from 'rxjs';
 import { Message } from 'src/app/core/dto/message.dto';
@@ -13,7 +13,7 @@ import { UserService } from 'src/app/core/services/user/user.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit{
+export class ChatComponent implements OnInit, OnDestroy{
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
   chatRoomID:string = ""
   reverseChatRoomID:string = ""
@@ -46,10 +46,18 @@ export class ChatComponent implements OnInit{
     private _chatService:ChatService,
     private _userSession:UserSessionService
   ){}
+  ngOnDestroy(): void {
+      this._chatService.leaveRoom(this.username).subscribe({
+        next:response=>{
+          console.log(response)
+        }
+      })
+  }
   ngOnInit(): void {
     this._initilizeComponent()
 
   }
+
   ngAfterViewChecked(): void {
     this.scrollToBottom();
   }

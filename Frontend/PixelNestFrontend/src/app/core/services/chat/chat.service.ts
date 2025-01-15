@@ -37,4 +37,8 @@ export class ChatService {
     const url = `${environment.apiUrl}/api/Chat/JoinRoom?receiverUsername=${receiverUsername}`
     return this._httpClient.post(url,{})
   }
+  leaveRoom(receiverUsername:string):Observable<any>{
+    const url = `${environment.apiUrl}/api/Chat/LeaveRoom?receiverUsername=${receiverUsername}`
+    return this._httpClient.post(url,{})
+  }
 }

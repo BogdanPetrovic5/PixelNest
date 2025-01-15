@@ -66,7 +66,20 @@ namespace PixelNestBackend.Controllers
             return BadRequest();
             
         }
+        [Authorize]
+        [HttpPost("LeaveRoom")]
+        public ActionResult<bool> LeaveRoom([FromQuery] string receiverUsername)
+        {
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (email == null) return Unauthorized();
+            int userID = _userService.GetUserID(email);
+            string username = _userUtility.GetUserName(email);
+            string roomID = $"{username}-{receiverUsername}";
+            string reverserdRoomID = $"{receiverUsername}-{username}";
+            _websocketManager.LeaveRoom(roomID, reverserdRoomID, username);
 
+            return Ok();
+        }
         [Authorize]
         [HttpPost("JoinRoom")]
         public ActionResult<bool> JoinRoom([FromQuery] string receiverUsername)

@@ -65,7 +65,7 @@ export class LayoutComponent implements OnInit, OnDestroy{
           this.isNotification = response;
           setTimeout(()=>{
             this.isNotification = false;
-          }, 1300)
+          }, 1700)
         }
       })
     )

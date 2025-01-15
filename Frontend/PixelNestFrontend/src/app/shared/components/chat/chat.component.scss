@@ -82,16 +82,24 @@ $HFONT: "Roboto Condensed", sans-serif;
                 align-items: center;
                 max-width: 50%;
                 gap: 5px;
-
-                app-profile-image{
+                flex-shrink: 0;
+                div{
                     width: 30px;
                     height: 30px;
+                    app-profile-image{
+                        width: 30px;
+                        height: 30px;
+                        flex-shrink: 0;
+                    }
                 }
+               
                 app-message{
                     background-color: rgb(0, 140, 255);
                     border-radius: 25px;
                     width: calc(100% - 30px);
                     height: fit-content;
+                    flex-shrink: 0;
+                    
                 }
             }
            

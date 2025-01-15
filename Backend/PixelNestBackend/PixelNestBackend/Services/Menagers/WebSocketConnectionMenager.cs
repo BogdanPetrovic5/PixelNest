@@ -44,17 +44,27 @@ namespace PixelNestBackend.Services.Menagers
                 _rooms[actualRoomID].Add(connectionID);
                 
             }
-            foreach(var room in _rooms)
-            {
-                Console.WriteLine("Room ID: "+ room.Key);
-                foreach (var i in _rooms[room.Key])
-                {
-                    Console.WriteLine(i);
-                }
-            }
+          
           
         }
- 
+        public void LeaveRoom(string roomID, string reversedRoomID, string connectionID)
+        {
+            string actualRoomID;
+
+            if (_rooms.ContainsKey(roomID))
+            {
+                actualRoomID = roomID;
+            }
+            else if (_rooms.ContainsKey(reversedRoomID))
+            {
+                actualRoomID = reversedRoomID;
+            }
+            else
+            {
+                actualRoomID = roomID;
+            }
+            _rooms[actualRoomID].Remove(connectionID);
+        }
         public async Task SendMessageToUser(string receiver, string sender, string message)
         {
             string roomID = $"{sender}-{receiver}";

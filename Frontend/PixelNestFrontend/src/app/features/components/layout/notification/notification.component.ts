@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscriber, Subscription } from 'rxjs';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 
@@ -11,7 +12,10 @@ export class NotificationComponent implements OnInit{
   sender:string =""
   message:string =""
   subscription:Subscription = new Subscription();
-  constructor(private _dashboardState:DashboardStateService){}
+  constructor(
+    private _dashboardState:DashboardStateService,
+    private _router:Router
+  ){}
   ngOnInit(): void {
     this.subscription.add(
       this._dashboardState.notificationMessage$.subscribe({
@@ -27,5 +31,8 @@ export class NotificationComponent implements OnInit{
         }
       })
     )
+  }
+  navigateToChat(){
+    this._router.navigate([`/Chat/${this.sender}`])
   }
 }

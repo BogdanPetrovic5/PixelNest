@@ -21,12 +21,15 @@
             </div>
         </div>
         <div class="messages">
-            <div *ngFor="let message of messages"  [ngStyle]="{
+            <div *ngFor="let message of messages; let i = index"  [ngStyle]="{
                 'align-self': message.sender === username ? 'flex-start' : 'flex-end',
                 'flex-direction': message.sender !== username ? 'row-reverse' : ''
                 
                 }" >
-                <app-profile-image [username]="message.sender"></app-profile-image>
+                <div>
+                    <app-profile-image [username]="message.sender" *ngIf="messages[i+1] == undefined || messages[i].sender != messages[i+1].sender"></app-profile-image>
+
+                </div>
                 <app-message [message]="message.message" [ngStyle]="{ 'background-color': message.sender === username ? 'rgb(124, 196, 255)' : ''}" [senderUsername]="message.sender" >
                 </app-message>
             </div>
