@@ -73,9 +73,11 @@ namespace PixelNestBackend.Controllers
             string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (email == null) return Unauthorized();
             int userID = _userService.GetUserID(email);
+
             string username = _userUtility.GetUserName(email);
             string roomID = $"{username}-{receiverUsername}";
             string reverserdRoomID = $"{receiverUsername}-{username}";
+
             _websocketManager.LeaveRoom(roomID, reverserdRoomID, username);
 
             return Ok();
@@ -87,9 +89,11 @@ namespace PixelNestBackend.Controllers
             string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (email == null) return Unauthorized();
             int userID = _userService.GetUserID(email);
+
             string username = _userUtility.GetUserName(email);
             string roomID = $"{username}-{receiverUsername}";
             string reverserdRoomID = $"{receiverUsername}-{username}";
+
             _websocketManager.JoinRoom(roomID, reverserdRoomID, username);
 
             return Ok();

@@ -33,7 +33,13 @@ namespace PixelNestBackend.Data
             modelBuilder.Entity<Follow>().HasKey(f => new {f.UserFollowerID, f.UserFollowingID});
             modelBuilder.Entity<Story>().HasKey(s => s.StoryID);
             modelBuilder.Entity<Seen>().HasKey(s => new {s.StoryID, s.UserID});
-         
+
+
+            modelBuilder.Entity<User>().HasIndex(u => new {u.Email, u.UserID, u.Username});
+            modelBuilder.Entity<Post>().HasIndex(p => p.UserID);
+            modelBuilder.Entity<Comment>().HasIndex(c => c.ParentCommentID);
+            modelBuilder.Entity<Seen>().HasIndex(s => s.UserID);
+            modelBuilder.Entity<Story>().HasIndex(s => s.UserID);
 
             modelBuilder.Entity<Message>()
                 .HasOne(user => user.Sender)
