@@ -20,6 +20,7 @@ namespace PixelNestBackend.Data
         public DbSet<Story> Stories { get; set; }
         public DbSet<Seen> Seen { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<SeenMessages> SeenMessages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            
@@ -33,13 +34,25 @@ namespace PixelNestBackend.Data
             modelBuilder.Entity<Follow>().HasKey(f => new {f.UserFollowerID, f.UserFollowingID});
             modelBuilder.Entity<Story>().HasKey(s => s.StoryID);
             modelBuilder.Entity<Seen>().HasKey(s => new {s.StoryID, s.UserID});
-
+            modelBuilder.Entity<SeenMessages>().HasKey(s => new { s.UserID, s.MessageID });
 
             modelBuilder.Entity<User>().HasIndex(u => new {u.Email, u.UserID, u.Username});
             modelBuilder.Entity<Post>().HasIndex(p => p.UserID);
             modelBuilder.Entity<Comment>().HasIndex(c => c.ParentCommentID);
             modelBuilder.Entity<Seen>().HasIndex(s => s.UserID);
             modelBuilder.Entity<Story>().HasIndex(s => s.UserID);
+
+            modelBuilder.Entity<SeenMessages>()
+                .HasOne(user => user.User)
+                .WithMany(seen => seen.SeenMessages)
+                .HasForeignKey(s => s.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SeenMessages>()
+                .HasOne(message => message.Message)
+                .WithMany(seen => seen.SeenByUsers)
+                .HasForeignKey(s => s.MessageID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Message>()
                 .HasOne(user => user.Sender)

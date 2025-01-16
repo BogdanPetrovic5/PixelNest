@@ -27,6 +27,27 @@ namespace PixelNestBackend.Controllers
             _userUtility = userUtility;
             _userService = userService;
         }
+        [Authorize]
+        [HttpGet("GetNumberOfMessages")]
+        public ActionResult<int> GetNumberOfNewMessages()
+        {
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (email == null) return Unauthorized();
+            int number = _chatService.GetNumberOfNewMessages(email);
+            return Ok(new {
+                newMessages = number
+            });
+        }
+        [Authorize]
+        [HttpPost("MarkAsRead")]
+        public ActionResult<bool> MarkAsRead([FromBody] MarkAsRead markAsReadDto)
+        {
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (email == null) return Unauthorized();
+            bool response = _chatService.MarkAsRead(markAsReadDto, email);
+            return Ok(response);
+        }
+
 
         [Authorize]
         [HttpGet("GetUserChats")]

@@ -2,9 +2,10 @@
 {
     public class SeenMessages
     {
-        public int MessageID;
-        public int UserID;
-        public User User;
-        public Message Message;
+        public int MessageID { get; set; }
+        public int UserID { get; set; }
+        public int SenderID { get; set; }
+        public User User { get; set; }
+        public Message Message { get; set; }
     }
 }

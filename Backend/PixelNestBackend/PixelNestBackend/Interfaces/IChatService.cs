@@ -9,5 +9,7 @@ namespace PixelNestBackend.Interfaces
         MessageResponse SaveMessage(MessageDto messageDto);
         ICollection<ResponseMessagesDto> GetUserToUserMessages(string username, string targetUsername);
         ICollection<ResponseChatsDto> GetUserChats(string email);
+        bool MarkAsRead(MarkAsRead markAsrReadDto, string email);
+        int GetNumberOfNewMessages(string email);
     }
 }

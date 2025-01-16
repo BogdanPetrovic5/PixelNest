@@ -17,7 +17,7 @@ namespace PixelNestBackend.Models
         public User Sender { get; set; }
         public User Receiver { get; set; }
 
-
+        public ICollection<SeenMessages> SeenByUsers { get; set; }
         
     }
 }
