@@ -3,6 +3,7 @@ using PixelNestBackend.Models;
 using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Net.WebSockets;
+using System.Reflection;
 using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -67,10 +68,9 @@ namespace PixelNestBackend.Services.Menagers
         }
         public async Task SendMessageToUser(string receiver, string sender, string message)
         {
-            string roomID = $"{sender}-{receiver}";
-            string reversedRoomID = $"{receiver}-{sender}";
+           
 
-            string actualRoomID = _findRoom(roomID, reversedRoomID);
+            string actualRoomID = FindRoom(receiver, sender);
             WebSocketMessage webSocketMessage = new WebSocketMessage
             {
                 SenderUsername = sender,
@@ -79,7 +79,7 @@ namespace PixelNestBackend.Services.Menagers
                 Content = message
             };
            
-            if (_isUserInRoom(actualRoomID, receiver)) 
+            if (IsUserInRoom(actualRoomID, receiver)) 
             {
                 Console.Write("Ovde");
                 webSocketMessage.Type = "Room";
@@ -107,7 +107,7 @@ namespace PixelNestBackend.Services.Menagers
                 }
             }
         }
-        private bool _isUserInRoom(string roomID, string receiver)
+        public bool IsUserInRoom(string roomID, string receiver)
         {
             if (!_rooms.ContainsKey(roomID))
             {
@@ -123,8 +123,11 @@ namespace PixelNestBackend.Services.Menagers
             }
             return false;
         }
-        private string _findRoom(string roomID, string reversedRoomID)
+        public string FindRoom(string receiver, string sender)
         {
+            string roomID = $"{sender}-{receiver}";
+            string reversedRoomID = $"{receiver}-{sender}";
+
             string actualRoomID;
             if (_rooms.ContainsKey(roomID))
             {
