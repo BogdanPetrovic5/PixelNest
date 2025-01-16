@@ -64,8 +64,8 @@ $HFONT: "Roboto Condensed", sans-serif;
         .users{
             width: 100%;
             display: flex;
-            justify-content: flex-end;
-            flex-direction: column-reverse;
+            justify-content: flex-start;
+            flex-direction: column;
           
             height: calc(100% - 186px);
             .chat-wrapper:hover{
@@ -86,6 +86,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     display: flex;
                     align-items: center;
                     flex-direction: row;
+                    position: relative;
                     gap: 10px;
                     width: 90%;
                     app-profile-image{
@@ -100,7 +101,13 @@ $HFONT: "Roboto Condensed", sans-serif;
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
-
+                        position: relative;
+                        app-lottie-notification{
+                            position: absolute;
+                            top: 50%;
+                            transform: translateY(50%);
+                            right: 0px;
+                        }
                         div{
                             display: flex;
                             flex-direction: row;

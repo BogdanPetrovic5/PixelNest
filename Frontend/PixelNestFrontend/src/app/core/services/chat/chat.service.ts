@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Chats } from '../../dto/chats.dto';
+import { MessageSeen } from '../../dto/messageSeen.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,11 @@ import { Chats } from '../../dto/chats.dto';
 export class ChatService {
   
   constructor(private _httpClient:HttpClient) { }
+  getNumberOfMessages():Observable<any>{
+    const url = `${environment.apiUrl}/api/Chat/GetNumberOfMessages`
 
+    return this._httpClient.get<any>(url);
+  }
   getMessages(username:string):Observable<Message[]>{
     const url = `${environment.apiUrl}/api/Chat/GetUserToUserMessages?targetUsername=${username}`
 
@@ -25,6 +30,11 @@ export class ChatService {
         SenderUsername:message.sender,
         ReceiverUsername:message.receiver
       })
+  }
+
+  markAsRead(messageSeenDto:MessageSeen){
+    const url = `${environment.apiUrl}/api/Chat/MarkAsRead`
+    return this._httpClient.post(url, messageSeenDto)
   }
 
   getChats():Observable<Chats[]>{

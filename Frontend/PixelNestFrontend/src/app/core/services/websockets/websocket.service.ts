@@ -4,6 +4,7 @@ import { Message } from '../../dto/message.dto';
 import { ChatStateService } from '../states/chat-state.service';
 import { DashboardStateService } from '../states/dashboard-state.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,14 +16,16 @@ export class WebsocketService {
     message:'',
     roomID:'',
     dateSent:new Date(),
-    source:''
+    source:'',
+    isSeen:true,
+    messageID: 0
   };
   messages:Message[] = []
-
+  lastSenderID:string[] = []
   constructor(
     private _chatState:ChatStateService,
-    private _dashboardState:DashboardStateService
-    
+    private _dashboardState:DashboardStateService,
+   
   ) { }
 
   connect(userID:string):void{
@@ -40,13 +43,16 @@ export class WebsocketService {
       this.messageData.receiver = data.TargetUser
       this.messageData.roomID = data.RoomID
       this.messageData.dateSent = new Date()
-    
+     
       if(data.Type === "Direct"){
         this._dashboardState.setMessage(this.messageData.message)
         this._dashboardState.setSender(this.messageData.sender)
-        this._dashboardState.setIsNotification(true)
+        this._dashboardState.setIsNotification(true);
+        if(!this.lastSenderID.includes(this.messageData.sender, 0)) this._chatState.updateNewMessages(1);
+        this.lastSenderID.push(this.messageData.sender)
+        
       }
-
+      
       this._chatState.setMessages(this.messageData)
 
     };
@@ -66,4 +72,5 @@ export class WebsocketService {
       this._socket.close();
     }
   }
+ 
 }

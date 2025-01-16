@@ -4,5 +4,7 @@ export interface Message{
     sender:string;
     roomID:string;
     dateSent:Date;
-    source:string
+    source:string;
+    messageID:number;
+    isSeen:boolean;
 }

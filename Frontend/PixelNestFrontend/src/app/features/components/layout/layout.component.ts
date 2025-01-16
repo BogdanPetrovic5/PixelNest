@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ChatService } from 'src/app/core/services/chat/chat.service';
+import { ChatStateService } from 'src/app/core/services/states/chat-state.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
@@ -19,17 +21,22 @@ export class LayoutComponent implements OnInit, OnDestroy{
   deleteDialog:boolean = false;
   logOutDialog:boolean = false;
   isNotification:boolean = false;
+
+  
   constructor(
     private _dashboardStateManagement:DashboardStateService,
     private _lottieState:LottieStateService,
     private _userSession:UserSessionService,
-    private _websocketService:WebsocketService
+    private _websocketService:WebsocketService,
+    private _chatService:ChatService,
+    private _chatState:ChatStateService
   ){
     
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-    this._websocketService.close()
+    this._websocketService.close();
+    
   }
   ngOnInit(): void {
     this.initSubscriptions();
@@ -37,6 +44,11 @@ export class LayoutComponent implements OnInit, OnDestroy{
   }
 
   private initSubscriptions(): void {
+    this._chatService.getNumberOfMessages().subscribe({
+      next:response=>{
+        this._chatState.updateNewMessages(response.newMessages)
+      }
+    })
     const subscriptionsList = [
       {
         observable$: this._dashboardStateManagement.newPostTab$,

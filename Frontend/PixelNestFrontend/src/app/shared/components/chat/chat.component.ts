@@ -3,6 +3,7 @@ import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@ang
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, tap } from 'rxjs';
 import { Message } from 'src/app/core/dto/message.dto';
+import { MessageSeen } from 'src/app/core/dto/messageSeen.dto';
 import { ProfileUser } from 'src/app/core/dto/profileUser.dto';
 import { ChatService } from 'src/app/core/services/chat/chat.service';
 import { ChatStateService } from 'src/app/core/services/states/chat-state.service';
@@ -32,15 +33,10 @@ export class ChatComponent implements OnInit, OnDestroy{
     lastname:''
 
   }
-
-   messageData: Message = {
-      sender:'',
-      receiver:'',
-      message:'',
-      roomID:'',
-      dateSent: new Date(),
-      source: ''
-    };
+  messageSeen:MessageSeen = {
+    messageID:[]
+  }
+  messageData!: Message;
   constructor(
     private _chatState:ChatStateService,
     private _route:ActivatedRoute,
@@ -57,6 +53,7 @@ export class ChatComponent implements OnInit, OnDestroy{
       })
   }
   ngOnInit(): void {
+    this.messageData = this._createDefaultMessage()
     this._initilizeComponent()
 
   }
@@ -97,6 +94,7 @@ export class ChatComponent implements OnInit, OnDestroy{
             
           })
         ).subscribe()
+    
     this.chatRoomID = `${this._userSession.getFromCookie("username")}-${this.username}`
     this.reverseChatRoomID = `${this.username}-${this._userSession.getFromCookie("username")}`    
   }
@@ -113,6 +111,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     this._chatService.getMessages(this.username).subscribe({
       next:response=>{
         this.messages = response;
+        this._loadSeenMessages();
         console.log(this.messages);
       }
     })
@@ -134,21 +133,56 @@ export class ChatComponent implements OnInit, OnDestroy{
         console.log(response);
         this._loadMessages();
         this._subsribeToWebSocket();
+        
       }
     })
   }
+  private _loadSeenMessages(){
+    for(let i = this.messages.length - 1; i >= 0;i--){
+      this.messageSeen.messageID.push(this.messages[i].messageID)
+    }
+  
+    this._chatService.markAsRead(this.messageSeen).subscribe({
+      next:response=>{
+        console.log(response)
+        this._chatState.updateNewMessages(-1)
+      }
+    });
+  }
   formatDate(date:Date){
     let formattedDate = ""
+ 
     if(date){
       const dateCopy = date;
+    
       const dateObject = new Date(dateCopy)
-      
-      if (isNaN(dateObject.getTime())) {
+     
+      const utcDate = new Date(dateObject.getTime() - dateObject.getTimezoneOffset() * 60000);
+
+    
+      if (isNaN(utcDate.getTime())) {
         formattedDate = 'Invalid Date';
       } else {
-        formattedDate = this._datePipe.transform(dateObject, 'd MMM \'at\' HH:mm') || 'Invalid Format';
+        formattedDate = this._datePipe.transform(utcDate, 'd MMM \'at\' HH:mm') || 'Invalid Format';
       }
     }
     return formattedDate
+  }
+  private _checkUTC(date:string){
+    return date.endsWith('Z') || date.includes('+00:00');
+  }
+  private _createDefaultMessage(): Message {
+    const currentDate = new Date();
+    console.log(currentDate)
+    return {
+      sender: '',
+      receiver: '',
+      message: '',
+      roomID: '',
+      dateSent: new Date(currentDate.getTime() - 3600000),
+      source: '',
+      isSeen: true,
+      messageID: 0
+    };
   }
 }

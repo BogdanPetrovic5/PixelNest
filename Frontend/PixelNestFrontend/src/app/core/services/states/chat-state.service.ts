@@ -8,6 +8,11 @@ import { Message } from '../../dto/message.dto';
   providedIn: 'root'
 })
 export class ChatStateService {
+  private _newMessages = new BehaviorSubject<number>(0)
+  updateNewMessages$ = this._newMessages.asObservable();
+  private _isUserInRoom = new BehaviorSubject<boolean>(false)
+  isUserInRoom$ = this._isUserInRoom.asObservable();
+
   private _chatStateUser = new BehaviorSubject<ProfileUser>(
     {
       username:'',
@@ -28,7 +33,9 @@ export class ChatStateService {
     message:'',
     roomID:'',
     dateSent: new Date(),
-    source:''
+    source:'',
+    isSeen: true,
+    messageID: 0
   });
   chatStateMessage = this._chatStateMessage.asObservable()
   setUser(value:ProfileUser){
@@ -39,6 +46,19 @@ export class ChatStateService {
     let messages = this._chatStateMessage.getValue()
     messages = value;
     this._chatStateMessage.next(messages);
+  }
+
+  setIsUserInRoom(value:boolean){
+    this._isUserInRoom.next(value);
+  }
+  resetNewMessages(){
+    this._newMessages.next(0)
+  }
+  updateNewMessages(value:number){
+    let number = this._newMessages.getValue()
+    number += value;
+
+    this._newMessages.next(number);
   }
   constructor() { }
 }

@@ -33,6 +33,7 @@
                     </div>
                     <app-message [message]="message.message" [ngStyle]="{ 'background-color': message.sender === username ? 'rgb(124, 196, 255)' : ''}" [senderUsername]="message.sender" >
                     </app-message>
+                    
                 </div>
                 <div [ngStyle]="{
                     'align-self': message.sender === username ? 'flex-start' : 'flex-end',
