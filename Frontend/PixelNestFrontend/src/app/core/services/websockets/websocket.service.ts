@@ -3,6 +3,8 @@ import { environment } from 'src/environments/environment.development';
 import { Message } from '../../dto/message.dto';
 import { ChatStateService } from '../states/chat-state.service';
 import { DashboardStateService } from '../states/dashboard-state.service';
+import { UserSessionService } from '../user-session/user-session.service';
+import { LastSendersDto } from '../../dto/lastSenders.dto';
 
 
 @Injectable({
@@ -21,11 +23,12 @@ export class WebsocketService {
     messageID: 0
   };
   messages:Message[] = []
-  lastSenderID:string[] = []
+  lastSenderIDs:LastSendersDto[] =[]
+  lastSenderIDObj:LastSendersDto = {currentUser:'', senders:[]} 
   constructor(
     private _chatState:ChatStateService,
     private _dashboardState:DashboardStateService,
-   
+    private _userSession:UserSessionService
   ) { }
 
   connect(userID:string):void{
@@ -45,12 +48,7 @@ export class WebsocketService {
       this.messageData.dateSent = new Date()
      
       if(data.Type === "Direct"){
-        this._dashboardState.setMessage(this.messageData.message)
-        this._dashboardState.setSender(this.messageData.sender)
-        this._dashboardState.setIsNotification(true);
-        if(!this.lastSenderID.includes(this.messageData.sender, 0)) this._chatState.updateNewMessages(1);
-        this.lastSenderID.push(this.messageData.sender)
-        
+        this._proccessDirectMessage()
       }
       
       this._chatState.setMessages(this.messageData)
@@ -72,5 +70,38 @@ export class WebsocketService {
       this._socket.close();
     }
   }
- 
+  
+
+  private _proccessDirectMessage(){
+    this._dashboardState.setMessage(this.messageData.message)
+    this._dashboardState.setSender(this.messageData.sender)
+    this._dashboardState.setIsNotification(true);
+    this._processLastIDS(this.messageData.sender)
+    
+
+  }
+
+  private _processLastIDS(sender:string){
+    this.lastSenderIDs = this._chatState.getLastIDS()
+    
+    let currentUser = this._userSession.getFromCookie("username")
+    this.lastSenderIDObj.currentUser = currentUser;
+    this.lastSenderIDObj.senders.push(sender);
+
+    const matched = this.lastSenderIDs.find(a => a.currentUser == this.lastSenderIDObj.currentUser)
+    if(!matched?.senders.includes(sender) || matched == null) this._chatState.updateNewMessages(1);
+    if(matched) matched?.senders.push(...this.lastSenderIDObj.senders)
+    else{
+      const copy = {...this.lastSenderIDObj}
+      this.lastSenderIDs.push(copy);
+      
+    }
+
+    this._userSession.setToCookie("ids", JSON.stringify(this.lastSenderIDs));
+    
+   
+    console.log(this.lastSenderIDs)
+    this.lastSenderIDObj.senders = []
+    
+  }
 }

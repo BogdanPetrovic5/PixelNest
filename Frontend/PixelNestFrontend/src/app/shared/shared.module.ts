@@ -24,6 +24,8 @@ import { TopNavigationComponent } from './components/top-navigation/top-navigati
 import { ChatComponent } from './components/chat/chat.component';
 import { MessageComponent } from './components/message/message.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { LottieNotificationComponent } from './components/lottie-notification/lottie-notification.component';
+import { InboxIconComponent } from './components/inbox-icon/inbox-icon.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     TopNavigationComponent,
     ChatComponent,
     MessageComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    LottieNotificationComponent,
+    InboxIconComponent
   ],
   imports: [
     CommonModule,
@@ -74,7 +78,9 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     TopNavigationComponent,
     ChatComponent,
     MessageComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    LottieNotificationComponent,
+    InboxIconComponent
   ]
 })
 export class SharedModule { }

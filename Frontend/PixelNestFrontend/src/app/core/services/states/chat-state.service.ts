@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Users } from '../../dto/users.dto';
 import { ProfileUser } from '../../dto/profileUser.dto';
 import { Message } from '../../dto/message.dto';
+import { LastSendersDto } from '../../dto/lastSenders.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,9 @@ export class ChatStateService {
   updateNewMessages$ = this._newMessages.asObservable();
   private _isUserInRoom = new BehaviorSubject<boolean>(false)
   isUserInRoom$ = this._isUserInRoom.asObservable();
+
+  private _lastSenderIDS = new BehaviorSubject<LastSendersDto[]>([])
+  lastSenderIDS = this._lastSenderIDS.asObservable()
 
   private _chatStateUser = new BehaviorSubject<ProfileUser>(
     {
@@ -42,12 +46,27 @@ export class ChatStateService {
     this._chatStateUser.next(value);
   }
 
+  updateLastIDS(value:LastSendersDto){
+    let ids = this._lastSenderIDS.getValue();
+    ids.push(value);
+
+    this._lastSenderIDS.next(ids);
+  }
+  setLastIDS(value:LastSendersDto[]){
+    this._lastSenderIDS.next(value)
+  }
+  getLastIDS() : LastSendersDto[]{
+    return this._lastSenderIDS.getValue();
+  }
+  resetLastIDS(){
+    this._lastSenderIDS.next([]);
+  }
+
   setMessages(value:Message){
     let messages = this._chatStateMessage.getValue()
     messages = value;
     this._chatStateMessage.next(messages);
   }
-
   setIsUserInRoom(value:boolean){
     this._isUserInRoom.next(value);
   }
@@ -56,7 +75,8 @@ export class ChatStateService {
   }
   updateNewMessages(value:number){
     let number = this._newMessages.getValue()
-    number += value;
+    
+    if((number + value) >= 0) number += value;
 
     this._newMessages.next(number);
   }

@@ -58,7 +58,7 @@ export class ProfileImageComponent implements OnInit{
     
     this._userService.getProfilePicture(username).subscribe({next:response=>{
       if(response.path.length > 0){
-        this.stringUrl = 'http://localhost:7157/Photos/' + response.path;
+        this.stringUrl = environment.blobStorageBaseUrl + response.path;
       }
     }}) 
    }

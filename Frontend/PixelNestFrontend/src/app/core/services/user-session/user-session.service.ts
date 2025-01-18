@@ -26,7 +26,9 @@ export class UserSessionService {
     expiryDate.setMinutes(expiryDate.getMinutes() + 30);
     this._cookieService.set(key, value,expiryDate, '/');
   }
-
+  deleteKeyFromCookie(key:any){
+    this._cookieService.delete(key);
+  }
   setToLocalStorage(key:string, value:any){
     localStorage.setItem(key, JSON.stringify(value));
   }

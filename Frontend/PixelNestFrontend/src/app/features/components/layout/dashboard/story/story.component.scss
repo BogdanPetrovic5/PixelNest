@@ -43,8 +43,18 @@ $HFONT: "Roboto Condensed", sans-serif;
             left: 50%;
             transform: translateX(-50%);
             cursor: pointer;
-            z-index: 2;
+            z-index: 4;
             border: 3px solid $BGCOLOR;
+        }
+        .box::after{
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: '';
+            height: 100%;
+            width: 100%;
+            background-color: transparent;
+            z-index: 3;
         }
         .box{
             height: 60px;
@@ -60,10 +70,13 @@ $HFONT: "Roboto Condensed", sans-serif;
             font-family: $PFONT;
             transition: 300ms;
             cursor: pointer;
-            position: relative;
+           position: relative;
+            
+           
             app-profile-image{
                 width: 90%;
                 height: 90%;
+              
             }
             img{
                 width: 55px;
@@ -108,7 +121,16 @@ $HFONT: "Roboto Condensed", sans-serif;
                 justify-content: flex-end;
                 align-items: center;
                 gap: 5px;
-          
+                .box::after{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    content: '';
+                    height: 100%;
+                    width: 100%;
+                    background-color: transparent;
+                    z-index: 3;
+                }
                 .box{
                     width: 60px;
                     height: 60px;
@@ -122,6 +144,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                     app-profile-image{
                         width: 90%;
                         height: 90%;
+                        
+                       
                     }
                     img{
                         width: 100%;
@@ -185,7 +209,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 left: 50%;
                 transform: translateX(-50%);
                 cursor: pointer;
-                z-index: 1;
+                z-index: 4;
                 border: 3px solid $BGCOLOR;
             }
             .box{
@@ -333,7 +357,7 @@ $HFONT: "Roboto Condensed", sans-serif;
             left: 50%;
             transform: translateX(-50%);
                 cursor: pointer;
-                z-index: 3;
+                z-index: 4;
             }
             .box{
                 height: 50px;

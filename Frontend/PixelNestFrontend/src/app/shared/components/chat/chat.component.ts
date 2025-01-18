@@ -48,7 +48,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
       this._chatService.leaveRoom(this.username).subscribe({
         next:response=>{
-          console.log(response)
+         
         }
       })
   }
@@ -112,7 +112,7 @@ export class ChatComponent implements OnInit, OnDestroy{
       next:response=>{
         this.messages = response;
         this._loadSeenMessages();
-        console.log(this.messages);
+     
       }
     })
   }
@@ -127,10 +127,10 @@ export class ChatComponent implements OnInit, OnDestroy{
       })
   }
   private _joinRoom(){
-    console.log(this.user.username)
+   
     this._chatService.joinRoom(this.user.username).subscribe({
       next:response=>{
-        console.log(response);
+       
         this._loadMessages();
         this._subsribeToWebSocket();
         
@@ -144,10 +144,31 @@ export class ChatComponent implements OnInit, OnDestroy{
   
     this._chatService.markAsRead(this.messageSeen).subscribe({
       next:response=>{
-        console.log(response)
+        
         this._chatState.updateNewMessages(-1)
+        this._proccessLastSenders()
       }
     });
+  }
+  private _proccessLastSenders(){
+    let senders = this._userSession.getFromCookie("ids");
+    if(senders){
+      let sendersParsed = JSON.parse(senders);
+  
+      let currentUsername = this._userSession.getFromCookie("username")
+      const matched = sendersParsed.find((a:any) => a.currentUser=== currentUsername)
+   
+      if (matched) {
+        matched.senders = matched.senders.filter((sender:any) => sender !== this.username);
+      }
+    
+      this._chatState.setLastIDS(sendersParsed);
+      this._userSession.setToCookie("ids", JSON.stringify(sendersParsed));
+
+    }
+    
+
+    
   }
   formatDate(date:Date){
     let formattedDate = ""
@@ -173,7 +194,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
   private _createDefaultMessage(): Message {
     const currentDate = new Date();
-    console.log(currentDate)
+   
     return {
       sender: '',
       receiver: '',

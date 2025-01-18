@@ -35,8 +35,7 @@ export class InboxComponent implements OnInit{
     const now = Date.now();
 
     const messageDate = new Date(date).getDate()
-    console.log(messageDate);
-    console.log(now);
+ 
     const diffInSeconds = Math.floor((now - messageDate) / 1000);
 
     if (diffInSeconds < 60) {
@@ -65,7 +64,7 @@ export class InboxComponent implements OnInit{
     this._chatService.getChats().subscribe({
       next:response=>{
         this.chats = response;
-        console.log(this.chats)
+       
       }
     })
   }
