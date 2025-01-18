@@ -50,7 +50,7 @@ builder.Services.AddScoped<UserUtility>();
 builder.Services.AddScoped<PostUtility>();
 builder.Services.AddScoped<CommentUtility>();
 builder.Services.AddScoped<TokenGenerator>();
-
+builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<WebSocketConnectionMenager>();
 builder.Services.AddScoped(x =>
 {

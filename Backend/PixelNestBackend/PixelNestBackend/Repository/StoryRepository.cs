@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
@@ -15,47 +16,62 @@ namespace PixelNestBackend.Repository
     {
         private readonly DataContext _dataContext;
         private readonly SASTokenGenerator _SASTokenGenerator;
-        public StoryRepository(DataContext dataContext, SASTokenGenerator sASTokenGenerator)
+        private readonly IMemoryCache _memoryCache;
+        private const string StoryCacheKey = "Stories_{0}";
+        private readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10);
+        public StoryRepository(DataContext dataContext, 
+            SASTokenGenerator sASTokenGenerator,
+            IMemoryCache memoryCache
+            )
         {
             _dataContext = dataContext;
             _SASTokenGenerator = sASTokenGenerator;
+            _memoryCache = memoryCache;
         }
 
         public async Task<ICollection<GroupedStoriesDto>> GetStories(string username)
         {
             try
             {
-                ICollection<GroupedStoriesDto> groupedStories = null;
-                User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
-                if (user != null)
-                {
-                    groupedStories = await _dataContext
-                         .Stories
-                         .Where(s => s.UserID != user.UserID && s.ExpirationDate >= DateTime.Now)
-                         .GroupBy(s => s.UserID)
-                         .Select(group => new GroupedStoriesDto
-                         {
-                             OwnerUsername = _dataContext.Users
-                                                 .Where(u => u.UserID == group.Key)
-                                                 .Select(u => u.Username)
-                                                 .FirstOrDefault(), 
-                             Stories = group.Select(s => new ResponseStoryDto
+                var cacheKey = string.Format(StoryCacheKey, username);
+                if(!_memoryCache.TryGetValue(cacheKey, out ICollection<GroupedStoriesDto> groupedStories)){
+                    groupedStories = null;
+                    
+                    User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
+                    if (user != null)
+                    {
+                        groupedStories = await _dataContext
+                             .Stories
+                             .Where(s => s.UserID != user.UserID && s.ExpirationDate >= DateTime.Now)
+                             .GroupBy(s => s.UserID)
+                             .Select(group => new GroupedStoriesDto
                              {
-                                 OwnerUsername = s.User.Username, 
-                                 SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
-                                 ImagePaths = s.ImagePath 
-                                                .Select(i => new ResponseImageDto
-                                                {
-                                                    Path = i.Path,
-                                                    PhotoDisplay = i.PhotoDisplay,
-                                                }).ToList(),
-                                 StoryID = s.StoryID
-                             }).ToList()
-                         })
-                         .AsSplitQuery()
-                         .ToListAsync();
-                    this._appendToken(groupedStories);
+                                 OwnerUsername = _dataContext.Users
+                                                     .Where(u => u.UserID == group.Key)
+                                                     .Select(u => u.Username)
+                                                     .FirstOrDefault(),
+                                 Stories = group.Select(s => new ResponseStoryDto
+                                 {
+                                     OwnerUsername = s.User.Username,
+                                     SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
+                                     ImagePaths = s.ImagePath
+                                                    .Select(i => new ResponseImageDto
+                                                    {
+                                                        Path = i.Path,
+                                                        PhotoDisplay = i.PhotoDisplay,
+                                                    }).ToList(),
+                                     StoryID = s.StoryID
+                                 }).ToList()
+                             })
+                             .AsSplitQuery()
+                             .ToListAsync();
+                        _memoryCache.Set(cacheKey, _memoryCache, new MemoryCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = CacheDuration
+                        });
+                    }
                 }
+               
                 return groupedStories;
             }
             catch(SqlException ex)
@@ -67,37 +83,45 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                ICollection<GroupedStoriesDto> groupedStories = null;
-                User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
-                if (user != null)
+                var cacheKey = string.Format(StoryCacheKey, 'C' + username);
+                if(!_memoryCache.TryGetValue(cacheKey, out ICollection<GroupedStoriesDto> groupedStories))
                 {
-                    groupedStories = await _dataContext
-                         .Stories
-                         .Where(s => s.UserID == user.UserID && s.ExpirationDate >= DateTime.Now)
-                         .GroupBy(s => s.UserID)
-                         .Select(group => new GroupedStoriesDto
-                         {
-                             OwnerUsername = _dataContext.Users
-                                                 .Where(u => u.UserID == group.Key)
-                                                 .Select(u => u.Username)
-                                                 .FirstOrDefault(),
-                             Stories = group.Select(s => new ResponseStoryDto
+                    groupedStories = null;
+                    User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
+                    if (user != null)
+                    {
+                        groupedStories = await _dataContext
+                             .Stories
+                             .Where(s => s.UserID == user.UserID && s.ExpirationDate >= DateTime.Now)
+                             .GroupBy(s => s.UserID)
+                             .Select(group => new GroupedStoriesDto
                              {
-                                 OwnerUsername = s.User.Username, 
-                                 SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
-                                 ImagePaths = s.ImagePath 
-                                                .Select(i => new ResponseImageDto
-                                                {
-                                                    Path = i.Path,
-                                                    PhotoDisplay = i.PhotoDisplay,
-                                                }).ToList(),
-                                 StoryID = s.StoryID
-                             }).ToList()
-                         })
-                         .AsSplitQuery()
-                         .ToListAsync();
-                    this._appendToken(groupedStories);
+                                 OwnerUsername = _dataContext.Users
+                                                     .Where(u => u.UserID == group.Key)
+                                                     .Select(u => u.Username)
+                                                     .FirstOrDefault(),
+                                 Stories = group.Select(s => new ResponseStoryDto
+                                 {
+                                     OwnerUsername = s.User.Username,
+                                     SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
+                                     ImagePaths = s.ImagePath
+                                                    .Select(i => new ResponseImageDto
+                                                    {
+                                                        Path = i.Path,
+                                                        PhotoDisplay = i.PhotoDisplay,
+                                                    }).ToList(),
+                                     StoryID = s.StoryID
+                                 }).ToList()
+                             })
+                             .AsSplitQuery()
+                             .ToListAsync();
+                        _memoryCache.Set(cacheKey, groupedStories, new MemoryCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = CacheDuration
+                        });
+                    }
                 }
+                
                 return groupedStories;
             }
             catch (SqlException ex)

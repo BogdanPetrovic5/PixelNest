@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
@@ -20,12 +21,16 @@ namespace PixelNestBackend.Repository
         private readonly ILogger<PostRepository> _logger;
         private readonly SASTokenGenerator _SAStokenGenerator;
         private readonly UserUtility _userUtility;
+        private readonly IMemoryCache _memoryCache;
+        private const string PostsCacheKey = "Posts_{0}";
+        private readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10); 
         public PostRepository(
             DataContext dataContext,
             IConfiguration configuration,
             ILogger<PostRepository> logger,
             SASTokenGenerator SASTokenGenerator,
-            UserUtility userUtility
+            UserUtility userUtility,
+            IMemoryCache memoryCache
             )
         {
             _dataContext = dataContext;
@@ -33,6 +38,7 @@ namespace PixelNestBackend.Repository
             _logger = logger;
             _SAStokenGenerator = SASTokenGenerator;
             _userUtility = userUtility;
+            _memoryCache = memoryCache;
         }
 
 
@@ -142,45 +148,51 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                int userID = _userUtility.GetUserID(username);
-                int currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
-                ICollection<ResponsePostDto> posts = await _dataContext.Posts
-                    .Where(u => u.UserID == userID)
-                   .Select(a => new ResponsePostDto
-                   {
-                       PostDescription = a.PostDescription,
-                       OwnerUsername = a.User.Username,
-                       TotalComments = a.TotalComments,
-                       TotalLikes = a.TotalLikes,
-                       PostID = a.PostID,
-                       IsDeletable = a.UserID == currentLoggedUserID,
-                       PublishDate = a.PublishDate,
-                       ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
-                       {
-                           Path = l.Path,
-                           PhotoDisplay = l.PhotoDisplay,
-                           PathID = l.PathID
-
-                       }).ToList(),
-                       Location = a.Location,
-                       LikedByUsers = a.LikedPosts.Select(l => new LikeDto
-                       {
-                           Username = l.User.Username
-
-                       }).ToList(),
-                       SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
-                       {
-                           Username = s.User.Username
-
-                       }).ToList()
-                   })
-                .AsSplitQuery()
-                .ToListAsync();
-                foreach (var post in posts)
+                var cacheKey = string.Format(PostsCacheKey, username + currentLoggedUser);
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts))
                 {
-                    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                    int userID = _userUtility.GetUserID(username);
+                    int currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
+                    posts = await _dataContext.Posts
+                        .Where(u => u.UserID == userID)
+                       .Select(a => new ResponsePostDto
+                       {
+                           PostDescription = a.PostDescription,
+                           OwnerUsername = a.User.Username,
+                           TotalComments = a.TotalComments,
+                           TotalLikes = a.TotalLikes,
+                           PostID = a.PostID,
+                           IsDeletable = a.UserID == currentLoggedUserID,
+                           PublishDate = a.PublishDate,
+                           ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
+                           {
+                               Path = l.Path,
+                               PhotoDisplay = l.PhotoDisplay,
+                               PathID = l.PathID
+
+                           }).ToList(),
+                           Location = a.Location,
+                           LikedByUsers = a.LikedPosts.Select(l => new LikeDto
+                           {
+                               Username = l.User.Username
+
+                           }).ToList(),
+                           SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
+                           {
+                               Username = s.User.Username
+
+                           }).ToList()
+                       })
+                    .AsSplitQuery()
+                    .ToListAsync();
+                    _memoryCache.Set(cacheKey, posts, new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = CacheDuration
+                    });
+                    _logger.LogInformation("Posts retrieved successfully.");
                 }
-                _logger.LogInformation("Posts retrieved successfully.");
+                 
+                
                 return posts;
             }
             catch (SqlException ex)
@@ -198,46 +210,49 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                
-                int userID = _userUtility.GetUserID(username);
-                ICollection<ResponsePostDto> posts = await _dataContext.Posts
-                   .Where(l => l.Location.ToLower().Contains(location.ToLower()))
-                   .Select(a => new ResponsePostDto
-                   {
-                       PostDescription = a.PostDescription,
-                       OwnerUsername = a.User.Username,
-                       TotalComments = a.TotalComments,
-                       TotalLikes = a.TotalLikes,
-                       IsDeletable = a.UserID == userID,
-                       PostID = a.PostID,
-                       PublishDate = a.PublishDate,
-                       ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
-                       {
-                           Path = l.Path,
-                           PhotoDisplay = l.PhotoDisplay,
-                           PathID = l.PathID
-
-                       }).ToList(),
-                       Location = a.Location,
-                       LikedByUsers = a.LikedPosts.Select(l => new LikeDto
-                       {
-                           Username = l.User.Username
-
-                       }).ToList(),
-                       SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
-                       {
-                           Username = s.User.Username
-
-                       }).ToList()
-                   })
-                .AsSplitQuery()
-                .ToListAsync();
-                foreach (var post in posts)
+                var cacheKey = string.Format(PostsCacheKey, username + location);
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts))
                 {
-                    _SAStokenGenerator.appendSasToken(post.ImagePaths);
-                }
+                    int userID = _userUtility.GetUserID(username);
+                    posts = await _dataContext.Posts
+                       .Where(l => l.Location.ToLower().Contains(location.ToLower()))
+                       .Select(a => new ResponsePostDto
+                       {
+                           PostDescription = a.PostDescription,
+                           OwnerUsername = a.User.Username,
+                           TotalComments = a.TotalComments,
+                           TotalLikes = a.TotalLikes,
+                           IsDeletable = a.UserID == userID,
+                           PostID = a.PostID,
+                           PublishDate = a.PublishDate,
+                           ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
+                           {
+                               Path = l.Path,
+                               PhotoDisplay = l.PhotoDisplay,
+                               PathID = l.PathID
 
-                _logger.LogInformation("Posts retrieved successfully.");
+                           }).ToList(),
+                           Location = a.Location,
+                           LikedByUsers = a.LikedPosts.Select(l => new LikeDto
+                           {
+                               Username = l.User.Username
+
+                           }).ToList(),
+                           SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
+                           {
+                               Username = s.User.Username
+
+                           }).ToList()
+                       })
+                    .AsSplitQuery()
+                    .ToListAsync();
+                    _memoryCache.Set(cacheKey, posts, new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = CacheDuration
+                    });
+                    _logger.LogInformation("Posts retrieved successfully.");
+                }
+                
                 return posts;
             }
             catch (SqlException ex)
@@ -253,45 +268,51 @@ namespace PixelNestBackend.Repository
         }
         public async Task<ICollection<ResponsePostDto>> GetPosts(string username)
         {
+
             try
             {
-                
-                ICollection<ResponsePostDto> posts = await _dataContext.Posts
-                   .Select(a => new ResponsePostDto
-                   {
-                       PostDescription = a.PostDescription,
-                      
-                       TotalComments = a.TotalComments,
-                       TotalLikes = a.TotalLikes,
-                       OwnerUsername = a.User.Username,
-                       PostID = a.PostID,
-                       IsDeletable = a.User.Username == username,
-                       PublishDate = a.PublishDate,
-                       ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto {
-                           Path = l.Path,
-                           PhotoDisplay = l.PhotoDisplay,
-                           PathID = l.PathID
-
-                       }).ToList(),
-                       Location = a.Location,
-                       LikedByUsers = a.LikedPosts.Select(l => new LikeDto
-                       {
-                           Username = l.User.Username
-
-                       }).ToList(),
-                       SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
-                       {
-                           Username = s.User.Username
-
-                       }).ToList()
-                   })
-                .AsSplitQuery() 
-                .ToListAsync();
-                foreach (var post in posts)
+                var cacheKey = string.Format(PostsCacheKey, username);
+                if(!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts))
                 {
-                    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                  posts = await _dataContext.Posts
+                        .Select(a => new ResponsePostDto
+                        {
+                            PostDescription = a.PostDescription,
+
+                            TotalComments = a.TotalComments,
+                            TotalLikes = a.TotalLikes,
+                            OwnerUsername = a.User.Username,
+                            PostID = a.PostID,
+                            IsDeletable = a.User.Username == username,
+                            PublishDate = a.PublishDate,
+                            ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
+                            {
+                                Path = l.Path,
+                                PhotoDisplay = l.PhotoDisplay,
+                                PathID = l.PathID
+
+                            }).ToList(),
+                            Location = a.Location,
+                            LikedByUsers = a.LikedPosts.Select(l => new LikeDto
+                            {
+                                Username = l.User.Username
+
+                            }).ToList(),
+                            SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
+                            {
+                                Username = s.User.Username
+
+                            }).ToList()
+                        })
+                        .AsSplitQuery()
+                        .ToListAsync();
+                    _memoryCache.Set(cacheKey, posts, new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = CacheDuration
+                    });
+                    _logger.LogInformation("Posts retrieved successfully.");
                 }
-                _logger.LogInformation("Posts retrieved successfully.");
+              
                 return posts;
             }
             catch (SqlException ex)

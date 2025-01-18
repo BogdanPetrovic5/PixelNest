@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
@@ -13,10 +14,17 @@ namespace PixelNestBackend.Repository
     public class ChatRepository : IChatRepository
     {
         private readonly DataContext _dataContext;
-
-        public ChatRepository(DataContext dataContext)
+        private IMemoryCache _memoryCache;
+      
+        private const string MessagesCache = "Messages_{0}";
+        private readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10);
+        public ChatRepository(
+            DataContext dataContext,
+            IMemoryCache memoryCache                    
+            )
         {
             _dataContext = dataContext;
+            _memoryCache = memoryCache;
         }
 
         public int GetNumberOfNewMessages(int userID)
@@ -37,60 +45,79 @@ namespace PixelNestBackend.Repository
 
         public ICollection<ResponseChatsDto> GetUserChats(int userID)
         {
-            Console.WriteLine(userID);
-            var userChats = _dataContext.Messages
-                .Where(m => m.SenderID == userID || m.ReceiverID == userID)
-                .Include(u => u.Sender)
-                .Include(u => u.Receiver)
-                .ToList()
-                .GroupBy(m => m.SenderID < m.ReceiverID
-                    ? $"{m.SenderID}-{m.ReceiverID}"
-                    : $"{m.ReceiverID}-{m.SenderID}")
-                .Select(group => new ResponseChatsDto
+            var cacheKey = string.Format(MessagesCache, userID);
+            if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseChatsDto> cashedChats)) {
+                Console.WriteLine("Usloooo");
+                var userChats = _dataContext.Messages
+                   .Where(m => m.SenderID == userID || m.ReceiverID == userID)
+                   .Include(u => u.Sender)
+                   .Include(u => u.Receiver)
+                   .ToList()
+                   .GroupBy(m => m.SenderID < m.ReceiverID
+                       ? $"{m.SenderID}-{m.ReceiverID}"
+                       : $"{m.ReceiverID}-{m.SenderID}")
+                   .Select(group => new ResponseChatsDto
+                   {
+                       ChatID = group.Key,
+                       Messages = group
+
+
+                           .OrderByDescending(m => m.DateSent)
+                           .Take(1)
+                           .Select(m => new ResponseMessagesDto
+                           {
+                               Sender = m.Sender.Username,
+                               Receiver = m.Receiver.Username,
+                               Message = m.MessageText,
+                               DateSent = m.DateSent,
+                               Source = m.SenderID == userID ? m.Receiver.Username : m.ReceiverID == userID ? m.Sender.Username : "",
+                               MessageID = m.MessageID,
+                               IsSeen = !_dataContext.SeenMessages
+                               .Any(sm => sm.UserID == userID && sm.MessageID == m.MessageID)
+
+                           })
+                           .ToList()
+                   })
+                   .OrderByDescending(date => date.Messages.First().DateSent)
+                   .ToList();
+                _memoryCache.Set(cacheKey, userChats, new MemoryCacheEntryOptions
                 {
-                    ChatID = group.Key,
-                    Messages = group
+                    AbsoluteExpirationRelativeToNow = CacheDuration
+                });
+                cashedChats = userChats;
+            }
 
-
-                        .OrderByDescending(m => m.DateSent)
-                        .Take(1)
-                        .Select(m => new ResponseMessagesDto
-                        {
-                            Sender = m.Sender.Username,
-                            Receiver = m.Receiver.Username,
-                            Message = m.MessageText,
-                            DateSent = m.DateSent,
-                            Source = m.SenderID == userID ? m.Receiver.Username : m.ReceiverID == userID ? m.Sender.Username : "",
-                            MessageID = m.MessageID,
-                            IsSeen = !_dataContext.SeenMessages
-                            .Any(sm => sm.UserID == userID && sm.MessageID == m.MessageID)
-
-                        })
-                        .ToList()
-                })
-                .OrderByDescending(date => date.Messages.First().DateSent)
-                .ToList();
-            Console.WriteLine(userChats.Count());
-            return userChats;
+               
+            
+            return cashedChats;
         }
 
         public ICollection<ResponseMessagesDto> GetUserToUserMessages(int userID, int targetID)
         {
             try
             {
-                ICollection<ResponseMessagesDto> messages = _dataContext.Messages
-                    .Where(u => (u.SenderID == userID || u.ReceiverID == userID) && (u.SenderID == targetID || u.ReceiverID == targetID))
-                    .Select(m => new ResponseMessagesDto
+                var cacheKey = string.Format(MessagesCache, userID, targetID);
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseMessagesDto> cashedMessages))
+                {
+                    cashedMessages = _dataContext.Messages
+                   .Where(u => (u.SenderID == userID || u.ReceiverID == userID) && (u.SenderID == targetID || u.ReceiverID == targetID))
+                   .Select(m => new ResponseMessagesDto
+                   {
+                       Sender = m.Sender.Username,
+                       Receiver = m.Receiver.Username,
+                       DateSent = m.DateSent,
+                       Message = m.MessageText,
+                       MessageID = m.MessageID,
+                       IsSeen = !_dataContext.SeenMessages
+                           .Any(sm => sm.UserID == userID && sm.MessageID == m.MessageID)
+                   }).ToList();
+                    _memoryCache.Set(cacheKey, cashedMessages, new MemoryCacheEntryOptions
                     {
-                        Sender = m.Sender.Username,
-                        Receiver = m.Receiver.Username,
-                        DateSent = m.DateSent,
-                        Message = m.MessageText,
-                        MessageID = m.MessageID,
-                         IsSeen = !_dataContext.SeenMessages
-                            .Any(sm => sm.UserID == userID && sm.MessageID == m.MessageID)
-                    }).ToList();
-                return messages;
+                        AbsoluteExpirationRelativeToNow = CacheDuration
+                    });
+                }
+                
+                return cashedMessages;
             }
             catch (Exception ex)
             {
