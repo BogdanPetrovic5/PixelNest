@@ -22,7 +22,7 @@ namespace PixelNestBackend.Repository
         private readonly SASTokenGenerator _SAStokenGenerator;
         private readonly UserUtility _userUtility;
         private readonly IMemoryCache _memoryCache;
-        private const string PostsCacheKey = "Posts_{0}";
+        private const string PostsCacheKey = "Posts";
         private readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10); 
         public PostRepository(
             DataContext dataContext,
@@ -116,6 +116,9 @@ namespace PixelNestBackend.Repository
                         {
                             user.TotalPosts += 1;
                         }
+                        var cacheKey = string.Format(PostsCacheKey, postDto.OwnerUsername);
+                        var versionKey = $"{cacheKey}_Version";
+                        _memoryCache.Remove(cacheKey);
                         return new PostResponse
                         {
                             IsSuccessfull = true,
@@ -148,12 +151,10 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var cacheKey = string.Format(PostsCacheKey, username + currentLoggedUser);
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts))
-                {
+               
                     int userID = _userUtility.GetUserID(username);
                     int currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
-                    posts = await _dataContext.Posts
+                    ICollection<ResponsePostDto> posts = await _dataContext.Posts
                         .Where(u => u.UserID == userID)
                        .Select(a => new ResponsePostDto
                        {
@@ -185,12 +186,13 @@ namespace PixelNestBackend.Repository
                        })
                     .AsSplitQuery()
                     .ToListAsync();
-                    _memoryCache.Set(cacheKey, posts, new MemoryCacheEntryOptions
+                    foreach (var post in posts)
                     {
-                        AbsoluteExpirationRelativeToNow = CacheDuration
-                    });
+                        _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                    }
+                   
                     _logger.LogInformation("Posts retrieved successfully.");
-                }
+                
                  
                 
                 return posts;
@@ -210,11 +212,9 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var cacheKey = string.Format(PostsCacheKey, username + location);
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts))
-                {
+               
                     int userID = _userUtility.GetUserID(username);
-                    posts = await _dataContext.Posts
+                    ICollection<ResponsePostDto> posts = await _dataContext.Posts
                        .Where(l => l.Location.ToLower().Contains(location.ToLower()))
                        .Select(a => new ResponsePostDto
                        {
@@ -246,12 +246,11 @@ namespace PixelNestBackend.Repository
                        })
                     .AsSplitQuery()
                     .ToListAsync();
-                    _memoryCache.Set(cacheKey, posts, new MemoryCacheEntryOptions
+                    foreach (var post in posts)
                     {
-                        AbsoluteExpirationRelativeToNow = CacheDuration
-                    });
-                    _logger.LogInformation("Posts retrieved successfully.");
-                }
+                        _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                    }
+                  
                 
                 return posts;
             }
@@ -271,9 +270,21 @@ namespace PixelNestBackend.Repository
 
             try
             {
-                var cacheKey = string.Format(PostsCacheKey, username);
-                if(!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts))
+                var cacheKey = string.Format(PostsCacheKey);
+                var versionKey = $"{cacheKey}_Version";
+
+
+                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
                 {
+                   
+                    cachedVersion = DateTime.MinValue;
+                }
+                else cachedVersion = DateTime.MaxValue;
+                var latestVersion = DateTime.UtcNow;
+              
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts) || cachedVersion < latestVersion)
+                {
+                    Console.WriteLine("Uslo!!");
                   posts = await _dataContext.Posts
                         .Select(a => new ResponsePostDto
                         {
@@ -306,10 +317,19 @@ namespace PixelNestBackend.Repository
                         })
                         .AsSplitQuery()
                         .ToListAsync();
+                    foreach (var post in posts)
+                    {
+                        _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                    }
                     _memoryCache.Set(cacheKey, posts, new MemoryCacheEntryOptions
                     {
                         AbsoluteExpirationRelativeToNow = CacheDuration
                     });
+                    _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = CacheDuration
+                    });
+
                     _logger.LogInformation("Posts retrieved successfully.");
                 }
               
@@ -437,10 +457,13 @@ namespace PixelNestBackend.Repository
                 _dataContext.ImagePaths.Where(a => a.PostID == postID).ExecuteDelete();
                 User? user = _dataContext.Users.FirstOrDefault(u => u.UserID == userID);
                 if (user != null) user.TotalPosts -= 1;
+               
                 _dataContext.Posts.Remove(post);
                 
                 await _dataContext.SaveChangesAsync();
-
+                var cacheKey = string.Format(PostsCacheKey);
+                var versionKey = $"{cacheKey}_Version";
+                _memoryCache.Remove(cacheKey);
                 return new DeleteResponse
                 {
                     IsSuccess = true,

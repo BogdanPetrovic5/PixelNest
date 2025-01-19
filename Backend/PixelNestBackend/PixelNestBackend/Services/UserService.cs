@@ -96,20 +96,8 @@ namespace PixelNestBackend.Services
 
             string? username = this._userUtility.GetUserName(email);
             int userID = this._userUtility.GetUserID(username);
-            string userFolderName = userID.ToString();
-            string userFolderPath = Path.Combine(_basedFolderPath, userFolderName, "Profile");
 
-
-            if (!this._folderGenerator.CheckIfFolderExists(userFolderPath))
-            {
-                _folderGenerator.GenerateNewFolder(userFolderPath);
-            }
-
-
-            //bool response = await _fileUpload.StoreImages(null, null, profileDto, userFolderPath, null, userID);
-            bool response = await _blobStorageUpload.StoreImages(null, null, profileDto, userID, null);
-            if (response) return true;
-            return false;
+            return await _userRepository.ChangeProfilePicture(userID, profileDto);
 
         }
         

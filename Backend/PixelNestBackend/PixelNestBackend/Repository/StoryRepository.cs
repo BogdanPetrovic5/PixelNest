@@ -34,7 +34,14 @@ namespace PixelNestBackend.Repository
             try
             {
                 var cacheKey = string.Format(StoryCacheKey, username);
-                if(!_memoryCache.TryGetValue(cacheKey, out ICollection<GroupedStoriesDto> groupedStories)){
+                var versionKey = $"{cacheKey}_Version";
+                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
+                {
+                    cachedVersion = DateTime.MinValue;
+                }
+                else cachedVersion = DateTime.MaxValue;
+                var latestVersion = DateTime.UtcNow;
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<GroupedStoriesDto> groupedStories) || cachedVersion < latestVersion){
                     groupedStories = null;
                     
                     User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
@@ -65,7 +72,12 @@ namespace PixelNestBackend.Repository
                              })
                              .AsSplitQuery()
                              .ToListAsync();
+                        this._appendToken(groupedStories);
                         _memoryCache.Set(cacheKey, _memoryCache, new MemoryCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = CacheDuration
+                        });
+                        _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
                         {
                             AbsoluteExpirationRelativeToNow = CacheDuration
                         });
@@ -83,8 +95,15 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var cacheKey = string.Format(StoryCacheKey, 'C' + username);
-                if(!_memoryCache.TryGetValue(cacheKey, out ICollection<GroupedStoriesDto> groupedStories))
+                var cacheKey = string.Format(StoryCacheKey, "Current" + "_" + username);
+                var versionKey = $"{cacheKey}_Version";
+                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
+                {
+                    cachedVersion = DateTime.MinValue;
+                }
+                else cachedVersion = DateTime.MaxValue;
+                var latestVersion = DateTime.UtcNow;
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<GroupedStoriesDto> groupedStories) || cachedVersion < latestVersion)
                 {
                     groupedStories = null;
                     User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
@@ -115,7 +134,12 @@ namespace PixelNestBackend.Repository
                              })
                              .AsSplitQuery()
                              .ToListAsync();
+                        this._appendToken(groupedStories);
                         _memoryCache.Set(cacheKey, groupedStories, new MemoryCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = CacheDuration
+                        });
+                        _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
                         {
                             AbsoluteExpirationRelativeToNow = CacheDuration
                         });
@@ -140,6 +164,9 @@ namespace PixelNestBackend.Repository
 
                     if (result > 0)
                     {
+                        var cacheKey = string.Format(StoryCacheKey, seen.UserID);
+                        var versionKey = $"{cacheKey}_Version";
+                        _memoryCache.Remove(versionKey);
                         return new StoryResponse
                         {
                             IsSuccessful = true,
@@ -192,6 +219,9 @@ namespace PixelNestBackend.Repository
             if(result > 0)
             {
                 int storyID = story.StoryID;
+                var cacheKey = string.Format(StoryCacheKey, storyDto.Username);
+                var versionKey = $"{cacheKey}_Version";
+                _memoryCache.Remove(versionKey);
                 return new StoryResponse
                 {
                     IsSuccessful = true,

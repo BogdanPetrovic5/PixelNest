@@ -33,8 +33,13 @@ namespace PixelNestBackend.Repository
             try
             {
                 var cacheKey = string.Format(CommentsCacheKey, "Replies" + initialParentID);
-                Console.WriteLine(cacheKey);
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseReplyCommentDto> cachedReplies))
+                var versionKey = $"{cacheKey}_Version";
+                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
+                {
+                    cachedVersion = DateTime.MinValue;
+                }
+                var latestVersion = DateTime.UtcNow;
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseReplyCommentDto> cachedReplies) || cachedVersion < latestVersion)
                 {
                     var allComments = _dataContext.Comments
                         .Include(c => c.LikedComments)
@@ -105,8 +110,13 @@ namespace PixelNestBackend.Repository
             try
             {
                 var cacheKey = string.Format(CommentsCacheKey, postID);
-                Console.WriteLine(cacheKey);
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseCommentDto> cachedComments)){
+                var versionKey = $"{cacheKey}_Version";
+                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
+                {
+                    cachedVersion = DateTime.MinValue;
+                }
+                var latestVersion = DateTime.UtcNow;
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseCommentDto> cachedComments) || cachedVersion < latestVersion){
                     var allComments = _dataContext.Comments.Include(c => c.LikedComments).Include(c => c.User).Where(c => c.PostID == postID).ToList();
                     cachedComments = allComments
                     .Where(c => c.ParentCommentID == null)

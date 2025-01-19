@@ -1,7 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Caching.Memory;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
+using PixelNestBackend.Gateaway;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
@@ -16,17 +18,34 @@ namespace PixelNestBackend.Repository
         private readonly ILogger<UserRepository> _logger;
         private readonly UserUtility _userUtility;
         private readonly SASTokenGenerator _sasTokenGenerator;
+        private readonly IMemoryCache _memoryCache;
+        private const string UserCache = "User_{0}";
+        public readonly IFileUpload _fileUpload;
+        private readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10);
+        private readonly FolderGenerator _folderGenerator;
+        private readonly BlobStorageUpload _blobStorageUpload;
+        private readonly string _basedFolderPath;
         public UserRepository(
             DataContext dataContext,
             ILogger<UserRepository> logger,
             UserUtility userUtility,
-            SASTokenGenerator SASTokenGenerator
+            SASTokenGenerator SASTokenGenerator,
+            IMemoryCache memoryCache,
+            FolderGenerator folderGenerator,
+            BlobStorageUpload blobStorageUpload,
+            IFileUpload fileUpload
+
             )
         {
             _dataContext = dataContext;
             _logger = logger;
             _userUtility = userUtility;
             _sasTokenGenerator = SASTokenGenerator;
+            _memoryCache = memoryCache;
+            _fileUpload = fileUpload;
+            _blobStorageUpload = blobStorageUpload;
+            _folderGenerator = folderGenerator;
+            _basedFolderPath = Path.Combine("wwwroot", "Photos");
         }
         public FollowResponse IsFollowing(FollowDto follow)
         {
@@ -218,7 +237,24 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                ImagePath image = _dataContext.ImagePaths.Where(u => u.UserID == userID).FirstOrDefault();
+                var cacheKey = string.Format(UserCache, userID);
+                var versionKey = $"{cacheKey}_Version";
+                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
+                {
+                    cachedVersion = DateTime.MinValue;
+                }
+                else cachedVersion = DateTime.MaxValue;
+                var latestVersion = DateTime.UtcNow;
+                if (!_memoryCache.TryGetValue(cacheKey, out ImagePath image) || cachedVersion < latestVersion)
+                {
+                    image = _dataContext.ImagePaths.Where(u => u.UserID == userID).FirstOrDefault();
+                    _memoryCache.Set(cacheKey, image, new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = CacheDuration
+                    });
+                  
+                }
+                    
                 if (image != null)
                 {
                     _sasTokenGenerator.appendSasToken(image);
@@ -278,5 +314,28 @@ namespace PixelNestBackend.Repository
             }
             
         }
+
+        public async Task<bool> ChangeProfilePicture(int userID, ProfileDto profileDto)
+        {
+            string userFolderName = userID.ToString();
+            string userFolderPath = Path.Combine(_basedFolderPath, userFolderName, "Profile");
+
+
+            if (!this._folderGenerator.CheckIfFolderExists(userFolderPath))
+            {
+                _folderGenerator.GenerateNewFolder(userFolderPath);
+            }
+
+
+            //bool response = await _fileUpload.StoreImages(null, null, profileDto, userFolderPath, null, userID);
+            bool response = await _blobStorageUpload.StoreImages(null, null, profileDto, userID, null);
+            var cacheKey = string.Format(UserCache, userID);
+            var versionKey = $"{cacheKey}_Version";
+            _memoryCache.Remove(versionKey);
+            if (response) return true;
+            return false;
+        }
+
+    
     }
 }

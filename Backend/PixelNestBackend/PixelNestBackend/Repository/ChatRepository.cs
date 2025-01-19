@@ -46,7 +46,14 @@ namespace PixelNestBackend.Repository
         public ICollection<ResponseChatsDto> GetUserChats(int userID)
         {
             var cacheKey = string.Format(MessagesCache, userID);
-            if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseChatsDto> cashedChats)) {
+            var versionKey = $"{cacheKey}_Version";
+            if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
+            {
+                cachedVersion = DateTime.MinValue;
+            }
+            else cachedVersion = DateTime.MaxValue;
+            var latestVersion = DateTime.UtcNow;
+            if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseChatsDto> cashedChats) || cachedVersion < latestVersion) {
                 Console.WriteLine("Usloooo");
                 var userChats = _dataContext.Messages
                    .Where(m => m.SenderID == userID || m.ReceiverID == userID)
@@ -84,6 +91,10 @@ namespace PixelNestBackend.Repository
                 {
                     AbsoluteExpirationRelativeToNow = CacheDuration
                 });
+                _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = CacheDuration
+                });
                 cashedChats = userChats;
             }
 
@@ -97,7 +108,14 @@ namespace PixelNestBackend.Repository
             try
             {
                 var cacheKey = string.Format(MessagesCache, userID, targetID);
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseMessagesDto> cashedMessages))
+                var versionKey = $"{cacheKey}_Version";
+                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
+                {
+                    cachedVersion = DateTime.MinValue;
+                }
+                else cachedVersion = DateTime.MaxValue;
+                var latestVersion = DateTime.UtcNow;
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseMessagesDto> cashedMessages) || cachedVersion < latestVersion)
                 {
                     cashedMessages = _dataContext.Messages
                    .Where(u => (u.SenderID == userID || u.ReceiverID == userID) && (u.SenderID == targetID || u.ReceiverID == targetID))
@@ -112,6 +130,10 @@ namespace PixelNestBackend.Repository
                            .Any(sm => sm.UserID == userID && sm.MessageID == m.MessageID)
                    }).ToList();
                     _memoryCache.Set(cacheKey, cashedMessages, new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = CacheDuration
+                    });
+                    _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
                     {
                         AbsoluteExpirationRelativeToNow = CacheDuration
                     });
@@ -188,7 +210,9 @@ namespace PixelNestBackend.Repository
                     Console.WriteLine($"Error saving seen message: {ex.Message}");
                 }
             }
-
+            var cacheKey = string.Format(MessagesCache, message.SenderID, message.ReceiverID);
+            var versionKey = $"{cacheKey}_Version";
+            _memoryCache.Remove(versionKey);
             return true;
 
         }
