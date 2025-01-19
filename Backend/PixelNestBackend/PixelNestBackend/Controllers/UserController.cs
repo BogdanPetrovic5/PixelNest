@@ -28,13 +28,13 @@ namespace PixelNestBackend.Controllers
   
         [Authorize]
         [HttpPost("CloseConnection")]
-        public ActionResult CloseConnectionWithSocket()
+        public async Task<ActionResult> CloseConnectionWithSocket()
         {
             string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (email == null) return Unauthorized();
             int userID = _userService.GetUserID(email);
            string username=  _userUtility.GetUserName(userID);
-            _webSocketConnection.CloseConnection(username);
+           await _webSocketConnection.CloseConnection(username);
             return Ok();
         }
 
