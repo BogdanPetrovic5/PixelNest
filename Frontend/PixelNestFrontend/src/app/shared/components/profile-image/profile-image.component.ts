@@ -26,7 +26,8 @@ export class ProfileImageComponent implements OnInit{
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['username']) {
       const newUsername = changes['username'].currentValue;
-      this._loadProfilePicture(newUsername);
+      if(newUsername) this._loadProfilePicture(newUsername);
+      
     }
   }
   ngOnDestroy():void{
@@ -59,6 +60,7 @@ export class ProfileImageComponent implements OnInit{
     this._userService.getProfilePicture(username).subscribe({next:response=>{
       if(response.path.length > 0){
         this.stringUrl = environment.blobStorageBaseUrl + response.path;
+        
       }
     }}) 
    }

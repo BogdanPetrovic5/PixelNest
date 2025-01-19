@@ -21,7 +21,14 @@ export class ProfileComponent implements OnInit, OnDestroy{
   @ViewChild(ProfileImageComponent) profilePicture!:ProfileImageComponent
 
   username:string = ""
-  user!:ProfileUser
+  user:ProfileUser = {
+    username: this.username,
+    followers: 0,
+    followings: 0,
+    name: '',
+    lastname: '',
+    totalPosts: 0
+  }
   private destroy$ = new Subject<void>();
   posts:PostDto[] = []
   isLoading:boolean = false
@@ -46,7 +53,9 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _chatState:ChatStateService
   ){}
   ngOnInit(): void {
+    
     this._postState.setPosts([]);
+    this._postState.clearCache();
     this._initilizeApp();
   }
 
@@ -206,7 +215,9 @@ export class ProfileComponent implements OnInit, OnDestroy{
     )
   }
   private _resetProfileState() {
+    this._postState.clearCache();
     this._postState.setPosts([]);
+   
     this.posts = [];
     this.currentPage = 1;
     this.empty = false;

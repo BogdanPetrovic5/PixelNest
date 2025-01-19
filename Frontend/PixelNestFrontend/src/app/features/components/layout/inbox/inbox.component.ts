@@ -59,7 +59,9 @@ export class InboxComponent implements OnInit{
     return `${diffInDays} days ago`;
   }
 
-
+  navigate(){
+    this._router.navigate(["Dashboard"])
+  }
   private _initilizeComponent(){
     this._chatService.getChats().subscribe({
       next:response=>{

@@ -104,6 +104,7 @@ export class NewPostComponent implements OnInit{
         
         this._lottieState.setIsSuccess(false);
         this._postState.setPosts([]);
+        this._postState.clearCache();
         this._postState.loadPosts(1);
       }, 1600)
     }, (error:HttpErrorResponse) =>{
