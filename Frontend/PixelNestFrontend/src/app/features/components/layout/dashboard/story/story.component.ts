@@ -44,7 +44,10 @@ export class StoryComponent implements OnInit{
     private _storyState:StoryStateService,
     private changeDetectorRef: ChangeDetectorRef
   ){}  
-
+  ngOnDestroy():void{
+    this.subscription.unsubscribe();
+    this._storyState.setStories();
+  }
   ngOnInit(): void {
     this.username = this._cookieService.get("username");
     this._initilizeComponent();
@@ -107,27 +110,56 @@ export class StoryComponent implements OnInit{
         }
       })
     )
-    this.subscription.add(
-      forkJoin({
-        groupedStories:this._storyService.getStories(this.username, false),
-        storiesByUser:this._storyService.getStories(this.username, true)
-      }).subscribe({
-        next:({groupedStories, storiesByUser})=>{
+    // this.subscription.add(
+    //   forkJoin({
+    //     groupedStories:this._storyState.fetchStories(this.username, false),
+    //     storiesByUser:this._storyState.fetchStories(this.username, true)
+    //   }).subscribe({
+    //     next:({groupedStories, storiesByUser})=>{
           
-          this.groupedStories = groupedStories;
-          setTimeout(() => {
-            this.initializeStepSize();
-          }, 0);
-          if(storiesByUser.length > 0){
-            this.storiesByUser = storiesByUser;
+    //       this.groupedStories = groupedStories;
+    //       setTimeout(() => {
+    //         this.initializeStepSize();
+    //       }, 0);
+    //       if(storiesByUser.length > 0){
+    //         this.storiesByUser = storiesByUser;
             
-            this.extractFromResponse(storiesByUser);
+    //         this.extractFromResponse(storiesByUser);
             
-          }
+    //       }
+    //     }
+    //   })
+    // )
+    this._storyState.fetchStories(this.username, false);
+    
+    this.subscription.add(
+      this._storyState.stories$.subscribe({
+        next:response=>{
+          
+          this.groupedStories = response
+          console.log(this.groupedStories);
+          setTimeout(()=>{
+            this.initializeStepSize()
+          },0)
+          
         }
       })
     )
-    
+    this._storyState.fetchCurrentUserStories(this.username, true);
+    this.subscription.add(
+      this._storyState.storyListByUser$.subscribe({
+        next:response=>{
+          
+            this.storiesByUser = response;
+            console.log(this.storiesByUser);
+            
+            this.extractFromResponse(this.storiesByUser);
+            
+           
+          
+        }
+      })
+    )
     // this.subscription.add(
     //   this._storyState.currentPage$
     //     .pipe(
@@ -163,8 +195,11 @@ export class StoryComponent implements OnInit{
     )
   }
   private extractFromResponse(storiesByUser:StoriesDto[]){
-      this.extractedStories = storiesByUser[0].stories
-      if(  this.extractedStories != undefined &&  this.extractedStories.length > 0) this.default = false;
+      if(storiesByUser != undefined && storiesByUser[0]?.stories.length > 0){
+        this.extractedStories = storiesByUser[0].stories
+        if( this.extractedStories != undefined &&  this.extractedStories.length > 0) this.default = false;
+      }
+     
      
   }
 
