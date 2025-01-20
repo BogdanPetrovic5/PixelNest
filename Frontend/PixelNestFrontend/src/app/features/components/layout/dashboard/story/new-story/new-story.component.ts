@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
+import { StoryStateService } from 'src/app/core/services/states/story-state.service';
 import { StoryService } from 'src/app/core/services/story/story.service';
 import { ImageCompressorService } from 'src/app/uitility/image-compressor.service';
 
@@ -26,7 +27,8 @@ export class NewStoryComponent {
     private _dashboardState:DashboardStateService,
     private _cookieService:CookieService,
     private _storyService:StoryService,
-    private _lottieState:LottieStateService
+    private _lottieState:LottieStateService,
+    private _storyState:StoryStateService
   ){
 
   }
@@ -51,6 +53,7 @@ export class NewStoryComponent {
         this._dashboardState.setIsNewStoryTabOpen(false);
         setTimeout(()=>{
           this._lottieState.setIsSuccess(false)
+          this._storyState.fetchCurrentUserStories(this._cookieService.get("username"), true);
         },1400)
       },
       error:error=>{

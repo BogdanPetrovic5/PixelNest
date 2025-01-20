@@ -169,6 +169,9 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
         next:response=>{
           
         }
+        ,error:error =>{
+          console.log(error)
+        }
       })
     }
 

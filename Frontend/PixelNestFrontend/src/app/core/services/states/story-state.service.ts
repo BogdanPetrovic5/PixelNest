@@ -1,10 +1,13 @@
  import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { StoriesDto } from '../../dto/stories.dto';
+import { StoryService } from '../story/story.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StoryStateService {
+
   private _currentStory = new BehaviorSubject<number>(0);
   currentStory$ = this._currentStory.asObservable();
 
@@ -16,6 +19,19 @@ export class StoryStateService {
 
   private _viewerListAnim = new BehaviorSubject<boolean>(false);
   viewerListAnim$ = this._viewerListAnim.asObservable();
+
+
+  private _storyList = new BehaviorSubject<StoriesDto[]>([]);
+  stories$ = this._storyList.asObservable();
+
+
+  private _storyListByUser = new BehaviorSubject<StoriesDto[]>([])
+  storyListByUser$ = this._storyListByUser.asObservable();
+  
+  public stories:StoriesDto[] = []
+  public storiesByUser:StoriesDto[] = []
+
+  constructor(private _storyService:StoryService) { }
   resetCurrentState(){
     this._currentStory.next(0);
   }
@@ -38,5 +54,25 @@ export class StoryStateService {
   setViewerListAnim(value:boolean){
     this._viewerListAnim.next(value);
   }
-  constructor() { }
+  setStories(){
+    this._storyList.next([])
+    this._storyListByUser.next([]);
+  }
+  fetchCurrentUserStories(username:string, forCurrentUser:boolean){
+    this._storyService.getStories(username, forCurrentUser).subscribe({
+      next:response=>{
+        this.storiesByUser = response;
+        this._storyListByUser.next(this.storiesByUser)
+      }
+    })
+  }
+  fetchStories(username:string, forCurrentUser:boolean){
+    this._storyService.getStories(username, forCurrentUser).subscribe({
+      next:response=>{
+        this.stories = response;
+        this._storyList.next(this.stories)
+      }
+    })
+  }
+  
 }

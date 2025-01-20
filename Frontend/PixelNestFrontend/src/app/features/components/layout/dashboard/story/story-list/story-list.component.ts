@@ -14,7 +14,7 @@ import { StoryStateService } from 'src/app/core/services/states/story-state.serv
 })
 export class StoryListComponent implements OnInit, OnDestroy{
   @Input() storyList:StoriesDto[] = []
-  @Input() storiesByUser:StoryDto[] | undefined = [];
+  // @Input() storiesByUser:StoryDto[] = [];
 
   @Input() userIndex!:number;
   marginStep = 28;
