@@ -17,7 +17,8 @@ namespace PixelNestBackend.Repository
         private readonly DataContext _dataContext;
         private readonly SASTokenGenerator _SASTokenGenerator;
         private readonly IMemoryCache _memoryCache;
-        private const string StoryCacheKey = "Stories_{0}";
+        private const string StoryCacheKey = "Stories";
+        private const string UserStoryCacheKey = "UserStories_{0}";
         private readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10);
         public StoryRepository(DataContext dataContext, 
             SASTokenGenerator sASTokenGenerator,
@@ -33,56 +34,41 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var cacheKey = string.Format(StoryCacheKey, username);
-                var versionKey = $"{cacheKey}_Version";
-                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
-                {
-                    cachedVersion = DateTime.MinValue;
-                }
-                else cachedVersion = DateTime.MaxValue;
-                var latestVersion = DateTime.UtcNow;
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<GroupedStoriesDto> groupedStories) || cachedVersion < latestVersion){
-                    groupedStories = null;
+               
+               
+                    ICollection<GroupedStoriesDto> groupedStories = null;
                     
                     User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
-                    if (user != null)
-                    {
-                        groupedStories = await _dataContext
-                             .Stories
-                             .Where(s => s.UserID != user.UserID && s.ExpirationDate >= DateTime.Now)
-                             .GroupBy(s => s.UserID)
-                             .Select(group => new GroupedStoriesDto
+                if (user != null)
+                {
+                    groupedStories = await _dataContext
+                         .Stories
+                         .Where(s => s.UserID != user.UserID && s.ExpirationDate >= DateTime.Now)
+                         .GroupBy(s => s.UserID)
+                         .Select(group => new GroupedStoriesDto
+                         {
+                             OwnerUsername = _dataContext.Users
+                                                 .Where(u => u.UserID == group.Key)
+                                                 .Select(u => u.Username)
+                                                 .FirstOrDefault(),
+                             Stories = group.Select(s => new ResponseStoryDto
                              {
-                                 OwnerUsername = _dataContext.Users
-                                                     .Where(u => u.UserID == group.Key)
-                                                     .Select(u => u.Username)
-                                                     .FirstOrDefault(),
-                                 Stories = group.Select(s => new ResponseStoryDto
-                                 {
-                                     OwnerUsername = s.User.Username,
-                                     SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
-                                     ImagePaths = s.ImagePath
-                                                    .Select(i => new ResponseImageDto
-                                                    {
-                                                        Path = i.Path,
-                                                        PhotoDisplay = i.PhotoDisplay,
-                                                    }).ToList(),
-                                     StoryID = s.StoryID
-                                 }).ToList()
-                             })
-                             .AsSplitQuery()
-                             .ToListAsync();
-                        this._appendToken(groupedStories);
-                        _memoryCache.Set(cacheKey, _memoryCache, new MemoryCacheEntryOptions
-                        {
-                            AbsoluteExpirationRelativeToNow = CacheDuration
-                        });
-                        _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
-                        {
-                            AbsoluteExpirationRelativeToNow = CacheDuration
-                        });
-                    }
+                                 OwnerUsername = s.User.Username,
+                                 SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
+                                 ImagePaths = s.ImagePath
+                                                .Select(i => new ResponseImageDto
+                                                {
+                                                    Path = i.Path,
+                                                    PhotoDisplay = i.PhotoDisplay,
+                                                }).ToList(),
+                                 StoryID = s.StoryID
+                             }).ToList()
+                         })
+                         .AsSplitQuery()
+                         .ToListAsync();
+
                 }
+                
                
                 return groupedStories;
             }
@@ -95,17 +81,9 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var cacheKey = string.Format(StoryCacheKey, "Current" + "_" + username);
-                var versionKey = $"{cacheKey}_Version";
-                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
-                {
-                    cachedVersion = DateTime.MinValue;
-                }
-                else cachedVersion = DateTime.MaxValue;
-                var latestVersion = DateTime.UtcNow;
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<GroupedStoriesDto> groupedStories) || cachedVersion < latestVersion)
-                {
-                    groupedStories = null;
+                
+               
+                    ICollection<GroupedStoriesDto> groupedStories = null;
                     User user = _dataContext.Users.Where(user => user.Username == username).FirstOrDefault();
                     if (user != null)
                     {
@@ -134,17 +112,9 @@ namespace PixelNestBackend.Repository
                              })
                              .AsSplitQuery()
                              .ToListAsync();
-                        this._appendToken(groupedStories);
-                        _memoryCache.Set(cacheKey, groupedStories, new MemoryCacheEntryOptions
-                        {
-                            AbsoluteExpirationRelativeToNow = CacheDuration
-                        });
-                        _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
-                        {
-                            AbsoluteExpirationRelativeToNow = CacheDuration
-                        });
+                       
                     }
-                }
+                
                 
                 return groupedStories;
             }
@@ -160,13 +130,12 @@ namespace PixelNestBackend.Repository
                 if(!_dataContext.Seen.Any(a => a.UserID == seen.UserID && a.StoryID == seen.StoryID))
                 {
                     _dataContext.Seen.Add(seen);
+                    
                     int result = _dataContext.SaveChanges();
 
                     if (result > 0)
                     {
-                        var cacheKey = string.Format(StoryCacheKey, seen.UserID);
-                        var versionKey = $"{cacheKey}_Version";
-                        _memoryCache.Remove(versionKey);
+                       
                         return new StoryResponse
                         {
                             IsSuccessful = true,
@@ -219,9 +188,7 @@ namespace PixelNestBackend.Repository
             if(result > 0)
             {
                 int storyID = story.StoryID;
-                var cacheKey = string.Format(StoryCacheKey, storyDto.Username);
-                var versionKey = $"{cacheKey}_Version";
-                _memoryCache.Remove(versionKey);
+                
                 return new StoryResponse
                 {
                     IsSuccessful = true,
