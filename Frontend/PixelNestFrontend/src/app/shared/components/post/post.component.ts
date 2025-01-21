@@ -64,6 +64,7 @@ export class PostComponent implements OnInit{
   ngAfterViewInit() {
   
     this.containerWidth = this.getImageWidth();
+    
   }
   ngOnInit():void{
     this.baseUrl = environment.blobStorageBaseUrl;
@@ -137,7 +138,7 @@ export class PostComponent implements OnInit{
   }
   getImageWidth(): number {
     const imageWrapper = document.querySelector('.image-wrapper') as HTMLElement;
-    return imageWrapper ? imageWrapper.offsetWidth : 200;
+    return imageWrapper ? imageWrapper.offsetWidth : 0;
   }
   onSwipeLeft() {
    

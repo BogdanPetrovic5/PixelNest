@@ -1,21 +1,23 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { forkJoin, Subscription, switchMap } from 'rxjs';
+import { forkJoin, last, Subscription, switchMap } from 'rxjs';
 import { StoriesDto } from 'src/app/core/dto/stories.dto';
 import { StoryDto } from 'src/app/core/dto/story.dto';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { StoryStateService } from 'src/app/core/services/states/story-state.service';
 import { StoryService } from 'src/app/core/services/story/story.service';
 import 'hammerjs';
+import { math } from '@maptiler/sdk';
 @Component({
   selector: 'app-story',
   templateUrl: './story.component.html',
   styleUrls: ['./story.component.scss'],
   standalone:false
 })
-export class StoryComponent implements OnInit{
+export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
   @ViewChild('storyList', { static: false }) storyList!: ElementRef<HTMLDivElement>
   @ViewChild('storyListWrapper', { static: false }) storyListWrapper!: ElementRef<HTMLDivElement>
+  @ViewChildren('userBox') userBoxes!: QueryList<ElementRef>;
   username:string = ""
 
   groupedStories:StoriesDto[] = []
@@ -28,14 +30,17 @@ export class StoryComponent implements OnInit{
   newStory:boolean = false;
   default:boolean = true;
   isStorySeen:boolean = false;
+  isDragging:boolean = false;
 
   selectedStoryIndex!:number 
   marginLeft:number = 0;
   stepSize:number = 0;
   currentPage = 1;
   subscription:Subscription = new Subscription();
-
-
+  minMargin:number = 0;
+  startX:number = 0;
+  currentMargin:number = 0;
+  containerWidth:number = 0;
   constructor(
     private _storyService:StoryService,
     private _cookieService:CookieService,
@@ -53,6 +58,93 @@ export class StoryComponent implements OnInit{
     this._initilizeComponent();
     
   }
+  ngAfterViewInit():void{
+    
+      
+   
+  }
+
+  calculateContainerWidth(): void {
+    if (this.userBoxes.last) {
+      this.containerWidth = this.userBoxes.last.nativeElement.offsetWidth;
+    } else {
+      this.containerWidth = 30; 
+    }
+    console.log('Container Width:', this.containerWidth);
+  }
+
+
+  onPanStart(event:any){
+    this.isDragging = true;
+    this.startX = event.touches[0].clientX;
+    this.currentMargin = this.marginLeft;
+  }
+  onPanMove(event:any){
+      if(!this.isDragging) return
+      
+      const delta = (event.touches[0].clientX - this.startX) * 1.3
+      const potentialMargin = this.currentMargin + delta;
+
+      const maxMargin = 0;
+      const minMarginResult = this.calculateMinMargin();
+      if (minMarginResult === false && delta < 0) {
+        return; 
+      }
+
+      this.marginLeft = Math.max(this.minMargin, Math.min(maxMargin, potentialMargin));
+      this.updateSliderTransform(false);
+  }
+  calculateMinMargin(){
+    const followingList = document.getElementById('following-list')?.getBoundingClientRect();
+    const lastBox = this.userBoxes.last.nativeElement.getBoundingClientRect();
+    
+    if (!followingList || !lastBox) {
+      
+      return -(this.groupedStories.length - 1) * this.containerWidth; 
+    }
+
+    const followingListRight = parseFloat(followingList.right.toFixed(1));
+    const lastBoxRight = parseFloat(lastBox.right.toFixed(1));
+  
+ 
+    if (lastBoxRight <= followingListRight) {
+    
+      return false;
+    }
+  
+    this.minMargin = -(this.groupedStories.length - 1) * this.containerWidth;
+    return true;
+  }
+  onPanEnd(event: any) {
+
+    this.isDragging = false;
+    this.updateSliderTransform(true);
+}
+  getImageWidth(): number {
+    const imageWrapper = document.querySelector('.user-box') as HTMLElement;
+    console.log(imageWrapper)
+    return imageWrapper ? imageWrapper.offsetWidth : 0;
+  }
+
+
+  updateSliderTransform(smooth: boolean) {
+    const slider = document.getElementById(`following`);
+    if (slider) {
+     
+      slider.style.transition = smooth ? 'transform 0.2s ease-out' : 'none';
+      slider.style.transform = `translateX(${this.marginLeft}px)`;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
 
   onSwipeLeft() {
     this.changeDetectorRef.detectChanges();
@@ -137,9 +229,17 @@ export class StoryComponent implements OnInit{
         next:response=>{
           
           this.groupedStories = response
-          console.log(this.groupedStories);
+          this.groupedStories.sort((a, b) => {
+            const aHasUnread = a.stories.some(story => story.seenByUser === false);
+            const bHasUnread = b.stories.some(story => story.seenByUser === false);
+            
+            // Sort groups with unread stories first
+            if (aHasUnread === bHasUnread) return 0;
+            return aHasUnread ? -1 : 1;
+          });
           setTimeout(()=>{
             this.initializeStepSize()
+            setTimeout(() => this.calculateContainerWidth());
           },0)
           
         }

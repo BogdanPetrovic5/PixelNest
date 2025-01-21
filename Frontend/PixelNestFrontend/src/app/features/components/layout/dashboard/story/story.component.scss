@@ -121,6 +121,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                 justify-content: flex-end;
                 align-items: center;
                 gap: 5px;
+             
+                flex: 0 0 auto;
                 .box::after{
                     position: absolute;
                     top: 0;
@@ -317,7 +319,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                         font-family: $HFONT;
                         font-weight: 300;
                         margin: 0;
-                        width: 100%;
+                        width: 55px;
                     }
                 }
             }
@@ -422,7 +424,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                     justify-content: flex-end;
                     align-items: center;
                     gap: 5px;
-                
+                    flex: 0 0 auto;
+                    overflow: hidden;
                     .box{
                         width: 50px;
                         height: 50px;
@@ -457,8 +460,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                         color: $PCOLOR;
                         font-family: $HFONT;
                         font-weight: 300;
+                        align-self: center;
                         margin: 0;
-                        width: 100%;
+                        width: 50px;
                     }
                 }
             }
