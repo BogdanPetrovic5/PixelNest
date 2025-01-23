@@ -18,6 +18,5 @@ export class GlobalInterceptor implements HttpInterceptor {
     })
     return next.handle(authorizationReq)
     
-   
   }
 }

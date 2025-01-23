@@ -10,6 +10,7 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { SearchComponent } from './search/search.component';
 import { InboxComponent } from './inbox/inbox.component';
 import { NotificationComponent } from './notification/notification.component';
+import { SessionExpiredDialogComponent } from './session-expired-dialog/session-expired-dialog.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { NotificationComponent } from './notification/notification.component';
     LayoutComponent,
     SearchComponent,
     InboxComponent,
-    NotificationComponent
+    NotificationComponent,
+    SessionExpiredDialogComponent
   ],
   imports: [
     CommonModule,

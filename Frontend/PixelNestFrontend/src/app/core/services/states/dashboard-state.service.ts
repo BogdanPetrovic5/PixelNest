@@ -31,6 +31,9 @@ export class DashboardStateService {
 
   private _notificationMessage = new BehaviorSubject<string>("")
   notificationMessage$ = this._notificationMessage.asObservable();
+
+  private _sessionExpiredDialog = new BehaviorSubject<boolean>(false)
+  sessionExpiredDialog$ = this._sessionExpiredDialog.asObservable();
   constructor() { }
 
   setIsNewStoryTabOpen(isSelected:boolean){
@@ -62,5 +65,8 @@ export class DashboardStateService {
   }
   setSender(value:string){
     this._notificationSender.next(value);
+  }
+  setSessionExpiredDialog(value:boolean){
+    this._sessionExpiredDialog.next(value);
   }
 }

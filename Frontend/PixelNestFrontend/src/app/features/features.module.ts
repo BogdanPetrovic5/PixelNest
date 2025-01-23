@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 import { LayoutModule } from './components/layout/layout.module';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
 
 
@@ -22,6 +23,7 @@ import { LayoutModule } from './components/layout/layout.module';
     AuthenticationPageComponent,
     LoginFormComponent,
     RegisterFormComponent,
+    UnauthorizedComponent,
   ],
   imports: [
     CommonModule,

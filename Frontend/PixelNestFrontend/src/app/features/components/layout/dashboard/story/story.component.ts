@@ -70,7 +70,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
     } else {
       this.containerWidth = 30; 
     }
-    console.log('Container Width:', this.containerWidth);
+ 
   }
 
 
@@ -251,7 +251,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
         next:response=>{
           
             this.storiesByUser = response;
-            console.log(this.storiesByUser);
+      
             
             this.extractFromResponse(this.storiesByUser);
             

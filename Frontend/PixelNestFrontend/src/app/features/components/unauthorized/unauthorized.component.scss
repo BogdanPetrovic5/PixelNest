@@ -1,0 +1,88 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+    width: 100%;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .content{
+        width: 90%;
+        height: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 25px;
+        
+        img{
+            width: 30%;
+            height: 30%;
+
+        }
+        h1{
+            font-size: 0.8em;
+            color: $PCOLOR;
+            font-family: $PFONT;
+            margin: 0;
+            text-align: center;
+        }
+        .nav{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            margin-top: 40px;
+            gap: 20px;
+            button{
+                padding: 15px 40px;
+                color: $PCOLOR;
+                background-color: #01BAEF;
+                border-radius: 25px;
+                border: none;
+                outline: none;
+                font-weight: bold;
+                font-size: 0.7em;
+            }
+            button.home{
+                background-color: white;
+                color: black;
+            }
+        }
+    }
+}
+@media only screen and (min-width:0px) and (max-width:625px){
+    .container{
+
+        .content{
+        
+            
+            img{
+                width: 90%;
+                height: 90%;
+    
+            }
+        }
+    }
+}
+@media only screen and (min-width:626px) and (max-width:1024px){
+    .container{
+
+        .content{
+        
+            
+            img{
+                width: 50%;
+                height: 50%;
+    
+            }
+        }
+    }
+}

@@ -18,13 +18,17 @@ export class DashboardGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+      const excludedRoutes = ['/Authentication/Login', '/Authentication/Register']; // Add your login and register routes here
+      if (excludedRoutes.includes(state.url)) {
+        return true; 
+      }
       return this._authenticationService.isLoggedIn().pipe(
         map(loggedIn => {
           if (loggedIn != null && loggedIn != undefined && loggedIn) {
             
             return true; 
           }else {
-            this._router.navigate(['/Get Started']); 
+            this._router.navigate(['/Unauthorized']); 
             return false; 
           }
         }),

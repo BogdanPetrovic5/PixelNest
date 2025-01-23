@@ -1,0 +1,68 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.74);
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .wrapper{
+        width: 90%;
+       
+        background-color: $TABCOLOR;
+        border: 1px solid $BORDERCOLOR;
+        border-radius: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 25px;
+        h1{
+            width: 90%;
+            font-size: 0.8em;
+            color: $PCOLOR;
+            font-family: $PFONT;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-wrapper{
+            width: 90%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            font-size: 25px;
+            button{
+                padding: 10px 20px;
+                color: $PCOLOR;
+                font-family: $PFONT;
+                border-radius: 25px;
+                outline: none;
+                border: none;
+                font-size: 0.7em;
+            }
+            #yes{
+                background-color: #01BAEF;
+            }
+            #no{
+                background-color: $PCOLOR;
+                color: black;
+            }
+        }
+    }
+}

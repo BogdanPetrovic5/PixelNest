@@ -21,7 +21,7 @@ export class LayoutComponent implements OnInit, OnDestroy{
   deleteDialog:boolean = false;
   logOutDialog:boolean = false;
   isNotification:boolean = false;
-
+  sessionExpired:boolean = false;
   
   constructor(
     private _dashboardStateManagement:DashboardStateService,
@@ -46,6 +46,8 @@ export class LayoutComponent implements OnInit, OnDestroy{
 
   private _initSubscriptions(): void {
     this._proccessLastSenderIDS();
+    this._userSession.setTokenExpiration(this._userSession.getFromCookie("tokenExpirationAt"))
+    this._userSession.monitorUserActivity();
     const subscriptionsList = [
       {
         observable$: this._dashboardStateManagement.newPostTab$,
@@ -84,6 +86,13 @@ export class LayoutComponent implements OnInit, OnDestroy{
           }
         },
       },
+      {
+        observable$: this._dashboardStateManagement.sessionExpiredDialog$,
+        handler: (response: boolean | null) =>{
+          this.sessionExpired = response ?? false
+          
+        }
+      }
     ];
   
     subscriptionsList.forEach(({ observable$, handler }) => {

@@ -14,10 +14,12 @@ import { LayoutComponent } from './features/components/layout/layout.component';
 import { SearchComponent } from './features/components/layout/search/search.component';
 import { InboxComponent } from './features/components/layout/inbox/inbox.component';
 import { ChatComponent } from './shared/components/chat/chat.component';
+import { UnauthorizedComponent } from './features/components/unauthorized/unauthorized.component';
 
 
 const routes: Routes = [
-  {path:'',redirectTo:"Get Started", pathMatch:'full'},
+  {path:'',redirectTo:"Unauthorized", pathMatch:'full'},
+  {path:"Unauthorized", component:UnauthorizedComponent},
   {path:"Get Started", component:LandingPageComponent},
   {
     path:"Authentication", 
@@ -73,7 +75,7 @@ const routes: Routes = [
   },
   {
     path:"**", 
-    redirectTo:"/Get Started"
+    redirectTo:"/Unauthorized"
   }
 ];
 

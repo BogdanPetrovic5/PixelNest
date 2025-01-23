@@ -17,6 +17,10 @@ export class AuthenticationService {
   ngOnInit():void{
     
   }
+  refreshToken():Observable<any>{
+    const url = `${environment.apiUrl}/api/`;
+    return this._httpClient.post<any>(url,{})
+  }
   logout(email:string):Observable<any>{
     let url = `${environment.apiUrl}/api/Authentication/Logout`
     return this._httpClient.post<any>(url, {
