@@ -1,4 +1,5 @@
-﻿using CarWebShop.Security;
+﻿using Azure;
+using CarWebShop.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,8 @@ using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
 using PixelNestBackend.Services;
+using PixelNestBackend.Utility;
+using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
@@ -15,13 +18,46 @@ namespace PixelNestBackend.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly UserUtility _userUtility;
         public AuthenticationController(
-                IAuthenticationService authenticationService
+                IAuthenticationService authenticationService,
+                UserUtility userUtility
             )
         {
             _authenticationService = authenticationService;
+            _userUtility = userUtility;
         }
+        [Authorize]
+        [HttpPost("RefreshToken")]
+        public ActionResult RefreshToken()
+        {
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string token = _authenticationService.ReturnToken(email);
+            string username = _userUtility.GetUserName(email);
+           
 
+
+            var tokenExpirationDate = DateTime.Now.AddMinutes(30);
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = true,
+                Expires = tokenExpirationDate,
+                Path = "/"
+            };
+            return Ok(new LoginResponse
+            {
+                Response = "Token refreshed!",
+                IsSuccessful = true,
+                Username = username,
+                Email = email,
+                TokenExpiration = tokenExpirationDate
+
+
+            });
+           
+        }
         [HttpPost("Register")]
         public ActionResult<RegisterResponse> Register(RegisterDto registerDto)
         {
@@ -45,7 +81,8 @@ namespace PixelNestBackend.Controllers
         [HttpPost("Logout")]
         public IActionResult Logout([FromBody] LogoutDto logoutDto)
         {
-            string token = _authenticationService.ReturnToken(logoutDto.Email);
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string token = _authenticationService.ReturnToken(email);
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
@@ -77,13 +114,13 @@ namespace PixelNestBackend.Controllers
                     Response=response.Response
                 });
             }
-          
+            var tokenExpirationDate = DateTime.Now.AddMinutes(30);
             var tokenCookieOption = new CookieOptions
             {
                 HttpOnly = true,
                 SameSite = SameSiteMode.None,
                 Secure = true,
-                Expires = DateTime.Now.AddMinutes(30),
+                Expires = tokenExpirationDate,
                 Path = "/"
 
             };
@@ -94,7 +131,9 @@ namespace PixelNestBackend.Controllers
                 Response = response.Response,
                 IsSuccessful = response.IsSuccessful,
                 Username = response.Username,
-                Email = response.Email
+                Email = response.Email,
+                TokenExpiration = tokenExpirationDate
+
 
             });
           
