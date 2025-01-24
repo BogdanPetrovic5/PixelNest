@@ -21,10 +21,22 @@
                             <h1>
                                 {{chat.messages[0].source}}
                             </h1>
+                            
+                            <div class="status" *ngIf="isActive(chat.messages[0].source)">
+
+                            </div>
+                            <p *ngIf="isActive(chat.messages[0].source)">Active now</p>
+                        </div>
+                        <div>
+                            <p *ngIf="chat.messages[0].sender === currentUser">
+                                You: 
+                            </p>
+                            <p>{{chat.messages[0].message}}</p>
+                            <div class="separator">
+
+                            </div>
                             <p>{{chat.messages[0].dateSent | timeAgo}}</p>
                         </div>
-                        
-                        <p>{{chat.messages[0].message}}</p>
                         
                     </div>
                    

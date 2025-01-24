@@ -111,7 +111,20 @@ $HFONT: "Roboto Condensed", sans-serif;
                         div{
                             display: flex;
                             flex-direction: row;
+                            align-items: center;
                             gap: 5px;
+                            div.status{
+                                width: 5px;
+                                height: 5px;
+                                border-radius: 50%;
+                                background-color: green;
+                            }
+                            div.separator{
+                                width: 5px;
+                                height: 5px;
+                                border-radius: 50%;
+                                background-color: rgb(119, 119, 119);
+                            }
                             h1{
                                 font-size: 0.7em;
                                 margin: 0;

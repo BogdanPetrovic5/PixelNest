@@ -4,6 +4,7 @@ import { Users } from '../../dto/users.dto';
 import { ProfileUser } from '../../dto/profileUser.dto';
 import { Message } from '../../dto/message.dto';
 import { LastSendersDto } from '../../dto/lastSenders.dto';
+import { ActiveUsers } from '../../dto/activeUsers.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,9 @@ export class ChatStateService {
       lastname:''
     }
   );
+
+  private _activeUsers = new BehaviorSubject<ActiveUsers[]>([])
+  activeUsers$ = this._activeUsers.asObservable();
   
   chatStateUser = this._chatStateUser.asObservable();
 
@@ -42,6 +46,26 @@ export class ChatStateService {
     messageID: 0
   });
   chatStateMessage = this._chatStateMessage.asObservable()
+  
+  updateActiveUsers(value:any){
+    console.log(value)
+    let users = this._activeUsers.getValue()
+    let user = users.find((a:any) => a.username === value.UserID);
+    if(user){
+      user.isActive = value.IsActive;
+    }else{
+      users.push({
+        username:value.UserID,
+        isActive:value.IsActive
+      });
+    }
+    
+    this._activeUsers.next(users);
+  }
+
+  setActiveUsers(value:ActiveUsers[]){
+    this._activeUsers.next(value)
+  }
   setUser(value:ProfileUser){
     this._chatStateUser.next(value);
   }
@@ -55,6 +79,7 @@ export class ChatStateService {
   setLastIDS(value:LastSendersDto[]){
     this._lastSenderIDS.next(value)
   }
+
   getLastIDS() : LastSendersDto[]{
     return this._lastSenderIDS.getValue();
   }

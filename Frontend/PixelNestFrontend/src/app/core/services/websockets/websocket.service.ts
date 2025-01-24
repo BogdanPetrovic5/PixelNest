@@ -50,7 +50,14 @@ export class WebsocketService {
       if(data.Type === "Direct"){
         this._proccessDirectMessage()
       }
-      
+      if(data.Type === "Status"){
+        this._chatState.updateActiveUsers(data);
+      }
+      if(data.Type === "ActiveUsers"){
+     
+       
+        this._chatState.setActiveUsers(data.Users);
+      }
       this._chatState.setMessages(this.messageData)
 
     };

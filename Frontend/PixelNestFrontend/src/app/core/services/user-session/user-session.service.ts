@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, timer } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
+import { DashboardStateService } from '../states/dashboard-state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,11 @@ export class UserSessionService {
   private _tokenExpiration: number | null = null;
   logOutDialog$ = this._logOutDialog.asObservable();
 
-  constructor(private _cookieService:CookieService, private _httpClient:HttpClient) { }
+  constructor(
+    private _cookieService:CookieService, 
+    private _httpClient:HttpClient,
+    private _dashboardState:DashboardStateService
+  ) { }
   setTokenExpiration(expiration: string): void {
     this._tokenExpiration = new Date(expiration).getTime();
     this.scheduleTokenRefresh();
@@ -32,7 +37,9 @@ export class UserSessionService {
         console.log(this._userActivity$.getValue());
         if(this._userActivity$.getValue() == true){
           this.refreshToken();
-        }else console.log("Session is about to expire!")
+        }else{
+          this._dashboardState.setSessionExpiredDialog(true);
+        }
         
       });
     } else {
@@ -47,7 +54,7 @@ export class UserSessionService {
         this.setToCookie("email", response.email)
         this.setToCookie("username", response.username)
         this.setTokenExpiration(response.tokenExpiration);
-        
+        console.log(response.tokenExpiration)
       }
     })
   }
