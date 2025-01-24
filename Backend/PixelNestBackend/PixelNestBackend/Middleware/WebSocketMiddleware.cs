@@ -23,7 +23,7 @@ namespace PixelNestBackend.Middleware
         {
             _next = next;
             _connectionMenager = connectionMenager;
-         
+
         }
 
 
@@ -31,19 +31,20 @@ namespace PixelNestBackend.Middleware
         {
             if (httpContext.WebSockets.IsWebSocketRequest)
             {
-             
-               
+
+
                 var socket = await httpContext.WebSockets.AcceptWebSocketAsync();
                 string username = httpContext.Request.Query["userID"];
-              
-                
-                 _connectionMenager.AddSocket(socket, username);
+
+
+                await _connectionMenager.AddSocket(socket, username);
                 Console.WriteLine($"WebSocket connected: {username}");
+                await _connectionMenager.NotifyUsers(username, true);
                 await Receive(socket, username);
             }
             else
             {
-                await _next(httpContext); 
+                await _next(httpContext);
             }
         }
 
@@ -65,11 +66,11 @@ namespace PixelNestBackend.Middleware
                 {
                     var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
-                    
+
                     try
                     {
                         var messageObj = System.Text.Json.JsonSerializer.Deserialize<WebSocketMessage>(message);
-                        
+
                     }
                     catch (Exception ex)
                     {
@@ -86,7 +87,8 @@ namespace PixelNestBackend.Middleware
             {
                 var messageObj = System.Text.Json.JsonSerializer.Deserialize<WebSocketMessage>(message);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -99,5 +101,5 @@ namespace PixelNestBackend.Middleware
             public string Content { get; set; }
         }
     }
-   
+
 }

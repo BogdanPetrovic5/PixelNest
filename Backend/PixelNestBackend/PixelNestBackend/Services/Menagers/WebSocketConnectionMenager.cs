@@ -1,10 +1,12 @@
 ﻿using PixelNestBackend.Dto.WebSockets;
 using PixelNestBackend.Models;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace PixelNestBackend.Services.Menagers
@@ -13,10 +15,29 @@ namespace PixelNestBackend.Services.Menagers
     {
         private readonly ConcurrentDictionary<string, List<string>> _rooms = new();
         private readonly ConcurrentDictionary<string, WebSocket> _connections = new();
+        private readonly ConcurrentDictionary<string, bool> _userStatuses = new();
 
-        public void AddSocket(WebSocket socket, string userID)
+        public async Task AddSocket(WebSocket socket, string userID)
         {
-          _connections.TryAdd(userID, socket);
+            _connections.TryAdd(userID, socket);
+            _userStatuses[userID] = true;
+            var activeUsers = _userStatuses.Where(u => u.Value && !u.Key.Equals(userID)).Select(u => new {
+                username = u.Key,
+                isActive = u.Value,
+            }).ToList();
+            var activeUsersMessage = new
+            {
+                Type = "ActiveUsers",
+                Users = activeUsers
+            };
+            string messageJson = JsonSerializer.Serialize(activeUsersMessage);
+
+            if (socket.State == WebSocketState.Open)
+            {
+                var buffer = Encoding.UTF8.GetBytes(messageJson);
+                await socket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+
         }
 
         
@@ -66,6 +87,25 @@ namespace PixelNestBackend.Services.Menagers
             }
             _rooms[actualRoomID].Remove(connectionID);
         }
+        public async Task NotifyUsers(string userID, bool isActive)
+        {
+            var statusMessage = new
+            {
+                UserID = userID,
+                IsActive = isActive,
+                Type = "Status"
+            };
+            string messageJson = JsonSerializer.Serialize(statusMessage);
+
+            foreach (var connection in _connections.Values)
+            {
+                if (connection.State == WebSocketState.Open && !connection.Equals(userID))
+                {
+                    var buffer = Encoding.UTF8.GetBytes(messageJson);
+                    await connection.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+            }
+        }
         public async Task SendMessageToUser(string receiver, string sender, string message)
         {
            
@@ -84,7 +124,7 @@ namespace PixelNestBackend.Services.Menagers
                 Console.Write("Ovde");
                 webSocketMessage.Type = "Room";
                 string jsonMessage = System.Text.Json.JsonSerializer.Serialize(webSocketMessage);
-                _sendMessageToRoom(actualRoomID, receiver, jsonMessage);
+                await _sendMessageToRoom(actualRoomID, receiver, jsonMessage);
                 
             }else if (_connections.TryGetValue(receiver, out var webSocket) && webSocket.State == WebSocketState.Open)
             {
@@ -161,7 +201,12 @@ namespace PixelNestBackend.Services.Menagers
                 {
                     room.Remove(connectionID);
                 }
-
+                _userStatuses[connectionID] = false;
+                if (_userStatuses.ContainsKey(connectionID))
+                {
+                    _userStatuses.TryRemove(connectionID, out bool status);
+                }
+                await NotifyUsers(connectionID, false);
                 await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by server", CancellationToken.None);
             }
         }

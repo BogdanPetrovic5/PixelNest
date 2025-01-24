@@ -373,7 +373,9 @@ namespace PixelNestBackend.Repository
                         connection.Close();
                         if (i > 0)
                         {
-
+                            var cacheKey = string.Format(PostsCacheKey);
+                            var versionKey = $"{cacheKey}_Version";
+                            _memoryCache.Remove(cacheKey);
                             return true;
                         }
                         else return false;
@@ -417,7 +419,14 @@ namespace PixelNestBackend.Repository
 
                 int result = _dataContext.SaveChanges();
 
-                if (result > 0) return new PostResponse {Message = "Comment Added!", IsSuccessfull = true };
+                if (result > 0)
+                {
+                    var cacheKey = string.Format(PostsCacheKey);
+                    var versionKey = $"{cacheKey}_Version";
+                    _memoryCache.Remove(cacheKey);
+                    return new PostResponse { Message = "Comment Added!", IsSuccessfull = true };
+                
+                }
                 return new PostResponse { Message = "Failed to add comment!", IsSuccessfull = false };
 
             }
