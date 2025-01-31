@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="content">
+        <div class="header">
+            <img src="/assets/images/back.png" (click)="navigation('Dashboard')">
+            <h1 >Notifications</h1>
+        </div>
+        <div class="notifications" >
+            <div class="notification-wrap" *ngFor="let notification of notifications">
+                <div class="user-info" >   
+                    <app-profile-image [username]="notification.username"></app-profile-image>
+                    <h1 (click)="navigation('Profile/'+notification.username)">{{notification.username}}</h1>
+                    <p>{{notification.message}}</p>
+                </div>
+                <div class="notification-source">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil, tap } from 'rxjs';
+import { ActiveUsers } from 'src/app/core/dto/activeUsers.dto';
 import { Message } from 'src/app/core/dto/message.dto';
 import { MessageSeen } from 'src/app/core/dto/messageSeen.dto';
 import { ProfileUser } from 'src/app/core/dto/profileUser.dto';
@@ -18,6 +19,7 @@ import { UserService } from 'src/app/core/services/user/user.service';
 })
 export class ChatComponent implements OnInit, OnDestroy{
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
+  activeUsers:ActiveUsers[] = []
   chatRoomID:string = ""
   reverseChatRoomID:string = ""
   private destroy$ = new Subject<void>();
@@ -43,7 +45,8 @@ export class ChatComponent implements OnInit, OnDestroy{
     private _userService:UserService,
     private _chatService:ChatService,
     private _userSession:UserSessionService,
-    private _datePipe:DatePipe
+    private _datePipe:DatePipe,
+    private _router:Router
   ){}
   ngOnDestroy(): void {
       this._chatService.leaveRoom(this.username).subscribe({
@@ -59,12 +62,16 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
 
   ngAfterViewChecked(): void {
-    this.scrollToBottom();
+   
   }
-
+  navigate(url:string){
+    this._router.navigate([`${url}`])
+  }
   private scrollToBottom(): void {
-    const container = this.chatContainer.nativeElement;
-    container.scrollTop = container.scrollHeight;
+    setTimeout(() => {
+      const container = this.chatContainer.nativeElement;
+      container.scrollTop = container.scrollHeight;
+    }, 0);
   }
   sendMessage(){
     this.messageData.receiver = this.username;
@@ -78,6 +85,7 @@ export class ChatComponent implements OnInit, OnDestroy{
         this.messages.push(messageCopy)
         this.messageData.message = "";
         this.message = ""
+        this.scrollToBottom();
       }
     })
   
@@ -106,13 +114,28 @@ export class ChatComponent implements OnInit, OnDestroy{
         this._joinRoom();
       }
     })
+    this._chatState.activeUsers$.subscribe({
+      next:response=>{
+        this.activeUsers = response;
+      }
+    })
+
+  }
+  trackByFn(index: number, item: any): number {
+    return item.messageID
+  } 
+  isActive(): boolean{
+    const obj = this.activeUsers.find((a:any) => a.username === this.username);
+    if(obj != null && obj != undefined){
+      return obj.isActive 
+    } return false
   }
   private _loadMessages(){
     this._chatService.getMessages(this.username).subscribe({
       next:response=>{
         this.messages = response;
         this._loadSeenMessages();
-     
+        this.scrollToBottom();
       }
     })
   }
@@ -189,6 +212,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     }
     return formattedDate
   }
+
   private _checkUTC(date:string){
     return date.endsWith('Z') || date.includes('+00:00');
   }

@@ -9,8 +9,10 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { SearchComponent } from './search/search.component';
 import { InboxComponent } from './inbox/inbox.component';
-import { NotificationComponent } from './notification/notification.component';
+import { NotificationComponent } from './notification-modal/notification.component';
 import { SessionExpiredDialogComponent } from './session-expired-dialog/session-expired-dialog.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { SessionExpiredDialogComponent } from './session-expired-dialog/session-
     SearchComponent,
     InboxComponent,
     NotificationComponent,
-    SessionExpiredDialogComponent
+    SessionExpiredDialogComponent,
+    NotificationsComponent
+   
   ],
   imports: [
     CommonModule,

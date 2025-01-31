@@ -4,6 +4,7 @@ import { ChatService } from 'src/app/core/services/chat/chat.service';
 import { ChatStateService } from 'src/app/core/services/states/chat-state.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
+import { NotificationStateService } from 'src/app/core/services/states/notification-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { WebsocketService } from 'src/app/core/services/websockets/websocket.service';
 
@@ -29,7 +30,8 @@ export class LayoutComponent implements OnInit, OnDestroy{
     private _userSession:UserSessionService,
     private _websocketService:WebsocketService,
     private _chatService:ChatService,
-    private _chatState:ChatStateService
+    private _chatState:ChatStateService,
+    private _notificationState:NotificationStateService
   ){
     
   }
@@ -37,6 +39,8 @@ export class LayoutComponent implements OnInit, OnDestroy{
     this.subscriptions.unsubscribe();
    
     this._websocketService.close();
+    this._chatState.resetNewMessages()
+    this._notificationState.setNotificationNumber(0);
     
   }
   ngOnInit(): void {

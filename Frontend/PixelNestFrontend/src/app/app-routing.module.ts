@@ -15,6 +15,8 @@ import { SearchComponent } from './features/components/layout/search/search.comp
 import { InboxComponent } from './features/components/layout/inbox/inbox.component';
 import { ChatComponent } from './shared/components/chat/chat.component';
 import { UnauthorizedComponent } from './features/components/unauthorized/unauthorized.component';
+import { NotificationComponent } from './features/components/layout/notification-modal/notification.component';
+import { NotificationsComponent } from './features/components/layout/notifications/notifications.component';
 
 
 const routes: Routes = [
@@ -69,6 +71,10 @@ const routes: Routes = [
         path:'Chat/:username',
         component:ChatComponent
       },
+      {
+        path:'Notifications',
+        component:NotificationsComponent
+      }
       
     ],
     canActivate:[DashboardGuard]

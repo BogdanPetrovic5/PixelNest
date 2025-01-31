@@ -26,6 +26,8 @@ import { MessageComponent } from './components/message/message.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { LottieNotificationComponent } from './components/lottie-notification/lottie-notification.component';
 import { InboxIconComponent } from './components/inbox-icon/inbox-icon.component';
+import { NewNotificationComponent } from './components/new-notification/new-notification.component';
+import { NotificationIconComponent } from './components/notification-icon/notification-icon.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { InboxIconComponent } from './components/inbox-icon/inbox-icon.component
     MessageComponent,
     TimeAgoPipe,
     LottieNotificationComponent,
-    InboxIconComponent
+    InboxIconComponent,
+    NewNotificationComponent,
+    NotificationIconComponent
   ],
   imports: [
     CommonModule,

@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
+import { NotificationStateService } from 'src/app/core/services/states/notification-state.service';
 import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
@@ -16,6 +17,9 @@ export class NavigationComponent implements OnInit{
   public selectedTab!:number
   public username:string = this._userSessionService.getFromCookie("username")
   subscription:Subscription = new Subscription();
+  newNotification:boolean = true;
+  
+  interval:any
   stringUrl = ""
   routeToTabMap: { [key: string]: number } = {
     'Dashboard/Feed': 1,
@@ -32,11 +36,24 @@ export class NavigationComponent implements OnInit{
     private _router:Router,
     private cdr: ChangeDetectorRef,
     private _route:ActivatedRoute,
-    private _profileState:ProfileStateService
+    private _profileState:ProfileStateService,
+    private _notification:NotificationStateService
   ){
 
   }
   ngOnInit():void{
+    this.subscription.add(
+      this._notification.newNotification$.subscribe({
+        next:response=>{
+          this.newNotification = response
+
+        //  this.interval = setTimeout(()=>{
+        //     this._notification.setNewNotification(false);
+        //     clearTimeout(this.interval)
+        //   }, 1500)
+        }
+      })
+    )
     this._router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
@@ -88,5 +105,6 @@ export class NavigationComponent implements OnInit{
         }
       })
     )
+   
   }
 }

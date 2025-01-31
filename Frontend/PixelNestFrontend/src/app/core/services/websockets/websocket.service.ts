@@ -5,6 +5,7 @@ import { ChatStateService } from '../states/chat-state.service';
 import { DashboardStateService } from '../states/dashboard-state.service';
 import { UserSessionService } from '../user-session/user-session.service';
 import { LastSendersDto } from '../../dto/lastSenders.dto';
+import { NotificationStateService } from '../states/notification-state.service';
 
 
 @Injectable({
@@ -28,7 +29,8 @@ export class WebsocketService {
   constructor(
     private _chatState:ChatStateService,
     private _dashboardState:DashboardStateService,
-    private _userSession:UserSessionService
+    private _userSession:UserSessionService,
+    private _notificationState:NotificationStateService
   ) { }
 
   connect(userID:string):void{
@@ -55,8 +57,13 @@ export class WebsocketService {
       }
       if(data.Type === "ActiveUsers"){
      
-       
         this._chatState.setActiveUsers(data.Users);
+      }
+      console.log(data);
+      if(data.Type === "Like" || data.Type === "Comment" || data.Type === "Follower"){
+          this._notificationState.setNewNotification(true)
+          this._notificationState.setNotificationType(data.Type)
+          this._notificationState.updateNotification(1);
       }
       this._chatState.setMessages(this.messageData)
 

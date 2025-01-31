@@ -37,6 +37,7 @@ export class InboxIconComponent implements OnInit{
       this._chatService.getNumberOfMessages().subscribe({
         next:response=>{
           this.newMessages = response.newMessages
+          this._chatState.setNewMessages(this.newMessages);
         }
       })
     }

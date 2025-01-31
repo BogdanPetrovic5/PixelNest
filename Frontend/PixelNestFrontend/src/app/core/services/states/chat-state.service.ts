@@ -98,6 +98,9 @@ export class ChatStateService {
   resetNewMessages(){
     this._newMessages.next(0)
   }
+  setNewMessages(value:number){
+    this._newMessages.next(value)
+  }
   updateNewMessages(value:number){
     let number = this._newMessages.getValue()
     

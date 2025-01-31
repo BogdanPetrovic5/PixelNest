@@ -16,7 +16,7 @@ $HFONT: "Roboto Condensed", sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 3;
+    z-index: 5 !important;
     background-color: rgba(0, 0, 0, 0.651);
     .log-out-wrap{
         width: 25%;

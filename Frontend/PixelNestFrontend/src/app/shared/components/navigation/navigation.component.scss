@@ -87,8 +87,14 @@ $HFONT: "Roboto Condensed", sans-serif;
                 align-items: center;
                 gap: 10px;
                 font-size: 25px;
+                position: relative;
                 cursor: pointer;
-
+                app-new-notification{
+                    width: 40px;
+                    height: 40px;
+                    right: 0;
+                    position: absolute;
+                }
 
                 img, app-profile-image, app-inbox-icon{
                     width: 27px;

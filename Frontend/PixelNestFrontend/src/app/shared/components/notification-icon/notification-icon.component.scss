@@ -1,0 +1,31 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.img-container{
+    position: relative;
+    img{
+        width: 100%;
+        height: 100%;
+    }
+    span{
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: red;
+        border-radius: 50%;
+        font-family: $PFONT;
+        color: $PCOLOR;
+        top: -6px;
+        right:-6px;
+        font-size: 0.8em;
+    }
+}

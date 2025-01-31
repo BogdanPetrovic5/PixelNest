@@ -27,7 +27,14 @@
         justify-content: right;
         align-items: center;
         gap: 20px;
-        img, app-inbox-icon{
+        position: relative;
+        app-new-notification{
+            position: absolute;
+            bottom: -75%;
+            right: 40px;
+            z-index: 4;
+        }
+        app-notification-icon, app-inbox-icon{
             width: 25px;
             height: 25px;
 

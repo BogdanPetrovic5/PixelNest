@@ -27,7 +27,7 @@ export class TimeAgoPipe implements PipeTransform {
       return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
     }
     if(hours < 24){
-      return `${hours} hour${hours !== 1 ? 's' : ''} and ${minutes % 60} minute${minutes % 60 !== 1 ? 's' : ''}`
+      return `${hours} hour${hours !== 1 ? 's' : ''} ago`
     }
     if (days < 30) {
       return `${days} day${days !== 1 ? 's' : ''} ago`;

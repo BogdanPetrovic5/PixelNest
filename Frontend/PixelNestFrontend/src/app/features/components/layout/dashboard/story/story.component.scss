@@ -43,7 +43,7 @@ $HFONT: "Roboto Condensed", sans-serif;
             left: 50%;
             transform: translateX(-50%);
             cursor: pointer;
-            z-index: 4;
+            z-index: 3 !important;
             border: 3px solid $BGCOLOR;
         }
         .box::after{
@@ -54,7 +54,7 @@ $HFONT: "Roboto Condensed", sans-serif;
             height: 100%;
             width: 100%;
             background-color: transparent;
-            z-index: 3;
+            z-index: 2 !important;
         }
         .box{
             height: 60px;

@@ -21,7 +21,7 @@
 
             <div class="messages nav-sec"(click)="changeTab(2)"  [ngClass]="{'selected':selectedTab == 2}" (click)="navigate('/Inbox')"><app-inbox-icon></app-inbox-icon><p>Messages</p></div>
 
-            <div class="notifications nav-sec" (click)="changeTab(3)" [ngClass]="{'selected':selectedTab == 3}"><img src="./assets/images/notification.png"><p>Notifications</p></div>
+            <div class="notifications nav-sec" (click)="changeTab(3)" [ngClass]="{'selected':selectedTab == 3}"> <app-new-notification *ngIf="newNotification"></app-new-notification> <img src="./assets/images/notification.png"><p>Notifications</p></div>
             
             <div class="search nav-sec" (click)="changeTab(5)" [ngClass]="{'selected':selectedTab == 5}" (click)="navigate('/Search')"><img src="./assets/images/search.png"><p>Search</p></div>
             <div class="new-post nav-sec" (click)="openNewPostDialog()"><img src="./assets/images/plus.png"><p>Create</p></div>

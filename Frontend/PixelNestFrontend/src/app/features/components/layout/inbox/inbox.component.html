@@ -17,7 +17,7 @@
                     [username]="chat.messages[0].source">
                     </app-profile-image>
                     <div class="chat-info">
-                        <div>
+                        <div class="chat-status">
                             <h1>
                                 {{chat.messages[0].source}}
                             </h1>
@@ -26,16 +26,20 @@
 
                             </div>
                             <p *ngIf="isActive(chat.messages[0].source)">Active now</p>
+                            <p *ngIf="!isActive(chat.messages[0].source)">Not active now</p>
                         </div>
-                        <div>
-                            <p *ngIf="chat.messages[0].sender === currentUser">
-                                You: 
-                            </p>
-                            <p>{{chat.messages[0].message}}</p>
+                        <div class="chat-data">
+                            <div class="message">
+                                <p *ngIf="chat.messages[0].sender === currentUser">
+                                    You: 
+                                </p>
+                                <p class="text">{{chat.messages[0].message}}</p>
+                            </div>
+                           
                             <div class="separator">
 
                             </div>
-                            <p>{{chat.messages[0].dateSent | timeAgo}}</p>
+                            <p class="ago">{{chat.messages[0].dateSent | timeAgo}}</p>
                         </div>
                         
                     </div>

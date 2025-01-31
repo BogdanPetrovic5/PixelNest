@@ -15,7 +15,45 @@ $HFONT: "Roboto Condensed", sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-y: auto;
+    overflow-y: scroll !important;
+    .chat-nav{
+        width: 100%;
+        height: 70px;
+        right: 0;
+        top: 0;
+        position: absolute;
+        background-color: $BGCOLOR;
+        z-index: 6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+       .nav-content{
+        width: 90%;
+        
+        .nav{
+            display: flex;
+            flex-direction:  row;
+            align-items: center;
+            gap: 26px;
+            img{
+                width: 20px;
+                height: 20px;
+            }
+            app-profile-image{
+                width: 40px;
+                height: 40px;
+            }
+            h1{
+                font-size: 1.4em;
+                font-family: $PFONT;
+                color: $PCOLOR;
+                margin-left: -10px;
+            }
+        }
+       }
+       
+       
+    }
     .content{
         width: 100%;
         height: calc(100% - 60px);
@@ -24,7 +62,10 @@ $HFONT: "Roboto Condensed", sans-serif;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+       
         .user-overview{
+            margin-top: 170px;
+            margin-bottom: 40px;
             width: 100%;
             height: 40%;
             display: flex;
@@ -34,6 +75,7 @@ $HFONT: "Roboto Condensed", sans-serif;
             app-profile-image{
                 width: 150px;
                 height: 150px;
+                flex-shrink: 0;
             }
             .user-info{
                 display: flex;
@@ -109,6 +151,18 @@ $HFONT: "Roboto Condensed", sans-serif;
                     div{
                         width: 30px;
                         height: 30px;
+                        position: relative;
+                        .active-status{
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                            background-color: green;
+                            position: absolute;
+                            z-index: 4;
+                            bottom: -5px;
+                            right:  0;
+                            border: 2px solid $BGCOLOR;
+                        }
                         app-profile-image{
                             width: 30px;
                             height: 30px;
@@ -157,8 +211,60 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
         }
     }
+
 }
-@media only screen and (min-width:1024px) {
+
+// @media only screen and (max-width: 767px){
+//     .container{
+//         width: 100%;
+//         height: calc(100dvh - 110px);
+//         color: white;
+        
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//         overflow-y: scroll !important;
+//         .chat-nav{
+//             width: 100%;
+//             height: 50px;
+//             left: 0;
+//             top: 0;
+//             position: absolute;
+//             background-color: $BGCOLOR;
+//             z-index: 6;
+//             display: flex;
+//             justify-content: center;
+//             align-items: center;
+//            .nav-content{
+//             width: 90%;
+            
+//             .nav{
+//                 display: flex;
+//                 flex-direction:  row;
+//                 align-items: center;
+//                 gap: 26px;
+//                 img{
+//                     width: 20px;
+//                     height: 20px;
+//                 }
+//                 app-profile-image{
+//                     width: 40px;
+//                     height: 40px;
+//                 }
+//                 h1{
+//                     font-size: 1.4em;
+//                     font-family: $PFONT;
+//                     color: $PCOLOR;
+//                     margin-left: -10px;
+//                 }
+//             }
+//            }
+           
+           
+//         }
+//     }
+// }
+@media only screen and (min-width: 768px){
     ::-webkit-scrollbar {
         width: 10px; 
         
@@ -177,53 +283,177 @@ $HFONT: "Roboto Condensed", sans-serif;
     ::-webkit-scrollbar-thumb:hover {
         background: #555; 
     }
+}
+@media only screen and (min-width:768px) and (max-width:1023px) {
     .container{
-       
-        .content{
-           
-            height: 100%;
-            .user-overview{
-              
+        height: calc(100dvh - 60px);
+        .chat-nav{
+            width: 60%;
+            height: 70px;
+            right: 4% !important;
+            background-color: $BGCOLOR;
+            z-index: 6;
+           .nav-content{
+            width: 90%;
+            
+            .nav{
+                display: flex;
+                flex-direction:  row;
+                align-items: center;
+                gap: 26px;
+                img{
+                    width: 20px;
+                    height: 20px;
+                }
                 app-profile-image{
-                 
+                    width: 40px;
+                    height: 40px;
                 }
-                .user-info{
-                 
-                    h2{
-                       
-                    }
-                    h1{
-                       
-                    }
-                    .stats{
-                      
-    
-                    }
+                h1{
+                    font-size: 1.4em;
+                    font-family: $PFONT;
+                    color: $PCOLOR;
+                    margin-left: -10px;
                 }
-               
             }
-            .messages{
-               
-                div{
-                  
-                    app-profile-image{
-                      
-                    }
-                    app-message{
-                      
-                    }
-                }
-               
-            }
+           }
+           
+           
+        }
+        .content{
+            width: 95%;
+            height: calc(100% - 160px);
+           
             .input{
-                width: 50%;
+                position: absolute;
+                width: 60%;  
+                height: 40px;
+                bottom: 20px;
                 input{
-                   
+                
                 }
                 img{
-                  
+               
                 }
             }
+        }
+    }
+}
+@media only screen and (min-width:1024px) and (max-width:1300px){
+    .container{
+        height: calc(100dvh - 60px);
+        .chat-nav{
+            width: 65%;
+            height: 70px;
+            right: 4% !important;
+            background-color: $BGCOLOR;
+            z-index: 6;
+           .nav-content{
+            width: 90%;
+            
+            .nav{
+                display: flex;
+                flex-direction:  row;
+                align-items: center;
+                gap: 26px;
+                img{
+                    width: 20px;
+                    height: 20px;
+                }
+                app-profile-image{
+                    width: 40px;
+                    height: 40px;
+                }
+                h1{
+                    font-size: 1.4em;
+                    font-family: $PFONT;
+                    color: $PCOLOR;
+                    margin-left: -10px;
+                }
+            }
+           }
+           
+           
+        }
+        .content{
+            width: 95%;
+            height: calc(100% - 160px);
+           
+            .input{
+                position: absolute;
+                width: 65%;  
+                height: 40px;
+                bottom: 20px;
+                input{
+                
+                }
+                img{
+               
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width:1301px){
+    .container{
+        height: calc(100dvh - 60px);
+        .chat-nav{
+            width: 65%;
+            height: 70px;
+            right: 6% !important;
+            background-color: $BGCOLOR;
+            z-index: 6;
+           .nav-content{
+            width: 90%;
+            
+            .nav{
+                display: flex;
+                flex-direction:  row;
+                align-items: center;
+                gap: 26px;
+                img{
+                    width: 20px;
+                    height: 20px;
+                }
+                app-profile-image{
+                    width: 40px;
+                    height: 40px;
+                }
+                h1{
+                    font-size: 1.4em;
+                    font-family: $PFONT;
+                    color: $PCOLOR;
+                    margin-left: -10px;
+                }
+            }
+           }
+           
+           
+        }
+        .content{
+            width: 95%;
+            height: calc(100% - 160px);
+           
+            .input{
+                position: absolute;
+                width: 65%;  
+                height: 40px;
+                bottom: 20px;
+                input{
+                
+                }
+                img{
+               
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width:1024px) {
+    
+    .container{
+        .content{
+            height: 100%;
         }
     }
 }
