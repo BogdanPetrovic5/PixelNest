@@ -68,8 +68,8 @@ namespace PixelNestBackend.Repository
                          .ToListAsync();
 
                 }
-                
-               
+                this._appendToken(groupedStories);
+
                 return groupedStories;
             }
             catch(SqlException ex)
@@ -114,8 +114,8 @@ namespace PixelNestBackend.Repository
                              .ToListAsync();
                        
                     }
-                
-                
+                this._appendToken(groupedStories);
+
                 return groupedStories;
             }
             catch (SqlException ex)

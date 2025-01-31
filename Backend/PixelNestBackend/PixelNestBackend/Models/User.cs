@@ -36,5 +36,8 @@ namespace PixelNestBackend.Models
         public ICollection<Message> SentMessages { get; set; }
         public ICollection<Message> ReceivedMessages { get; set; }
         public ICollection<SeenMessages> SeenMessages { get; set; }
+        public ICollection<Notification> ReceivedNotifications { get; set; }
+
+        public ICollection<Notification> SentNotifications { get; set; }
     }
 }

@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
+using PixelNestBackend.Dto.WebSockets;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Services.Menagers;
 using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
@@ -15,11 +17,12 @@ namespace PixelNestBackend.Controllers
     {
       
         private readonly IPostService _postService;
-      
-        public PostController(IPostService postService)
+        private readonly WebSocketConnectionMenager _webSocketConnectionMenager;
+        public PostController(IPostService postService, WebSocketConnectionMenager webSocketConnectionMenager)
         {
             
             _postService = postService;
+            _webSocketConnectionMenager = webSocketConnectionMenager;
 
         }
 
@@ -119,21 +122,31 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpPost("LikePost")]
-        public ActionResult LikePost(LikeDto likeDto)
+        public async Task<ActionResult> LikePost(LikeDto likeDto)
         {
             if(likeDto == null)
             {
                 return BadRequest();
             }
-            bool result = _postService.LikePost(likeDto);
-            if (result)
+            PostResponse likeResponse = null;
+            likeResponse = _postService.LikePost(likeDto);
+            if (likeResponse != null && likeResponse.IsSuccessfull)
             {
+                WebSocketMessage webSocketMessage = new WebSocketMessage
+                {
+                    Content = "New Like",
+                    SenderUsername = likeResponse.User,
+                    TargetUser = likeResponse.TargetUser,
+                    Type = "Like"
+                };
+                if (!likeResponse.DoubleAction) await this._webSocketConnectionMenager.SendNotificationToUser(webSocketMessage);
+
                 return Ok();
             } else return NotFound();
         }
         [Authorize]
         [HttpPost("Comment")]
-        public ActionResult<PostResponse> Comment(CommentDto commentDto)
+        public async Task<ActionResult> Comment(CommentDto commentDto)
         {
             if (!ModelState.IsValid)
             {
@@ -142,12 +155,21 @@ namespace PixelNestBackend.Controllers
             
             try
             {
-                PostResponse result = _postService.Comment(commentDto);
-                if (result.IsSuccessfull)
+                PostResponse commentResponse = _postService.Comment(commentDto);
+                if (commentResponse.IsSuccessfull)
                 {
-                    return Ok(new PostResponse { Message = result.Message, IsSuccessfull = result.IsSuccessfull });
+                    WebSocketMessage webSocketMessage = new WebSocketMessage
+                    {
+                        Content = "New Comment",
+                        SenderUsername = commentResponse.User,
+                        TargetUser = commentResponse.TargetUser,
+                        Type = "Comment"
+                        
+                    };
+                    await this._webSocketConnectionMenager.SendNotificationToUser(webSocketMessage);
+                    return Ok(new PostResponse { Message = commentResponse.Message, IsSuccessfull = commentResponse.IsSuccessfull });
                 }
-                else return BadRequest(new PostResponse { Message = result.Message, IsSuccessfull = result.IsSuccessfull });
+                else return BadRequest(new PostResponse { Message = commentResponse.Message, IsSuccessfull = commentResponse.IsSuccessfull });
             }catch(Exception ex)
             {
                 return StatusCode(500, new { message = ex.Message });

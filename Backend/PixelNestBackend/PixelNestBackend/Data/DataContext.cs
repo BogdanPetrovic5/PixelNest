@@ -21,6 +21,7 @@ namespace PixelNestBackend.Data
         public DbSet<Seen> Seen { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<SeenMessages> SeenMessages { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            
@@ -29,18 +30,40 @@ namespace PixelNestBackend.Data
             modelBuilder.Entity<ImagePath>().HasKey(p => p.PathID);
             modelBuilder.Entity<Comment>().HasKey(c => c.CommentID);
             modelBuilder.Entity<LikedPosts>().HasKey(lp => new { lp.PostID, lp.UserID });
+           
             modelBuilder.Entity<LikedComments>().HasKey(lc => new { lc.CommentID, lc.UserID });
             modelBuilder.Entity<SavedPosts>().HasKey(lc => new { lc.PostID, lc.UserID });
             modelBuilder.Entity<Follow>().HasKey(f => new {f.UserFollowerID, f.UserFollowingID});
             modelBuilder.Entity<Story>().HasKey(s => s.StoryID);
             modelBuilder.Entity<Seen>().HasKey(s => new {s.StoryID, s.UserID});
             modelBuilder.Entity<SeenMessages>().HasKey(s => new { s.UserID, s.MessageID });
+            modelBuilder.Entity<Notification>().HasKey(n => new { n.NotificaitonID });
 
             modelBuilder.Entity<User>().HasIndex(u => new {u.Email, u.UserID, u.Username});
             modelBuilder.Entity<Post>().HasIndex(p => p.UserID);
             modelBuilder.Entity<Comment>().HasIndex(c => c.ParentCommentID);
             modelBuilder.Entity<Seen>().HasIndex(s => s.UserID);
             modelBuilder.Entity<Story>().HasIndex(s => s.UserID);
+
+            modelBuilder.Entity<Notification>().HasIndex(n => new { n.ReceiverID, n.SenderID, n.PostID });
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(user => user.SenderUser)
+                .WithMany(notifications => notifications.SentNotifications)
+                .HasForeignKey(user => user.SenderID)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Notification>()
+               .HasOne(user => user.ReceiverUser)
+               .WithMany(notifications => notifications.ReceivedNotifications)
+               .HasForeignKey(user => user.ReceiverID)
+               .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Notification>()
+              .HasOne(post => post.Post)
+              .WithMany(notifications => notifications.Notifications)
+              .HasForeignKey(post => post.PostID)
+              .OnDelete(DeleteBehavior.Restrict);
+        
+           
 
             modelBuilder.Entity<SeenMessages>()
                 .HasOne(user => user.User)

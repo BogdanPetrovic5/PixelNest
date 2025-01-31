@@ -11,5 +11,6 @@ namespace PixelNestBackend.Models
     
         public virtual User UserFollower { get; set; }
         public virtual User UserFollowing { get; set; }
+       
     }
 }

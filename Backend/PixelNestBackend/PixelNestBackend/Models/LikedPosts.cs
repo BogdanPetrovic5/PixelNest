@@ -5,7 +5,7 @@ namespace PixelNestBackend.Models
 {
     public class LikedPosts
     {
-
+      
         public int UserID { get; set; }
         public int PostID { get; set; }
     
@@ -13,5 +13,6 @@ namespace PixelNestBackend.Models
 
         public User? User { get; set; }
         public Post? Post { get; set; }
+      
     }
 }

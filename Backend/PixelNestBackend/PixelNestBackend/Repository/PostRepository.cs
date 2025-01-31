@@ -348,51 +348,94 @@ namespace PixelNestBackend.Repository
 
         }
         
-        public bool LikePost(LikeDto likeDto, bool isLiked, int userID)
+        public PostResponse LikePost(LikeDto likeDto, bool isLiked, int userID)
         {
-           
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
-            string query;
-            if (!isLiked)
-            {
-                query = "INSERT INTO LikedPosts (UserID, PostID, DateLiked) Values(@UserID, @PostID,GETDATE())";
-            }
-            else query = "DELETE FROM LikedPosts WHERE PostID = @PostID AND UserID = @UserID";
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        connection.Open();
-                        command.Parameters.AddWithValue("@UserID", userID);
-                        command.Parameters.AddWithValue("@PostID", likeDto.PostID);
-                    
-                        int i = command.ExecuteNonQuery();
-                        connection.Close();
-                        if (i > 0)
-                        {
-                            var cacheKey = string.Format(PostsCacheKey);
-                            var versionKey = $"{cacheKey}_Version";
-                            _memoryCache.Remove(cacheKey);
-                            return true;
-                        }
-                        else return false;
-                    }
-                }
-            }catch(SqlException ex)
-            {
+                bool doubleAction = false;
+                LikedPosts likedPost = _dataContext.LikedPosts
+                    .FirstOrDefault(lp => lp.UserID == userID && lp.PostID == likeDto.PostID);
 
-                _logger.LogError($"Database related error: {ex.Message}");
-                return false;
+                User user = _dataContext.Users.Where(u => u.UserID == userID).FirstOrDefault();
+                Post post = _dataContext.Posts.Include(u => u.User).Where(pid => pid.PostID == likeDto.PostID).FirstOrDefault();
+                Notification notification = _dataContext.Notifications.Where(ru => ru.ReceiverID == post.UserID && ru.SenderID == userID && ru.PostID == likeDto.PostID).FirstOrDefault();
+                if (notification != null) _dataContext.Notifications.Remove(notification);
+                if (likedPost == null)
+                {
+                    Notification newNotification = new Notification
+                    {
+                        Message = $"liked your photo.",
+                        SenderID = userID,
+                        ReceiverID = post.User.UserID,
+                        DateTime = DateTime.Now,
+                        PostID = post.PostID
+
+                    };
+                    if (newNotification.SenderID != newNotification.ReceiverID) _dataContext.Notifications.Add(newNotification);
+                       
+                    var newLikedPost = new LikedPosts
+                    {
+                        UserID = userID,
+                        PostID = likeDto.PostID,
+                        DateLiked = DateTime.UtcNow
+                    };
+
+                    _dataContext.LikedPosts.Add(newLikedPost);
+                }
+                else
+                {
+                    _dataContext.LikedPosts.Remove(likedPost);
+                    doubleAction = true;
+                }
+
+                int changes = _dataContext.SaveChanges();
+
+                if (changes > 0)
+                {
+                   
+                    var cacheKey = string.Format(PostsCacheKey);
+                    var versionKey = $"{cacheKey}_Version";
+                    _memoryCache.Remove(cacheKey);
+
+
+                    return new PostResponse
+                    {
+                        IsSuccessfull = true,
+                        Message = "Successfully liked.",
+                        User = user.Username,
+                        TargetUser = post.User.Username,
+                        DoubleAction = doubleAction ? true : false
+
+                    };
+                }
+                else
+                {
+                    return new PostResponse
+                    {
+                        IsSuccessfull = false,
+                        Message = "No changes were made."
+                    };
+                }
             }
-            catch(Exception ex)
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError($"Database related error: {ex.Message}");
+                return new PostResponse
+                {
+                    IsSuccessfull = false,
+                    Message = "An error occurred while interacting with the database."
+                };
+            }
+            catch (Exception ex)
             {
                 _logger.LogError($"General error: {ex.Message}");
-                return false;
+                return new PostResponse
+                {
+                    IsSuccessfull = false,
+                    Message = "An unexpected error occurred."
+                };
             }
-           
 
 
         } 
@@ -400,34 +443,73 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var post = _dataContext.Posts.FirstOrDefault(p => p.PostID == comment.PostID);
-                if (post != null)
+                Post post = _dataContext.Posts.Include(u=>u.User).FirstOrDefault(p => p.PostID == comment.PostID);
+                User user = _dataContext.Users.FirstOrDefault(u => u.UserID == comment.UserID);
+                Comment parentComment = null;
+                if (post == null || user == null)
                 {
-                   
-                    post.TotalComments += 1;
+                    return new PostResponse
+                    {
+                        Message = "Post or user not found!",
+                        IsSuccessfull = false
+                    };
                 }
-
-                _dataContext.Comments.Add(comment);
+                post.TotalComments += 1;
+                
+                
                 if (comment.ParentCommentID.HasValue)
                 {
-                    var parentComment = _dataContext.Comments.FirstOrDefault(c => c.CommentID == comment.ParentCommentID.Value && c.ParentCommentID == null);
+                    parentComment = _dataContext.Comments
+                        .Include(c => c.User)
+                        .FirstOrDefault(c => c.CommentID == comment.ParentCommentID.Value && c.ParentCommentID == null);
+
                     if (parentComment != null)
                     {
                         parentComment.TotalReplies += 1;
+
+                        this._createNotification(
+                            receiverID: parentComment.User.UserID,
+                            senderID: comment.UserID,
+                            postID: post.PostID,
+                            parentCommentID: comment.ParentCommentID,
+                            message: $"replied to your comment."
+                        );
                     }
                 }
-
+                _dataContext.Comments.Add(comment);
                 int result = _dataContext.SaveChanges();
 
                 if (result > 0)
                 {
+                    
+                    this._createNotification(
+                        receiverID: post.UserID,
+                        senderID: comment.UserID,
+                        postID: post.PostID,
+                        message: $"commented on your photo.",
+                        commentID: comment.CommentID
+                    );
+
+                    
                     var cacheKey = string.Format(PostsCacheKey);
-                    var versionKey = $"{cacheKey}_Version";
                     _memoryCache.Remove(cacheKey);
-                    return new PostResponse { Message = "Comment Added!", IsSuccessfull = true };
-                
+
+                    return new PostResponse
+                    {
+                        Message = "Comment added successfully!",
+                        IsSuccessfull = true,
+                        TargetUser = comment.ParentCommentID.HasValue ? parentComment.User.Username : post.User.Username,
+                        DoubleAction = false
+
+
+                    };
                 }
-                return new PostResponse { Message = "Failed to add comment!", IsSuccessfull = false };
+
+                return new PostResponse
+                {
+                    Message = "Failed to save comment.",
+                    IsSuccessfull = false
+                };
 
             }
             catch(SqlException ex)
@@ -440,7 +522,26 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
-
+        private void _createNotification(int receiverID, int senderID, int postID, string message, int? commentID = null, int? parentCommentID = null, int? likeID = null)
+        {
+            var notification = new Notification
+            {
+                ReceiverID = receiverID,
+                SenderID = senderID,
+                PostID = postID,
+                LikeID = likeID,
+                Message = message,
+                DateTime = DateTime.Now,
+                CommentID = commentID,
+                ParentCommentID = parentCommentID
+            };
+            if(notification.ReceiverID != notification.SenderID)
+            {
+                _dataContext.Notifications.Add(notification);
+                _dataContext.SaveChanges();
+            }
+           
+        }
         public async Task<DeleteResponse> DeletePost(int postID)
         {
             try
@@ -464,6 +565,7 @@ namespace PixelNestBackend.Repository
                 _dataContext.LikedPosts.Where(a => a.PostID == postID).ExecuteDelete();
                 _dataContext.SavedPosts.Where(a => a.PostID == postID).ExecuteDelete();
                 _dataContext.ImagePaths.Where(a => a.PostID == postID).ExecuteDelete();
+                _dataContext.Notifications.Where(a => a.PostID == postID).ExecuteDelete();
                 User? user = _dataContext.Users.FirstOrDefault(u => u.UserID == userID);
                 if (user != null) user.TotalPosts -= 1;
                

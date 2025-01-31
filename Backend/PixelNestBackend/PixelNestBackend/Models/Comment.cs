@@ -23,5 +23,6 @@ namespace PixelNestBackend.Models
         [NotMapped]
         
         public ICollection<LikedComments> LikedComments { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
     }
 }

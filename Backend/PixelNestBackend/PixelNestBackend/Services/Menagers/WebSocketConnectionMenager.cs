@@ -121,7 +121,7 @@ namespace PixelNestBackend.Services.Menagers
            
             if (IsUserInRoom(actualRoomID, receiver)) 
             {
-                Console.Write("Ovde");
+              
                 webSocketMessage.Type = "Room";
                 string jsonMessage = System.Text.Json.JsonSerializer.Serialize(webSocketMessage);
                 await _sendMessageToRoom(actualRoomID, receiver, jsonMessage);
@@ -191,6 +191,18 @@ namespace PixelNestBackend.Services.Menagers
                 {
                     _connections.TryRemove(connection.Key, out _);
                 }
+            }
+        }
+        public async Task SendNotificationToUser(WebSocketMessage message)
+        {
+            
+            if (_connections.TryGetValue(message.TargetUser, out var webSocket) && webSocket.State == WebSocketState.Open)
+            {
+                Console.WriteLine(message.TargetUser);
+                string jsonMessage = System.Text.Json.JsonSerializer.Serialize(message);
+                var buffer = Encoding.UTF8.GetBytes(jsonMessage);
+
+                await webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
             }
         }
         public async Task CloseConnection(string connectionID)
