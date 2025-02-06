@@ -193,5 +193,18 @@ namespace PixelNestBackend.Services
             }
             return new DeleteResponse { IsSuccess = false, IsValid = false, Message = "You do not have authority to do this!" };
         }
+
+        public Task<ResponsePostDto> GetSinglePost(int postID, string email)
+        {
+           
+            string username = _userUtility.GetUserName(email);
+            return _postRepository.GetSinglePost(postID, username);
+        }
+
+        public bool CacheChange(string email)
+        {
+            string username = _userUtility.GetUserName(email);
+            return _postRepository.CacheChange(username);
+        }
     }
 }

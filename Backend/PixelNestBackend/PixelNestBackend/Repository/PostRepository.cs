@@ -22,7 +22,7 @@ namespace PixelNestBackend.Repository
         private readonly SASTokenGenerator _SAStokenGenerator;
         private readonly UserUtility _userUtility;
         private readonly IMemoryCache _memoryCache;
-        private const string PostsCacheKey = "Posts";
+        private const string PostsCacheKey = "Posts_{0}";
         private readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10); 
         public PostRepository(
             DataContext dataContext,
@@ -41,23 +41,31 @@ namespace PixelNestBackend.Repository
             _memoryCache = memoryCache;
         }
 
-
+      
         public bool SavePost(int userID, SavePostDto savePostDto, bool isDuplicate)
         {
+            Post? post = _dataContext.Posts.Where(pid => savePostDto.PostID == pid.PostID).FirstOrDefault();
             var obj = new SavedPosts
             {
                 UserID = userID,
                 PostID = savePostDto.PostID,
                 
             };
+            var cacheKey = string.Format(PostsCacheKey);
             if (!isDuplicate)
             {
+                _memoryCache.Remove(cacheKey);
                 _dataContext.SavedPosts.Add(obj);
+                if(post != null) post.LastModified = DateTime.UtcNow;
+
                 return _dataContext.SaveChanges() > 0; 
             }
             var existingSave = _dataContext.SavedPosts.FirstOrDefault(sp => sp.PostID == savePostDto.PostID && sp.UserID == userID);
             if (existingSave != null) 
             {
+              
+               
+                _memoryCache.Remove(cacheKey);
                 _dataContext.SavedPosts.Remove(existingSave);
                 return _dataContext.SaveChanges() > 0;
             }
@@ -65,6 +73,87 @@ namespace PixelNestBackend.Repository
         }
         public async Task<PostResponse> PublishPost(PostDto postDto,int userID)
         {
+            //if (postDto == null)
+            //{
+            //    return new PostResponse
+            //    {
+            //        IsSuccessfull = false,
+            //        Message = "PostDto is null!"
+            //    };
+            //}
+
+            //string newPostQuery = @"INSERT INTO Posts(UserID, PostDescription, TotalComments, TotalLikes, PublishDate, Location) 
+            //                VALUES(@UserID, @PostDescription, @TotalComments, @TotalLikes, GETDATE(), @Location);
+            //                SELECT CAST(SCOPE_IDENTITY() as int)";
+            //string connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+            //try
+            //{
+            //    using (SqlConnection connection = new SqlConnection(connectionString))
+            //    {
+            //        await connection.OpenAsync();
+
+            //        using (SqlCommand command = new SqlCommand(newPostQuery, connection))
+            //        {
+
+            //            command.Parameters.AddWithValue("@UserID", userID);
+
+
+            //            command.Parameters.AddWithValue("@TotalComments", 0);
+            //            command.Parameters.AddWithValue("@TotalLikes", 0);
+            //            if (string.IsNullOrEmpty(postDto.Location))
+            //            {
+            //                command.Parameters.AddWithValue("@Location", DBNull.Value); 
+            //            }
+            //            else
+            //            {
+            //                command.Parameters.AddWithValue("@Location", postDto.Location);
+            //            }
+
+            //            if (string.IsNullOrEmpty(postDto.PostDescription))
+            //            {
+            //                command.Parameters.AddWithValue("@PostDescription", DBNull.Value);
+            //            }
+            //            else
+            //            {
+            //                command.Parameters.AddWithValue("@PostDescription", postDto.PostDescription);
+            //            }
+            //            int postID = (int)await command.ExecuteScalarAsync();
+            //            User user = _dataContext.Users.FirstOrDefault(u => u.Username == postDto.OwnerUsername);
+            //            if(user != null)
+            //            {
+            //                user.TotalPosts += 1;
+            //            }
+            //            var cacheKey = string.Format(PostsCacheKey, postDto.OwnerUsername);
+            //            var versionKey = $"{cacheKey}_Version";
+            //            _memoryCache.Remove(cacheKey);
+            //            return new PostResponse
+            //            {
+            //                IsSuccessfull = true,
+            //                PostID = postID,
+            //                Message = "Post was successfully added"
+            //            };
+            //        }
+            //    }
+            //}
+            //catch (SqlException ex)
+            //{
+            //    _logger.LogError($"Database error: {ex.Message}");
+            //    return new PostResponse
+            //    {
+            //        IsSuccessfull = false,
+            //        Message = $"Database error: {ex.Message}"
+            //    };
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError($"General error: {ex.Message}");
+            //    return new PostResponse
+            //    {
+            //        IsSuccessfull = false,
+            //        Message = $"An unexpected error occurred: {ex.Message}"
+            //    };
+            //}
             if (postDto == null)
             {
                 return new PostResponse
@@ -74,76 +163,55 @@ namespace PixelNestBackend.Repository
                 };
             }
 
-            string newPostQuery = @"INSERT INTO Posts(UserID, PostDescription, TotalComments, TotalLikes, PublishDate, Location) 
-                            VALUES(@UserID, @PostDescription, @TotalComments, @TotalLikes, GETDATE(), @Location);
-                            SELECT CAST(SCOPE_IDENTITY() as int)";
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
-
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+               
+                var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserID == userID);
+                if (user == null)
                 {
-                    await connection.OpenAsync();
-
-                    using (SqlCommand command = new SqlCommand(newPostQuery, connection))
+                    return new PostResponse
                     {
-                      
-                        command.Parameters.AddWithValue("@UserID", userID);
-                       
-                        
-                        command.Parameters.AddWithValue("@TotalComments", 0);
-                        command.Parameters.AddWithValue("@TotalLikes", 0);
-                        if (string.IsNullOrEmpty(postDto.Location))
-                        {
-                            command.Parameters.AddWithValue("@Location", DBNull.Value); 
-                        }
-                        else
-                        {
-                            command.Parameters.AddWithValue("@Location", postDto.Location);
-                        }
-
-                        if (string.IsNullOrEmpty(postDto.PostDescription))
-                        {
-                            command.Parameters.AddWithValue("@PostDescription", DBNull.Value);
-                        }
-                        else
-                        {
-                            command.Parameters.AddWithValue("@PostDescription", postDto.PostDescription);
-                        }
-                        int postID = (int)await command.ExecuteScalarAsync();
-                        User user = _dataContext.Users.FirstOrDefault(u => u.Username == postDto.OwnerUsername);
-                        if(user != null)
-                        {
-                            user.TotalPosts += 1;
-                        }
-                        var cacheKey = string.Format(PostsCacheKey, postDto.OwnerUsername);
-                        var versionKey = $"{cacheKey}_Version";
-                        _memoryCache.Remove(cacheKey);
-                        return new PostResponse
-                        {
-                            IsSuccessfull = true,
-                            PostID = postID,
-                            Message = "Post was successfully added"
-                        };
-                    }
+                        IsSuccessfull = false,
+                        Message = "User not found!"
+                    };
                 }
-            }
-            catch (SqlException ex)
-            {
-                _logger.LogError($"Database error: {ex.Message}");
+
+              
+                var newPost = new Post
+                {
+                    UserID = userID,
+                    PostDescription = string.IsNullOrEmpty(postDto.PostDescription) ? null : postDto.PostDescription,
+                    TotalComments = 0,
+                    TotalLikes = 0,
+                    PublishDate = DateTime.UtcNow, 
+                    Location = string.IsNullOrEmpty(postDto.Location) ? null : postDto.Location
+                };
+
+
+                _dataContext.Posts.Add(newPost);
+                await _dataContext.SaveChangesAsync();
+
+               
+                user.TotalPosts += 1;
+                await _dataContext.SaveChangesAsync();
+
+               
+            
+
                 return new PostResponse
                 {
-                    IsSuccessfull = false,
-                    Message = $"Database error: {ex.Message}"
+                    IsSuccessfull = true,
+                    PostID = newPost.PostID,
+                    Message = "Post was successfully added"
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"General error: {ex.Message}");
+                _logger.LogError($"Error: {ex.Message}");
                 return new PostResponse
                 {
                     IsSuccessfull = false,
-                    Message = $"An unexpected error occurred: {ex.Message}"
+                    Message = $"An error occurred: {ex.Message}"
                 };
             }
         }
@@ -270,21 +338,16 @@ namespace PixelNestBackend.Repository
 
             try
             {
-                var cacheKey = string.Format(PostsCacheKey);
+                var cacheKey = string.Format(PostsCacheKey, username);
+
                 var versionKey = $"{cacheKey}_Version";
+                Console.WriteLine("\nVersion key: " + versionKey + "\n");
 
-
-                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
-                {
-                   
-                    cachedVersion = DateTime.MinValue;
-                }
-                else cachedVersion = DateTime.MaxValue;
-                var latestVersion = DateTime.UtcNow;
               
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts) || cachedVersion < latestVersion)
+              
+                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts) || CacheChange(username))
                 {
-                    Console.WriteLine("Uslo!!");
+                    Console.WriteLine("\nPonovo je pokrenuo query!\n");
                   posts = await _dataContext.Posts
                         .Select(a => new ResponsePostDto
                         {
@@ -321,11 +384,8 @@ namespace PixelNestBackend.Repository
                     {
                         _SAStokenGenerator.appendSasToken(post.ImagePaths);
                     }
-                    _memoryCache.Set(cacheKey, posts, new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = CacheDuration
-                    });
-                    _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
+                  
+                    _memoryCache.Set(versionKey, posts, new MemoryCacheEntryOptions
                     {
                         AbsoluteExpirationRelativeToNow = CacheDuration
                     });
@@ -368,8 +428,9 @@ namespace PixelNestBackend.Repository
                         Message = $"liked your photo.",
                         SenderID = userID,
                         ReceiverID = post.User.UserID,
-                        DateTime = DateTime.Now,
-                        PostID = post.PostID
+                        DateTime = DateTime.UtcNow,
+                        PostID = post.PostID,
+                        IsNew = true
 
                     };
                     if (newNotification.SenderID != newNotification.ReceiverID) _dataContext.Notifications.Add(newNotification);
@@ -380,7 +441,7 @@ namespace PixelNestBackend.Repository
                         PostID = likeDto.PostID,
                         DateLiked = DateTime.UtcNow
                     };
-
+                    post.LastModified = DateTime.UtcNow;
                     _dataContext.LikedPosts.Add(newLikedPost);
                 }
                 else
@@ -394,9 +455,7 @@ namespace PixelNestBackend.Repository
                 if (changes > 0)
                 {
                    
-                    var cacheKey = string.Format(PostsCacheKey);
-                    var versionKey = $"{cacheKey}_Version";
-                    _memoryCache.Remove(cacheKey);
+                   
 
 
                     return new PostResponse
@@ -455,7 +514,7 @@ namespace PixelNestBackend.Repository
                     };
                 }
                 post.TotalComments += 1;
-                
+                post.LastModified = DateTime.UtcNow;
                 
                 if (comment.ParentCommentID.HasValue)
                 {
@@ -531,7 +590,7 @@ namespace PixelNestBackend.Repository
                 PostID = postID,
                 LikeID = likeID,
                 Message = message,
-                DateTime = DateTime.Now,
+                DateTime = DateTime.UtcNow,
                 CommentID = commentID,
                 ParentCommentID = parentCommentID
             };
@@ -615,6 +674,112 @@ namespace PixelNestBackend.Repository
                 Console.WriteLine(ex.Message);
                 return false;
             }
+        }
+
+        public async Task<ResponsePostDto> GetSinglePost(int postID, string currentLoggedUser)
+        {
+            try
+            {
+                var cacheKey = string.Format(PostsCacheKey, currentLoggedUser);
+                var versionKey = $"{cacheKey}_Version";
+                int currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
+                if (_memoryCache.TryGetValue(cacheKey, out List<ResponsePostDto>? allPosts) && allPosts != null)
+                {
+                    var cachedPost = allPosts.FirstOrDefault(p => p.PostID == postID);
+                    if (cachedPost != null)
+                    {
+                        Console.WriteLine("\n uzeo iz kesa \n");
+                        return cachedPost; 
+                    }
+                }
+               
+                ResponsePostDto? post = await _dataContext.Posts
+                    .Where(u => u.PostID == postID)
+                   .Select(a => new ResponsePostDto
+                   {
+                       PostDescription = a.PostDescription,
+                       OwnerUsername = a.User.Username,
+                       TotalComments = a.TotalComments,
+                       TotalLikes = a.TotalLikes,
+                       PostID = a.PostID,
+                       IsDeletable = a.UserID == currentLoggedUserID,
+                       PublishDate = a.PublishDate,
+                       ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
+                       {
+                           Path = l.Path,
+                           PhotoDisplay = l.PhotoDisplay,
+                           PathID = l.PathID
+
+                       }).ToList(),
+                       Location = a.Location,
+                       LikedByUsers = a.LikedPosts.Select(l => new LikeDto
+                       {
+                           Username = l.User.Username
+
+                       }).ToList(),
+                       SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
+                       {
+                           Username = s.User.Username
+
+                       }).ToList()
+                   }).FirstOrDefaultAsync();
+              
+                
+              
+                 if(post != null)
+                {
+                    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                }
+                 
+                
+
+                _logger.LogInformation("Posts retrieved successfully.");
+
+
+
+                return post;
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogError($"Database error while retrieving posts: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An unexpected error occurred: {ex.Message}");
+                throw;
+            }
+        }
+
+        public bool CacheChange(string username)
+        {
+            var cacheKey = string.Format(PostsCacheKey,username);
+            var versionKey = $"{cacheKey}_Version";
+
+            if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
+            {
+                cachedVersion = DateTime.MinValue; 
+            }
+
+            var latestVersion = _getLatestVersion();
+
+            bool hasChanged = cachedVersion < latestVersion;
+
+            Console.WriteLine("\nLatest version date: " + latestVersion + "\n");
+            Console.WriteLine("\nCached version date: " + cachedVersion + "\n");
+            Console.WriteLine("\nCache change: " + hasChanged + "\n");
+           
+          
+
+            return hasChanged;
+
+        }
+        private DateTime _getLatestVersion()
+        {
+            return _dataContext.Posts
+                .OrderByDescending(p => p.LastModified) 
+                .Select(p => p.LastModified)
+                .FirstOrDefault();
         }
     }
 }

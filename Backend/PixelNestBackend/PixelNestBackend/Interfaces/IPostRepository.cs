@@ -12,7 +12,9 @@ namespace PixelNestBackend.Interfaces
         Task<ICollection<ResponsePostDto>> GetPosts(string username);
         Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username,string currentLoggedUser);
         Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location, string username);
+        Task<ResponsePostDto> GetSinglePost(int postID, string currentLoggedUser);
         bool SavePost(int userID, SavePostDto savePostDto, bool isDuplicate);
+        bool CacheChange(string username);
         PostResponse LikePost(LikeDto likeDto, bool isLiked, int userID);
         PostResponse Comment(Comment comment);
         Task<DeleteResponse> DeletePost(int postID);
