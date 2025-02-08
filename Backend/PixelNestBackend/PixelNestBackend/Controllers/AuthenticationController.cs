@@ -46,6 +46,7 @@ namespace PixelNestBackend.Controllers
                 Expires = tokenExpirationDate,
                 Path = "/"
             };
+            Response.Cookies.Append("jwtToken", token, cookieOptions);
             return Ok(new LoginResponse
             {
                 Response = "Token refreshed!",
