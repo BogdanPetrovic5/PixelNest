@@ -34,8 +34,33 @@ export class DashboardStateService {
 
   private _sessionExpiredDialog = new BehaviorSubject<boolean>(false)
   sessionExpiredDialog$ = this._sessionExpiredDialog.asObservable();
+
+  private _scrollPosition = new BehaviorSubject<number>(0)
+  scrollPosition = this._scrollPosition.asObservable();
+
+
+  private _isPostApiFinished = new BehaviorSubject<boolean>(false)
+  isPostApiFinished = this._isPostApiFinished.asObservable();
+  private _isStoryApiFinished = new BehaviorSubject<boolean>(false)
+  isStoryApiFinished = this._isStoryApiFinished.asObservable();
+
+  
   constructor() { }
 
+  setIsPostApiFinished(value:boolean){
+    this._isPostApiFinished.next(value)
+  }
+  setIsStoryApiFinished(value:boolean){
+    this._isStoryApiFinished.next(value)
+  }
+
+
+  setNewScrollPosition(value:number){
+    this._scrollPosition.next(value);
+  }
+  getScrollPosition() : number{
+    return this._scrollPosition.getValue()
+  }
   setIsNewStoryTabOpen(isSelected:boolean){
     this._newStoryTab.next(isSelected);
   }

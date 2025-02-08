@@ -29,7 +29,7 @@ export class NewNotificationComponent implements OnInit, OnDestroy{
             const stateMap: Record<string, keyof Pick<this, 'like' | 'comment' | 'follower'>> = {
               Like: 'like',
               Comment: 'comment',
-              Follower: 'follower',
+              Follow: 'follower',
             };
         
             Object.keys(stateMap).forEach(key => this[stateMap[key]] = false); 

@@ -1,8 +1,12 @@
 .alert{
     
-    position: absolute;
-    top: 80%;
-    right: calc(50% - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: calc(100% - 20px);
+    width: 100%;
+ 
     iframe{
         border: none;
     }

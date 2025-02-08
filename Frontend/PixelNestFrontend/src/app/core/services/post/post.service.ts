@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
+import { PostDto } from '../../dto/post.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,10 @@ import { environment } from 'src/environments/environment.development';
 export class PostService {
 
   constructor(private _httpClient:HttpClient) { }
-
+  getSinglePost(postID:number):Observable<PostDto>{
+    const url = `${environment.apiUrl}/api/Post/GetPost?postID=${postID}`
+    return this._httpClient.get<PostDto>(url);
+  }
   createNewPost(body:any):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/PublishPost`
     return this._httpClient.post<any>(url, body);
@@ -19,7 +23,7 @@ export class PostService {
     const url = `${environment.apiUrl}/api/Post/GetPosts?${parameter}&page=${currentPage}`
     return this._httpClient.get<any>(url)
   }
-  likePost(postID:number, username:string):Observable<any>{
+  likePost(postID?:number, username?:string):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/LikePost`
     return this._httpClient.post(url, {
       PostID:postID,

@@ -28,6 +28,7 @@ import { LottieNotificationComponent } from './components/lottie-notification/lo
 import { InboxIconComponent } from './components/inbox-icon/inbox-icon.component';
 import { NewNotificationComponent } from './components/new-notification/new-notification.component';
 import { NotificationIconComponent } from './components/notification-icon/notification-icon.component';
+import { PixelnestLoadingComponent } from './components/pixelnest-loading/pixelnest-loading.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { NotificationIconComponent } from './components/notification-icon/notifi
     LottieNotificationComponent,
     InboxIconComponent,
     NewNotificationComponent,
-    NotificationIconComponent
+    NotificationIconComponent,
+    PixelnestLoadingComponent
   ],
   imports: [
     CommonModule,
@@ -84,7 +86,8 @@ import { NotificationIconComponent } from './components/notification-icon/notifi
     MessageComponent,
     TimeAgoPipe,
     LottieNotificationComponent,
-    InboxIconComponent
+    InboxIconComponent,
+    PixelnestLoadingComponent
   ]
 })
 export class SharedModule { }

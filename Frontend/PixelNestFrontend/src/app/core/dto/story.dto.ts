@@ -1,4 +1,5 @@
-import { ImagePathDto } from "./post.dto";
+import { ImagePathDto } from "./imagePath.dto";
+
 
 export interface StoryDto{
     ownerUsername:string;

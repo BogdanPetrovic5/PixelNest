@@ -12,6 +12,7 @@ import { InboxComponent } from './inbox/inbox.component';
 import { NotificationComponent } from './notification-modal/notification.component';
 import { SessionExpiredDialogComponent } from './session-expired-dialog/session-expired-dialog.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { PostViewComponent } from './post-view/post-view.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
     InboxComponent,
     NotificationComponent,
     SessionExpiredDialogComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    PostViewComponent
    
   ],
   imports: [

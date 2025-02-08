@@ -8,6 +8,7 @@ import { StoryStateService } from 'src/app/core/services/states/story-state.serv
 import { StoryService } from 'src/app/core/services/story/story.service';
 import 'hammerjs';
 import { math } from '@maptiler/sdk';
+import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 @Component({
   selector: 'app-story',
   templateUrl: './story.component.html',
@@ -19,7 +20,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
   @ViewChild('storyListWrapper', { static: false }) storyListWrapper!: ElementRef<HTMLDivElement>
   @ViewChildren('userBox') userBoxes!: QueryList<ElementRef>;
   username:string = ""
-
+  stringUrl:string = ""
   groupedStories:StoriesDto[] = []
   storiesByUser:StoriesDto[]= [];
   extractedStories:StoryDto[] = [];
@@ -47,7 +48,8 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
     private _dashboardState:DashboardStateService,
     private _stateService:StoryStateService,
     private _storyState:StoryStateService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private _profileState:ProfileStateService
   ){}  
   ngOnDestroy():void{
     this.subscription.unsubscribe();
@@ -55,7 +57,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
   }
   ngOnInit(): void {
     this.username = this._cookieService.get("username");
-    this._initilizeComponent();
+    this._initializeComponent();
     
   }
   ngAfterViewInit():void{
@@ -190,11 +192,11 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
     return width;
   }
 
-  private _initilizeComponent() {
-    this._initilizeSubscriptions();
+  private _initializeComponent() {
+    this._initializeSubscriptions();
   }
 
-  private _initilizeSubscriptions() {
+  private _initializeSubscriptions() {
     this.subscription.add(
       this._dashboardState.newStoryTab$.subscribe({
         next:response=>{
@@ -202,26 +204,6 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
         }
       })
     )
-    // this.subscription.add(
-    //   forkJoin({
-    //     groupedStories:this._storyState.fetchStories(this.username, false),
-    //     storiesByUser:this._storyState.fetchStories(this.username, true)
-    //   }).subscribe({
-    //     next:({groupedStories, storiesByUser})=>{
-          
-    //       this.groupedStories = groupedStories;
-    //       setTimeout(() => {
-    //         this.initializeStepSize();
-    //       }, 0);
-    //       if(storiesByUser.length > 0){
-    //         this.storiesByUser = storiesByUser;
-            
-    //         this.extractFromResponse(storiesByUser);
-            
-    //       }
-    //     }
-    //   })
-    // )
     this._storyState.fetchStories(this.username, false);
     
     this.subscription.add(
@@ -233,7 +215,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
             const aHasUnread = a.stories.some(story => story.seenByUser === false);
             const bHasUnread = b.stories.some(story => story.seenByUser === false);
             
-            // Sort groups with unread stories first
+          
             if (aHasUnread === bHasUnread) return 0;
             return aHasUnread ? -1 : 1;
           });
@@ -260,32 +242,13 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
         }
       })
     )
-    // this.subscription.add(
-    //   this._storyState.currentPage$
-    //     .pipe(
-    //       switchMap((page) =>
-    //         forkJoin({
-    //           groupedStories: this._storyService.getStories(this.username, false, page),
-    //           storiesByUser: this._storyService.getStories(this.username, true, 1),
-    //         })
-    //       )
-    //     )
-    //     .subscribe({
-    //       next: ({ groupedStories, storiesByUser }) => {
-    //         this.groupedStories = this.groupedStories.concat(groupedStories);
-            
-    //         if (storiesByUser.length > 0) {
-    //           this.storiesByUser = storiesByUser;
-    //           this.extractFromResponse(storiesByUser);
-              
-    //         }
-    //       },
-    //     })
-    // );
-
-
-
-
+    this.subscription.add(
+      this._profileState.currentProfileUrl$.subscribe({
+        next:response =>{
+          this.stringUrl = response
+        }
+      })
+    )
     this.subscription.add(
         this._dashboardState.storyPreview$.subscribe({
           next:response=>{

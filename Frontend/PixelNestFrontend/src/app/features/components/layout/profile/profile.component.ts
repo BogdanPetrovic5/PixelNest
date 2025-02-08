@@ -53,15 +53,16 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _chatState:ChatStateService
   ){}
   ngOnInit(): void {
-    
+    this._userSessions.setUrl("Profile")
     this._postState.setPosts([]);
-    this._postState.clearCache();
-    this._initilizeApp();
+ 
+    this._initializeComponent();
   }
 
   ngOnDestroy(): void {
       this.subscribe.unsubscribe();
       this._postState.setPosts([]);
+      
       this._postState.setQuery(undefined);
       
   }
@@ -71,10 +72,12 @@ export class ProfileComponent implements OnInit, OnDestroy{
     this._router.navigate([`/Chat/${route}`])
     this._chatState.setUser(this.user);
   }
+
   toggleEdit(){
     this.editProfile = !this.editProfile;
     if(this.editProfile == false) this._cdr.detectChanges();
   }
+
   follow(){
     this.isFollowing = !this.isFollowing
     let currentUsername = this._userSessions.getFromCookie("username")
@@ -87,7 +90,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
         }
       })
     )
-    
   }
 
   checkIsFollowing(){
@@ -134,7 +136,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   
   }
 
-  private _initilizeApp(){
+  private _initializeComponent(){
     
     // this.subscribe.add(
     //   this._route.paramMap.subscribe(params => {
@@ -215,7 +217,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
     )
   }
   private _resetProfileState() {
-    this._postState.clearCache();
+  
     this._postState.setPosts([]);
    
     this.posts = [];

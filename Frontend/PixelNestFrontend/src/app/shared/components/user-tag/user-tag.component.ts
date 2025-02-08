@@ -11,8 +11,8 @@ import { UserService } from 'src/app/core/services/user/user.service';
   styleUrls: ['./user-tag.component.scss']
 })
 export class UserTagComponent implements OnInit{
-  @Input() post:PostDto | undefined = undefined
-  @Input() username!:string 
+  @Input() post?:PostDto
+  @Input() username?:string | any 
   @Input() date?:Date
   @Input() location?:string 
   formattedDate:string = ""
@@ -24,12 +24,12 @@ export class UserTagComponent implements OnInit{
     private _userService:UserService
   ){}
   ngOnInit(): void {
-    this._userService.getProfilePicture(this.username).subscribe({
-      next:response=>{
-        this.stringUrl = response.path;
+    // this._userService.getProfilePicture(this.username).subscribe({
+    //   next:response=>{
+    //     this.stringUrl = response.path;
         
-      }
-    })
+    //   }
+    // })
   
     this._formatDate()
     

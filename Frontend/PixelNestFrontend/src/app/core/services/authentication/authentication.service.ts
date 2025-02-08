@@ -5,6 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment.development';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { UserSessionService } from '../user-session/user-session.service';
+import { CustomRouteReuseStrategy } from '../../route-reuse-strategy';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +13,8 @@ export class AuthenticationService {
 
   constructor(
     private _httpClient:HttpClient,
-    private _userSessionService:UserSessionService
+    private _userSessionService:UserSessionService,
+    private _routeReuse:CustomRouteReuseStrategy
   ) { }
   ngOnInit():void{
     
@@ -23,6 +25,7 @@ export class AuthenticationService {
   }
   logout(email:string):Observable<any>{
     let url = `${environment.apiUrl}/api/Authentication/Logout`
+    
     return this._httpClient.post<any>(url, {
       Email:email
     }, {withCredentials:true});

@@ -10,9 +10,15 @@
                     <app-profile-image [username]="notification.username"></app-profile-image>
                     <h1 (click)="navigation('Profile/'+notification.username)">{{notification.username}}</h1>
                     <p>{{notification.message}}</p>
+                    <p>{{notification.date | timeAgo}}</p>
                 </div>
-                <div class="notification-source">
-
+                <div class="notification-source" *ngIf="notification.postID" (click)="navigation('Post/'+notification.postID)">
+                    <img *ngIf="notification.imagePath.length > 0" 
+                    src="{{baseUrl}}{{notification.imagePath[0].path}}" 
+                    loading="lazy" [ngStyle]="{'object-fit':notification.imagePath[0].photoDisplay}" alt=""
+                    
+                    
+                    >
                 </div>
             </div>
         </div>

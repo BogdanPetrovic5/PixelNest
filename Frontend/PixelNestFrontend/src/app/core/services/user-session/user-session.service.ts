@@ -13,6 +13,9 @@ export class UserSessionService {
   private _userActivity$ = new BehaviorSubject<boolean>(false);
   private _refreshInterval = 5 * 60 * 1000;
 
+  private _currentUrl = new BehaviorSubject<string>("/Dashboard/Feed")
+  currentUrl$ = this._currentUrl.asObservable()
+
   private _tokenExpiration: number | null = null;
   logOutDialog$ = this._logOutDialog.asObservable();
 
@@ -21,6 +24,9 @@ export class UserSessionService {
     private _httpClient:HttpClient,
     private _dashboardState:DashboardStateService
   ) { }
+ setUrl(value:string){
+  this._currentUrl.next(value)
+ }
   setTokenExpiration(expiration: string): void {
     this._tokenExpiration = new Date(expiration).getTime();
     this.scheduleTokenRefresh();

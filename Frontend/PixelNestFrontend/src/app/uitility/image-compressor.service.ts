@@ -24,11 +24,8 @@ export class ImageCompressorService {
           const compressedFile = new File([compressedBlob], fileName, {
             type: 'image/jpeg'
           });
-          const originalSizeMB = (file.size / (1024 * 1024)).toFixed(2); // Convert to MB and round to 2 decimal places
-          const compressedSizeMB = (compressedFile.size / (1024 * 1024)).toFixed(2); // Convert to MB and round to 2 decimal places
-      
-          console.log(`Original File Size: ${originalSizeMB} MB`);
-          console.log(`Compressed File Size: ${compressedSizeMB} MB`);
+        
+     
           return compressedFile;
       }catch(error){
         console.error('Error compressing file:', error);

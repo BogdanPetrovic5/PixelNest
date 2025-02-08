@@ -27,7 +27,7 @@ export class PostComponent implements OnInit{
 
   @Input() post!:PostDto;
   @Input() postIndex!:number
-  
+  @Input() postID!:number
   likedByUsers: LikedByUsers[] = [];
   savedByUsers:SavedPosts[] = []
 
@@ -57,18 +57,18 @@ export class PostComponent implements OnInit{
 
     private _postService:PostService,
     private _userSession:UserSessionService,
-   
+    private _postState:PostStateService
   ){
    
   }
   ngAfterViewInit() {
   
     this.containerWidth = this.getImageWidth();
-    
+ 
   }
   ngOnInit():void{
     this.baseUrl = environment.blobStorageBaseUrl;
-    this._initilizeComponent();
+    this._initializeComponent();
     
     const element = document.getElementById(`image-slider-${this.postIndex}`); 
     if(element){
@@ -203,7 +203,7 @@ export class PostComponent implements OnInit{
       }
     })
   }
-  private _initilizeComponent(){
+  private _initializeComponent(){
     this.username = this._userSession.getFromCookie("username");
     this.likedByUsers = this.post.likedByUsers;
     this.savedByUsers = this.post.savedByUsers;
@@ -235,6 +235,7 @@ export class PostComponent implements OnInit{
     if(!this.isLiked) this.likedByUsers.push({username: this.username})
     else this.likedByUsers = this.likedByUsers.filter(user => user.username !== this.username)
     this.isLiked = !this.isLiked
+
 
   }
 

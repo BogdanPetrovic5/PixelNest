@@ -9,6 +9,8 @@ import { ImageCompressorService } from 'src/app/uitility/image-compressor.servic
 import { Map, Marker, geocoding, config } from '@maptiler/sdk'; 
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { PostStateService } from 'src/app/core/services/states/post-state.service';
+import { IndexedDbService } from 'src/app/core/services/indexed-db/indexed-db.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-post',
@@ -50,7 +52,9 @@ export class NewPostComponent implements OnInit{
     private _postService:PostService,
     private _postState:PostStateService,
     private _imageCompressorService:ImageCompressorService,
-    private _lottieState:LottieStateService
+    private _lottieState:LottieStateService,
+    private _indexDb:IndexedDbService,
+    private _router:Router
   ){
     config.apiKey = 'aqR39NWYQyZAdFc6KtYh'
   }
@@ -103,9 +107,7 @@ export class NewPostComponent implements OnInit{
       setTimeout(()=>{
         
         this._lottieState.setIsSuccess(false);
-        this._postState.setPosts([]);
-        this._postState.clearCache();
-        this._postState.loadPosts(1);
+        this._resetState();
       }, 1600)
     }, (error:HttpErrorResponse) =>{
       this.newPostForm = false
@@ -116,6 +118,15 @@ export class NewPostComponent implements OnInit{
       }, 1500)
     })
 
+  }
+
+  private async _resetState(){
+    this._router.navigate(['Dashboard/Feed'])
+    this._postState.setQuery(undefined)
+    this._postState.resetFeed([])
+    this._postState.setPosts([]);
+    this._postState.loadPosts(1);
+    await this._indexDb.clearPosts();
   }
 
   toggleObjectFit(): void {

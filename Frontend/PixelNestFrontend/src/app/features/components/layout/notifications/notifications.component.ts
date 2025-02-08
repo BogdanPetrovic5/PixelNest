@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { NotificationDto } from 'src/app/core/dto/notification.dto';
 import { NotificationOpened } from 'src/app/core/dto/notificationOpened.dto';
 import { NotificationService } from 'src/app/core/services/notification/notification.service';
+import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-notifications',
@@ -10,37 +12,47 @@ import { NotificationService } from 'src/app/core/services/notification/notifica
   styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit{
-
+baseUrl:string = ""
   notifications:NotificationDto[] = []
   notificationsID:NotificationOpened = {
     notificationID:[]
   }
   constructor(
     private _notificationService:NotificationService,
-    private _router:Router
+    private _router:Router,
+ 
   ){
 
   }
 
   ngOnInit(): void {
+   
+     this.baseUrl = environment.blobStorageBaseUrl;
     this._notificationService.getNotifications().subscribe({
       next:response=>{
         this.notifications = response;
-        console.log(this.notifications)
-        for(let i = 0; i< this.notifications.length;i++){
-          this.notificationsID.notificationID.push(this.notifications[i].notificationID)
-        }
-        console.log(this.notificationsID.notificationID)
-        this._notificationService.markAsOpened(this.notificationsID).subscribe({
-          next:response=>{
-            console.log(response)
-          }
-        })
-        console.log(this.notifications)
+     
+        this._openNotifications();
+        
       }
     })
+  
   }
+
   navigation(url:string){
     this._router.navigate([url]);
+  }
+  private _openNotifications(){
+    for(let i = 0; i< this.notifications.length;i++){
+      this.notificationsID.notificationID.push(this.notifications[i].notificationID)
+    }
+    
+    console.log(this.notificationsID.notificationID)
+    this._notificationService.markAsOpened(this.notificationsID).subscribe({
+      next:response=>{
+      
+      }
+    })
+
   }
 }

@@ -58,6 +58,14 @@ $HFONT: "Roboto Condensed", sans-serif;
         z-index: 5 !important;
         top: 0;
     }
+    app-pixelnest-loading{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100dvh;
+        z-index: 7;
+    }
 }
 @media only screen and (min-width:768px) and (max-width:1023px) {
     .container{

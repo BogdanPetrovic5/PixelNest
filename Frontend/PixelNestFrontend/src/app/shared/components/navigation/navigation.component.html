@@ -15,18 +15,36 @@
         <div class="hr"></div>
         <div class="navigation">
           
-            <div class="feed nav-sec"(click)="changeTab(1)" [ngClass]="{'selected':selectedTab == 1}" (click)="navigate('/Dashboard')"><img src="./assets/images/home.png" ><p>Feed</p></div>
+            <div class="feed nav-sec"(click)="changeTab(1)" [ngClass]="{'selected':selectedTab == 1}" (click)="navigate('/Dashboard')">
+                <img loading="lazy" src="./assets/images/home.png" >
+                <p>Feed</p>
+            </div>
 
-            <div class="feed nav-sec"(click)="changeTab(4)" [ngClass]="{'selected':selectedTab == 4}" (click)="navigateToUserProfile()"><app-profile-image [stringUrl]="stringUrl" [username]="username"></app-profile-image><p>Profile</p></div>
+            <div class="feed nav-sec"(click)="changeTab(4)" [ngClass]="{'selected':selectedTab == 4}" (click)="navigateToUserProfile()">
+                <app-profile-image [stringUrl]="stringUrl" [username]="username"></app-profile-image>
+                <p>Profile</p>
+            </div>
 
-            <div class="messages nav-sec"(click)="changeTab(2)"  [ngClass]="{'selected':selectedTab == 2}" (click)="navigate('/Inbox')"><app-inbox-icon></app-inbox-icon><p>Messages</p></div>
+            <div class="messages nav-sec"(click)="changeTab(2)"  [ngClass]="{'selected':selectedTab == 2}" (click)="navigate('/Inbox')">
+                <app-inbox-icon></app-inbox-icon>
+                <p>Messages</p>
+            </div>
 
-            <div class="notifications nav-sec" (click)="changeTab(3)" [ngClass]="{'selected':selectedTab == 3}"> <app-new-notification *ngIf="newNotification"></app-new-notification> <img src="./assets/images/notification.png"><p>Notifications</p></div>
+            <div class="notifications nav-sec" (click)="changeTab(3)" [ngClass]="{'selected':selectedTab == 3}" (click)="navigate('/Notifications')">
+                <app-new-notification *ngIf="newNotification"></app-new-notification> <app-notification-icon></app-notification-icon>
+                <p>Notifications</p>
+            </div>
             
-            <div class="search nav-sec" (click)="changeTab(5)" [ngClass]="{'selected':selectedTab == 5}" (click)="navigate('/Search')"><img src="./assets/images/search.png"><p>Search</p></div>
-            <div class="new-post nav-sec" (click)="openNewPostDialog()"><img src="./assets/images/plus.png"><p>Create</p></div>
+            <div class="search nav-sec" (click)="changeTab(5)" [ngClass]="{'selected':selectedTab == 5}" (click)="navigate('/Search')">
+                <img loading="lazy" src="./assets/images/search.png">
+                <p>Search</p>
+            </div>
+            <div class="new-post nav-sec" (click)="openNewPostDialog()">
+                <img loading="lazy" src="./assets/images/plus.png">
+                <p>Create</p>
+            </div>
             <div class="logout nav-sec" (click)="logout()">
-                <img src="./assets/images/logout.png" alt="">
+                <img src="./assets/images/logout.png" alt="" loading="lazy">
                 <p>Logout</p>
             </div>
         </div>

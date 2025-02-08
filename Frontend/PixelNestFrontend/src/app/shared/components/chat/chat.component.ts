@@ -57,7 +57,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
   ngOnInit(): void {
     this.messageData = this._createDefaultMessage()
-    this._initilizeComponent()
+    this._initializeComponent()
 
   }
 
@@ -90,7 +90,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     })
   
   }
-  private _initilizeComponent(){
+  private _initializeComponent(){
    
     this._route.paramMap
         .pipe(

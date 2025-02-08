@@ -95,8 +95,10 @@ $HFONT: "Roboto Condensed", sans-serif;
                     right: 0;
                     position: absolute;
                 }
+                app-notification-icon{
 
-                img, app-profile-image, app-inbox-icon{
+                }
+                img, app-profile-image, app-inbox-icon, app-notification-icon{
                     width: 27px;
                     height: 27px;
                 }

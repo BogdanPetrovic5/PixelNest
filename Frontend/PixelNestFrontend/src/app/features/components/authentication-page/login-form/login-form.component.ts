@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
+import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
@@ -21,7 +22,8 @@ export class LoginFormComponent {
     private _formBuilder:FormBuilder,
     private _authService:AuthenticationService,
     private _lottieState:LottieStateService,
-    private _userSession:UserSessionService
+    private _userSession:UserSessionService,
+    private _dashboardState:DashboardStateService
   ){
     this.loginForm = this._formBuilder.group({
       Email:['', Validators.required],
@@ -43,7 +45,9 @@ export class LoginFormComponent {
         setTimeout(() => {
           
           this._lottieState.setIsSuccess(false)
+       
           this._router.navigate(["/Dashboard"])
+          
           this._userSession.setToCookie("tokenExpirationAt", response.tokenExpiration)
           console.log(response.tokenExpiration)
         }, 1500);

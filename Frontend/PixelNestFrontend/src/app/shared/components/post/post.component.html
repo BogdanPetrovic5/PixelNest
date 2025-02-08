@@ -13,13 +13,13 @@
                 
             </div>
             <div class="delete" *ngIf="post.isDeletable" >
-                <img src="/assets/images/trash-bin.png" (click)="openDeleteDialog()">
+                <img src="/assets/images/trash-bin.png" (click)="openDeleteDialog()" loading="lazy">
             </div>
         </div>
         <div class="image-holder"  
             >
-            <img class="right" src="/assets/images/next.png" (click)="onSwipeLeft()" *ngIf="post.imagePaths.length > 1">
-            <img class="left" src="/assets/images/prev.png" (click)="onSwipeRight()" *ngIf="post.imagePaths.length > 1">
+            <img class="right" src="/assets/images/next.png" (click)="onSwipeLeft()" *ngIf="post.imagePaths.length > 1" loading="lazy">
+            <img class="left" src="/assets/images/prev.png" (click)="onSwipeRight()" *ngIf="post.imagePaths.length > 1" loading="lazy">
             <div class="image-slider" [id]="'image-slider-'+this.postIndex"
                
                 (touchstart)="onPanStart($event, postIndex)" 
@@ -55,19 +55,19 @@
        <div class="post-options">
             <div class="basic">
                 <div class="option" >
-                    <img *ngIf="!isLiked" src="./assets/images/notLiked.png" alt="" (click)="likePost(post.postID)">
-                    <img *ngIf="isLiked" src="./assets/images/liked.png" alt="" (click)="likePost(post.postID)">
-                    <p (click)="showLikes()">{{likedByUsers.length}} Likes</p>
+                    <img *ngIf="!isLiked" src="./assets/images/notLiked.png" alt="" (click)="likePost(post.postID)" loading="lazy">
+                    <img *ngIf="isLiked" src="./assets/images/liked.png" alt="" (click)="likePost(post.postID)" loading="lazy"> 
+                    <p (click)="showLikes()">{{likedByUsers?.length}} Likes</p>
                 </div>
                 <div class="option" (click)="showComments()">
-                    <img src="./assets/images/comment.png" alt="">
+                    <img src="./assets/images/comment.png" alt="" loading="lazy">
                     <p>{{post.totalComments}} comments</p> 
                 </div>
             </div>
            <div class="basic-1">
              <div class="option" (click)="savePost()">
-                <img *ngIf="isSavedByUser()" src="./assets/images/saved.png">
-                <img *ngIf="!isSavedByUser()" src="./assets/images/unsaved.png">
+                <img *ngIf="isSavedByUser()" src="./assets/images/saved.png" loading="lazy">
+                <img *ngIf="!isSavedByUser()" src="./assets/images/unsaved.png" loading="lazy">
              </div>
            </div>
        </div>

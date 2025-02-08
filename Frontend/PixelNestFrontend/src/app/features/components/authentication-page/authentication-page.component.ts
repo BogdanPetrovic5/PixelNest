@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
+import { CustomRouteReuseStrategy } from 'src/app/core/route-reuse-strategy';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
@@ -25,12 +26,13 @@ export class AuthenticationPageComponent implements OnInit{
   constructor(
     private _route:ActivatedRoute,
     private _userSession:UserSessionService,
-    private _lottieState:LottieStateService
+    private _lottieState:LottieStateService,
+    private _routeReuse:CustomRouteReuseStrategy
   ){}
 
   ngOnInit():void{
 
-
+    this._routeReuse.destroyComponents();
     this.subscriptions.add(
       this._lottieState.isSuccess$.subscribe({
         next:response=>{

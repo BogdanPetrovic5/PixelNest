@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IndexedDbService } from 'src/app/core/services/indexed-db/indexed-db.service';
 import { PostService } from 'src/app/core/services/post/post.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { PostStateService } from 'src/app/core/services/states/post-state.service';
@@ -17,7 +18,8 @@ export class DeleteDialogComponent {
       private _postService:PostService,
       
       private _postState:PostStateService,
-      private _lottie:LottieStateService
+      private _lottie:LottieStateService,
+      private _indexDB:IndexedDbService
     ){
      
     }
@@ -27,9 +29,11 @@ export class DeleteDialogComponent {
       this._postService.deletePost(this.postID).subscribe({
         next:response=>{
          
+          this._postState.resetFeed([])
           this._postState.setPosts([]);
           this._postState.loadPosts(1);
           this._lottie.setIsInitialized(false);
+          this._indexDB.clearPosts()
         },
         error:error=>{
           console.error(error);

@@ -35,14 +35,16 @@ export class LocationComponent implements OnInit, OnDestroy{
     config.apiKey = 'aqR39NWYQyZAdFc6KtYh'
   }
   ngOnInit(): void {
-      this._initilizeApp();
+      this._initializeComponent();
   }
   ngOnDestroy(): void {
       this.subscribe.unsubscribe();
       this._postState.setPosts([]);
+      this._postState.setQuery(undefined)
   }
   private loadPosts(){
     const parameter = `location=${this.location}`
+    this._postState.setQuery(parameter)
     this._postService.getPosts(1,parameter).subscribe({
       next:response=>{
         this.posts = response
@@ -75,7 +77,7 @@ export class LocationComponent implements OnInit, OnDestroy{
     return null;
   }
 }
-  private _initilizeApp(){
+  private _initializeComponent(){
     this.subscribe.add(
       this._router.events.pipe(
         filter(event => event instanceof NavigationEnd)

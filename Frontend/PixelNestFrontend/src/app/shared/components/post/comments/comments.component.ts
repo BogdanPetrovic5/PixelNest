@@ -28,7 +28,7 @@ export class CommentsComponent {
 
   }
   ngOnInit():void{
-     this._initilizeApp();
+     this._initializeComponent();
   }
   
   addComment(inputElement: HTMLInputElement){
@@ -66,7 +66,7 @@ export class CommentsComponent {
       })
     )
   }
-  private _initilizeApp(){
+  private _initializeComponent(){
     this.postID = this._userSession.getFromLocalStorage("postID");
     this.username = this._userSession.getFromCookie("username")
     this.getComments().subscribe({

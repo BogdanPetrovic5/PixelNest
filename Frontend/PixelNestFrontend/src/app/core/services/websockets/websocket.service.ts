@@ -59,8 +59,8 @@ export class WebsocketService {
      
         this._chatState.setActiveUsers(data.Users);
       }
-      console.log(data);
-      if(data.Type === "Like" || data.Type === "Comment" || data.Type === "Follower"){
+      
+      if(data.Type === "Like" || data.Type === "Comment" || data.Type === "Follow"){
           this._notificationState.setNewNotification(true)
           this._notificationState.setNotificationType(data.Type)
           this._notificationState.updateNotification(1);

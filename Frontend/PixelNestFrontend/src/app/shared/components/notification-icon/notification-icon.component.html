@@ -1,4 +1,4 @@
 <div class="img-container">
-    <span *ngIf="newNotifications > 0">{{newNotifications}}</span>
-    <img src="/assets/images/notification.png" (click)="navigate('/Notifications')">
+    <span  *ngIf="newNotifications > 0">{{newNotifications}}</span>
+    <img loading="lazy" src="/assets/images/notification.png" (click)="navigate('/Notifications')">
 </div>

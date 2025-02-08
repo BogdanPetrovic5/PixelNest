@@ -1,19 +1,27 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CustomRouteReuseStrategy } from 'src/app/core/route-reuse-strategy';
+import { ApiTrackerService } from 'src/app/core/services/api-tracker/api-tracker.service';
+import { CacheService } from 'src/app/core/services/cache/cache.service';
 import { ChatService } from 'src/app/core/services/chat/chat.service';
+import { IndexedDbService } from 'src/app/core/services/indexed-db/indexed-db.service';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { ChatStateService } from 'src/app/core/services/states/chat-state.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { NotificationStateService } from 'src/app/core/services/states/notification-state.service';
+import { PostStateService } from 'src/app/core/services/states/post-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { WebsocketService } from 'src/app/core/services/websockets/websocket.service';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
+  styleUrls: ['./layout.component.scss'],
+  
 })
-export class LayoutComponent implements OnInit, OnDestroy{
+export class LayoutComponent implements OnInit, OnDestroy, AfterContentInit{
   newPost:boolean | null = false;
   subscriptions: Subscription = new Subscription();
 
@@ -23,27 +31,42 @@ export class LayoutComponent implements OnInit, OnDestroy{
   logOutDialog:boolean = false;
   isNotification:boolean = false;
   sessionExpired:boolean = false;
-  
+  isFeedInitilizing:boolean = false
+
   constructor(
     private _dashboardStateManagement:DashboardStateService,
     private _lottieState:LottieStateService,
     private _userSession:UserSessionService,
     private _websocketService:WebsocketService,
-    private _chatService:ChatService,
     private _chatState:ChatStateService,
-    private _notificationState:NotificationStateService
+    private _notificationState:NotificationStateService,
+    private _cacheService:CacheService,
+    private _postState:PostStateService,
+    private _authState:AuthStateService,
+    private _cdr:ChangeDetectorRef,
+    private _apiTracker:ApiTrackerService
   ){
+   
+  }
+  ngAfterContentInit(): void {
     
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-   
+    
     this._websocketService.close();
     this._chatState.resetNewMessages()
     this._notificationState.setNotificationNumber(0);
-    
+    this._postState.feedCurrentPage = 1;
+    this._postState.setPosts([])
+    this._postState.resetFeed([])
+    this._authState.setIsLoggedIn(false);
+    this._dashboardStateManagement.setNewScrollPosition(0)
   }
   ngOnInit(): void {
+    this._cdr.detectChanges()
+   
+   
     this._initSubscriptions();
     this._websocketService.connect(this._userSession.getFromCookie('username'))
   }
@@ -95,6 +118,23 @@ export class LayoutComponent implements OnInit, OnDestroy{
         handler: (response: boolean | null) =>{
           this.sessionExpired = response ?? false
           
+        }
+      },
+      {
+        observable$: this._cacheService.checkCache(),
+        handler: (response: boolean | null) =>{
+          if(response) this._cacheService.setCacheState(response);
+         
+        
+        }
+      },
+      {
+        observable$: this._apiTracker.requestCompleted,
+        handler: (response: boolean | null) =>{
+       
+          if(response != null) this.isFeedInitilizing = response
+         
+        
         }
       }
     ];

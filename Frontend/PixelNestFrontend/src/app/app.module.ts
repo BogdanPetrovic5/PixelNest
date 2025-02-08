@@ -8,23 +8,15 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { GlobalInterceptor } from './core/interceptors/global.interceptor';
 import { CustomHammerConfig } from './hammer-config';
 import { UnauthorizedAccessInterceptor } from './core/interceptors/unauthorized-access.interceptor';
-
-
-
-
-
-
-
-
+import { RouteReuseStrategy } from '@angular/router';
+import { CustomRouteReuseStrategy } from './core/route-reuse-strategy';
+import { ApiTrackerInterceptor } from './core/interceptors/api-tracker.interceptor';
 
 
 @NgModule({
   declarations: [
     AppComponent,
    
-   
-
-
   ],
   imports: [
     BrowserModule,
@@ -35,6 +27,10 @@ import { UnauthorizedAccessInterceptor } from './core/interceptors/unauthorized-
   ],
   providers: [
     {
+      provide:RouteReuseStrategy,
+      useClass:CustomRouteReuseStrategy
+    },
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: GlobalInterceptor,
       multi: true
@@ -44,7 +40,16 @@ import { UnauthorizedAccessInterceptor } from './core/interceptors/unauthorized-
       useClass: UnauthorizedAccessInterceptor,
       multi:true
     },
-    { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass:ApiTrackerInterceptor,
+      multi:true
+    },
+    { 
+      provide: HAMMER_GESTURE_CONFIG, 
+      useClass: CustomHammerConfig 
+    },
+   
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

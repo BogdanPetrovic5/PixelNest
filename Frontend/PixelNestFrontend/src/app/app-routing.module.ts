@@ -17,6 +17,8 @@ import { ChatComponent } from './shared/components/chat/chat.component';
 import { UnauthorizedComponent } from './features/components/unauthorized/unauthorized.component';
 import { NotificationComponent } from './features/components/layout/notification-modal/notification.component';
 import { NotificationsComponent } from './features/components/layout/notifications/notifications.component';
+import { PostComponent } from './shared/components/post/post.component';
+import { PostViewComponent } from './features/components/layout/post-view/post-view.component';
 
 
 const routes: Routes = [
@@ -40,11 +42,12 @@ const routes: Routes = [
       {
         path:"Dashboard", 
         component:DashboardComponent,
+        
         children: [
           { path: '', redirectTo: 'Feed', pathMatch: 'full' },
-          { path: 'Feed', component: FeedComponent, canActivate:[DashboardGuard] },
+          { path: 'Feed', component: FeedComponent, canActivate:[DashboardGuard], data:{shouldReuse:true,key:'feed'}},
         ],
-        canActivate:[DashboardGuard]
+        
       },
       {
         path:"Profile/:username",
@@ -74,6 +77,10 @@ const routes: Routes = [
       {
         path:'Notifications',
         component:NotificationsComponent
+      },
+      {
+        path:'Post/:postID',
+        component:PostViewComponent
       }
       
     ],
@@ -86,7 +93,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration:'enabled'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

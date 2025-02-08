@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class LogOutDialogComponent {
   constructor(
     private _userSession:UserSessionService,
     private _authService:AuthenticationService,
-    private _router:Router
+    private _router:Router,
+    private _authState:AuthStateService
   ){
 
   }
@@ -26,8 +28,11 @@ export class LogOutDialogComponent {
         this._userSession.clearCookies();
         this._userSession.clearStorage();
         this._userSession.setLogOutDialog(false);
+         
         this._router.navigate(["/Authentication/Login"])
-        
+      
+        this._authState.setIsLoggedIn(false);
+      
       
       },(error:HttpErrorResponse)=>{
         console.log(error)

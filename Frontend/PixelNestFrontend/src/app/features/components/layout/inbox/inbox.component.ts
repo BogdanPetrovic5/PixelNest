@@ -30,38 +30,38 @@ export class InboxComponent implements OnInit{
   ){}
   ngOnInit():void{
     this.currentUser = this._userSession.getFromCookie("username")
-    this._initilizeComponent();
+    this._initializeComponent();
   }
   chatNavigation(route:string){
     this._router.navigate([`/Chat/${route}`])
   }
-  timeAgo(date: Date): string {
-    const now = Date.now();
+  // timeAgo(date: Date): string {
+  //   const now = Date.now();
 
-    const messageDate = new Date(date).getDate()
+  //   const messageDate = new Date(date).getDate()
  
-    const diffInSeconds = Math.floor((now - messageDate) / 1000);
+  //   const diffInSeconds = Math.floor((now - messageDate) / 1000);
 
-    if (diffInSeconds < 60) {
-      return `${diffInSeconds} seconds ago`;
-    }
+  //   if (diffInSeconds < 60) {
+  //     return `${diffInSeconds} seconds ago`;
+  //   }
   
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
+  //   const diffInMinutes = Math.floor(diffInSeconds / 60);
   
-    if (diffInMinutes < 60) {
-      return `${diffInMinutes} minutes ago`;
-    }
+  //   if (diffInMinutes < 60) {
+  //     return `${diffInMinutes} minutes ago`;
+  //   }
   
-    const diffInHours = Math.floor(diffInMinutes / 60);
+  //   const diffInHours = Math.floor(diffInMinutes / 60);
   
-    if (diffInHours < 24) {
-      return `${diffInHours} hours ago`;
-    }
+  //   if (diffInHours < 24) {
+  //     return `${diffInHours} hours ago`;
+  //   }
   
-    const diffInDays = Math.floor(diffInHours / 24);
+  //   const diffInDays = Math.floor(diffInHours / 24);
   
-    return `${diffInDays} days ago`;
-  }
+  //   return `${diffInDays} days ago`;
+  // }
 
   navigate(){
     this._router.navigate(["Dashboard"])
@@ -72,11 +72,11 @@ export class InboxComponent implements OnInit{
       return obj.isActive 
     } return false
   }
-  private _initilizeComponent(){
+  private _initializeComponent(){
     this._chatService.getChats().subscribe({
       next:response=>{
         this.chats = response;
-       
+        console.log(this.chats)
       }
     })
     this._chatState.activeUsers$.subscribe({
