@@ -3,11 +3,13 @@ using Microsoft.Extensions.Caching.Memory;
 using PixelNestBackend.Data;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
+using PixelNestBackend.Dto.WebSockets;
 using PixelNestBackend.Gateaway;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
 using PixelNestBackend.Security;
+using PixelNestBackend.Services.Menagers;
 using PixelNestBackend.Utility;
 
 namespace PixelNestBackend.Repository
@@ -25,6 +27,9 @@ namespace PixelNestBackend.Repository
         private readonly FolderGenerator _folderGenerator;
         private readonly BlobStorageUpload _blobStorageUpload;
         private readonly string _basedFolderPath;
+        private readonly WebSocketConnectionMenager _websocketMenager;
+
+        //private readonly IMemoryCache 
         public UserRepository(
             DataContext dataContext,
             ILogger<UserRepository> logger,
@@ -33,10 +38,12 @@ namespace PixelNestBackend.Repository
             IMemoryCache memoryCache,
             FolderGenerator folderGenerator,
             BlobStorageUpload blobStorageUpload,
-            IFileUpload fileUpload
+            IFileUpload fileUpload,
+            WebSocketConnectionMenager webSocketConnectionMenager
 
             )
         {
+            _websocketMenager = webSocketConnectionMenager;
             _dataContext = dataContext;
             _logger = logger;
             _userUtility = userUtility;
@@ -110,7 +117,7 @@ namespace PixelNestBackend.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Doslo je do fatalne greske: {ex.Message}");
+                Console.WriteLine($"Fatal error occurred: {ex.Message}");
                 return null;
             }
         }
@@ -130,15 +137,16 @@ namespace PixelNestBackend.Repository
                 return users;
             }catch(Exception ex)
             {
-                Console.WriteLine($"Doslo je do fatalne greske: {ex.Message}");
+                Console.WriteLine($"Fatal error occurred: {ex.Message}");
                 return null;
             }
         }
 
-        public bool Follow(FollowDto followDto)
+        public FollowResponse Follow(FollowDto followDto)
         {
             try
             {
+                bool isSaved = false;
                 Follow follow = new Follow {
 
                 
@@ -150,6 +158,16 @@ namespace PixelNestBackend.Repository
                 var isDuplicate = _dataContext
                     .Follow
                     .FirstOrDefault(uid => uid.UserFollowerID == follow.UserFollowerID && uid.UserFollowingID == follow.UserFollowingID);
+                Notification notification = _dataContext.Notifications.Where(a=> a.SenderID == follow.UserFollowerID && a.ReceiverID == follow.UserFollowingID && a.PostID == null).FirstOrDefault();
+              
+                if(notification != null)
+                {
+                    Console.WriteLine(notification.ReceiverID);
+                }
+                if (notification == null)
+                {
+                    Console.WriteLine("\nNULL\n");
+                }
                 if(isDuplicate != null)
                 {
                     _dataContext.Follow.Remove(isDuplicate);
@@ -161,11 +179,38 @@ namespace PixelNestBackend.Repository
                         duplicateFollower.Following -= 1;
                         duplicateFollowing.Followers -= 1;
                     }
-
-                    return _dataContext.SaveChanges() > 0;
+                    if(notification != null)
+                    {
+                        _dataContext.Notifications.Remove(notification);
+                    }
+                    isSaved =  _dataContext.SaveChanges() > 0;
+                    if (isSaved)
+                    {
+                        return new FollowResponse
+                        {
+                            IsDuplicate = true,
+                            IsSuccessful = true,
+                            
+                        };
+                    }
                 }
 
-
+               
+                notification = new Notification
+                {
+                    ReceiverID = follow.UserFollowingID,
+                    SenderID = follow.UserFollowerID,
+                    ParentCommentID = null,
+                    PostID = null,
+                    CommentID = null,
+                    DateTime = DateTime.UtcNow,
+                    LikeID = null,
+                    Message = "followed you."
+                    
+                };
+                
+                _dataContext.Notifications.Add(notification);
+              
                 _dataContext.Follow.Add(follow);
                 User followerUser = _dataContext.Users.FirstOrDefault(u => u.Username == followDto.FollowerUsername);
                 User followingUser = _dataContext.Users.FirstOrDefault(u => u.Username == followDto.FollowingUsername);
@@ -175,15 +220,42 @@ namespace PixelNestBackend.Repository
                     followerUser.Following += 1;
                     followingUser.Followers += 1;
                 }
-                return _dataContext.SaveChanges() > 0;
-            }catch(SqlException ex)
+                isSaved = _dataContext.SaveChanges() > 0;
+                if (isSaved)
+                {
+                    return new FollowResponse
+                    {
+                        IsDuplicate = false,
+                        IsSuccessful = true,
+
+                    };
+                }
+                return new FollowResponse
+                {
+                    IsDuplicate = true,
+                    IsSuccessful = false,
+
+                };
+            }
+            catch(SqlException ex)
             {
                 _logger.LogError(ex.Message);
-                return false;
-            }catch(Exception ex)
+                return new FollowResponse
+                {
+                    IsDuplicate = true,
+                    IsSuccessful = false,
+
+                };
+            }
+            catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return false;
+                return new FollowResponse
+                {
+                    IsDuplicate = true,
+                    IsSuccessful = false,
+
+                };
             }
         }
 
@@ -241,12 +313,14 @@ namespace PixelNestBackend.Repository
                 var versionKey = $"{cacheKey}_Version";
                 if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
                 {
+                   
                     cachedVersion = DateTime.MinValue;
                 }
                 else cachedVersion = DateTime.MaxValue;
                 var latestVersion = DateTime.UtcNow;
                 if (!_memoryCache.TryGetValue(cacheKey, out ImagePath image) || cachedVersion < latestVersion)
                 {
+                    Console.WriteLine("\n Query: \n");
                     image = _dataContext.ImagePaths.Where(u => u.UserID == userID).FirstOrDefault();
                     _memoryCache.Set(cacheKey, image, new MemoryCacheEntryOptions
                     {

@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
+using PixelNestBackend.Dto.WebSockets;
 using PixelNestBackend.Gateaway;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Mappers;
 using PixelNestBackend.Models;
 using PixelNestBackend.Repository;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Services.Menagers;
 using PixelNestBackend.Utility;
 
 namespace PixelNestBackend.Services
@@ -24,6 +26,7 @@ namespace PixelNestBackend.Services
         private readonly string _basedFolderPath;
         private readonly FolderGenerator _folderGenerator;
         private readonly BlobStorageUpload _blobStorageUpload;
+        private readonly WebSocketConnectionMenager _webSocketConnectionMenager;
         public UserService(
             IMapper mapper,
             IAuthenticationRepository authenticationRepository,
@@ -31,11 +34,12 @@ namespace PixelNestBackend.Services
             IFileUpload fileUpload,
             UserUtility userUtility,
             FolderGenerator folderGenerator,
-            BlobStorageUpload blobStorageUpload
-
+            BlobStorageUpload blobStorageUpload,
+            WebSocketConnectionMenager webSocketConnectionMenager
 
             )
         {
+            _webSocketConnectionMenager = webSocketConnectionMenager;
             _userMapper = mapper;
             _authenticationRepository = authenticationRepository;
             _userRepository = userRepository;
@@ -81,9 +85,22 @@ namespace PixelNestBackend.Services
         {
             return _userRepository.GetFollowings(username);
         }
-        public bool Follow(FollowDto followDto)
+        public async Task<bool> Follow(FollowDto followDto)
         {
-            return _userRepository.Follow(followDto);
+
+            FollowResponse? response =  _userRepository.Follow(followDto);
+            if (!response.IsDuplicate)
+            {
+                WebSocketMessage message = new WebSocketMessage
+                {
+                    SenderUsername = followDto.FollowerUsername,
+                    TargetUser = followDto.FollowingUsername,
+                    Type = "Follow",
+                    Content = "followed you"
+                };
+                await _webSocketConnectionMenager.SendNotificationToUser(message);
+            }
+            return response.IsSuccessful;
         }
 
         public FollowResponse IsFollowing(FollowDto followDto)

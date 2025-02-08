@@ -20,6 +20,7 @@ namespace PixelNestBackend.Models
 
         public string? Location { get; set; }
         public DateTime PublishDate { get; set; }
+        public DateTime LastModified { get; set; } = DateTime.UtcNow;
         public User? User { get; set; }
         [NotMapped]
         public ICollection<LikeDto>? LikedByUsers { get; set; }

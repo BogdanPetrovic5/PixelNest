@@ -60,10 +60,10 @@ namespace PixelNestBackend.Controllers
         }
 
         [HttpPost("Follow")]
-        public IActionResult Follow(FollowDto followDto)
+        public async Task<IActionResult> Follow(FollowDto followDto)
         {
             if (followDto == null) return BadRequest();
-            bool response = _userService.Follow(followDto);
+            bool response = await _userService.Follow(followDto);
             if (response)
             {
                 return Ok();

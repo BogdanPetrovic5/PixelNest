@@ -7,5 +7,6 @@
         public DateTime Date { get; set; }
         public int? PostID { get; set; }
         public int NotificationID { get; set; }
+        public ICollection<ResponseImageDto> ImagePath { get; set; }
     }
 }

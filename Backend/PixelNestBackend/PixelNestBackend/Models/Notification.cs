@@ -10,6 +10,7 @@ namespace PixelNestBackend.Models
         public int NotificaitonID { get; set; }
         public int ReceiverID { get; set; }
         public int SenderID { get; set; }
+        public bool IsNew { get; set; }
         public int? PostID { get; set; }
         public int? LikeID { get; set; }
         public int? CommentID { get; set; }
@@ -18,7 +19,7 @@ namespace PixelNestBackend.Models
         public string Message { get; set; }
         public User ReceiverUser { get; set; }
         public User SenderUser { get; set; }
-        public Post Post { get; set; }
+        public Post? Post { get; set; }
      
         
         

@@ -384,8 +384,13 @@ namespace PixelNestBackend.Repository
                     {
                         _SAStokenGenerator.appendSasToken(post.ImagePaths);
                     }
-                  
-                    _memoryCache.Set(versionKey, posts, new MemoryCacheEntryOptions
+
+                    _memoryCache.Set(cacheKey, posts, new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = CacheDuration
+                    });
+
+                    _memoryCache.Set(versionKey, _getLatestVersion(), new MemoryCacheEntryOptions
                     {
                         AbsoluteExpirationRelativeToNow = CacheDuration
                     });
@@ -441,7 +446,7 @@ namespace PixelNestBackend.Repository
                         PostID = likeDto.PostID,
                         DateLiked = DateTime.UtcNow
                     };
-                    post.LastModified = DateTime.UtcNow;
+                  
                     _dataContext.LikedPosts.Add(newLikedPost);
                 }
                 else
@@ -449,7 +454,7 @@ namespace PixelNestBackend.Repository
                     _dataContext.LikedPosts.Remove(likedPost);
                     doubleAction = true;
                 }
-
+                post.LastModified = DateTime.UtcNow;
                 int changes = _dataContext.SaveChanges();
 
                 if (changes > 0)
@@ -550,8 +555,7 @@ namespace PixelNestBackend.Repository
                     );
 
                     
-                    var cacheKey = string.Format(PostsCacheKey);
-                    _memoryCache.Remove(cacheKey);
+                 
 
                     return new PostResponse
                     {
@@ -631,9 +635,7 @@ namespace PixelNestBackend.Repository
                 _dataContext.Posts.Remove(post);
                 
                 await _dataContext.SaveChangesAsync();
-                var cacheKey = string.Format(PostsCacheKey);
-                var versionKey = $"{cacheKey}_Version";
-                _memoryCache.Remove(cacheKey);
+                
                 return new DeleteResponse
                 {
                     IsSuccess = true,
@@ -753,9 +755,10 @@ namespace PixelNestBackend.Repository
 
         public bool CacheChange(string username)
         {
+            Console.WriteLine(username);
             var cacheKey = string.Format(PostsCacheKey,username);
             var versionKey = $"{cacheKey}_Version";
-
+            Console.WriteLine("\nCacheChange: " + versionKey + "\n");
             if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
             {
                 cachedVersion = DateTime.MinValue; 

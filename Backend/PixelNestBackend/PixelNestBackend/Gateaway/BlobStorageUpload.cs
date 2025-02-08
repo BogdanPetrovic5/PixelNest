@@ -46,6 +46,11 @@ namespace PixelNestBackend.Gateaway
                             using (var stream = formFile.OpenReadStream())
                             {
                                 await blobClient.UploadAsync(stream, overwrite: true);
+                                await blobClient.SetHttpHeadersAsync(new BlobHttpHeaders
+                                {
+                                    ContentType = "image/jpeg",
+                                    CacheControl = "public, max-age=86400"
+                                });
                             }
                             var imagePaths = new ImagePath
                             {
@@ -72,6 +77,11 @@ namespace PixelNestBackend.Gateaway
                         using (var stream = formFile.OpenReadStream())
                         {
                             await blobClient.UploadAsync(stream, overwrite: true);
+                            await blobClient.SetHttpHeadersAsync(new BlobHttpHeaders
+                            {
+                                ContentType = "image/jpeg",
+                                CacheControl = "public, max-age=86400"
+                            });
                         }
                         var imagePaths = new ImagePath
                         {
@@ -97,6 +107,11 @@ namespace PixelNestBackend.Gateaway
                         using (var stream = formFile.OpenReadStream())
                         {
                             await blobClient.UploadAsync(stream, overwrite: true);
+                            await blobClient.SetHttpHeadersAsync(new BlobHttpHeaders
+                            {
+                                ContentType = "image/jpeg",
+                                CacheControl = "public, max-age=86400"  
+                            });
                         }
 
                         var existingImagePath = await _dataContext.ImagePaths.FirstOrDefaultAsync(ip => ip.UserID == userFolder);

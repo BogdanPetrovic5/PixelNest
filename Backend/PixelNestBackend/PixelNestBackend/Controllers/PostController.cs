@@ -25,7 +25,31 @@ namespace PixelNestBackend.Controllers
             _webSocketConnectionMenager = webSocketConnectionMenager;
 
         }
+        [Authorize]
+        [HttpGet("CheckCache")]
+        public ActionResult<bool> CacheChange()
+        {
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (email == null) return Unauthorized();
+            bool response = _postService.CacheChange(email);
+            if (response)
+            {
+                return Ok(true);
+            }
+            else return Ok(false);
 
+
+        }
+        [Authorize]
+        [HttpGet("GetPost")]
+        public async Task<ActionResult<ResponsePostDto>> GetPost(int postID)
+        {
+            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (email == null) return Unauthorized();
+            ResponsePostDto result = await _postService.GetSinglePost(postID, email);
+            if(result == null) return NotFound();
+            return Ok(result);
+        }
         [Authorize]
         [HttpDelete("DeletePost")]
         public async Task<ActionResult<DeleteResponse>> DeletePost(int postID)
@@ -139,7 +163,7 @@ namespace PixelNestBackend.Controllers
                     TargetUser = likeResponse.TargetUser,
                     Type = "Like"
                 };
-                if (!likeResponse.DoubleAction) await this._webSocketConnectionMenager.SendNotificationToUser(webSocketMessage);
+                if (!likeResponse.DoubleAction && webSocketMessage.SenderUsername != webSocketMessage.TargetUser) await this._webSocketConnectionMenager.SendNotificationToUser(webSocketMessage);
 
                 return Ok();
             } else return NotFound();

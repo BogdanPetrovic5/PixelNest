@@ -27,7 +27,7 @@ namespace PixelNestBackend.Security
             {
                 BlobContainerName = _containerName,
                
-                ExpiresOn = DateTimeOffset.UtcNow.AddMinutes(15),
+                ExpiresOn = DateTimeOffset.UtcNow.AddDays(7),
                 
                
             };

@@ -54,7 +54,7 @@ namespace PixelNestBackend.Repository
             else cachedVersion = DateTime.MaxValue;
             var latestVersion = DateTime.UtcNow;
             if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseChatsDto> cashedChats) || cachedVersion < latestVersion) {
-                Console.WriteLine("Usloooo");
+               
                 var userChats = _dataContext.Messages
                    .Where(m => m.SenderID == userID || m.ReceiverID == userID)
                    .Include(u => u.Sender)
@@ -211,8 +211,10 @@ namespace PixelNestBackend.Repository
                 }
             }
             var cacheKey = string.Format(MessagesCache, message.SenderID, message.ReceiverID);
+            var cacheKey_2 = string.Format(MessagesCache, message.ReceiverID, message.SenderID);
             var versionKey = $"{cacheKey}_Version";
-            _memoryCache.Remove(versionKey);
+            _memoryCache.Remove(cacheKey);
+            _memoryCache.Remove(cacheKey_2);
             return true;
 
         }
