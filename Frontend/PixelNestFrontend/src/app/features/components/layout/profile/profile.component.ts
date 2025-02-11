@@ -62,7 +62,14 @@ export class ProfileComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
       this.subscribe.unsubscribe();
       this._postState.setPosts([]);
-      
+      this.user = {
+        username: this.username,
+        followers: 0,
+        followings: 0,
+        name: '',
+        lastname: '',
+        totalPosts: 0
+      }
       this._postState.setQuery(undefined);
       
   }
