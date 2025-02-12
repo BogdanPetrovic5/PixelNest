@@ -74,15 +74,7 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
     this._postState.loadPosts(this.currentPage);
     
   }
-  private async _cachePosts(){
-  
-    if(this.posts.length <= 5){
-      for(let i = 0; i < this.posts.length; i++){
-        await this._indexedDb.addPost(this.posts[i]);
-      }
-    }
-   
-  }
+
 
  private _initializeComponent(){
    

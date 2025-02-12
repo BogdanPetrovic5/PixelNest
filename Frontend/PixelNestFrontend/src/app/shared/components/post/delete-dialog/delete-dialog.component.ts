@@ -33,7 +33,6 @@ export class DeleteDialogComponent {
           this._postState.setPosts([]);
           this._postState.loadPosts(1);
           this._lottie.setIsInitialized(false);
-          this._indexDB.clearPosts()
         },
         error:error=>{
           console.error(error);

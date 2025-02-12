@@ -126,7 +126,7 @@ export class NewPostComponent implements OnInit{
     this._postState.resetFeed([])
     this._postState.setPosts([]);
     this._postState.loadPosts(1);
-    await this._indexDb.clearPosts();
+    
   }
 
   toggleObjectFit(): void {
