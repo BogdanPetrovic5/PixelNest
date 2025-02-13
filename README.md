@@ -138,7 +138,7 @@ PixelNest is a web application currently under development, created with the pur
       "ownerUsername":"string",
       "photoDisplay":"string",
       "location":"string",
-      "photos":[]
+      "photos": string[]
     }
   ```
 - Response:
@@ -201,7 +201,119 @@ PixelNest is a web application currently under development, created with the pur
         }
     ]
    ```
+## Story
+#### GET `/api/Story/GetStories`
+- Request URL: `/api/Story/GetStories?username={string}&maximum={number}`
+- Username parameter is optional. If client does not send username with query, API will fetch stories of all user.
+If username is passed then API will fetch stories that belong to that user.
 
+- Response:
+```
+  {
+  "ownerUsername": "string",
+  "storiesLeft": 0,
+  "stories": [
+    {
+      "storyID": 0,
+      "ownerUsername": "string",
+      "seenByUser": true,
+      "imagePaths": [
+        {
+          "pathID": 0,
+          "postID": 0,
+          "storyID": 0,
+          "path": "string",
+          "photoDisplay": "string"
+        }
+      ]
+    }
+  ]
+}
+```
+#### POST `api/Story/PublishStory
+- Request body:
+```
+  {
+    username: "string",
+    photoDisplay: "string",
+    storyImage: string[]
+  }
+```
+- Response body:
+```
+  {
+    "isSuccessful": bool,
+    "message": "string",
+    "storyID": 0
+  }
+```
+#### POST `api/Story/MarkStoryAsSeen
+- Request body:
+```
+  {
+    username: "string",
+    storyID: 0
+  }
+```
+- Response body:
+```
+  {
+    "isSuccessful": bool,
+    "message": "string",
+    "storyID": 0
+  }
+```
+#### GET `api/Story/GetViewers
+- Request URL: `/api/Story/GetViewers?username={string}&storyID={number}`
+- Response body:
+```
+  [
+    {
+      username: "string"
+    }
+  ]
+```
+
+## Notification
+#### POST `api/Notification/MarkAsOpened`
+- Request body:
+```
+  {
+    "notificationID": [
+        0
+      ]
+  }
+```
+- Responses: `bool`
+
+#### GET `api/Notification/CountNotifications`
+- Request URL:  `api/Notification/CountNotifications`
+- Responses: `number`
+
+#### GET `api/Notification/GetAllNotifications`
+- Request URL:  `api/Notification/GetAllNotifications`
+- Responses:
+
+```
+[
+  {
+    "username": "string",
+    "message": "string",
+    "date": "2025-02-13T15:55:28.587Z",
+    "postID": 0,
+    "notificationID": 0,
+    "imagePath": [
+      {
+        "pathID": 0,
+        "postID": 0,
+        "storyID": 0,
+        "path": "string",
+        "photoDisplay": "string"
+      }
+    ]
+  }
+]
+```
 ## Frontend
 
 For frontend part as primary and only framework I used Angular 15.
