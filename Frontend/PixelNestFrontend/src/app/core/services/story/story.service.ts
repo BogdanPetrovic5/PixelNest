@@ -23,7 +23,7 @@ export class StoryService {
     return this._httpClient.post(url, formData);
   }
   
-  marStoryAsSeen(storyID:number, username:string):Observable<any>{
+  marStoryAsSeen(storyID:string, username:string):Observable<any>{
     const url = `${environment.apiUrl}/api/Story/MarkStoryAsSeen`;
     return this._httpClient.post(url, {
         StoryID:storyID,
@@ -31,7 +31,7 @@ export class StoryService {
     });
   }
 
-  getViewers(username:string, storyID:number):Observable<ViewersDto[]>{
+  getViewers(username:string, storyID:string):Observable<ViewersDto[]>{
     const url = `${environment.apiUrl}/api/Story/GetViewers?username=${username}&storyID=${storyID}`;
     return this._httpClient.get<ViewersDto[]>(url);
   }

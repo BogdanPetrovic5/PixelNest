@@ -163,7 +163,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
       }
     }
 
-    private _markStoryAsSeen(storyID:number){
+    private _markStoryAsSeen(storyID:string){
       const username = this._userService.getFromCookie("username");
       this._storyService.marStoryAsSeen(storyID, username).subscribe({
         next:response=>{

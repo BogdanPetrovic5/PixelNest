@@ -18,7 +18,7 @@ export class PostViewComponent implements OnInit{
   ){}
   post?:PostDto
   
-  postID:number = -1;
+  postID:string = "-1";
   private destroy$ = new Subject<void>();
   ngOnInit(): void {
     console.log("ASD")
@@ -27,7 +27,7 @@ export class PostViewComponent implements OnInit{
          takeUntil(this.destroy$), 
          tap(params => {
             let postID = params.get('postID')
-            if(postID) this.postID = parseInt(postID, 10);
+            if(postID) this.postID = postID
            
             this._getPostData(this.postID);
          })
@@ -40,7 +40,7 @@ export class PostViewComponent implements OnInit{
   navigate(){
     this._router.navigate(["Notifications"])
   }
-  private _getPostData(postID:number){
+  private _getPostData(postID:string){
    
     this._postService.getSinglePost(postID).subscribe({
       next:response=>{

@@ -16,11 +16,11 @@ export class ApiTrackerService {
       this._requestsCompleted.next(true);
    }
     this._activeRequests++;
-    console.log(this._activeRequests)
+  
   }
   requestEnded(): void {
     this._activeRequests--;
-    console.log(this._activeRequests)
+    
     if (this._activeRequests === 0) {
       this._requestsCompleted.next(false); 
     }

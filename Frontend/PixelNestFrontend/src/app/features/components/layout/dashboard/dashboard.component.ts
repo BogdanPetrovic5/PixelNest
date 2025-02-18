@@ -98,7 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
       this._postState.feedPosts$.subscribe({
         next:response=>{
           this.posts = response;
-        
+          console.log(this.posts)
         
         this._cdr.detectChanges()
         },error:error=>{

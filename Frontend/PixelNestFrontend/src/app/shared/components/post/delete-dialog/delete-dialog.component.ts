@@ -10,7 +10,7 @@ import { PostStateService } from 'src/app/core/services/states/post-state.servic
   styleUrls: ['./delete-dialog.component.scss']
 })
 export class DeleteDialogComponent {
-  @Input() postID!:number
+  @Input() postID!:string
   @Output() closeDeleteDialog: EventEmitter<void> = new EventEmitter<void>();
   anim:boolean = false;
   constructor(

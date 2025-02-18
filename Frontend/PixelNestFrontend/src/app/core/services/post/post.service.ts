@@ -10,7 +10,7 @@ import { PostDto } from '../../dto/post.dto';
 export class PostService {
 
   constructor(private _httpClient:HttpClient) { }
-  getSinglePost(postID:number):Observable<PostDto>{
+  getSinglePost(postID:string):Observable<PostDto>{
     const url = `${environment.apiUrl}/api/Post/GetPost?postID=${postID}`
     return this._httpClient.get<PostDto>(url);
   }
@@ -23,18 +23,18 @@ export class PostService {
     const url = `${environment.apiUrl}/api/Post/GetPosts?${parameter}&page=${currentPage}`
     return this._httpClient.get<any>(url)
   }
-  likePost(postID?:number, username?:string):Observable<any>{
+  likePost(postID?:string, username?:string):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/LikePost`
     return this._httpClient.post(url, {
       PostID:postID,
       Username:username
     })
   }
-  deletePost(postID:number):Observable<any>{
+  deletePost(postID:string):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/DeletePost?postID=${postID}`;
     return this._httpClient.delete<any>(url)
   }
-  savePost(username:string, postID:number){
+  savePost(username:string, postID:string){
     const url = `${environment.apiUrl}/api/Post/SavePost`
     return this._httpClient.post<any>(url,{
       Username:username,

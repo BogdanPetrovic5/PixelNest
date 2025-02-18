@@ -27,7 +27,7 @@ export class PostComponent implements OnInit{
 
   @Input() post!:PostDto;
   @Input() postIndex!:number
-  @Input() postID!:number
+  @Input() postID!:string
   likedByUsers: LikedByUsers[] = [];
   savedByUsers:SavedPosts[] = []
 
@@ -180,7 +180,7 @@ export class PostComponent implements OnInit{
   openDeleteDialog(){
     this.deleteDialog = true;
   }
-  likePost(postID:number){
+  likePost(postID:string){
     this._postService.likePost(postID, this.username).pipe(
       tap((response)=>{
         this._handleLikeArray();

@@ -11,7 +11,7 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
   styleUrls: ['./viewer-list.component.scss']
 })
 export class ViewerListComponent implements OnInit{
-  @Input() storyID?:number;
+  @Input() storyID?:string;
   viewers:ViewersDto[] = []
   anim:boolean = false;
   subscriptions:Subscription = new Subscription();
