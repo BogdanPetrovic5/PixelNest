@@ -53,8 +53,9 @@ namespace PixelNestBackend.Repository
             }
             else cachedVersion = DateTime.MaxValue;
             var latestVersion = DateTime.UtcNow;
+            Console.WriteLine("\n\nUserID: " + userID + "\n\n");
             if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseChatsDto> cashedChats) || cachedVersion < latestVersion) {
-               
+                Console.WriteLine("Entered query");
                 var userChats = _dataContext.Messages
                    .Where(m => m.SenderGuid == userID || m.ReceiverGuid == userID)
                    .Include(u => u.Sender)
@@ -77,7 +78,8 @@ namespace PixelNestBackend.Repository
                                Receiver = m.Receiver.Username,
                                Message = m.MessageText,
                                DateSent = m.DateSent,
-                               Source = m.SenderGuid == userID ? m.Receiver.Username : m.SenderGuid == userID ? m.Sender.Username : "",
+                              Source = m.SenderGuid == userID ? m.Receiver.Username : m.ReceiverGuid == userID ? m.Sender.Username : "",
+
                                MessageID = m.MessageID,
                                IsSeen = !_dataContext.SeenMessages
                                .Any(sm => sm.UserGuid == userID && sm.MessageID == m.MessageID)
@@ -210,8 +212,8 @@ namespace PixelNestBackend.Repository
                     Console.WriteLine($"Error saving seen message: {ex.Message}");
                 }
             }
-            var cacheKey = string.Format(MessagesCache, message.SenderID, message.ReceiverID);
-            var cacheKey_2 = string.Format(MessagesCache, message.ReceiverID, message.SenderID);
+            var cacheKey = string.Format(MessagesCache, message.SenderGuid, message.ReceiverGuid);
+            var cacheKey_2 = string.Format(MessagesCache, message.ReceiverGuid, message.SenderGuid);
             var versionKey = $"{cacheKey}_Version";
             _memoryCache.Remove(cacheKey);
             _memoryCache.Remove(cacheKey_2);
