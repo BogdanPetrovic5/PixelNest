@@ -9,6 +9,7 @@ namespace PixelNestBackend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserID { get; set; }
+        public Guid UserGuid { get; set; } = Guid.NewGuid();
 
         public string Firstname { get; set; }
         public string Lastname { get; set; }

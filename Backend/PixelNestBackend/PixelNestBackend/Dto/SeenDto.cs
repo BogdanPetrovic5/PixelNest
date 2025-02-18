@@ -3,6 +3,6 @@
     public class SeenDto
     {
         public string Username { get; set; }
-        public int StoryID { get; set; }
+        public Guid StoryID { get; set; }
     }
 }

@@ -43,25 +43,25 @@ namespace PixelNestBackend.Repository
                 {
                     groupedStories = await _dataContext
                          .Stories
-                         .Where(s => s.UserID != user.UserID && s.ExpirationDate >= DateTime.Now)
-                         .GroupBy(s => s.UserID)
+                         .Where(s => s.UserGuid != user.UserGuid && s.ExpirationDate >= DateTime.Now)
+                         .GroupBy(s => s.UserGuid)
                          .Select(group => new GroupedStoriesDto
                          {
                              OwnerUsername = _dataContext.Users
-                                                 .Where(u => u.UserID == group.Key)
+                                                 .Where(u => u.UserGuid == group.Key)
                                                  .Select(u => u.Username)
                                                  .FirstOrDefault(),
                              Stories = group.Select(s => new ResponseStoryDto
                              {
                                  OwnerUsername = s.User.Username,
-                                 SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
+                                 SeenByUser = _dataContext.Seen.Any(a => a.UserGuid == user.UserGuid && s.StoryGuid == a.StoryGuid),
                                  ImagePaths = s.ImagePath
                                                 .Select(i => new ResponseImageDto
                                                 {
                                                     Path = i.Path,
                                                     PhotoDisplay = i.PhotoDisplay,
                                                 }).ToList(),
-                                 StoryID = s.StoryID
+                                 StoryID = s.StoryGuid
                              }).ToList()
                          })
                          .AsSplitQuery()
@@ -89,25 +89,25 @@ namespace PixelNestBackend.Repository
                     {
                         groupedStories = await _dataContext
                              .Stories
-                             .Where(s => s.UserID == user.UserID && s.ExpirationDate >= DateTime.Now)
-                             .GroupBy(s => s.UserID)
+                             .Where(s => s.UserGuid == user.UserGuid && s.ExpirationDate >= DateTime.Now)
+                             .GroupBy(s => s.UserGuid)
                              .Select(group => new GroupedStoriesDto
                              {
                                  OwnerUsername = _dataContext.Users
-                                                     .Where(u => u.UserID == group.Key)
+                                                     .Where(u => u.UserGuid == group.Key)
                                                      .Select(u => u.Username)
                                                      .FirstOrDefault(),
                                  Stories = group.Select(s => new ResponseStoryDto
                                  {
                                      OwnerUsername = s.User.Username,
-                                     SeenByUser = _dataContext.Seen.Any(a => a.UserID == user.UserID && s.StoryID == a.StoryID),
+                                     SeenByUser = _dataContext.Seen.Any(a => a.UserGuid == user.UserGuid && s.StoryGuid == a.StoryGuid),
                                      ImagePaths = s.ImagePath
                                                     .Select(i => new ResponseImageDto
                                                     {
                                                         Path = i.Path,
                                                         PhotoDisplay = i.PhotoDisplay,
                                                     }).ToList(),
-                                     StoryID = s.StoryID
+                                     StoryID = s.StoryGuid
                                  }).ToList()
                              })
                              .AsSplitQuery()
@@ -127,7 +127,7 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                if(!_dataContext.Seen.Any(a => a.UserID == seen.UserID && a.StoryID == seen.StoryID))
+                if(!_dataContext.Seen.Any(a => a.UserGuid == seen.UserGuid && a.StoryGuid == seen.StoryGuid))
                 {
                     _dataContext.Seen.Add(seen);
                     
@@ -164,7 +164,7 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public async Task<StoryResponse> PublishStory(StoryDto storyDto, int userID)
+        public async Task<StoryResponse> PublishStory(StoryDto storyDto, Guid userID)
         {
             if(storyDto == null)
             {
@@ -178,7 +178,7 @@ namespace PixelNestBackend.Repository
             Story story = new Story
             {
                
-                UserID = userID,
+                UserGuid = userID,
                 CreationDate = DateTime.Now,
                 ExpirationDate = DateTime.Now.AddDays(1)
             };
@@ -187,7 +187,7 @@ namespace PixelNestBackend.Repository
 
             if(result > 0)
             {
-                int storyID = story.StoryID;
+                Guid storyID = story.StoryGuid;
                 
                 return new StoryResponse
                 {
@@ -209,7 +209,7 @@ namespace PixelNestBackend.Repository
             {
                 User user = _dataContext.Users.Where(u => u.Username.Equals(viewersDto.Username)).FirstOrDefault();
                 ICollection<ResponseViewersDto> viewers = this._dataContext.Seen
-                    .Where(a => a.UserID != user.UserID && viewersDto.StoryID == a.StoryID)
+                    .Where(a => a.UserID != user.UserID && viewersDto.StoryID == a.StoryGuid)
                     .Select(v => new ResponseViewersDto
                     {
                         Username = v.User.Username

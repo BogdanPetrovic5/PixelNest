@@ -8,7 +8,9 @@ namespace PixelNestBackend.Models
       
         public int UserID { get; set; }
         public int PostID { get; set; }
-    
+        
+        public Guid UserGuid { get; set; }
+        public Guid PostGuid { get; set; } 
         public DateTime DateLiked { get; set; }
 
         public User? User { get; set; }

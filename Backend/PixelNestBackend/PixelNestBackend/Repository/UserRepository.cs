@@ -62,7 +62,7 @@ namespace PixelNestBackend.Repository
                 User followingUser = _dataContext.Users.Where(u => u.Username.Equals(follow.FollowingUsername)).FirstOrDefault();
 
                 if (followerUser != null && followingUser != null) {
-                    bool isFollowing = _dataContext.Follow.Any(a => a.UserFollowerID == followerUser.UserID && a.UserFollowingID == followingUser.UserID);
+                    bool isFollowing = _dataContext.Follow.Any(a => a.UserFollowerGuid == followerUser.UserGuid && a.UserFollowingGuid == followingUser.UserGuid);
 
                     return new FollowResponse
                     {
@@ -105,7 +105,7 @@ namespace PixelNestBackend.Repository
                 {
                     ICollection<ResponseFollowingDto> users = _dataContext
                     .Follow
-                    .Where(follower => follower.UserFollowerID == user.UserID && follower.UserFollowingID != user.UserID)
+                    .Where(follower => follower.UserFollowerGuid == user.UserGuid && follower.UserFollowingGuid != user.UserGuid)
                     .Select(f => new ResponseFollowingDto
                     {
                         FollowingUsername = f.UserFollowing.Username
@@ -128,7 +128,7 @@ namespace PixelNestBackend.Repository
                 User user = _dataContext.Users.Where(u => u.Username.Equals(username)).FirstOrDefault();
                 ICollection<ResponseFollowersDto> users = _dataContext
                     .Follow
-                    .Where(follower => follower.UserFollowingID == user.UserID && follower.UserFollowerID != user.UserID)
+                    .Where(follower => follower.UserFollowingGuid == user.UserGuid && follower.UserFollowerGuid != user.UserGuid)
                     .Select(f => new ResponseFollowersDto
                     {
                         FollowerUsername = f.UserFollower.Username
@@ -150,24 +150,17 @@ namespace PixelNestBackend.Repository
                 Follow follow = new Follow {
 
                 
-                    UserFollowerID = _userUtility.GetUserID(followDto.FollowerUsername),
-                    UserFollowingID = _userUtility.GetUserID(followDto.FollowingUsername)
+                    UserFollowerGuid = _userUtility.GetUserID(followDto.FollowerUsername),
+                    UserFollowingGuid = _userUtility.GetUserID(followDto.FollowingUsername)
                    
                 };
 
                 var isDuplicate = _dataContext
                     .Follow
-                    .FirstOrDefault(uid => uid.UserFollowerID == follow.UserFollowerID && uid.UserFollowingID == follow.UserFollowingID);
-                Notification notification = _dataContext.Notifications.Where(a=> a.SenderID == follow.UserFollowerID && a.ReceiverID == follow.UserFollowingID && a.PostID == null).FirstOrDefault();
+                    .FirstOrDefault(uid => uid.UserFollowerGuid == follow.UserFollowerGuid && uid.UserFollowingGuid == follow.UserFollowingGuid);
+                Notification notification = _dataContext.Notifications.Where(a=> a.SenderGuid == follow.UserFollowerGuid && a.ReceiverGuid == follow.UserFollowingGuid && a.PostID == null).FirstOrDefault();
               
-                if(notification != null)
-                {
-                    Console.WriteLine(notification.ReceiverID);
-                }
-                if (notification == null)
-                {
-                    Console.WriteLine("\nNULL\n");
-                }
+              
                 if(isDuplicate != null)
                 {
                     _dataContext.Follow.Remove(isDuplicate);
@@ -195,18 +188,19 @@ namespace PixelNestBackend.Repository
                     }
                 }
 
-               
+
                 notification = new Notification
                 {
-                    ReceiverID = follow.UserFollowingID,
-                    SenderID = follow.UserFollowerID,
+                    ReceiverGuid = follow.UserFollowingGuid,
+                    SenderGuid = follow.UserFollowerGuid,
                     ParentCommentID = null,
                     PostID = null,
                     CommentID = null,
+                    PostGuid = null,
                     DateTime = DateTime.UtcNow,
                     LikeID = null,
                     Message = "followed you."
-                    
+
                 };
                 
                 _dataContext.Notifications.Add(notification);
@@ -305,7 +299,7 @@ namespace PixelNestBackend.Repository
             }
 
         }
-        public string GetPicture(int userID)
+        public string GetPicture(Guid userID)
         {
             try
             {
@@ -320,8 +314,8 @@ namespace PixelNestBackend.Repository
                 var latestVersion = DateTime.UtcNow;
                 if (!_memoryCache.TryGetValue(cacheKey, out ImagePath image) || cachedVersion < latestVersion)
                 {
-                    Console.WriteLine("\n Query: \n");
-                    image = _dataContext.ImagePaths.Where(u => u.UserID == userID).FirstOrDefault();
+                    
+                    image = _dataContext.ImagePaths.Where(u => u.UserGuid == userID).FirstOrDefault();
                     _memoryCache.Set(cacheKey, image, new MemoryCacheEntryOptions
                     {
                         AbsoluteExpirationRelativeToNow = CacheDuration
@@ -389,7 +383,7 @@ namespace PixelNestBackend.Repository
             
         }
 
-        public async Task<bool> ChangeProfilePicture(int userID, ProfileDto profileDto)
+        public async Task<bool> ChangeProfilePicture(Guid userID, ProfileDto profileDto)
         {
             string userFolderName = userID.ToString();
             string userFolderPath = Path.Combine(_basedFolderPath, userFolderName, "Profile");

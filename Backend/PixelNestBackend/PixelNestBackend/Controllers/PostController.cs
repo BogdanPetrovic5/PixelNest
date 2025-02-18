@@ -42,7 +42,7 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpGet("GetPost")]
-        public async Task<ActionResult<ResponsePostDto>> GetPost(int postID)
+        public async Task<ActionResult<ResponsePostDto>> GetPost(Guid postID)
         {
             string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (email == null) return Unauthorized();
@@ -52,7 +52,7 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpDelete("DeletePost")]
-        public async Task<ActionResult<DeleteResponse>> DeletePost(int postID)
+        public async Task<ActionResult<DeleteResponse>> DeletePost(Guid postID)
         {
             try
             {

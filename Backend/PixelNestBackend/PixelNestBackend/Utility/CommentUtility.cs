@@ -10,9 +10,9 @@ namespace PixelNestBackend.Utility
             this._dataContext = dataContext;
         }
 
-        public bool FindDuplicates(int userID, int commentID)
+        public bool FindDuplicates(Guid userID, int commentID)
         {
-            return _dataContext.LikeComments.Any(c => c.CommentID == commentID && c.UserID == userID);
+            return _dataContext.LikeComments.Any(c => c.CommentID == commentID && c.UserGuid == userID);
         }
     }
 }

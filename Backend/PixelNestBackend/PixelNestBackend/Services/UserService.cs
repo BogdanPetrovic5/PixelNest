@@ -64,7 +64,7 @@ namespace PixelNestBackend.Services
             }
             return null;
         }
-        public int GetUserID(string email)
+        public Guid GetUserID(string email)
         {
             return _userUtility.GetUserID(email);
         }
@@ -112,7 +112,7 @@ namespace PixelNestBackend.Services
         {
 
             string? username = this._userUtility.GetUserName(email);
-            int userID = this._userUtility.GetUserID(username);
+            Guid userID = this._userUtility.GetUserID(username);
 
             return await _userRepository.ChangeProfilePicture(userID, profileDto);
 
@@ -120,7 +120,7 @@ namespace PixelNestBackend.Services
         
         public string GetPicture(string username)
         {
-            int userID = this._userUtility.GetUserID(username);
+            Guid userID = this._userUtility.GetUserID(username);
 
             
             return _userRepository.GetPicture(userID);

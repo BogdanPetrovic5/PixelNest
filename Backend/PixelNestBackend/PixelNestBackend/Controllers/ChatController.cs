@@ -93,7 +93,7 @@ namespace PixelNestBackend.Controllers
         {
             string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (email == null) return Unauthorized();
-            int userID = _userService.GetUserID(email);
+            Guid userID = _userService.GetUserID(email);
 
             string username = _userUtility.GetUserName(email);
             string roomID = $"{username}-{receiverUsername}";
@@ -109,7 +109,7 @@ namespace PixelNestBackend.Controllers
         {
             string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (email == null) return Unauthorized();
-            int userID = _userService.GetUserID(email);
+            Guid userID = _userService.GetUserID(email);
 
             string username = _userUtility.GetUserName(email);
             string roomID = $"{username}-{receiverUsername}";

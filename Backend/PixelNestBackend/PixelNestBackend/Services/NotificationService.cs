@@ -22,21 +22,21 @@ namespace PixelNestBackend.Services
         public int CountNotifications(string email)
         {
             string username = _userUtility.GetUserName(email);
-            int userID = _userUtility.GetUserID(username);
+            Guid userID = _userUtility.GetUserID(username);
             return _notificationRepository.CountNotifications(userID);
         }
 
         public ICollection<ResponseNotificationsDto> GetNotifications(string email)
         {
             string username = _userUtility.GetUserName(email);
-            int userID = _userUtility.GetUserID(username);
+            Guid userID = _userUtility.GetUserID(username);
             return _notificationRepository.GetNotifications(userID);
         }
 
         public bool MarkAsRead(MarkAsOpenedDto markAsrReadDto, string email)
         {
             string username = _userUtility.GetUserName(email);
-            int userID = _userUtility.GetUserID(username);
+            Guid userID = _userUtility.GetUserID(username);
             return _notificationRepository.MarkAsOpened(markAsrReadDto, userID);
         }
     }

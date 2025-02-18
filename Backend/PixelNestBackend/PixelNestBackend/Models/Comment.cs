@@ -11,6 +11,8 @@ namespace PixelNestBackend.Models
         public int CommentID { get; set; }
         public int PostID { get; set; }
         public int UserID { get; set; }
+        public Guid PostGuid { get; set; }
+        public Guid UserGuid { get; set; } 
         public string CommentText { get; set; }
         public int? ParentCommentID { get; set; }
         public int TotalLikes { get; set; }

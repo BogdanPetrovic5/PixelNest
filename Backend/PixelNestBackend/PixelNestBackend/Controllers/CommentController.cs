@@ -31,7 +31,7 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpGet("GetComments")]
-        public ActionResult<ICollection<ResponseCommentDto>?> GetComments(int postID)
+        public ActionResult<ICollection<ResponseCommentDto>?> GetComments(Guid postID)
         {
             ICollection<ResponseCommentDto> result;
             result = _commentService.GetComments(postID);

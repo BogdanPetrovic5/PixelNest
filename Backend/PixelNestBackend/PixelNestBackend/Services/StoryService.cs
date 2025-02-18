@@ -51,19 +51,20 @@ namespace PixelNestBackend.Services
 
         public StoryResponse MarkStoryAsSeen(SeenDto seenDto)
         {
-            int userID = _userUtility.GetUserID(seenDto.Username);
+            Guid userID = _userUtility.GetUserID(seenDto.Username);
             Seen seen = new Seen
             {
-                StoryID = seenDto.StoryID,
-               
-                UserID = userID
+                StoryGuid = seenDto.StoryID,
+                StoryID = -1,
+                UserGuid = userID,
+                UserID = -1
             };
             return _storyRepository.MarkStoryAsSeen(seen);
         }
 
         public async Task<StoryResponse> PublishStory(StoryDto storyDto)
         {
-            int userID = _userUtility.GetUserID(storyDto.Username);
+            Guid userID = _userUtility.GetUserID(storyDto.Username);
             string userFolderName =userID.ToString();
             string userFolderPath = Path.Combine(_basedFolderPath, userFolderName, "Stories");
 
@@ -81,6 +82,7 @@ namespace PixelNestBackend.Services
                     int storyID = response.StoryID;
                     //bool isUploaded = await _fileUpload.StoreImages(null, storyDto,null, userFolderPath, storyID,null);
                     bool isUploaded = await _blobStorageUpload.StoreImages(null, storyDto,null, userID, storyID);
+                    Guid storyID = response.StoryID;
 
                     if (isUploaded)
                     {

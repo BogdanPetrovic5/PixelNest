@@ -11,27 +11,27 @@ namespace PixelNestBackend.Utility
         {
              _dataContext = dataContext;
         }
-        public int GetUserID(string username)
+        public Guid GetUserID(string username)
         {
-            int userID = -1;
+            Guid userID = Guid.Empty;
             if (_dataContext != null)
             {
                 var user =_dataContext.Users.FirstOrDefault(x => x.Username == username);
                 if(user != null)
                 {
-                    userID = user.UserID;
+                    userID = user.UserGuid;
                 }
 
             }
-            
+            Console.WriteLine("\nUser GUID: " + userID + "\n");
             return userID;
         }
-        public string GetUserName(int userID)
+        public string GetUserName(Guid userID)
         {
             
             if (_dataContext != null)
             {
-                var user = _dataContext.Users.FirstOrDefault(x => x.UserID == userID);
+                var user = _dataContext.Users.FirstOrDefault(x => x.UserGuid == userID);
                 if (user != null)
                 {
                     return user.Username;

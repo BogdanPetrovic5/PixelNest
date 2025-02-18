@@ -21,6 +21,6 @@ namespace PixelNestBackend.Interfaces
 
         bool ChangeUsername(string email, string newUsername);
         ICollection<ResponseUsersDto> FindUsers(string username);
-        int GetUserID(string email);
+        Guid GetUserID(string email);
     }
 }

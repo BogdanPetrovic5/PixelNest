@@ -9,7 +9,7 @@ namespace PixelNestBackend.Dto
         [Required]
         public string Username { get; set; }
         [Required]
-        public int PostID { get; set; }
+        public Guid PostID { get; set; }
        
         public int? ParentCommentID { get; set; }
       

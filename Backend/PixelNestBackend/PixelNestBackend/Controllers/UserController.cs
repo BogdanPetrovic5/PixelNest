@@ -32,7 +32,7 @@ namespace PixelNestBackend.Controllers
         {
             string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (email == null) return Unauthorized();
-            int userID = _userService.GetUserID(email);
+            Guid userID = _userService.GetUserID(email);
            string username=  _userUtility.GetUserName(userID);
            await _webSocketConnection.CloseConnection(username);
             return Ok();

@@ -2,7 +2,7 @@
 {
     public class ResponseStoryDto
     {
-        public int StoryID { get; set; }
+        public Guid StoryID { get; set; }
         public string OwnerUsername { get; set; }
         public bool SeenByUser { get; set; }
         public ICollection<ResponseImageDto>? ImagePaths { get; set; }

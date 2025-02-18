@@ -48,8 +48,8 @@ namespace PixelNestBackend.Services
         }
         public bool SavePost(SavePostDto savePostDto)
         {
-            int userID = _userUtility.GetUserID(savePostDto.Username);
-            if (userID < 1) return false;
+            Guid userID = _userUtility.GetUserID(savePostDto.Username);
+            if (userID == Guid.Empty) return false;
 
             bool isLiked = _postUtility.FindDuplicate(savePostDto.PostID, userID, "savedPosts");
 
@@ -78,8 +78,8 @@ namespace PixelNestBackend.Services
 
         public PostResponse LikePost(LikeDto likeDto)
         {
-            int userID = _userUtility.GetUserID(likeDto.Username);
-            if (userID < 0) return null;
+            Guid userID = _userUtility.GetUserID(likeDto.Username);
+            if (userID == Guid.Empty) return null;
             bool isLiked = _postUtility.FindDuplicate(likeDto.PostID, userID, "likedPosts");
             
             PostResponse result = _postRepository.LikePost(likeDto, isLiked, userID);
@@ -89,7 +89,7 @@ namespace PixelNestBackend.Services
 
         public async Task<PostResponse> PublishPost(PostDto postDto)
         {
-            int userID = _userUtility.GetUserID(postDto.OwnerUsername);
+            Guid userID = _userUtility.GetUserID(postDto.OwnerUsername);
             string userFolderName = userID.ToString();
 
             string userFolderPath = Path.Combine(_basedFolderPath, userFolderName);
@@ -116,6 +116,7 @@ namespace PixelNestBackend.Services
                         Message = "Post was successfully added to your feed."
                     };
                     //if (isUploaded) return new PostResponse
+                    Guid postID = response.PostID;
                     //{
                     //    IsSuccessfull = true,
                     //    Message = "Post was successfully added to your feed."
@@ -143,21 +144,22 @@ namespace PixelNestBackend.Services
         {
             try
             {
-                int userID = _userUtility.GetUserID(commentDto.Username);
-                if (userID < 0)
+                Guid userID = _userUtility.GetUserID(commentDto.Username);
+                if (userID == Guid.Empty)
                 {
                     Console.WriteLine("user not found");
                     return new PostResponse {Message = "User not found!", IsSuccessfull = false };
                 }
                 Comment comment = new Comment
                 {
-                    UserID = userID,
+                    UserGuid = userID,
                     CommentText = commentDto.CommentText,
-                    
-                    PostID = commentDto.PostID,
+                    UserID = -1,
+                    PostID = -1,
+                    PostGuid = commentDto.PostID,
                     TotalLikes = 0,
                     ParentCommentID = commentDto.ParentCommentID
-                    
+
                 };
                 return _postRepository.Comment(comment);
             }
@@ -173,11 +175,11 @@ namespace PixelNestBackend.Services
             }
            
         }
-        public bool CheckIntegrity(string email, int postID)
+        public bool CheckIntegrity(string email, Guid postID)
         {
 
-            int userID = _postRepository.ExtractUserID(postID);
-            if (userID != null) { 
+            Guid userID = _postRepository.ExtractUserID(postID);
+            if (userID != Guid.Empty) { 
                 bool isValid = _postRepository.CheckIntegrity(userID, email);
                 if (!isValid)
                 {
@@ -185,7 +187,7 @@ namespace PixelNestBackend.Services
                 }return true;
             }return false;
         }
-        public async Task<DeleteResponse> DeletePost(string email, int postID)
+        public async Task<DeleteResponse> DeletePost(string email, Guid postID)
         {
             if (CheckIntegrity(email, postID))
             {
@@ -194,7 +196,7 @@ namespace PixelNestBackend.Services
             return new DeleteResponse { IsSuccess = false, IsValid = false, Message = "You do not have authority to do this!" };
         }
 
-        public Task<ResponsePostDto> GetSinglePost(int postID, string email)
+        public Task<ResponsePostDto> GetSinglePost(Guid postID, string email)
         {
            
             string username = _userUtility.GetUserName(email);

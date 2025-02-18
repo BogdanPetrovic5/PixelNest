@@ -6,9 +6,9 @@ namespace PixelNestBackend.Interfaces
 {
     public interface ICommentRepository
     {
-        ICollection<ResponseCommentDto> GetComments(int postID);
+        ICollection<ResponseCommentDto> GetComments(Guid postID);
         ICollection<ResponseReplyCommentDto> GetReplies(int? initialParentID);
-        bool LikeComment(int userID, LikeCommentDto likeCommentDto, bool isDuplicate);
+        bool LikeComment(Guid userID, LikeCommentDto likeCommentDto, bool isDuplicate);
 
         //Task<DeleteResponse> DeleteComment(int commentID);
         //string ExtractUsername(int commentID);

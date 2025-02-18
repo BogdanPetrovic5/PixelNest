@@ -6,7 +6,7 @@ namespace PixelNestBackend.Interfaces
     public interface ICommentService
     {
         bool LikeComment(LikeCommentDto likeCommentDto);
-        ICollection<ResponseCommentDto> GetComments(int postID);
+        ICollection<ResponseCommentDto> GetComments(Guid postID);
         ICollection<ResponseReplyCommentDto> GetReplies(int? initialParentID);
     }
 }

@@ -2,7 +2,7 @@
 {
     public class PostResponse
     {
-        public int PostID { get; set; }
+        public Guid PostID { get; set; }
         public bool IsSuccessfull { get; set; }
         public string Message { get; set; }
         public string? User { get; set; }

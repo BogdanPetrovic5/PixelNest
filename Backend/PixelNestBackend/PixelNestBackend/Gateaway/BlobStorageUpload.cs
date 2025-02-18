@@ -23,7 +23,7 @@ namespace PixelNestBackend.Gateaway
         }
        
 
-        public async Task<bool> StoreImages(PostDto? postDto, StoryDto? storyDto, ProfileDto profileDto, int userFolder, int? folder)
+        public async Task<bool> StoreImages(PostDto? postDto, StoryDto? storyDto, ProfileDto profileDto, Guid userFolder, Guid? folder)
         {
 
             try
@@ -54,7 +54,7 @@ namespace PixelNestBackend.Gateaway
                             }
                             var imagePaths = new ImagePath
                             {
-                                PostID = folder,
+                                PostGuid = folder,
                                 PhotoDisplay = postDto.PhotoDisplay,
                                 Path = blobName
                             };
@@ -85,7 +85,7 @@ namespace PixelNestBackend.Gateaway
                         }
                         var imagePaths = new ImagePath
                         {
-                            StoryID = folder,
+                            StoryGuid = folder,
                             PhotoDisplay = storyDto.PhotoDisplay,
                             Path = blobName
                         };
@@ -114,7 +114,7 @@ namespace PixelNestBackend.Gateaway
                             });
                         }
 
-                        var existingImagePath = await _dataContext.ImagePaths.FirstOrDefaultAsync(ip => ip.UserID == userFolder);
+                        var existingImagePath = await _dataContext.ImagePaths.FirstOrDefaultAsync(ip => ip.UserGuid == userFolder);
                         if (existingImagePath != null)
                         {
                             existingImagePath.Path = blobName;
@@ -125,7 +125,7 @@ namespace PixelNestBackend.Gateaway
                         {
                             var imagePaths = new ImagePath
                             {
-                                UserID = userFolder,
+                                UserGuid = userFolder,
                                 PhotoDisplay = "cover",
                                 Path = blobName
                             };

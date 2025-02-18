@@ -23,7 +23,7 @@ namespace PixelNestBackend.Services
         public int GetNumberOfNewMessages(string email)
         {
             string username = _userUtility.GetUserName(email);
-            int userID = _userUtility.GetUserID(username);
+            Guid userID = _userUtility.GetUserID(username);
 
             int newMessages = _chatRepository.GetNumberOfNewMessages(userID);
             return newMessages;
@@ -32,21 +32,21 @@ namespace PixelNestBackend.Services
         public ICollection<ResponseChatsDto> GetUserChats(string email)
         {
             string username = _userUtility.GetUserName(email);
-            int userID = _userUtility.GetUserID(username);
+            Guid userID = _userUtility.GetUserID(username);
             return _chatRepository.GetUserChats(userID);
         }
 
         public ICollection<ResponseMessagesDto> GetUserToUserMessages(string username, string targetUsername)
         {
-            int userID = _userUtility.GetUserID(username);
-            int targetID = _userUtility.GetUserID(targetUsername);
+            Guid userID = _userUtility.GetUserID(username);
+            Guid targetID = _userUtility.GetUserID(targetUsername);
             return _chatRepository.GetUserToUserMessages(userID, targetID);
         }
 
         public bool MarkAsRead(MarkAsRead markAsrReadDto,string email)
         {
             string username = _userUtility.GetUserName(email);
-            int userID = _userUtility.GetUserID(username);
+            Guid userID = _userUtility.GetUserID(username);
 
             return _chatRepository.MarkAsRead(markAsrReadDto, userID);
             throw new NotImplementedException();
@@ -56,8 +56,8 @@ namespace PixelNestBackend.Services
         {
             Message message = new Message();
 
-            message.SenderID = _userUtility.GetUserID(messageDto.SenderUsername);
-            message.ReceiverID = _userUtility.GetUserID(messageDto.ReceiverUsername);
+            message.SenderGuid = _userUtility.GetUserID(messageDto.SenderUsername);
+            message.ReceiverGuid = _userUtility.GetUserID(messageDto.ReceiverUsername);
             message.MessageText = messageDto.Message;
 
             string roomID = _connectionMenager.FindRoom(messageDto.ReceiverUsername, messageDto.SenderUsername);
@@ -67,8 +67,8 @@ namespace PixelNestBackend.Services
 
             return new MessageResponse { 
                 IsSuccessfull = response,
-                ReceiverID = message.ReceiverID, 
-                SenderID = message.SenderID 
+                ReceiverID = message.ReceiverGuid, 
+                SenderID = message.SenderGuid 
             };
         }
     }

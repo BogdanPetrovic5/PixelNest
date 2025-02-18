@@ -9,7 +9,7 @@ namespace PixelNestBackend.Interfaces
     {
         Task<ICollection<GroupedStoriesDto>> GetStories(string username);
         Task<ICollection<GroupedStoriesDto>> GetCurrentUserStories(string username);
-        Task<StoryResponse> PublishStory(StoryDto storyDto,int userID);
+        Task<StoryResponse> PublishStory(StoryDto storyDto,Guid userID);
         StoryResponse MarkStoryAsSeen(Seen seen);
         ICollection<ResponseViewersDto> GetViewers(ViewersDto viewersDto);
     }

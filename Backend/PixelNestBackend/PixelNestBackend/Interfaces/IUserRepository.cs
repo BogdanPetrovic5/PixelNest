@@ -13,10 +13,10 @@ namespace PixelNestBackend.Interfaces
         FollowResponse IsFollowing(FollowDto followDto);
         string GetUsername(string email);
 
-        string GetPicture(int userID);
+        string GetPicture(Guid userID);
         bool ChangeUsername(string username, string newUsername);
         ICollection<ResponseUsersDto> FindUsers(string username);
-        Task<bool> ChangeProfilePicture(int userID, ProfileDto profileDto);
+        Task<bool> ChangeProfilePicture(Guid userID, ProfileDto profileDto);
         
     }
 }

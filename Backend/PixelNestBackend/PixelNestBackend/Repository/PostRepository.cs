@@ -42,13 +42,13 @@ namespace PixelNestBackend.Repository
         }
 
       
-        public bool SavePost(int userID, SavePostDto savePostDto, bool isDuplicate)
+        public bool SavePost(Guid userID, SavePostDto savePostDto, bool isDuplicate)
         {
-            Post? post = _dataContext.Posts.Where(pid => savePostDto.PostID == pid.PostID).FirstOrDefault();
+            Post? post = _dataContext.Posts.Where(pid => savePostDto.PostID == pid.PostGuid).FirstOrDefault();
             var obj = new SavedPosts
             {
-                UserID = userID,
-                PostID = savePostDto.PostID,
+                UserGuid = userID,
+                PostGuid = savePostDto.PostID,
                 
             };
             var cacheKey = string.Format(PostsCacheKey);
@@ -60,7 +60,7 @@ namespace PixelNestBackend.Repository
 
                 return _dataContext.SaveChanges() > 0; 
             }
-            var existingSave = _dataContext.SavedPosts.FirstOrDefault(sp => sp.PostID == savePostDto.PostID && sp.UserID == userID);
+            var existingSave = _dataContext.SavedPosts.FirstOrDefault(sp => sp.PostGuid == savePostDto.PostID && sp.UserGuid == userID);
             if (existingSave != null) 
             {
               
@@ -71,7 +71,7 @@ namespace PixelNestBackend.Repository
             }
             return false;
         }
-        public async Task<PostResponse> PublishPost(PostDto postDto,int userID)
+        public async Task<PostResponse> PublishPost(PostDto postDto,Guid userID)
         {
             //if (postDto == null)
             //{
@@ -82,8 +82,8 @@ namespace PixelNestBackend.Repository
             //    };
             //}
 
-            //string newPostQuery = @"INSERT INTO Posts(UserID, PostDescription, TotalComments, TotalLikes, PublishDate, Location) 
-            //                VALUES(@UserID, @PostDescription, @TotalComments, @TotalLikes, GETDATE(), @Location);
+            //string newPostQuery = @"INSERT INTO Posts.UserGuid, PostDescription, TotalComments, TotalLikes, PublishDate, Location) 
+            //                VALUES(.UserGuid, @PostDescription, @TotalComments, @TotalLikes, GETDATE(), @Location);
             //                SELECT CAST(SCOPE_IDENTITY() as int)";
             //string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
@@ -96,7 +96,7 @@ namespace PixelNestBackend.Repository
             //        using (SqlCommand command = new SqlCommand(newPostQuery, connection))
             //        {
 
-            //            command.Parameters.AddWithValue("@UserID", userID);
+            //            command.Parameters.AddWithValue(".UserGuid", userID);
 
 
             //            command.Parameters.AddWithValue("@TotalComments", 0);
@@ -118,7 +118,7 @@ namespace PixelNestBackend.Repository
             //            {
             //                command.Parameters.AddWithValue("@PostDescription", postDto.PostDescription);
             //            }
-            //            int postID = (int)await command.ExecuteScalarAsync();
+            //            Guid postID = (int)await command.ExecuteScalarAsync();
             //            User user = _dataContext.Users.FirstOrDefault(u => u.Username == postDto.OwnerUsername);
             //            if(user != null)
             //            {
@@ -130,7 +130,7 @@ namespace PixelNestBackend.Repository
             //            return new PostResponse
             //            {
             //                IsSuccessfull = true,
-            //                PostID = postID,
+            //               .PostGuid = postID,
             //                Message = "Post was successfully added"
             //            };
             //        }
@@ -166,7 +166,7 @@ namespace PixelNestBackend.Repository
             try
             {
                
-                var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserID == userID);
+                var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserGuid == userID);
                 if (user == null)
                 {
                     return new PostResponse
@@ -179,7 +179,7 @@ namespace PixelNestBackend.Repository
               
                 var newPost = new Post
                 {
-                    UserID = userID,
+                    UserGuid = userID,
                     PostDescription = string.IsNullOrEmpty(postDto.PostDescription) ? null : postDto.PostDescription,
                     TotalComments = 0,
                     TotalLikes = 0,
@@ -201,7 +201,7 @@ namespace PixelNestBackend.Repository
                 return new PostResponse
                 {
                     IsSuccessfull = true,
-                    PostID = newPost.PostID,
+                    PostID = newPost.PostGuid,
                     Message = "Post was successfully added"
                 };
             }
@@ -220,18 +220,18 @@ namespace PixelNestBackend.Repository
             try
             {
                
-                    int userID = _userUtility.GetUserID(username);
-                    int currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
+                    Guid userID = _userUtility.GetUserID(username);
+                    Guid currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
                     ICollection<ResponsePostDto> posts = await _dataContext.Posts
-                        .Where(u => u.UserID == userID)
+                        .Where(u => u.UserGuid == userID)
                        .Select(a => new ResponsePostDto
                        {
                            PostDescription = a.PostDescription,
                            OwnerUsername = a.User.Username,
                            TotalComments = a.TotalComments,
                            TotalLikes = a.TotalLikes,
-                           PostID = a.PostID,
-                           IsDeletable = a.UserID == currentLoggedUserID,
+                           PostID = a.PostGuid,
+                           IsDeletable = a.UserGuid == currentLoggedUserID,
                            PublishDate = a.PublishDate,
                            ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
                            {
@@ -281,7 +281,7 @@ namespace PixelNestBackend.Repository
             try
             {
                
-                    int userID = _userUtility.GetUserID(username);
+                    Guid userID = _userUtility.GetUserID(username);
                     ICollection<ResponsePostDto> posts = await _dataContext.Posts
                        .Where(l => l.Location.ToLower().Contains(location.ToLower()))
                        .Select(a => new ResponsePostDto
@@ -290,8 +290,8 @@ namespace PixelNestBackend.Repository
                            OwnerUsername = a.User.Username,
                            TotalComments = a.TotalComments,
                            TotalLikes = a.TotalLikes,
-                           IsDeletable = a.UserID == userID,
-                           PostID = a.PostID,
+                           IsDeletable = a.UserGuid == userID,
+                           PostID = a.PostGuid,
                            PublishDate = a.PublishDate,
                            ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
                            {
@@ -341,13 +341,12 @@ namespace PixelNestBackend.Repository
                 var cacheKey = string.Format(PostsCacheKey, username);
 
                 var versionKey = $"{cacheKey}_Version";
-                Console.WriteLine("\nVersion key: " + versionKey + "\n");
 
               
               
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts) || CacheChange(username))
+                if (CacheChange(username) || !_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts))
                 {
-                    Console.WriteLine("\nPonovo je pokrenuo query!\n");
+                    
                   posts = await _dataContext.Posts
                         .Select(a => new ResponsePostDto
                         {
@@ -356,7 +355,7 @@ namespace PixelNestBackend.Repository
                             TotalComments = a.TotalComments,
                             TotalLikes = a.TotalLikes,
                             OwnerUsername = a.User.Username,
-                            PostID = a.PostID,
+                            PostID = a.PostGuid,
                             IsDeletable = a.User.Username == username,
                             PublishDate = a.PublishDate,
                             ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
@@ -413,37 +412,40 @@ namespace PixelNestBackend.Repository
 
         }
         
-        public PostResponse LikePost(LikeDto likeDto, bool isLiked, int userID)
+        public PostResponse LikePost(LikeDto likeDto, bool isLiked, Guid userID)
         {
 
             try
             {
                 bool doubleAction = false;
                 LikedPosts likedPost = _dataContext.LikedPosts
-                    .FirstOrDefault(lp => lp.UserID == userID && lp.PostID == likeDto.PostID);
+                    .FirstOrDefault(lp => lp.UserGuid == userID && lp.PostGuid == likeDto.PostID);
 
-                User user = _dataContext.Users.Where(u => u.UserID == userID).FirstOrDefault();
-                Post post = _dataContext.Posts.Include(u => u.User).Where(pid => pid.PostID == likeDto.PostID).FirstOrDefault();
-                Notification notification = _dataContext.Notifications.Where(ru => ru.ReceiverID == post.UserID && ru.SenderID == userID && ru.PostID == likeDto.PostID).FirstOrDefault();
+                User user = _dataContext.Users.Where(u => u.UserGuid == userID).FirstOrDefault();
+                Post post = _dataContext.Posts.Include(u => u.User).Where(pid => pid.PostGuid == likeDto.PostID).FirstOrDefault();
+                Notification notification = _dataContext.Notifications.Where(ru => ru.ReceiverGuid == post.UserGuid && ru.SenderGuid == userID && ru.PostGuid == likeDto.PostID).FirstOrDefault();
                 if (notification != null) _dataContext.Notifications.Remove(notification);
                 if (likedPost == null)
                 {
                     Notification newNotification = new Notification
                     {
                         Message = $"liked your photo.",
-                        SenderID = userID,
-                        ReceiverID = post.User.UserID,
+                        SenderGuid = userID,
+                        ReceiverGuid = post.User.UserGuid,
                         DateTime = DateTime.UtcNow,
-                        PostID = post.PostID,
-                        IsNew = true
+                       PostGuid = post.PostGuid,
+                        IsNew = true,
+                        ReceiverID = -1,
+                        SenderID = -1,
+                        PostID = -1,
 
                     };
-                    if (newNotification.SenderID != newNotification.ReceiverID) _dataContext.Notifications.Add(newNotification);
+                    if (newNotification.SenderGuid != newNotification.ReceiverGuid) _dataContext.Notifications.Add(newNotification);
                        
                     var newLikedPost = new LikedPosts
                     {
-                        UserID = userID,
-                        PostID = likeDto.PostID,
+                        UserGuid = userID,
+                        PostGuid = likeDto.PostID,
                         DateLiked = DateTime.UtcNow
                     };
                   
@@ -507,8 +509,8 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                Post post = _dataContext.Posts.Include(u=>u.User).FirstOrDefault(p => p.PostID == comment.PostID);
-                User user = _dataContext.Users.FirstOrDefault(u => u.UserID == comment.UserID);
+                Post post = _dataContext.Posts.Include(u=>u.User).FirstOrDefault(p => p.PostGuid == comment.PostGuid);
+                User user = _dataContext.Users.FirstOrDefault(u => u.UserGuid == comment.UserGuid);
                 Comment parentComment = null;
                 if (post == null || user == null)
                 {
@@ -532,9 +534,9 @@ namespace PixelNestBackend.Repository
                         parentComment.TotalReplies += 1;
 
                         this._createNotification(
-                            receiverID: parentComment.User.UserID,
-                            senderID: comment.UserID,
-                            postID: post.PostID,
+                            receiverID: parentComment.User.UserGuid,
+                            senderID: comment.UserGuid,
+                            postID: post.PostGuid,
                             parentCommentID: comment.ParentCommentID,
                             message: $"replied to your comment."
                         );
@@ -547,9 +549,9 @@ namespace PixelNestBackend.Repository
                 {
                     
                     this._createNotification(
-                        receiverID: post.UserID,
-                        senderID: comment.UserID,
-                        postID: post.PostID,
+                        receiverID: post.UserGuid,
+                        senderID: comment.UserGuid,
+                        postID: post.PostGuid,
                         message: $"commented on your photo.",
                         commentID: comment.CommentID
                     );
@@ -585,34 +587,37 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
-        private void _createNotification(int receiverID, int senderID, int postID, string message, int? commentID = null, int? parentCommentID = null, int? likeID = null)
+        private void _createNotification(Guid receiverID, Guid senderID, Guid postID, string message, int? commentID = null, int? parentCommentID = null, int? likeID = null)
         {
             var notification = new Notification
             {
-                ReceiverID = receiverID,
-                SenderID = senderID,
-                PostID = postID,
+               ReceiverGuid = receiverID,
+               SenderGuid = senderID,
+               PostGuid = postID,
+               ReceiverID = -1,
+               SenderID = -1,
+               PostID = -1,
                 LikeID = likeID,
                 Message = message,
                 DateTime = DateTime.UtcNow,
                 CommentID = commentID,
                 ParentCommentID = parentCommentID
             };
-            if(notification.ReceiverID != notification.SenderID)
+            if(notification.ReceiverGuid != notification.SenderGuid)
             {
                 _dataContext.Notifications.Add(notification);
                 _dataContext.SaveChanges();
             }
            
         }
-        public async Task<DeleteResponse> DeletePost(int postID)
+        public async Task<DeleteResponse> DeletePost(Guid postID)
         {
             try
             {
-                var post = _dataContext.Posts.FirstOrDefault(a => a.PostID == postID);
+                var post = _dataContext.Posts.FirstOrDefault(a => a.PostGuid == postID);
                 var userID = _dataContext.Posts
-                    .Where(p => p.PostID == postID)
-                    .Select(p => p.UserID)
+                    .Where(p => p.PostGuid == postID)
+                    .Select(p => p.UserGuid)
                     .FirstOrDefault();
                 if (post == null)
                 {
@@ -624,18 +629,23 @@ namespace PixelNestBackend.Repository
                     };
                 }
                 
-                _dataContext.Comments.Where(a => a.PostID == postID).ExecuteDelete();
-                _dataContext.LikedPosts.Where(a => a.PostID == postID).ExecuteDelete();
-                _dataContext.SavedPosts.Where(a => a.PostID == postID).ExecuteDelete();
-                _dataContext.ImagePaths.Where(a => a.PostID == postID).ExecuteDelete();
-                _dataContext.Notifications.Where(a => a.PostID == postID).ExecuteDelete();
-                User? user = _dataContext.Users.FirstOrDefault(u => u.UserID == userID);
+                _dataContext.Comments.Where(a => a.PostGuid == postID).ExecuteDelete();
+                _dataContext.LikedPosts.Where(a => a.PostGuid == postID).ExecuteDelete();
+                _dataContext.SavedPosts.Where(a => a.PostGuid == postID).ExecuteDelete();
+                _dataContext.ImagePaths.Where(a => a.PostGuid == postID).ExecuteDelete();
+                _dataContext.Notifications.Where(a => a.PostGuid == postID).ExecuteDelete();
+                User? user = _dataContext.Users.FirstOrDefault(u => u.UserGuid == userID);
                 if (user != null) user.TotalPosts -= 1;
-               
+                
                 _dataContext.Posts.Remove(post);
                 
                 await _dataContext.SaveChangesAsync();
+                Post latestPost = _dataContext.Posts.FirstOrDefault();
                 
+                if(latestPost != null) {
+                    latestPost.LastModified = DateTime.UtcNow;
+                    _dataContext.SaveChanges();
+                }
                 return new DeleteResponse
                 {
                     IsSuccess = true,
@@ -656,19 +666,19 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public int ExtractUserID(int postID)
+        public Guid ExtractUserID(Guid postID)
         {
-            int userID = _dataContext.Posts.Where(a => a.PostID == postID)
-                .Select(userID => userID.UserID).FirstOrDefault();
+            Guid userID = _dataContext.Posts.Where(a => a.PostGuid == postID)
+                .Select(userID => userID.UserGuid).FirstOrDefault();
 
             return userID;
         }
 
-        public bool CheckIntegrity(int userID, string email)
+        public bool CheckIntegrity(Guid userID, string email)
         {
             try
             {
-                bool isValid = _dataContext.Users.Where(u => u.UserID == userID).Any(e => e.Email == email);
+                bool isValid = _dataContext.Users.Where(u => u.UserGuid == userID).Any(e => e.Email == email);
                 return isValid;
             }
             catch (Exception ex)
@@ -678,13 +688,13 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public async Task<ResponsePostDto> GetSinglePost(int postID, string currentLoggedUser)
+        public async Task<ResponsePostDto> GetSinglePost(Guid postID, string currentLoggedUser)
         {
             try
             {
                 var cacheKey = string.Format(PostsCacheKey, currentLoggedUser);
                 var versionKey = $"{cacheKey}_Version";
-                int currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
+                Guid currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
                 if (_memoryCache.TryGetValue(cacheKey, out List<ResponsePostDto>? allPosts) && allPosts != null)
                 {
                     var cachedPost = allPosts.FirstOrDefault(p => p.PostID == postID);
@@ -696,15 +706,15 @@ namespace PixelNestBackend.Repository
                 }
                
                 ResponsePostDto? post = await _dataContext.Posts
-                    .Where(u => u.PostID == postID)
+                    .Where(u => u.PostGuid == postID)
                    .Select(a => new ResponsePostDto
                    {
                        PostDescription = a.PostDescription,
                        OwnerUsername = a.User.Username,
                        TotalComments = a.TotalComments,
                        TotalLikes = a.TotalLikes,
-                       PostID = a.PostID,
-                       IsDeletable = a.UserID == currentLoggedUserID,
+                       PostID = a.PostGuid,
+                       IsDeletable = a.UserGuid == currentLoggedUserID,
                        PublishDate = a.PublishDate,
                        ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
                        {
@@ -755,10 +765,8 @@ namespace PixelNestBackend.Repository
 
         public bool CacheChange(string username)
         {
-            Console.WriteLine(username);
             var cacheKey = string.Format(PostsCacheKey,username);
             var versionKey = $"{cacheKey}_Version";
-            Console.WriteLine("\nCacheChange: " + versionKey + "\n");
             if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
             {
                 cachedVersion = DateTime.MinValue; 
@@ -766,11 +774,9 @@ namespace PixelNestBackend.Repository
 
             var latestVersion = _getLatestVersion();
 
-            bool hasChanged = cachedVersion < latestVersion;
+            bool hasChanged = cachedVersion != latestVersion;
 
-            Console.WriteLine("\nLatest version date: " + latestVersion + "\n");
-            Console.WriteLine("\nCached version date: " + cachedVersion + "\n");
-            Console.WriteLine("\nCache change: " + hasChanged + "\n");
+         
            
           
 

@@ -54,9 +54,9 @@ namespace PixelNestBackend.Repository
                         CommentID = r.CommentID,
                         CommentText = r.CommentText,
                         TotalLikes = r.TotalLikes,
-                        UserID = r.UserID,
+                        UserID = r.UserGuid,
                         Username = r.User.Username,
-                        PostID = r.PostID,
+                        PostID = r.PostGuid,
                         ParentCommentID = r.ParentCommentID,
                         TotalReplies = r.TotalReplies,
                         LikedByUsers = r.LikedComments != null
@@ -105,7 +105,7 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
-        public ICollection<ResponseCommentDto> GetComments(int postID)
+        public ICollection<ResponseCommentDto> GetComments(Guid postID)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace PixelNestBackend.Repository
                 }
                 var latestVersion = DateTime.UtcNow;
                 if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseCommentDto> cachedComments) || cachedVersion < latestVersion){
-                    var allComments = _dataContext.Comments.Include(c => c.LikedComments).Include(c => c.User).Where(c => c.PostID == postID).ToList();
+                    var allComments = _dataContext.Comments.Include(c => c.LikedComments).Include(c => c.User).Where(c => c.PostGuid == postID).ToList();
                     cachedComments = allComments
                     .Where(c => c.ParentCommentID == null)
                     .Select(c => new ResponseCommentDto
@@ -125,9 +125,9 @@ namespace PixelNestBackend.Repository
                         CommentID = c.CommentID,
                         CommentText = c.CommentText,
                         TotalLikes = c.TotalLikes,
-                        UserID = c.UserID,
+                        UserID = c.UserGuid,
                         Username = c.User != null ? c.User.Username : "Unknown",
-                        PostID = c.PostID,
+                        PostID = c.PostGuid,
                         ParentCommentID = c.ParentCommentID,
                         TotalReplies = c.TotalReplies,
                         LikedByUsers = c.LikedComments != null
@@ -176,13 +176,13 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
-        public bool LikeComment(int userID, LikeCommentDto likeCommentDto, bool isDuplicate)
+        public bool LikeComment(Guid userID, LikeCommentDto likeCommentDto, bool isDuplicate)
         {
             try
             {
                 var likeObj = new LikedComments
                 {
-                    UserID = userID,
+                    UserGuid = userID,
                     CommentID = likeCommentDto.CommentID,
                   
 
@@ -196,7 +196,7 @@ namespace PixelNestBackend.Repository
                     return _dataContext.SaveChanges() > 0;
                 }
                 var existingLike = _dataContext.LikeComments
-                    .FirstOrDefault(l => l.UserID == userID && l.CommentID == likeCommentDto.CommentID);
+                    .FirstOrDefault(l => l.UserGuid == userID && l.CommentID == likeCommentDto.CommentID);
 
                 if (existingLike != null)
                 {
@@ -231,9 +231,9 @@ namespace PixelNestBackend.Repository
                     CommentID = reply.CommentID,
                     CommentText = reply.CommentText,
                     TotalLikes = reply.TotalLikes,
-                    UserID = reply.UserID,
+                    UserID = reply.UserGuid,
                     Username = reply.User.Username,
-                    PostID = reply.PostID,
+                    PostID = reply.PostGuid,
                     ParentCommentID = reply.ParentCommentID,
                     LikedByUsers = reply.LikedComments != null
                         ? reply.LikedComments.Select(l => new LikeCommentDto

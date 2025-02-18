@@ -28,7 +28,7 @@ namespace PixelNestBackend.Services
             result = _commentRepository.GetReplies(initialParentID);
             return result;
         }
-        public ICollection<ResponseCommentDto> GetComments(int postID)
+        public ICollection<ResponseCommentDto> GetComments(Guid postID)
         {
             ICollection<ResponseCommentDto> result;
             result = _commentRepository.GetComments(postID);
@@ -36,13 +36,13 @@ namespace PixelNestBackend.Services
         }
         public bool LikeComment(LikeCommentDto likeCommentDto)
         {
-            int userID = _userUtility.GetUserID(likeCommentDto.Username);
+            Guid userID = _userUtility.GetUserID(likeCommentDto.Username);
             Console.WriteLine(likeCommentDto.CommentID);
             Console.WriteLine(userID);
             
             bool isDuplicate = _commentUtility.FindDuplicates(userID, likeCommentDto.CommentID);
             Console.WriteLine(isDuplicate);
-            if (userID > -1)
+            if (userID != Guid.Empty)
             {
                 bool result = _commentRepository.LikeComment(userID, likeCommentDto, isDuplicate);
                 if (result)

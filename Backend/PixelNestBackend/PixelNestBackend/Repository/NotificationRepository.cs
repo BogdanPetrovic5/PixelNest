@@ -17,11 +17,11 @@ namespace PixelNestBackend.Repository
             _tokenGenerator = tokenGenerator;
         }
 
-        public int CountNotifications(int userID)
+        public int CountNotifications(Guid userID)
         {
             try
             {
-                int notifications = _dataContext.Notifications.Where(u => u.ReceiverID == userID && u.IsNew == true).Count();
+                int notifications = _dataContext.Notifications.Where(u => u.ReceiverGuid == userID && u.IsNew == true).Count();
                 return notifications;
             }
             catch (Exception ex)
@@ -31,14 +31,14 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public ICollection<ResponseNotificationsDto> GetNotifications(int userID)
+        public ICollection<ResponseNotificationsDto> GetNotifications(Guid userID)
         {
             try
             {
                 ICollection<ResponseNotificationsDto>? responseNotifications = null;
 
                 responseNotifications = _dataContext.Notifications
-                    .Where(u => u.ReceiverID == userID)
+                    .Where(u => u.ReceiverGuid == userID)
                     .Include(u => u.ReceiverUser)
                     .Include(u => u.SenderUser)
                     .Include(u => u.Post)
@@ -48,7 +48,7 @@ namespace PixelNestBackend.Repository
                         Message = u.Message,
                         NotificationID = u.NotificaitonID,
                         Username = u.SenderUser.Username,
-                        PostID = u.PostID,
+                        PostID = u.PostGuid,
                         ImagePath = u.Post.ImagePaths.Select(l => new ResponseImageDto
                         {
                             Path = l.Path,
@@ -72,7 +72,7 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public bool MarkAsOpened(MarkAsOpenedDto markAsRead, int userID)
+        public bool MarkAsOpened(MarkAsOpenedDto markAsRead, Guid userID)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace PixelNestBackend.Repository
 
 
                 var notificationsToUpdate = _dataContext.Notifications
-                        .Where(nid => notificationIDs.Contains(nid.NotificaitonID) && nid.ReceiverID == userID)
+                        .Where(nid => notificationIDs.Contains(nid.NotificaitonID) && nid.ReceiverGuid == userID)
                         .ToList();
                 foreach (var notification in notificationsToUpdate)
                 {

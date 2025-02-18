@@ -15,7 +15,7 @@ namespace PixelNestBackend.Gateaway
             _dataContext = dataContext;
         }
 
-        public async Task<bool> StoreImages(PostDto? postDto, StoryDto? storyDto, ProfileDto? profileDto, string userFolder, int? folder, int? userID)
+        public async Task<bool> StoreImages(PostDto? postDto, StoryDto? storyDto, ProfileDto? profileDto, string userFolder, Guid? folder, Guid? userID)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace PixelNestBackend.Gateaway
             }
         }
 
-        private async Task _storePostImages(PostDto postDto, string userFolder, int? folder)
+        private async Task _storePostImages(PostDto postDto, string userFolder, Guid? folder)
         {
             string postFolderPath = _createFolder(userFolder, folder.ToString());
 
@@ -54,7 +54,7 @@ namespace PixelNestBackend.Gateaway
                     string relativePath = filePath.Replace("wwwroot\\Photos\\", string.Empty).Trim();
                     var imagePath = new ImagePath
                     {
-                        PostID = folder,
+                        PostGuid = folder,
                         PhotoDisplay = postDto.PhotoDisplay,
                         Path = relativePath
                     };
@@ -65,7 +65,7 @@ namespace PixelNestBackend.Gateaway
 
             await _dataContext.SaveChangesAsync();
         }
-        private async Task _storeProfileImage(int? userID, IFormFile profilePicture, string userFolder)
+        private async Task _storeProfileImage(Guid? userID, IFormFile profilePicture, string userFolder)
         {
            if(profilePicture != null)
             {
@@ -73,7 +73,7 @@ namespace PixelNestBackend.Gateaway
 
                
                 var existingImagePath = await _dataContext.ImagePaths
-                    .FirstOrDefaultAsync(ip => ip.UserID == userID);
+                    .FirstOrDefaultAsync(ip => ip.UserGuid == userID);
                 string relativePath = filePath.Replace("wwwroot\\Photos\\", string.Empty).Trim();
                 if (existingImagePath != null)
                 {
@@ -87,7 +87,7 @@ namespace PixelNestBackend.Gateaway
                    
                     var newImagePath = new ImagePath
                     {
-                        UserID = userID,
+                        UserGuid = userID,
                         Path = filePath,
                         PhotoDisplay = "cover"
                     };
@@ -99,7 +99,7 @@ namespace PixelNestBackend.Gateaway
             }
 
         }
-        private async Task _storeStoryImage(StoryDto storyDto, string userFolder, int? folder)
+        private async Task _storeStoryImage(StoryDto storyDto, string userFolder, Guid? folder)
         {
             if (storyDto.StoryImage != null)
             {
@@ -108,7 +108,7 @@ namespace PixelNestBackend.Gateaway
                 string relativePath = filePath.Replace("wwwroot\\Photos\\", string.Empty).Trim();
                 var imagePath = new ImagePath
                 {
-                    StoryID = folder,
+                    StoryGuid = folder,
                     PhotoDisplay = storyDto.PhotoDisplay,
                     Path = relativePath
                 };

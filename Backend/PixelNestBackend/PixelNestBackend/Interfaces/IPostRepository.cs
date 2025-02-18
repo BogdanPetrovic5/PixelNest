@@ -8,17 +8,17 @@ namespace PixelNestBackend.Interfaces
 {
     public interface IPostRepository
     {
-        Task<PostResponse> PublishPost(PostDto postDto, int userID);
+        Task<PostResponse> PublishPost(PostDto postDto, Guid userID);
         Task<ICollection<ResponsePostDto>> GetPosts(string username);
         Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username,string currentLoggedUser);
         Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location, string username);
-        Task<ResponsePostDto> GetSinglePost(int postID, string currentLoggedUser);
-        bool SavePost(int userID, SavePostDto savePostDto, bool isDuplicate);
+        Task<ResponsePostDto> GetSinglePost(Guid postID, string currentLoggedUser);
+        bool SavePost(Guid userID, SavePostDto savePostDto, bool isDuplicate);
         bool CacheChange(string username);
-        PostResponse LikePost(LikeDto likeDto, bool isLiked, int userID);
+        PostResponse LikePost(LikeDto likeDto, bool isLiked, Guid userID);
         PostResponse Comment(Comment comment);
-        Task<DeleteResponse> DeletePost(int postID);
-        int ExtractUserID(int postID);
-        bool CheckIntegrity(int userID, string email);
+        Task<DeleteResponse> DeletePost(Guid postID);
+        Guid ExtractUserID(Guid postID);
+        bool CheckIntegrity(Guid userID, string email);
     }
 }

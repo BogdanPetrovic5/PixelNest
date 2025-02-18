@@ -9,7 +9,9 @@ namespace PixelNestBackend.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int StoryID { get; set; }
         public int UserID { get; set; }
-  
+        
+        public Guid StoryGuid { get; set; } = Guid.NewGuid();
+        public Guid UserGuid { get; set; }
         [NotMapped]
         public ICollection<ImagePath> ImagePath { get; set; }
         public DateTime CreationDate { get; set; }
