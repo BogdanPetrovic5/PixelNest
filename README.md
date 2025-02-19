@@ -5,7 +5,9 @@
 PixelNest is a web application currently under development, created with the purpose of expanding my knowledge in Angular and ASP.NET. The application is backed by MSSQL for data storage, integrating a modern tech stack to provide a robust environment for learning and development.
 
 ## API endpoints listed down below:
+
 ## Authentication
+
   #### POST `/api/Authentication/Registration`
   - Request body: 
       ```
@@ -32,6 +34,7 @@ PixelNest is a web application currently under development, created with the pur
           "isSuccess": false
         }
       ```
+
  #### POST `/api/Authentication/Logout`
   - Request body: 
       ```
@@ -40,6 +43,7 @@ PixelNest is a web application currently under development, created with the pur
         }
       ```
   - Response: `200 OK`
+
  #### POST `/api/Authentication/Login`
   - Request body: 
       ```
@@ -63,11 +67,13 @@ PixelNest is a web application currently under development, created with the pur
         }
       ```
      - `400 Bad Request`, `404 Not Found`
+    
 #### POST `/api/Authentication/IsLoggedIn`
   - Request Header: `JWT TOKEN`
   - Responses: `401 Unauthorized` and `200 OK`
 
 ## Comment
+
  #### GET `/api/Comments/GetReplies
   - Request URL `/api/Comment/GetReplies?initialParentID=${number}`
   - Response:
@@ -93,7 +99,8 @@ PixelNest is a web application currently under development, created with the pur
             ]
           }
         ]
-    ``` 
+    ```
+    
   #### GET `/api/Comments/GetComments`
   - Request URL `/api/Comment/GetComments?postID=${number}`
   - Response:
@@ -119,7 +126,8 @@ PixelNest is a web application currently under development, created with the pur
             ]
           }
         ]
-    ``` 
+    ```
+
   #### POST `/api/Comments/LikeComment`
   - Request:
   ```
@@ -129,6 +137,7 @@ PixelNest is a web application currently under development, created with the pur
     }
   ```
   - Responses: `200 OK`, `400 BadRequest`, `404 NotFound`
+
 ## Post  
 #### POST `/api/Post/ShareNewPost`
 - Request in form data format:
@@ -149,6 +158,7 @@ PixelNest is a web application currently under development, created with the pur
       "message": "string"
     }
   ```
+
 #### POST `/api/Post/SavePost`
 - Request in form data format:
   ```
@@ -201,7 +211,9 @@ PixelNest is a web application currently under development, created with the pur
         }
     ]
    ```
+   
 ## Story
+
 #### GET `/api/Story/GetStories`
 - Request URL: `/api/Story/GetStories?username={string}&maximum={number}`
 - Username parameter is optional. If client does not send username with query, API will fetch stories of all user.
@@ -230,6 +242,7 @@ If username is passed then API will fetch stories that belong to that user.
   ]
 }
 ```
+
 #### POST `api/Story/PublishStory
 - Request body:
 ```
@@ -247,6 +260,7 @@ If username is passed then API will fetch stories that belong to that user.
     "storyID": 0
   }
 ```
+
 #### POST `api/Story/MarkStoryAsSeen
 - Request body:
 ```
@@ -275,6 +289,7 @@ If username is passed then API will fetch stories that belong to that user.
 ```
 
 ## Notification
+
 #### POST `api/Notification/MarkAsOpened`
 - Request body:
 ```
@@ -292,28 +307,104 @@ If username is passed then API will fetch stories that belong to that user.
 
 #### GET `api/Notification/GetAllNotifications`
 - Request URL:  `api/Notification/GetAllNotifications`
-- Responses:
+- Response body:
+  ```
+  [
+    {
+      "username": "string",
+      "message": "string",
+      "date": "2025-02-13T15:55:28.587Z",
+      "postID": 0,
+      "notificationID": 0,
+      "imagePath": [
+        {
+          "pathID": 0,
+          "postID": 0,
+          "storyID": 0,
+          "path": "string",
+          "photoDisplay": "string"
+        }
+      ]
+    }
+  ]
+  ```
 
-```
-[
+## Chat
+
+#### GET `api/Chat/GetNumberOfMessages`
+- Request URL `api/Chat/GetNumberOfMessages`
+- Response body: `number`
+
+#### POST `api/Chat/MarkAsRead`
+- Request body:
+  ```
   {
-    "username": "string",
-    "message": "string",
-    "date": "2025-02-13T15:55:28.587Z",
-    "postID": 0,
-    "notificationID": 0,
-    "imagePath": [
-      {
-        "pathID": 0,
-        "postID": 0,
-        "storyID": 0,
-        "path": "string",
-        "photoDisplay": "string"
-      }
+    "messageID": [
+      0
     ]
   }
-]
-```
+  ```
+- Response body: `bool`
+
+#### GET `api/Chat/GetUserChats`
+- Request URL: `api/Chat/GetUserChats`
+- Response body:
+  ```
+  [
+    {
+      "chatID": "string",
+      "messages": [
+        {
+          "sender": "string",
+          "receiver": "string",
+          "message": "string",
+          "messageID": 0,
+          "isSeen": bool,
+          "source": "string",
+          "dateSent": "2025-02-19T17:43:16.516Z"
+        }
+      ]
+    }
+  ]
+  ```
+
+#### GET `api/Chat/GetUserToUserMessages`
+- Request URL: `api/Chat/GetUserToUserMessages?targetUsername={username}`
+- Response body:
+  ```
+  [
+    {
+      "sender": "string",
+      "receiver": "string",
+      "message": "string",
+      "messageID": 0,
+      "isSeen": bool,
+      "source": "string",
+      "dateSent": "2025-02-19T17:45:04.472Z"
+    }
+  ]
+  ```
+
+#### POST `api/Chat/SendMessage`
+- Request body:
+  ```
+    {
+      "message": "string",
+      "senderUsername": "string",
+      "receiverUsername": "string"
+    }
+  ```
+- Response: `bool`
+
+#### POST `api/Chat/LeaveRoom`
+- Request body: `none`
+- Request URL: `api/Chat/LeaveRoom?receiverUsername={username}`
+- Response: `bool`
+- 
+#### POST `api/Chat/JoinRoom`
+- Request body: `none`
+- Request URL: `api/Chat/JoinRoom?receiverUsername={username}`
+- Response: `bool`
 ## Frontend
 
 For frontend part as primary and only framework I used Angular 15.
