@@ -67,12 +67,11 @@ $HFONT: "Roboto Condensed", sans-serif;
             align-items: center;
             color:rgb(87, 87, 87);
             font-weight: 300;
+            flex: 0 0 auto;
             font-family: $PFONT;
             transition: 300ms;
             cursor: pointer;
-           position: relative;
-            
-           
+            position: relative;
             app-profile-image{
                 width: 90%;
                 height: 90%;
@@ -182,54 +181,20 @@ $HFONT: "Roboto Condensed", sans-serif;
     .story-section{
         width: 98%;
         height: 100%;
-        display: flex;
-        
-        flex-direction: row;
-        align-items: center;
-        justify-self: center;
         .personal{
             width: 20%;
             display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            font-size: 25px;
-            position: relative;
             .new-story{
                 width: 17px;
                 height: 17px;
-                background-color: $H1COLOR;
-                color: white;
-                font-size: 0.8em;
-                font-weight: bolder;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border-radius: 50%;
-                position: absolute;
                 bottom: 22%;
                 left: 50%;
-                transform: translateX(-50%);
-                cursor: pointer;
-                z-index: 4;
-                border: 3px solid $BGCOLOR;
             }
             .box{
                 height: 55px;
                 width: 55px;
-                border: 1px dashed rgb(87, 87, 87);;
-                border-radius: 50%;
-                font-size: 35px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color:rgb(87, 87, 87);
-                font-weight: 300;
-                flex: 0 0 auto;
-                font-family: $PFONT;
-                transition: 300ms;
-                cursor: pointer;
-                position: relative;
+               
                 app-profile-image{
                     width: 90%;
                     height: 90%;
@@ -260,36 +225,14 @@ $HFONT: "Roboto Condensed", sans-serif;
         .following{
             width: 80%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
           
             .following-list{
-                width: unset;
-                min-width: 90%;
-                height: 100%;
-                display: flex;
-                flex-direction: row;
-               gap: 20px;
-                align-items: center;
+           
                 .user-box{
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-end;
-                    align-items: center;
                     gap: 5px;
-                   
-                    flex: 0 0 auto;
                     .box{
                         width: 55px;
                         height: 55px;
-                        border-radius: 50%;
-                        position: relative;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        
-                        cursor: pointer;
                         app-profile-image{
                             width: 90%;
                             height: 90%;
@@ -315,8 +258,6 @@ $HFONT: "Roboto Condensed", sans-serif;
                     h1{
                         overflow: hidden;
                         font-size: 0.5em;
-                        color: $PCOLOR;
-                        font-family: $HFONT;
                         font-weight: 300;
                         margin: 0;
                         width: 55px;
@@ -346,36 +287,12 @@ $HFONT: "Roboto Condensed", sans-serif;
             .new-story{
                 width: 15px;
                 height: 15px;
-                background-color: $H1COLOR;
-                color: white;
                 font-size: 0.8em;
-                font-weight: bolder;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border-radius: 50%;
-                position: absolute;
-                bottom: 25%;
-            left: 50%;
-            transform: translateX(-50%);
-                cursor: pointer;
-                z-index: 4;
             }
             .box{
                 height: 50px;
                 width: 50px;
-                border: 1px dashed rgb(87, 87, 87);;
-                border-radius: 50%;
                 font-size: 35px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color:rgb(87, 87, 87);
-                font-weight: 300;
-                font-family: $PFONT;
-                transition: 300ms;
-                cursor: pointer;
-                position: relative;
                 app-profile-image{
                     width: 90%;
                     height: 90%;
@@ -414,18 +331,9 @@ $HFONT: "Roboto Condensed", sans-serif;
             .following-list{
                 width: unset;
                 min-width: 90%;
-                display: flex;
-                flex-direction: row;
-               gap: 20px;
+                gap: 20px;
                 align-items: center;
                 .user-box{
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-end;
-                    align-items: center;
-                    gap: 5px;
-                    flex: 0 0 auto;
-                    overflow: hidden;
                     .box{
                         width: 50px;
                         height: 50px;
