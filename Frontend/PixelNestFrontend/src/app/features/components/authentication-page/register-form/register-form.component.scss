@@ -218,33 +218,21 @@ $HFONT: "Roboto Condensed", sans-serif;
             height: 30px;
         }
         .wrap{
-          width: 100%;
-            
-            font-size: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
+          width: 100%;  
+            font-size: 25px;   
             h1{
                 font-size: 1.0em;
-                font-family: $HFONT;
-                color: $PCOLOR;
                 margin: 0;
             }
             p{
                 margin: 0;
                 margin-top: 10px !important;
                 font-size: 0.8em;
-                color: $PCOLOR;
-                font-family: $PFONT;
             }
             .inputs{
                 width: 95%;
                 .invalid-feedback{
-                  color: red;
-                  font-size: 0.65em;
-                  font-family: $PFONT;
+                  font-size: 0.65em;                
                   margin-top: 10px;
                 }
                 button{
@@ -254,13 +242,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     background-color: $H1COLOR;
                     margin-top: 40px;
                     border-radius: 50px;
-                    border: none;
-                    outline: none;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
                     font-size: 25px;
-                    transition: 300ms ease-in-out;
                     cursor: pointer;
                     h1{
                         margin: 0;
@@ -268,7 +250,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                         font-family: $HFONT;
                         letter-spacing: 2px;
                         font-size: .7em;
-                        color: rgb(255, 255, 255);
+                       
                     }
                 }
                 
@@ -304,30 +286,19 @@ $HFONT: "Roboto Condensed", sans-serif;
           width: 100%;
             margin-top: 40px;
             font-size: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
             h1{
                 font-size: 1.2em;
-                font-family: $HFONT;
-                color: $PCOLOR;
                 margin: 0;
             }
             p{
                 margin: 0;
                 margin-top: 10px !important;
                 font-size: 0.8em;
-                color: $PCOLOR;
-                font-family: $PFONT;
             }
             .inputs{
                 width: 95%;
                 .invalid-feedback{
-                  color: red;
                   font-size: 0.65em;
-                  font-family: $PFONT;
                   margin-top: 10px;
                 }
                 button{
@@ -336,22 +307,14 @@ $HFONT: "Roboto Condensed", sans-serif;
                     padding-bottom: 15px;
                     background-color: $H1COLOR;
                     margin-top: 40px;
-                    border-radius: 50px;
-                    border: none;
-                    outline: none;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
                     font-size: 25px;
                     transition: 300ms ease-in-out;
                     cursor: pointer;
                     h1{
                         margin: 0;
-                        padding: 0;
-                        font-family: $HFONT;
+                        padding: 0;                  
                         letter-spacing: 2px;
                         font-size: .8em;
-                        color: rgb(255, 255, 255);
                     }
                 }
                 
@@ -387,54 +350,35 @@ $HFONT: "Roboto Condensed", sans-serif;
           width: 100%;
            
             font-size: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
             h1{
                 font-size: 1.4em;
                 font-family: $HFONT;
-                color: $PCOLOR;
                 margin: 0;
             }
             p{
                 margin: 0;
                 margin-top: 10px !important;
                 font-size: 0.9em;
-                color: $PCOLOR;
-                font-family: $PFONT;
             }
             .inputs{
                 width: 95%;
                 .invalid-feedback{
-                  color: red;
                   font-size: 0.65em;
-                  font-family: $PFONT;
                   margin-top: 10px;
                 }
                 button{
                     width: 100%;
                     padding-top: 15px;
                     padding-bottom: 15px;
-                    background-color: $H1COLOR;
                     margin-top: 40px;
-                    border-radius: 50px;
-                    border: none;
-                    outline: none;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
                     font-size: 25px;
                     transition: 300ms ease-in-out;
                     cursor: pointer;
                     h1{
                         margin: 0;
                         padding: 0;
-                        font-family: $HFONT;
                         letter-spacing: 2px;
                         font-size: .9em;
-                        color: rgb(255, 255, 255);
                     }
                 }
                 
