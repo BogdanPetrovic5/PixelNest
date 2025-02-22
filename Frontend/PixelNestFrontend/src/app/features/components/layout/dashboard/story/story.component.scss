@@ -313,8 +313,6 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
             h1{
                 font-size: 0.6em;
-                color: $PCOLOR;
-                font-family: $HFONT;
                 font-weight: 300;
                 margin: 0;
                 transition: 300ms;
@@ -322,9 +320,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         }
         .following{
             width: 85%;
-          
             display: flex;
-           
             justify-content: center;
             align-items: center;
           
@@ -365,8 +361,6 @@ $HFONT: "Roboto Condensed", sans-serif;
                     h1{
                         overflow: hidden;
                         font-size: 0.5em;
-                        color: $PCOLOR;
-                        font-family: $HFONT;
                         font-weight: 300;
                         align-self: center;
                         margin: 0;
