@@ -17,7 +17,6 @@ $HFONT: "Roboto Condensed", sans-serif;
     .container-content{
         width: 100%;
         height: 100%;
-       
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -171,7 +170,6 @@ $HFONT: "Roboto Condensed", sans-serif;
                     display: none;
                     li{
                         font-size: 0.7em;
-                        font-family: "Josefin Sans", sans-serif;
                     }
                 }
             }
@@ -200,15 +198,11 @@ $HFONT: "Roboto Condensed", sans-serif;
                     z-index: 1;
                     h1{
                         font-size: 1.3em;
-                        color: $H1COLOR;
-                        font-family: $HFONT;
                         width: 100%;
                         margin: 0;
                     }
                     p{
                         font-size: 0.6em;
-                        color: $PCOLOR;
-                        font-family: $PFONT;
                         opacity: 0.8;
                         width: 55%;
                     }
@@ -220,11 +214,6 @@ $HFONT: "Roboto Condensed", sans-serif;
                         transition: 200ms ease-in-out;
                         button{
                             padding:10px 15px;
-                            border-radius: 50px;
-                            border: none;
-                            outline: none;
-                            background-color: $H1COLOR;
-                            font-family: $PFONT;
                             font-size: 0.65em;
                             margin-top: 0px;
                             transition: 200ms ease-in-out;
@@ -239,8 +228,6 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
             .footer{
                 font-size: 1.6em;
-                font-family: $HFONT;
-                color: $PCOLOR;
                 width: 80%;
                 align-self: center;
                 text-align: center;
@@ -272,10 +259,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                 }
                 .nav-bar{
                     display: none;
-                   
                     li{
                         font-size: 0.7em;
-                        font-family: "Josefin Sans", sans-serif;
                     }
                 }
             }
@@ -284,7 +269,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 top: 0;
                 width: 100%;
                 height: 100%;
-               background-color: #041f2bd7;
+                background-color: #041f2bd7;
                 left: 0;
                 content: '';
             
@@ -306,15 +291,11 @@ $HFONT: "Roboto Condensed", sans-serif;
                     z-index: 1;
                     h1{
                         font-size: 1.3em;
-                        color: $H1COLOR;
-                        font-family: $HFONT;
                         width: 80%;
                         margin: 0;
                     }
                     p{
                         font-size: 0.7em;
-                        color: $PCOLOR;
-                        font-family: $PFONT;
                         opacity: 0.8;
                         width: 55%;
                     }
@@ -326,17 +307,12 @@ $HFONT: "Roboto Condensed", sans-serif;
                         button{
                             padding:10px 15px;
                             border-radius: 50px;
-                            border: none;
-                            outline: none;
-                            background-color: $H1COLOR;
-                            font-family: $PFONT;
                             font-size: 0.65em;
                             margin-top: 40px;
                             transition: 200ms ease-in-out;
                         }
                         button:first-child{
                             background-color: $PCOLOR !important;
-    
                         }
                     }
                 }
@@ -344,8 +320,6 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
             .footer{
                 font-size: 1.6em;
-                font-family: $HFONT;
-                color: $PCOLOR;
                 width: 80%;
                 align-self: center;
                 text-align: center;
@@ -377,10 +351,8 @@ $HFONT: "Roboto Condensed", sans-serif;
                 }
                 .nav-bar{
                     display: none;
-                   
                     li{
                         font-size: 0.7em;
-                        font-family: "Josefin Sans", sans-serif;
                     }
                 }
             }
@@ -389,11 +361,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                 top: 0;
                 width: 100%;
                 height: 100%;
-               background-color: #041f2bd7;
+                background-color: #041f2bd7;
                 left: 0;
                 content: '';
-            
-
             }
             .content{
                
@@ -412,15 +382,11 @@ $HFONT: "Roboto Condensed", sans-serif;
                     z-index: 1;
                     h1{
                         font-size: 1.6em;
-                        color: $H1COLOR;
-                        font-family: $HFONT;
                         width: 60%;
                         margin: 0;
                     }
                     p{
                         font-size: 0.6em;
-                        color: $PCOLOR;
-                        font-family: $PFONT;
                         opacity: 0.8;
                         width: 55%;
                     }
@@ -434,8 +400,6 @@ $HFONT: "Roboto Condensed", sans-serif;
                             border-radius: 50px;
                             border: none;
                             outline: none;
-                            background-color: $H1COLOR;
-                            font-family: $PFONT;
                             font-size: 0.7em;
                             margin-top: 40px;
                             transition: 200ms ease-in-out;
@@ -450,8 +414,6 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
             .footer{
                 font-size: 2em;
-                font-family: $HFONT;
-                color: $PCOLOR;
                 width: 80%;
                 align-self: center;
                 text-align: center;
@@ -464,10 +426,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 align-items: center;
                 font-size: 25px;
                 h1{
-                    font-size: 1.3em;
-                    font-family: $PFONT;
-                    color: $PCOLOR;
-                    
+                    font-size: 1.3em;      
                 }
             }
         }
@@ -498,7 +457,6 @@ $HFONT: "Roboto Condensed", sans-serif;
                     text-align: center;
                     li{
                         font-size: 0.7em;
-                        font-family: "Josefin Sans", sans-serif;
                     }
                 }
             }
@@ -508,15 +466,11 @@ $HFONT: "Roboto Condensed", sans-serif;
                     width: 90%;
                     h1{
                         font-size: 2em;
-                        color: $H1COLOR;
-                        font-family: $HFONT;
                         width: 60%;
                         margin: 0;
                     }
                     p{
                         font-size: 0.7em;
-                        color: $PCOLOR;
-                        font-family: $PFONT;
                         opacity: 0.8;
                         width: 55%;
                     }
@@ -528,10 +482,6 @@ $HFONT: "Roboto Condensed", sans-serif;
                         button{
                             padding:15px 35px;
                             border-radius: 50px;
-                            border: none;
-                            outline: none;
-                            background-color: $H1COLOR;
-                            font-family: $PFONT;
                             font-size: 0.7em;
                             margin-top: 40px;
                             transition: 200ms ease-in-out;
@@ -546,8 +496,6 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
             .footer{
                 font-size: 2em;
-                font-family: $HFONT;
-                color: $PCOLOR;
                 width: 80%;
                 align-self: center;
                 text-align: center;
@@ -572,15 +520,11 @@ $HFONT: "Roboto Condensed", sans-serif;
                     width: 90%;
                     h1{
                         font-size: 2em;
-                        color: $H1COLOR;
-                        font-family: $HFONT;
                         width: 60%;
                         margin: 0;
                     }
                     p{
                         font-size: 0.7em;
-                        color: $PCOLOR;
-                        font-family: $PFONT;
                         opacity: 0.8;
                         width: 55%;
                     }
@@ -592,10 +536,6 @@ $HFONT: "Roboto Condensed", sans-serif;
                         button{
                             padding:15px 35px;
                             border-radius: 50px;
-                            border: none;
-                            outline: none;
-                            background-color: $H1COLOR;
-                            font-family: $PFONT;
                             font-size: 0.7em;
                             margin-top: 40px;
                             transition: 200ms ease-in-out;
@@ -606,12 +546,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                         }
                     }
                 }
-                
             }
             .footer{
                 font-size: 2em;
-                font-family: $HFONT;
-                color: $PCOLOR;
                 width: 80%;
                 align-self: center;
                 text-align: center;
