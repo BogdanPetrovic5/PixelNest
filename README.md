@@ -1,5 +1,6 @@
 # PixelNest Documentation
-
+## Links: 
+Live chat and profile photo cropper video: https://www.youtube.com/watch?v=gNDLqYFnqsU
 ## Short Description
 
 PixelNest is a web application currently under development, created with the purpose of expanding my knowledge in Angular and ASP.NET. The application is backed by MSSQL for data storage, integrating a modern tech stack to provide a robust environment for learning and development.
