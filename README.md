@@ -370,7 +370,7 @@ If username is passed then API will fetch stories that belong to that user.
   ```
 
 #### GET `api/Chat/GetUserToUserMessages`
-- Request URL: `api/Chat/GetUserToUserMessages?targetUsername={username}`
+- Request URL: `api/Chat/GetUserToUserMessages?targetClientGuid={targetClientGuid}`
 - Response body:
   ```
   [
@@ -399,12 +399,12 @@ If username is passed then API will fetch stories that belong to that user.
 
 #### POST `api/Chat/LeaveRoom`
 - Request body: `none`
-- Request URL: `api/Chat/LeaveRoom?receiverUsername={username}`
+- Request URL: `api/Chat/LeaveRoom?targetClientGuid={targetClientGuid}`
 - Response: `bool`
 - 
 #### POST `api/Chat/JoinRoom`
 - Request body: `none`
-- Request URL: `api/Chat/JoinRoom?receiverUsername={username}`
+- Request URL: `api/Chat/JoinRoom?targetClientGuid={targetClientGuid}`
 - Response: `bool`
 ## Frontend
 
