@@ -11,8 +11,10 @@ namespace PixelNestBackend.Models
 
         public int SenderID { get; set; } 
         public int ReceiverID { get; set; }
+        public string ChatID { get; set; }
         public Guid SenderGuid { get; set; }
         public Guid ReceiverGuid { get; set; } 
+         
         public string MessageText { get; set; }
      
         public DateTime DateSent { get; set; }

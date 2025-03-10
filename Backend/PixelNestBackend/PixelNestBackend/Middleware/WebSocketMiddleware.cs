@@ -6,6 +6,9 @@ using PixelNestBackend.Services;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Utility;
 using PixelNestBackend.Models;
+using PixelNestBackend.Data;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace PixelNestBackend.Middleware
 {
@@ -13,17 +16,20 @@ namespace PixelNestBackend.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly WebSocketConnectionMenager _connectionMenager;
+        private readonly IServiceScopeFactory _serviceFactory;
 
 
         public WebSocketMiddleware(
             RequestDelegate next,
-            WebSocketConnectionMenager connectionMenager
+            WebSocketConnectionMenager connectionMenager,
+           IServiceScopeFactory serviceScopeFactory
 
             )
         {
             _next = next;
             _connectionMenager = connectionMenager;
-
+            _serviceFactory = serviceScopeFactory;
+           
         }
 
 
@@ -34,13 +40,23 @@ namespace PixelNestBackend.Middleware
 
 
                 var socket = await httpContext.WebSockets.AcceptWebSocketAsync();
-                string username = httpContext.Request.Query["userID"];
+                    
+                string? token = httpContext.Request.Cookies["jwtToken"];
+                
+                string userGuid = _extractUserGuid(token);
 
+                using (var scope = _serviceFactory.CreateScope())
+                {
+                    var userUtility = scope.ServiceProvider.GetRequiredService<UserUtility>();
+                    string clientGuid = userUtility.GetClientGuid(userGuid);
 
-                await _connectionMenager.AddSocket(socket, username);
-                Console.WriteLine($"WebSocket connected: {username}");
-                await _connectionMenager.NotifyUsers(username, true);
-                await Receive(socket, username);
+                    await _connectionMenager.AddSocket(socket, clientGuid);
+                    Console.WriteLine($"\nWebSocket connected: {clientGuid}\n");
+                    await _connectionMenager.NotifyUsers(clientGuid, true);
+                    await Receive(socket, clientGuid);
+                }
+
+               
             }
             else
             {
@@ -93,6 +109,23 @@ namespace PixelNestBackend.Middleware
                 Console.WriteLine(ex.Message);
             }
         }
+        private string _extractUserGuid(string token)
+        {
+
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = tokenHandler.ReadJwtToken(token);
+
+                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+                return userIdClaim.Value;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         private class WebSocketMessage
         {
             public string Type { get; set; }
@@ -100,6 +133,7 @@ namespace PixelNestBackend.Middleware
             public string TargetUser { get; set; }
             public string Content { get; set; }
         }
+
     }
 
 }

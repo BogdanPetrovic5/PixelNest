@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using PixelNestBackend.Data;
+using System.Reflection.Metadata;
 
 namespace PixelNestBackend.Utility
 {
@@ -11,19 +12,33 @@ namespace PixelNestBackend.Utility
         {
              _dataContext = dataContext;
         }
-        public Guid GetUserID(string username)
+        public string GetClientGuid(string parameter)
+        {
+            string userID = "";
+            if (_dataContext != null)
+            {
+                var user = _dataContext.Users.FirstOrDefault(x => (x.UserGuid).ToString() == parameter);
+                if (user != null)
+                {
+                    userID = user.ClientGuid.ToString();
+                }
+
+            }
+            return userID;
+        }
+        public Guid GetUserID(string parameter)
         {
             Guid userID = Guid.Empty;
             if (_dataContext != null)
             {
-                var user =_dataContext.Users.FirstOrDefault(x => x.Username == username);
+                var user =_dataContext.Users.FirstOrDefault(x => (x.Username == parameter) || ((x.ClientGuid).ToString() == parameter));
                 if(user != null)
                 {
                     userID = user.UserGuid;
                 }
 
             }
-            Console.WriteLine("\nUser GUID: " + userID + "\n");
+            
             return userID;
         }
         public string GetUserName(Guid userID)
@@ -42,12 +57,12 @@ namespace PixelNestBackend.Utility
             return null;
 
         }
-        public string GetUserName(string email)
+        public string GetUserName(string userGuid)
         {
 
             if (_dataContext != null)
             {
-                var user = _dataContext.Users.FirstOrDefault(x => x.Email == email);
+                var user = _dataContext.Users.FirstOrDefault(x => (x.UserGuid).ToString() == userGuid || (x.ClientGuid).ToString() == userGuid);
                 if (user != null)
                 {
                     return user.Username;
@@ -58,5 +73,22 @@ namespace PixelNestBackend.Utility
             return null;
 
         }
+        public string GetEmail(string userGuid)
+        {
+
+            if (_dataContext != null)
+            {
+                var user = _dataContext.Users.FirstOrDefault(x => (x.UserGuid).ToString() == userGuid);
+                if (user != null)
+                {
+                    return user.Email;
+                }
+
+
+            }
+            return null;
+
+        }
+
     }
 }

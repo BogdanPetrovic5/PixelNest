@@ -1,5 +1,9 @@
-﻿using PixelNestBackend.Dto.WebSockets;
+﻿using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.WebSockets;
+using PixelNestBackend.Migrations;
 using PixelNestBackend.Models;
+using PixelNestBackend.Responses;
+using PixelNestBackend.Utility;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -16,13 +20,17 @@ namespace PixelNestBackend.Services.Menagers
         private readonly ConcurrentDictionary<string, List<string>> _rooms = new();
         private readonly ConcurrentDictionary<string, WebSocket> _connections = new();
         private readonly ConcurrentDictionary<string, bool> _userStatuses = new();
-
+     
+        public WebSocketConnectionMenager() { 
+            
+        }
         public async Task AddSocket(WebSocket socket, string userID)
         {
             _connections.TryAdd(userID, socket);
             _userStatuses[userID] = true;
+            
             var activeUsers = _userStatuses.Where(u => u.Value && !u.Key.Equals(userID)).Select(u => new {
-                username = u.Key,
+                userID = u.Key,
                 isActive = u.Value,
             }).ToList();
             var activeUsersMessage = new
@@ -106,28 +114,31 @@ namespace PixelNestBackend.Services.Menagers
                 }
             }
         }
-        public async Task SendMessageToUser(string receiver, string sender, string message)
+        public async Task SendMessageToUser(MessageResponse messageResponse)
         {
            
 
-            string actualRoomID = FindRoom(receiver, sender);
+            string actualRoomID = FindRoom((messageResponse.ReceiverID).ToString(), (messageResponse.SenderID).ToString());
             WebSocketMessage webSocketMessage = new WebSocketMessage
             {
-                SenderUsername = sender,
-                TargetUser = receiver,
+                SenderUsername = messageResponse.SenderUsername,
+                TargetUser = messageResponse.ReceiverUsername,
                 RoomID = actualRoomID,
-                Content = message
+                Content = messageResponse.Message,
+                SenderUser = (messageResponse.SenderID).ToString()
             };
-           
-            if (IsUserInRoom(actualRoomID, receiver)) 
+         
+        
+            if (IsUserInRoom(actualRoomID, (messageResponse.ReceiverID).ToString())) 
             {
-              
+                Console.WriteLine("\nMessage room\n");
                 webSocketMessage.Type = "Room";
                 string jsonMessage = System.Text.Json.JsonSerializer.Serialize(webSocketMessage);
-                await _sendMessageToRoom(actualRoomID, receiver, jsonMessage);
+                await _sendMessageToRoom(actualRoomID, (messageResponse.ReceiverID).ToString(), jsonMessage);
                 
-            }else if (_connections.TryGetValue(receiver, out var webSocket) && webSocket.State == WebSocketState.Open)
+            }else if (_connections.TryGetValue((messageResponse.ReceiverID).ToString(), out var webSocket) && webSocket.State == WebSocketState.Open)
             {
+                Console.WriteLine("\nMessage Direct\n");
                 webSocketMessage.Type = "Direct";
                 string jsonMessage = System.Text.Json.JsonSerializer.Serialize(webSocketMessage);
                 var buffer = Encoding.UTF8.GetBytes(jsonMessage);
@@ -151,13 +162,17 @@ namespace PixelNestBackend.Services.Menagers
         {
             if (!_rooms.ContainsKey(roomID))
             {
+               
                 return false;
             }
 
             foreach (var connectionID in _rooms[roomID])
             {
+                Console.WriteLine("Receiver: " + receiver);
+                Console.WriteLine("Receiver: " + connectionID);
                 if (_connections.TryGetValue(connectionID, out var socket) && connectionID == receiver)
                 {
+                   
                     return true;
                 }
             }

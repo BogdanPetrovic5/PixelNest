@@ -31,9 +31,9 @@ namespace PixelNestBackend.Controllers
         [HttpGet("GetNumberOfMessages")]
         public ActionResult<int> GetNumberOfNewMessages()
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
-            int number = _chatService.GetNumberOfNewMessages(email);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+            int number = _chatService.GetNumberOfNewMessages(userGuid);
             return Ok(new {
                 newMessages = number
             });
@@ -42,9 +42,9 @@ namespace PixelNestBackend.Controllers
         [HttpPost("MarkAsRead")]
         public ActionResult<bool> MarkAsRead([FromBody] MarkAsRead markAsReadDto)
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
-            bool response = _chatService.MarkAsRead(markAsReadDto, email);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+            bool response = _chatService.MarkAsRead(markAsReadDto, userGuid);
             return Ok(response);
         }
 
@@ -53,71 +53,82 @@ namespace PixelNestBackend.Controllers
         [HttpGet("GetUserChats")]
         public ActionResult<ICollection<ResponseChatsDto>> GetUserChats() {
 
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
-            ICollection<ResponseChatsDto> chats = _chatService.GetUserChats(email);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+            ICollection<ResponseChatsDto> chats = _chatService.GetUserChats(userGuid);
             if (chats == null) return NotFound();
             return Ok(chats);
         }
 
         [Authorize]
         [HttpGet("GetUserToUserMessages")]
-        public ActionResult<ICollection<ResponseMessagesDto>> GetUserToUserMessages(string targetUsername)
+        public ActionResult<ICollection<ResponseMessagesDto>> GetUserToUserMessages(string chatID)
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
-            string username = _userUtility.GetUserName(email);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+           
 
-            ICollection<ResponseMessagesDto> messages = _chatService.GetUserToUserMessages(username, targetUsername);
+            ICollection<ResponseMessagesDto> messages = _chatService.GetUserToUserMessages(chatID, userGuid);
             return Ok(messages);
         }
         [Authorize]
         [HttpPost("SendMessage")]
         public async Task<ActionResult<bool>> SendMessage(MessageDto messageDto)
         {
-            if (messageDto == null) return BadRequest();
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            Console.WriteLine("Message user guid: " + userGuid);
+            if (messageDto == null || userGuid == null) return BadRequest();
 
-            MessageResponse response = _chatService.SaveMessage(messageDto);
+            MessageResponse response = _chatService.SaveMessage(messageDto, userGuid);
 
             if (response.IsSuccessfull)
             {
-                 await _websocketManager.SendMessageToUser(messageDto.ReceiverUsername,messageDto.SenderUsername ,messageDto.Message);
-                 return Ok(response.IsSuccessfull);
+       
+
+                await _websocketManager.SendMessageToUser(response);
+                return Ok(response.IsSuccessfull);
             }
             return BadRequest();
             
         }
         [Authorize]
         [HttpPost("LeaveRoom")]
-        public ActionResult<bool> LeaveRoom([FromQuery] string receiverUsername)
+        public ActionResult<bool> LeaveRoom([FromQuery] string targetClientGuid)
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
-            Guid userID = _userService.GetUserID(email);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
 
-            string username = _userUtility.GetUserName(email);
-            string roomID = $"{username}-{receiverUsername}";
-            string reverserdRoomID = $"{receiverUsername}-{username}";
+            string currentClientGuid = _userUtility.GetClientGuid(userGuid);
 
-            _websocketManager.LeaveRoom(roomID, reverserdRoomID, username);
+            string roomID = $"{currentClientGuid}-{targetClientGuid}";
+            string reverserdRoomID = $"{targetClientGuid}-{currentClientGuid}";
 
-            return Ok();
+            _websocketManager.LeaveRoom(roomID, reverserdRoomID, currentClientGuid);
+
+            return Ok(new
+            {
+           
+            });
         }
         [Authorize]
         [HttpPost("JoinRoom")]
-        public ActionResult<bool> JoinRoom([FromQuery] string receiverUsername)
+        public ActionResult<bool> JoinRoom([FromQuery] string targetClientGuid)
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
-            Guid userID = _userService.GetUserID(email);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
 
-            string username = _userUtility.GetUserName(email);
-            string roomID = $"{username}-{receiverUsername}";
-            string reverserdRoomID = $"{receiverUsername}-{username}";
+            string currentClientGuid = _userUtility.GetClientGuid(userGuid);
+            
+            string roomID = $"{currentClientGuid}-{targetClientGuid}";
+            string reverserdRoomID = $"{targetClientGuid}-{currentClientGuid}";
 
-            _websocketManager.JoinRoom(roomID, reverserdRoomID, username);
+            _websocketManager.JoinRoom(roomID, reverserdRoomID, currentClientGuid);
 
-            return Ok();
+            return Ok(new
+            {
+                roomID = roomID,
+                reverserdRoomID = reverserdRoomID
+            });
         }
     }
 }
