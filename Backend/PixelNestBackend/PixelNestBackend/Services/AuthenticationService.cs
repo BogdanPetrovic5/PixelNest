@@ -1,10 +1,11 @@
-﻿
+﻿ 
 using CarWebShop.Security;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
 using PixelNestBackend.Security;
+using PixelNestBackend.Utility;
 using System.Security.Claims;
 
 namespace PixelNestBackend.Services
@@ -15,16 +16,19 @@ namespace PixelNestBackend.Services
         private readonly IUserService _userService;
         private readonly PasswordEncoder _passwordEncoder;
         private readonly TokenGenerator _tokenGenerator;
+        private readonly UserUtility _userUtility;
         public AuthenticationService(
             IAuthenticationRepository authenticationRepository,
             IUserService userService,
             PasswordEncoder passwordEncoder,
-             TokenGenerator tokenGenerator
+             TokenGenerator tokenGenerator,
+             UserUtility userUtility
             ) {
             _authenticationRepository = authenticationRepository;
             _userService = userService;
             _passwordEncoder = passwordEncoder;
             _tokenGenerator = tokenGenerator;
+            _userUtility = userUtility;
         }
 
         public LoginResponse Login(LoginDto loginDto)
@@ -34,17 +38,11 @@ namespace PixelNestBackend.Services
             {
                 if (response.IsSuccessful)
                 {
-                    string email = response.Email;
-                    string token = _tokenGenerator.GenerateToken(email);
-                    return new LoginResponse
-                    {
-                        IsSuccessful = true,
-                        Email = response.Email,
-                        Username = response.Username,
-                        Response = response.Response,
-                        Token = token
 
-                    };
+                    Guid userGuid = _userUtility.GetUserID(response.ClientGuid);
+                    string token = _tokenGenerator.GenerateToken(userGuid.ToString());
+                    response.Token = token;
+                    return response;
                 }
                 return new LoginResponse { 
                     IsSuccessful = response.IsSuccessful,

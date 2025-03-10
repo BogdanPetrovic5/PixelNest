@@ -31,11 +31,11 @@ namespace PixelNestBackend.Controllers
         [HttpPost("RefreshToken")]
         public ActionResult RefreshToken()
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            string token = _authenticationService.ReturnToken(email);
-            string username = _userUtility.GetUserName(email);
-           
-
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string token = _authenticationService.ReturnToken(userGuid);
+            string username = _userUtility.GetUserName(userGuid);
+            string email = _userUtility.GetEmail(userGuid);
+            string clientGuid = _userUtility.GetClientGuid(userGuid);
 
             var tokenExpirationDate = DateTime.Now.AddMinutes(30);
             var cookieOptions = new CookieOptions
@@ -53,8 +53,9 @@ namespace PixelNestBackend.Controllers
                 IsSuccessful = true,
                 Username = username,
                 Email = email,
-                TokenExpiration = tokenExpirationDate
-
+                TokenExpiration = tokenExpirationDate,
+                ClientGuid = clientGuid
+                
 
             });
            
@@ -82,8 +83,8 @@ namespace PixelNestBackend.Controllers
         [HttpPost("Logout")]
         public IActionResult Logout([FromBody] LogoutDto logoutDto)
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            string token = _authenticationService.ReturnToken(email);
+            string? userGUid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string token = _authenticationService.ReturnToken(userGUid);
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
@@ -133,8 +134,8 @@ namespace PixelNestBackend.Controllers
                 IsSuccessful = response.IsSuccessful,
                 Username = response.Username,
                 Email = response.Email,
-                TokenExpiration = tokenExpirationDate
-
+                TokenExpiration = tokenExpirationDate,
+                ClientGuid = response.ClientGuid
 
             });
           

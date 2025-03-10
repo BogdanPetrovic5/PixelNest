@@ -7,7 +7,7 @@ namespace PixelNestBackend.Interfaces
     public interface IAuthenticationService
     {
         RegisterResponse? Register(RegisterDto registerDto);
-        string ReturnToken(string email);
+        string ReturnToken(string userGuid);
         LoginResponse Login(LoginDto loginDto);
     }
 }

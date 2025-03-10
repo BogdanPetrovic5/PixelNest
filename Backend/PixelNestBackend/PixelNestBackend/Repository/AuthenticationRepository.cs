@@ -9,6 +9,7 @@ using CarWebShop.Security;
 using PixelNestBackend.Security;
 using PixelNestBackend.Responses;
 using Azure;
+using PixelNestBackend.Utility;
 
 namespace PixelNestBackend.Repository
 {
@@ -19,12 +20,15 @@ namespace PixelNestBackend.Repository
         private readonly PasswordEncoder _passwordEncoder;
         private readonly TokenGenerator _tokenGenerator;
         private readonly ILogger<AuthenticationRepository> _logger;
+        private readonly UserUtility _userUtility;
         public AuthenticationRepository(
                 DataContext context,
                 IConfiguration configuration,
                 PasswordEncoder passwordEncoder,
                 TokenGenerator tokenGenerator,
-                ILogger<AuthenticationRepository> logger
+                ILogger<AuthenticationRepository> logger,
+                UserUtility userUtility
+                
 
             ) 
         {
@@ -33,6 +37,7 @@ namespace PixelNestBackend.Repository
             _passwordEncoder = passwordEncoder;
             _tokenGenerator = tokenGenerator;
             _logger = logger;
+            _userUtility = userUtility;
         }
         public bool Register(User user)
         {
@@ -56,6 +61,9 @@ namespace PixelNestBackend.Repository
 
         public string ReturnToken(string tokenParameter)
         {
+            //string username = _userUtility.GetUserName(tokenParameter);
+            //Guid userGUID = _userUtility.GetUserID(username);
+            //string userID = userGUID.ToString();
             return _tokenGenerator.GenerateToken(tokenParameter);
         }
 
@@ -124,6 +132,7 @@ namespace PixelNestBackend.Repository
                             string? hashedPassword = reader["Password"].ToString();
                             string? username = reader["Username"].ToString();
                             string? email = reader["Email"].ToString();
+                            string? userID = reader["ClientGuid"].ToString();
                             bool passwordCheck = _passwordEncoder.VerifyPassword(loginDto.Password, hashedPassword);
 
                             return passwordCheck
@@ -132,7 +141,8 @@ namespace PixelNestBackend.Repository
                                     Response = "Successful",
                                     Username = username,
                                     Email = email,
-                                    IsSuccessful = true
+                                    IsSuccessful = true,
+                                    ClientGuid = userID
                                 }
                                 : new LoginResponse
                                 {
