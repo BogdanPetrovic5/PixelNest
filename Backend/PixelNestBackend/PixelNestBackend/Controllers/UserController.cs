@@ -30,11 +30,11 @@ namespace PixelNestBackend.Controllers
         [HttpPost("CloseConnection")]
         public async Task<ActionResult> CloseConnectionWithSocket()
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
-            Guid userID = _userService.GetUserID(email);
-           string username=  _userUtility.GetUserName(userID);
-           await _webSocketConnection.CloseConnection(username);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+          
+            string username = _userUtility.GetUserName(userGuid);
+            await _webSocketConnection.CloseConnection(userGuid);
             return Ok();
         }
 
@@ -58,23 +58,26 @@ namespace PixelNestBackend.Controllers
             }
             else return null;
         }
-
+        [Authorize]
         [HttpPost("Follow")]
-        public async Task<IActionResult> Follow(FollowDto followDto)
+        public async Task<IActionResult> Follow([FromQuery] string targetClientGuid)
         {
-            if (followDto == null) return BadRequest();
-            bool response = await _userService.Follow(followDto);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (targetClientGuid == null) return BadRequest();
+            
+            bool response = await _userService.Follow(targetClientGuid, userGuid);
             if (response)
             {
                 return Ok();
             }
             else return NotFound();
         }
+        [Authorize]
         [HttpGet("GetUserProfile")]
-        public UserProfileDto? GetUserData(string username)
+        public UserProfileDto? GetUserData(string clientGuid)
         {
-            
-            UserProfileDto user = _userService.GetUserProfileData(username);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            UserProfileDto user = _userService.GetUserProfileData(userGuid, clientGuid);
 
             if(user != null)
             {
@@ -84,9 +87,10 @@ namespace PixelNestBackend.Controllers
         }
 
         [HttpGet("IsFollowing")]
-        public ActionResult<bool> IsFollowing([FromQuery]FollowDto followDto)
+        public ActionResult<bool> IsFollowing([FromQuery] string targetClientGuid)
         {
-            FollowResponse followResponse = _userService.IsFollowing(followDto);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            FollowResponse followResponse = _userService.IsFollowing(targetClientGuid, userGuid);
 
             if (followResponse == null) return BadRequest();
 
@@ -101,10 +105,10 @@ namespace PixelNestBackend.Controllers
         public async Task<ActionResult<bool>> ChangePicture([FromForm] ProfileDto profileDto)
         {
             
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
 
-            bool response = await this._userService.ChangePicture(profileDto, email);
+            bool response = await this._userService.ChangePicture(profileDto, userGuid);
             if (response) return Ok(new { message = "Profile picture changed successfully" });
             return NotFound();
             
@@ -113,10 +117,10 @@ namespace PixelNestBackend.Controllers
         [HttpPut("ChangeUsername")]
         public ActionResult<bool> ChangeUsername([FromForm] ProfileDto profileDto)
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
 
-            bool response = _userService.ChangeUsername(email, profileDto.Username);
+            bool response = _userService.ChangeUsername(userGuid, profileDto.Username);
 
             if (response) return Ok(new { message = "Username changed successfully"} );
             return NotFound(new { message = "Error!" });
@@ -124,9 +128,10 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpGet("GetProfilePicture")]
-        public ActionResult<string> GetProfilePicture(string username)
+        public ActionResult<string> GetProfilePicture(string clientGuid)
         {
-            string? pictureUrl = _userService.GetPicture(username);
+           
+            string? pictureUrl = _userService.GetPicture(clientGuid);
             if(pictureUrl != null)
             {
                 return Ok(new {path = pictureUrl });
@@ -145,6 +150,7 @@ namespace PixelNestBackend.Controllers
                 return Ok(responseUsers);
             }else return NotFound();
         }
-    
+
+        
     } 
 }

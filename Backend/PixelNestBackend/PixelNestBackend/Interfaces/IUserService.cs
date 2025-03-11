@@ -11,12 +11,12 @@ namespace PixelNestBackend.Interfaces
         bool IsEmailRegistered(User user);
         bool IsUsernameRegistered(User user);
 
-        UserProfileDto GetUserProfileData(string username);
-        Task<bool> Follow(FollowDto followDto);
-        FollowResponse IsFollowing(FollowDto followDto);
+        UserProfileDto GetUserProfileData(string clientGuid, string targetUser);
+        Task<bool> Follow(string targetClientGuid, string userGuid);
+        FollowResponse IsFollowing(string targetClientGuid, string userGuid);
         ICollection<ResponseFollowersDto> GetFollowers(string username);
         ICollection<ResponseFollowingDto> GetFollowings(string username);
-        Task<bool> ChangePicture(ProfileDto profileDto, string email);
+        Task<bool> ChangePicture(ProfileDto profileDto, string userGuid);
         string GetPicture(string username);
 
         bool ChangeUsername(string email, string newUsername);

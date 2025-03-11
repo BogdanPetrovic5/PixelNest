@@ -55,9 +55,9 @@ namespace PixelNestBackend.Services
             return user;
         }
 
-        public UserProfileDto GetUserProfileData(string username)
+        public UserProfileDto GetUserProfileData(string clientGuid, string targetUser)
         {
-            UserProfileDto user = _userRepository.GetUserProfileData(username);
+            UserProfileDto user = _userRepository.GetUserProfileData(clientGuid, targetUser);
             if (user != null)
             {
                 return user;
@@ -85,16 +85,16 @@ namespace PixelNestBackend.Services
         {
             return _userRepository.GetFollowings(username);
         }
-        public async Task<bool> Follow(FollowDto followDto)
+        public async Task<bool> Follow(string targetClientGuid, string userGuid)
         {
 
-            FollowResponse? response =  _userRepository.Follow(followDto);
+            FollowResponse? response =  _userRepository.Follow(targetClientGuid, userGuid);
             if (!response.IsDuplicate)
             {
                 WebSocketMessage message = new WebSocketMessage
                 {
-                    SenderUsername = followDto.FollowerUsername,
-                    TargetUser = followDto.FollowingUsername,
+                    SenderUsername = response.User,
+                    TargetUser = response.TargetUser,
                     Type = "Follow",
                     Content = "followed you"
                 };
@@ -103,26 +103,25 @@ namespace PixelNestBackend.Services
             return response.IsSuccessful;
         }
 
-        public FollowResponse IsFollowing(FollowDto followDto)
+        public FollowResponse IsFollowing(string targetClientGuid, string userGuid)
         {
-            return _userRepository.IsFollowing(followDto);
+            return _userRepository.IsFollowing(targetClientGuid, userGuid);
         }
 
-        public async Task<bool> ChangePicture(ProfileDto profileDto, string email)
+        public async Task<bool> ChangePicture(ProfileDto profileDto, string userGuid)
         {
 
-            string? username = this._userUtility.GetUserName(email);
-            Guid userID = this._userUtility.GetUserID(username);
+        
 
-            return await _userRepository.ChangeProfilePicture(userID, profileDto);
+            return await _userRepository.ChangeProfilePicture(userGuid, profileDto);
 
         }
         
-        public string GetPicture(string username)
+        public string GetPicture(string clientGuid)
         {
-            Guid userID = this._userUtility.GetUserID(username);
+            Guid userID = this._userUtility.GetUserID(clientGuid);
 
-            
+
             return _userRepository.GetPicture(userID);
         }
 
