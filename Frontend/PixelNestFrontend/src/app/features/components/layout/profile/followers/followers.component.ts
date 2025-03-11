@@ -9,7 +9,7 @@ import { UserService } from 'src/app/core/services/user/user.service';
 })
 export class FollowersComponent implements OnInit{
   followers:FollowersDto[]=[]
-  @Input() username!:string;
+  @Input() clientGuid!:string;
 
   @Output() closeFollowersTab: EventEmitter<void> = new EventEmitter<void>();
   constructor(
@@ -24,7 +24,7 @@ export class FollowersComponent implements OnInit{
   }
   private _loadFollowers(){
     
-    this._userService.getFollowers(this.username).subscribe({
+    this._userService.getFollowers(this.clientGuid).subscribe({
       next:response=>{
         this.followers = response
       

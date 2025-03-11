@@ -14,8 +14,8 @@ namespace PixelNestBackend.Interfaces
         UserProfileDto GetUserProfileData(string clientGuid, string targetUser);
         Task<bool> Follow(string targetClientGuid, string userGuid);
         FollowResponse IsFollowing(string targetClientGuid, string userGuid);
-        ICollection<ResponseFollowersDto> GetFollowers(string username);
-        ICollection<ResponseFollowingDto> GetFollowings(string username);
+        ICollection<ResponseFollowersDto> GetFollowers(string clientGuid);
+        ICollection<ResponseFollowingDto> GetFollowings(string clientGuid);
         Task<bool> ChangePicture(ProfileDto profileDto, string userGuid);
         string GetPicture(string username);
 

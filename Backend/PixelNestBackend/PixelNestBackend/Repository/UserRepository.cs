@@ -99,11 +99,11 @@ namespace PixelNestBackend.Repository
                 }; 
             }
         }
-        public ICollection<ResponseFollowingDto> GetFollowings(string username)
+        public ICollection<ResponseFollowingDto> GetFollowings(string clientGuid)
         {
             try
             {
-                User user = _dataContext.Users.Where(u => u.Username.Equals(username)).FirstOrDefault();
+                User user = _dataContext.Users.Where(u => u.ClientGuid.ToString().Equals(clientGuid)).FirstOrDefault();
                 if (user != null)
                 {
                     ICollection<ResponseFollowingDto> users = _dataContext
@@ -111,7 +111,8 @@ namespace PixelNestBackend.Repository
                     .Where(follower => follower.UserFollowerGuid == user.UserGuid && follower.UserFollowingGuid != user.UserGuid)
                     .Select(f => new ResponseFollowingDto
                     {
-                        FollowingUsername = f.UserFollowing.Username
+                        FollowingUsername = f.UserFollowing.Username,
+                        FollowingClientGuid = f.UserFollowing.ClientGuid
 
                     }).ToList();
                     return users;
@@ -124,17 +125,19 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
-        public ICollection<ResponseFollowersDto> GetFollowers(string username)
+        public ICollection<ResponseFollowersDto> GetFollowers(string clientGuid)
         {
             try
             {
-                User user = _dataContext.Users.Where(u => u.Username.Equals(username)).FirstOrDefault();
+                User user = _dataContext.Users.Where(u => u.ClientGuid.ToString().Equals(clientGuid)).FirstOrDefault();
                 ICollection<ResponseFollowersDto> users = _dataContext
                     .Follow
                     .Where(follower => follower.UserFollowingGuid == user.UserGuid && follower.UserFollowerGuid != user.UserGuid)
                     .Select(f => new ResponseFollowersDto
                     {
-                        FollowerUsername = f.UserFollower.Username
+                        FollowerUsername = f.UserFollower.Username,
+                        FollowerClientGuid = f.UserFollower.ClientGuid
+                        
 
                     }).ToList();
                 return users;

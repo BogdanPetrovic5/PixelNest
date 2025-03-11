@@ -39,9 +39,9 @@ namespace PixelNestBackend.Controllers
         }
 
         [HttpGet("GetFollowings")]
-        public ICollection<ResponseFollowingDto>? GetFollowings(string username)
+        public ICollection<ResponseFollowingDto>? GetFollowings(string clientGuid)
         {
-            ICollection<ResponseFollowingDto> users = _userService.GetFollowings(username);
+            ICollection<ResponseFollowingDto> users = _userService.GetFollowings(clientGuid);
             if (users != null)
             {
                 return users;
@@ -49,9 +49,9 @@ namespace PixelNestBackend.Controllers
             else return null;
         }
         [HttpGet("GetFollowers")]
-        public ICollection<ResponseFollowersDto>? GetFollowers(string username)
+        public ICollection<ResponseFollowersDto>? GetFollowers(string clientGuid)
         {
-            ICollection<ResponseFollowersDto> users = _userService.GetFollowers(username);
+            ICollection<ResponseFollowersDto> users = _userService.GetFollowers(clientGuid);
             if (users != null)
             {
                 return users;

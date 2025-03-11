@@ -8,7 +8,7 @@ import { UserService } from 'src/app/core/services/user/user.service';
   styleUrls: ['./followings.component.scss']
 })
 export class FollowingsComponent implements OnInit{
-  @Input() username!:string;
+  @Input() clientGuid!:string;
   @Output() closeFollowingTab: EventEmitter<void> = new EventEmitter<void>();
   constructor(private _userService:UserService){}
 
@@ -21,9 +21,9 @@ export class FollowingsComponent implements OnInit{
     this.closeFollowingTab.emit()
   }
   private _loadFollowings(){
-    this._userService.getFollowings(this.username).subscribe({
+    this._userService.getFollowings(this.clientGuid).subscribe({
       next:response=>{
-       
+       console.log(response)
         this.followings = response
       },
       error:error=>{

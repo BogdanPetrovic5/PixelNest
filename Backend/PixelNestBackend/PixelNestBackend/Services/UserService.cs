@@ -77,13 +77,13 @@ namespace PixelNestBackend.Services
         {
             return _authenticationRepository.IsUsernameRegistered(user);
         }
-        public ICollection<ResponseFollowersDto> GetFollowers(string username)
+        public ICollection<ResponseFollowersDto> GetFollowers(string clientGuid)
         {
-            return _userRepository.GetFollowers(username);
+            return _userRepository.GetFollowers(clientGuid);
         }
-        public ICollection<ResponseFollowingDto> GetFollowings(string username)
+        public ICollection<ResponseFollowingDto> GetFollowings(string clientGuid)
         {
-            return _userRepository.GetFollowings(username);
+            return _userRepository.GetFollowings(clientGuid);
         }
         public async Task<bool> Follow(string targetClientGuid, string userGuid)
         {
