@@ -215,15 +215,15 @@ namespace PixelNestBackend.Repository
                 };
             }
         }
-        public async Task<ICollection<ResponsePostDto>> GetPostsByUsername(string username, string currentLoggedUser)
+        public async Task<ICollection<ResponsePostDto>> GetPostsByUsername(string clientGuid, string userGuid)
         {
             try
             {
                
-                    Guid userID = _userUtility.GetUserID(username);
-                    Guid currentLoggedUserID = _userUtility.GetUserID(currentLoggedUser);
+                  
+                  
                     ICollection<ResponsePostDto> posts = await _dataContext.Posts
-                        .Where(u => u.UserGuid == userID)
+                        .Where(u => u.UserGuid.ToString() == clientGuid)
                        .Select(a => new ResponsePostDto
                        {
                            PostDescription = a.PostDescription,
@@ -231,7 +231,8 @@ namespace PixelNestBackend.Repository
                            TotalComments = a.TotalComments,
                            TotalLikes = a.TotalLikes,
                            PostID = a.PostGuid,
-                           IsDeletable = a.UserGuid == currentLoggedUserID,
+                           ClientGuid = a.User.ClientGuid,
+                           IsDeletable = a.UserGuid.ToString() == userGuid,
                            PublishDate = a.PublishDate,
                            ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
                            {
@@ -243,7 +244,8 @@ namespace PixelNestBackend.Repository
                            Location = a.Location,
                            LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                            {
-                               Username = l.User.Username
+                               Username = l.User.Username,
+                               ClientGuid = l.User.ClientGuid.ToString()
 
                            }).ToList(),
                            SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
@@ -254,10 +256,10 @@ namespace PixelNestBackend.Repository
                        })
                     .AsSplitQuery()
                     .ToListAsync();
-                    foreach (var post in posts)
-                    {
-                        _SAStokenGenerator.appendSasToken(post.ImagePaths);
-                    }
+                    //foreach (var post in posts)
+                    //{
+                    //    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                    //}
                    
                     _logger.LogInformation("Posts retrieved successfully.");
                 
@@ -276,12 +278,12 @@ namespace PixelNestBackend.Repository
                 throw;
             }
         }
-        public async Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location, string username)
+        public async Task<ICollection<ResponsePostDto>> GetPostsByLocation(string location, string userGuid)
         {
             try
             {
                
-                    Guid userID = _userUtility.GetUserID(username);
+                   
                     ICollection<ResponsePostDto> posts = await _dataContext.Posts
                        .Where(l => l.Location.ToLower().Contains(location.ToLower()))
                        .Select(a => new ResponsePostDto
@@ -290,8 +292,9 @@ namespace PixelNestBackend.Repository
                            OwnerUsername = a.User.Username,
                            TotalComments = a.TotalComments,
                            TotalLikes = a.TotalLikes,
-                           IsDeletable = a.UserGuid == userID,
+                           IsDeletable = a.UserGuid.ToString() == userGuid,
                            PostID = a.PostGuid,
+                           ClientGuid = a.User.ClientGuid,
                            PublishDate = a.PublishDate,
                            ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
                            {
@@ -303,7 +306,8 @@ namespace PixelNestBackend.Repository
                            Location = a.Location,
                            LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                            {
-                               Username = l.User.Username
+                               Username = l.User.Username,
+                               ClientGuid = l.User.ClientGuid.ToString()
 
                            }).ToList(),
                            SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
@@ -314,10 +318,10 @@ namespace PixelNestBackend.Repository
                        })
                     .AsSplitQuery()
                     .ToListAsync();
-                    foreach (var post in posts)
-                    {
-                        _SAStokenGenerator.appendSasToken(post.ImagePaths);
-                    }
+                    //foreach (var post in posts)
+                    //{
+                    //    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                    //}
                   
                 
                 return posts;
@@ -333,18 +337,18 @@ namespace PixelNestBackend.Repository
                 throw;
             }
         }
-        public async Task<ICollection<ResponsePostDto>> GetPosts(string username)
+        public async Task<ICollection<ResponsePostDto>> GetPosts(string userGuid)
         {
 
             try
             {
-                var cacheKey = string.Format(PostsCacheKey, username);
+                var cacheKey = string.Format(PostsCacheKey, userGuid);
 
                 var versionKey = $"{cacheKey}_Version";
 
               
               
-                if (CacheChange(username) || !_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts))
+                if (CacheChange(userGuid) || !_memoryCache.TryGetValue(cacheKey, out ICollection<ResponsePostDto> posts))
                 {
                     
                   posts = await _dataContext.Posts
@@ -356,7 +360,8 @@ namespace PixelNestBackend.Repository
                             TotalLikes = a.TotalLikes,
                             OwnerUsername = a.User.Username,
                             PostID = a.PostGuid,
-                            IsDeletable = a.User.Username == username,
+                            ClientGuid = a.User.ClientGuid,
+                            IsDeletable = a.User.UserGuid.ToString() == userGuid,
                             PublishDate = a.PublishDate,
                             ImagePaths = a.ImagePaths.Select(l => new ResponseImageDto
                             {
@@ -368,7 +373,8 @@ namespace PixelNestBackend.Repository
                             Location = a.Location,
                             LikedByUsers = a.LikedPosts.Select(l => new LikeDto
                             {
-                                Username = l.User.Username
+                                Username = l.User.Username,
+                                ClientGuid = l.User.ClientGuid.ToString()
 
                             }).ToList(),
                             SavedByUsers = a.SavedPosts.Select(s => new SavePostDto
@@ -379,10 +385,10 @@ namespace PixelNestBackend.Repository
                         })
                         .AsSplitQuery()
                         .ToListAsync();
-                    foreach (var post in posts)
-                    {
-                        _SAStokenGenerator.appendSasToken(post.ImagePaths);
-                    }
+                    //foreach (var post in posts)
+                    //{
+                    //    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                    //}
 
                     _memoryCache.Set(cacheKey, posts, new MemoryCacheEntryOptions
                     {
@@ -470,7 +476,7 @@ namespace PixelNestBackend.Repository
                         IsSuccessfull = true,
                         Message = "Successfully liked.",
                         User = user.Username,
-                        TargetUser = post.User.Username,
+                        TargetUser = post.User.ClientGuid.ToString(),
                         DoubleAction = doubleAction ? true : false
 
                     };
@@ -520,8 +526,7 @@ namespace PixelNestBackend.Repository
                         IsSuccessfull = false
                     };
                 }
-                post.TotalComments += 1;
-                post.LastModified = DateTime.UtcNow;
+             
                 
                 if (comment.ParentCommentID.HasValue)
                 {
@@ -543,6 +548,8 @@ namespace PixelNestBackend.Repository
                     }
                 }
                 _dataContext.Comments.Add(comment);
+                post.TotalComments += 1;
+                post.LastModified = DateTime.UtcNow;
                 int result = _dataContext.SaveChanges();
 
                 if (result > 0)
@@ -563,9 +570,10 @@ namespace PixelNestBackend.Repository
                     {
                         Message = "Comment added successfully!",
                         IsSuccessfull = true,
-                        TargetUser = comment.ParentCommentID.HasValue ? parentComment.User.Username : post.User.Username,
-                        DoubleAction = false
-
+                        TargetUser = comment.ParentCommentID.HasValue ? parentComment.User.ClientGuid.ToString() : post.User.ClientGuid.ToString(),
+                        DoubleAction = false,
+                        User = _userUtility.GetUserName(comment.UserGuid.ToString())
+                        
 
                     };
                 }
@@ -628,12 +636,12 @@ namespace PixelNestBackend.Repository
                         Message = "No post found!"
                     };
                 }
-                
+                _dataContext.Notifications.Where(a => a.PostGuid == postID).ExecuteDelete();
                 _dataContext.Comments.Where(a => a.PostGuid == postID).ExecuteDelete();
                 _dataContext.LikedPosts.Where(a => a.PostGuid == postID).ExecuteDelete();
                 _dataContext.SavedPosts.Where(a => a.PostGuid == postID).ExecuteDelete();
                 _dataContext.ImagePaths.Where(a => a.PostGuid == postID).ExecuteDelete();
-                _dataContext.Notifications.Where(a => a.PostGuid == postID).ExecuteDelete();
+               
                 User? user = _dataContext.Users.FirstOrDefault(u => u.UserGuid == userID);
                 if (user != null) user.TotalPosts -= 1;
                 
@@ -738,10 +746,10 @@ namespace PixelNestBackend.Repository
               
                 
               
-                 if(post != null)
-                {
-                    _SAStokenGenerator.appendSasToken(post.ImagePaths);
-                }
+                // if(post != null)
+                //{
+                //    _SAStokenGenerator.appendSasToken(post.ImagePaths);
+                //}
                  
                 
 

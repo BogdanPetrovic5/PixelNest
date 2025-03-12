@@ -29,9 +29,9 @@ namespace PixelNestBackend.Controllers
         [HttpGet("CheckCache")]
         public ActionResult<bool> CacheChange()
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
-            bool response = _postService.CacheChange(email);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+            bool response = _postService.CacheChange(userGuid);
             if (response)
             {
                 return Ok(true);
@@ -44,9 +44,9 @@ namespace PixelNestBackend.Controllers
         [HttpGet("GetPost")]
         public async Task<ActionResult<ResponsePostDto>> GetPost(Guid postID)
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
-            ResponsePostDto result = await _postService.GetSinglePost(postID, email);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+            ResponsePostDto result = await _postService.GetSinglePost(postID, userGuid);
             if(result == null) return NotFound();
             return Ok(result);
         }
@@ -56,11 +56,11 @@ namespace PixelNestBackend.Controllers
         {
             try
             {
-                string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (email == null) return BadRequest();
+                string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userGuid == null) return BadRequest();
 
 
-                DeleteResponse deleteResponse = await _postService.DeletePost(email, postID);
+                DeleteResponse deleteResponse = await _postService.DeletePost(userGuid, postID);
 
                 if(deleteResponse == null) return NotFound();
                 
@@ -124,12 +124,12 @@ namespace PixelNestBackend.Controllers
 
         [Authorize]
         [HttpGet("GetPosts")]
-        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPosts(string? username,string? location, int page = 1, int maximumPosts = 5){
+        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPosts(string? clientGuid,string? location, int page = 1, int maximumPosts = 5){
             try
             {
                 ICollection<ResponsePostDto> posts;
-                string? userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                posts = await _postService.GetPosts(username,location, userEmail);
+                string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                posts = await _postService.GetPosts(clientGuid,location, userGuid);
                 if (posts == null && !posts.Any()) return NotFound(new { message = "No posts found"});
                 var result = posts.OrderByDescending(a => a.PublishDate);
                 var paginatedPosts = result
@@ -179,7 +179,10 @@ namespace PixelNestBackend.Controllers
             
             try
             {
-                PostResponse commentResponse = _postService.Comment(commentDto);
+                string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+               
+                PostResponse commentResponse = _postService.Comment(commentDto, userGuid);
+               
                 if (commentResponse.IsSuccessfull)
                 {
                     WebSocketMessage webSocketMessage = new WebSocketMessage
