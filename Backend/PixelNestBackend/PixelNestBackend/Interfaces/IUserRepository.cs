@@ -11,7 +11,7 @@ namespace PixelNestBackend.Interfaces
         ICollection<ResponseFollowersDto> GetFollowers(string username);
         ICollection<ResponseFollowingDto> GetFollowings(string username);
         FollowResponse IsFollowing(string targetClientGuid, string userGuid);
-        string GetUsername(string email);
+   
 
         string GetPicture(Guid userID);
         bool ChangeUsername(string username, string newUsername);

@@ -280,6 +280,7 @@ namespace PixelNestBackend.Repository
                         Lastname = up.Lastname,
                         ClientGuid = up.ClientGuid,
                         CanFollow = userGuid == (up.UserGuid).ToString() ? false : true,
+                        CanEdit = userGuid == up.UserGuid.ToString() ? false : true,
                         ChatID = clientGuid.CompareTo(targetGuid) < 0
                          ? $"{clientGuid}-{targetGuid}"
                          : $"{targetGuid}-{clientGuid}"
@@ -296,24 +297,6 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public string GetUsername(string email)
-        {
-            try
-            {
-                var user = _dataContext.Users.Where(e => e.Email == email).FirstOrDefault();
-
-                if(user == null)
-                {
-                    return string.Empty;
-                }
-                return user.Username;
-            }catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return string.Empty;
-            }
-
-        }
         public string GetPicture(Guid userID)
         {
             try
@@ -403,6 +386,7 @@ namespace PixelNestBackend.Repository
         public async Task<bool> ChangeProfilePicture(string userGuid, ProfileDto profileDto)
         {
             Guid userID = Guid.Parse(userGuid);
+
             string userFolderName = userID.ToString();
             string userFolderPath = Path.Combine(_basedFolderPath, userFolderName, "Profile");
 

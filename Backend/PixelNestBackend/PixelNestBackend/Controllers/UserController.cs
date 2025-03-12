@@ -106,7 +106,10 @@ namespace PixelNestBackend.Controllers
         {
             
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string clientGuid = _userUtility.GetClientGuid(userGuid);
             if (userGuid == null) return Unauthorized();
+            if (clientGuid != profileDto.ClientGuid) return Forbid();
+           
 
             bool response = await this._userService.ChangePicture(profileDto, userGuid);
             if (response) return Ok(new { message = "Profile picture changed successfully" });
