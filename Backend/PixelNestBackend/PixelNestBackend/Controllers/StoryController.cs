@@ -7,6 +7,7 @@ using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Responses;
+using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
@@ -21,9 +22,10 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpGet("GetStories")]
-        public async Task<ActionResult<GroupedStoriesDto>> GetStories(bool forCurrentUser, string username, int currentPage, int maximum = 10)
+        public async Task<ActionResult<GroupedStoriesDto>> GetStories(bool forCurrentUser, int currentPage, int maximum = 10)
         {
-            ICollection<GroupedStoriesDto> stories = await _storyService.GetStories(forCurrentUser, username);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            ICollection<GroupedStoriesDto> stories = await _storyService.GetStories(forCurrentUser, userGuid);
          
             if (stories != null)
             {
@@ -34,11 +36,12 @@ namespace PixelNestBackend.Controllers
         [HttpPost("PublishStory")]
         public async Task<ActionResult<StoryResponse>> PublishStory([FromForm] StoryDto storyDto)
         {
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (storyDto == null)
             {
                 return BadRequest(new StoryResponse { IsSuccessful = false, Message = "Bad request body." });
             }
-            StoryResponse response = await _storyService.PublishStory(storyDto);
+            StoryResponse response = await _storyService.PublishStory(storyDto, userGuid);
             if (response != null)
             {
                 if (response.IsSuccessful)
@@ -52,7 +55,8 @@ namespace PixelNestBackend.Controllers
         [Authorize]
         [HttpPost("MarkStoryAsSeen")]
         public ActionResult<StoryResponse> MarkStoryAsSeen(SeenDto seenDto){
-            StoryResponse storyResponse = _storyService.MarkStoryAsSeen(seenDto);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            StoryResponse storyResponse = _storyService.MarkStoryAsSeen(seenDto, userGuid);
             if(storyResponse == null || storyResponse.IsSuccessful == false)
             {
                 return NotFound(new StoryResponse { IsSuccessful = false, Message = "No response." });
@@ -65,9 +69,11 @@ namespace PixelNestBackend.Controllers
         [HttpGet("GetViewers")]
         public ActionResult<ICollection<ResponseViewersDto>> GetViewers([FromQuery]ViewersDto viewersDto)
         {
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             if (viewersDto == null) return BadRequest(new { message = "Bad request" });
             
-            ICollection<ResponseViewersDto> viewers = _storyService.GetViewers(viewersDto);
+            ICollection<ResponseViewersDto> viewers = _storyService.GetViewers(viewersDto, userGuid);
             if (viewers != null)
             {
                 return Ok(viewers);
