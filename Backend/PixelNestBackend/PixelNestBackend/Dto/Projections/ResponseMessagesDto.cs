@@ -8,6 +8,7 @@
         public int MessageID { get; set; }
         public bool IsSeen { get; set; }
         public string Source { get; set; }
+        public string UserID { get; set; }
         public DateTime DateSent { get; set; }
     }
 }

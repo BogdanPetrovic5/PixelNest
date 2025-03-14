@@ -20,55 +20,64 @@ namespace PixelNestBackend.Services
             _connectionMenager = webSocketConnectionMenager;
         }
 
-        public int GetNumberOfNewMessages(string email)
+        public int GetNumberOfNewMessages(string userGuid)
         {
-            string username = _userUtility.GetUserName(email);
-            Guid userID = _userUtility.GetUserID(username);
-
-            int newMessages = _chatRepository.GetNumberOfNewMessages(userID);
+     
+            int newMessages = _chatRepository.GetNumberOfNewMessages(userGuid);
             return newMessages;
         }
 
-        public ICollection<ResponseChatsDto> GetUserChats(string email)
+        public ICollection<ResponseChatsDto> GetUserChats(string userGuid)
         {
-            string username = _userUtility.GetUserName(email);
-            Guid userID = _userUtility.GetUserID(username);
-            return _chatRepository.GetUserChats(userID);
+            
+            return _chatRepository.GetUserChats(userGuid);
         }
 
-        public ICollection<ResponseMessagesDto> GetUserToUserMessages(string username, string targetUsername)
+        public ICollection<ResponseMessagesDto> GetUserToUserMessages(string chatID, string userGuid)
         {
-            Guid userID = _userUtility.GetUserID(username);
-            Guid targetID = _userUtility.GetUserID(targetUsername);
-            return _chatRepository.GetUserToUserMessages(userID, targetID);
+            Guid userID = Guid.Parse(userGuid);
+         
+            return _chatRepository.GetUserToUserMessages(chatID, userID);
         }
 
-        public bool MarkAsRead(MarkAsRead markAsrReadDto,string email)
+        public bool MarkAsRead(MarkAsRead markAsrReadDto,string userGuid)
         {
-            string username = _userUtility.GetUserName(email);
-            Guid userID = _userUtility.GetUserID(username);
+       
 
-            return _chatRepository.MarkAsRead(markAsrReadDto, userID);
+            return _chatRepository.MarkAsRead(markAsrReadDto, userGuid);
             throw new NotImplementedException();
         }
 
-        public MessageResponse SaveMessage(MessageDto messageDto)
+        public MessageResponse SaveMessage(MessageDto messageDto, string userGuid)
         {
             Message message = new Message();
 
-            message.SenderGuid = _userUtility.GetUserID(messageDto.SenderUsername);
-            message.ReceiverGuid = _userUtility.GetUserID(messageDto.ReceiverUsername);
+
+            Guid senderClientGuid = Guid.Parse(_userUtility.GetClientGuid(userGuid));
+            Guid receiverGuid = _userUtility.GetUserID(messageDto.ClientGuid);
+
             message.MessageText = messageDto.Message;
+            message.SenderGuid = Guid.Parse(userGuid);
+            message.ReceiverGuid = receiverGuid;
 
-            string roomID = _connectionMenager.FindRoom(messageDto.ReceiverUsername, messageDto.SenderUsername);
 
-            bool isUserInRoom = _connectionMenager.IsUserInRoom(roomID, messageDto.ReceiverUsername);
+            message.ChatID = senderClientGuid.CompareTo(Guid.Parse(messageDto.ClientGuid)) < 0
+                         ? $"{senderClientGuid.ToString()}-{messageDto.ClientGuid}"
+                         : $"{messageDto.ClientGuid}-{senderClientGuid.ToString()}";
+
+            string roomID = _connectionMenager.FindRoom(messageDto.ClientGuid, senderClientGuid.ToString());
+
+            bool isUserInRoom = _connectionMenager.IsUserInRoom(roomID, messageDto.ClientGuid);
             bool response = _chatRepository.SaveMessage(message, isUserInRoom);
 
             return new MessageResponse { 
                 IsSuccessfull = response,
-                ReceiverID = message.ReceiverGuid, 
-                SenderID = message.SenderGuid 
+                ReceiverID = Guid.Parse(_userUtility.GetClientGuid(message.ReceiverGuid.ToString())), 
+                SenderID = Guid.Parse(_userUtility.GetClientGuid(message.SenderGuid.ToString())),
+                Message = message.MessageText,
+                ReceiverUsername = _userUtility.GetUserName(message.ReceiverGuid),
+                SenderUsername = _userUtility.GetUserName(message.SenderGuid),
+                
             };
         }
     }

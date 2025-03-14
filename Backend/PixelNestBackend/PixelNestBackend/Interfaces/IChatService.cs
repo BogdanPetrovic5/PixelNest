@@ -6,10 +6,10 @@ namespace PixelNestBackend.Interfaces
 {
     public interface IChatService
     {
-        MessageResponse SaveMessage(MessageDto messageDto);
-        ICollection<ResponseMessagesDto> GetUserToUserMessages(string username, string targetUsername);
-        ICollection<ResponseChatsDto> GetUserChats(string email);
-        bool MarkAsRead(MarkAsRead markAsrReadDto, string email);
-        int GetNumberOfNewMessages(string email);
+        MessageResponse SaveMessage(MessageDto messageDto, string userGuid);
+        ICollection<ResponseMessagesDto> GetUserToUserMessages(string chatID, string userID);
+        ICollection<ResponseChatsDto> GetUserChats(string userGuid);
+        bool MarkAsRead(MarkAsRead markAsrReadDto, string userGuid);
+        int GetNumberOfNewMessages(string userGuid);
     }
 }

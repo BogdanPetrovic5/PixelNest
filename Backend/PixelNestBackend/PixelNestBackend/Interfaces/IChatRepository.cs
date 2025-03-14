@@ -8,9 +8,9 @@ namespace PixelNestBackend.Interfaces
     public interface IChatRepository
     {
         bool SaveMessage(Message message, bool isUserInRoom);
-        ICollection<ResponseMessagesDto> GetUserToUserMessages(Guid userID, Guid targetID);
-        ICollection<ResponseChatsDto> GetUserChats(Guid userID);
-        bool MarkAsRead(MarkAsRead markAsrReadDto, Guid userID);
-        int GetNumberOfNewMessages(Guid userID);
+        ICollection<ResponseMessagesDto> GetUserToUserMessages(string chatID, Guid userID);
+        ICollection<ResponseChatsDto> GetUserChats(string userGuid);
+        bool MarkAsRead(MarkAsRead markAsrReadDto, string userGuid);
+        int GetNumberOfNewMessages(string userGuid);
     }
 }

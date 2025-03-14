@@ -27,12 +27,12 @@ namespace PixelNestBackend.Repository
             _memoryCache = memoryCache;
         }
 
-        public int GetNumberOfNewMessages(Guid userID)
+        public int GetNumberOfNewMessages(string userGuid)
         {
             try
             {
 
-                int number = _dataContext.SeenMessages.Where(u => u.UserGuid == userID)
+                int number = _dataContext.SeenMessages.Where(u => (u.UserGuid).ToString() == userGuid)
                     .GroupBy(u => u.SenderID)
                     .Count();
                 return number;
@@ -43,30 +43,29 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public ICollection<ResponseChatsDto> GetUserChats(Guid userID)
+        public ICollection<ResponseChatsDto> GetUserChats(string userGuid)
         {
-            var cacheKey = string.Format(MessagesCache, userID);
-            var versionKey = $"{cacheKey}_Version";
+            var cacheKey = string.Format(MessagesCache, userGuid);
+            var versionKey = $"{cacheKey}";
             if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
             {
                 cachedVersion = DateTime.MinValue;
             }
             else cachedVersion = DateTime.MaxValue;
             var latestVersion = DateTime.UtcNow;
-            Console.WriteLine("\n\nUserID: " + userID + "\n\n");
+            Console.WriteLine("\n\nUserID: " + userGuid + "\n\n");
             if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseChatsDto> cashedChats) || cachedVersion < latestVersion) {
                 Console.WriteLine("Entered query");
                 var userChats = _dataContext.Messages
-                   .Where(m => m.SenderGuid == userID || m.ReceiverGuid == userID)
+                   .Where(m => (m.SenderGuid).ToString() == userGuid || (m.ReceiverGuid).ToString() == userGuid)
                    .Include(u => u.Sender)
                    .Include(u => u.Receiver)
                    .ToList()
-                  .GroupBy(m => m.SenderGuid.CompareTo(m.ReceiverGuid) < 0
-                         ? $"{m.SenderGuid}-{m.ReceiverGuid}"
-                         : $"{m.ReceiverGuid}-{m.SenderGuid}")
+                  .GroupBy(m => m.ChatID)
                    .Select(group => new ResponseChatsDto
                    {
                        ChatID = group.Key,
+                       UserID = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.ClientGuid).ToString() : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.ClientGuid).ToString() : "",
                        Messages = group
 
 
@@ -78,11 +77,11 @@ namespace PixelNestBackend.Repository
                                Receiver = m.Receiver.Username,
                                Message = m.MessageText,
                                DateSent = m.DateSent,
-                              Source = m.SenderGuid == userID ? m.Receiver.Username : m.ReceiverGuid == userID ? m.Sender.Username : "",
-
+                                Source = (m.SenderGuid).ToString() == userGuid ? m.Receiver.Username : (m.ReceiverGuid).ToString() == userGuid ? m.Sender.Username : "",
+                               UserID = (m.SenderGuid).ToString() == userGuid ? (m.Receiver.ClientGuid).ToString() : (m.ReceiverGuid).ToString() == userGuid ? (m.Sender.ClientGuid).ToString() : "",
                                MessageID = m.MessageID,
                                IsSeen = !_dataContext.SeenMessages
-                               .Any(sm => sm.UserGuid == userID && sm.MessageID == m.MessageID)
+                               .Any(sm => (sm.UserGuid).ToString() == userGuid && sm.MessageID == m.MessageID)
 
                            })
                            .ToList()
@@ -105,11 +104,11 @@ namespace PixelNestBackend.Repository
             return cashedChats;
         }
 
-        public ICollection<ResponseMessagesDto> GetUserToUserMessages(Guid userID, Guid targetID)
+        public ICollection<ResponseMessagesDto> GetUserToUserMessages(string chatID,Guid userID)
         {
             try
             {
-                var cacheKey = string.Format(MessagesCache, userID, targetID);
+                var cacheKey = string.Format(MessagesCache, chatID, userID.ToString());
                 var versionKey = $"{cacheKey}_Version";
                 if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
                 {
@@ -120,7 +119,7 @@ namespace PixelNestBackend.Repository
                 if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseMessagesDto> cashedMessages) || cachedVersion < latestVersion)
                 {
                     cashedMessages = _dataContext.Messages
-                   .Where(u => (u.SenderGuid == userID || u.ReceiverGuid == userID) && (u.SenderGuid == targetID || u.ReceiverGuid == targetID))
+                   .Where(u => u.ChatID.Equals(chatID))
                    .Select(m => new ResponseMessagesDto
                    {
                        Sender = m.Sender.Username,
@@ -128,6 +127,7 @@ namespace PixelNestBackend.Repository
                        DateSent = m.DateSent,
                        Message = m.MessageText,
                        MessageID = m.MessageID,
+                       UserID = (m.Sender.ClientGuid).ToString(),
                        IsSeen = !_dataContext.SeenMessages
                            .Any(sm => sm.UserGuid == userID && sm.MessageID == m.MessageID)
                    }).ToList();
@@ -151,7 +151,7 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public bool MarkAsRead(MarkAsRead markAsrReadDto, Guid userID)
+        public bool MarkAsRead(MarkAsRead markAsrReadDto, string userGuid)
         {
             try
             {
@@ -162,7 +162,7 @@ namespace PixelNestBackend.Repository
                     Console.WriteLine("User" + uid);
                 }
                 var messagesToDelete = _dataContext.SeenMessages
-                                                    .Where(mid => messageIds.Contains(mid.MessageID) && mid.UserGuid == userID);
+                                                    .Where(mid => messageIds.Contains(mid.MessageID) && (mid.UserGuid).ToString() == userGuid);
 
                 
                 _dataContext.SeenMessages.RemoveRange(messagesToDelete);
@@ -212,11 +212,15 @@ namespace PixelNestBackend.Repository
                     Console.WriteLine($"Error saving seen message: {ex.Message}");
                 }
             }
-            var cacheKey = string.Format(MessagesCache, message.SenderGuid, message.ReceiverGuid);
-            var cacheKey_2 = string.Format(MessagesCache, message.ReceiverGuid, message.SenderGuid);
-            var versionKey = $"{cacheKey}_Version";
+            var cacheKey = string.Format(MessagesCache, message.ChatID, message.SenderGuid);
+            var cacheKey_2 = string.Format(MessagesCache, message.ChatID, message.ReceiverGuid);
+            var cacheKey_3 = string.Format(MessagesCache, message.SenderGuid);
+            var cacheKey_4 = string.Format(MessagesCache, message.ReceiverGuid);
+           
             _memoryCache.Remove(cacheKey);
             _memoryCache.Remove(cacheKey_2);
+            _memoryCache.Remove(cacheKey_3);
+            _memoryCache.Remove(cacheKey_4);
             return true;
 
         }
