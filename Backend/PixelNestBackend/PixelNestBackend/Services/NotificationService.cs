@@ -19,25 +19,22 @@ namespace PixelNestBackend.Services
             _userUtility = userUtility;
         }
 
-        public int CountNotifications(string email)
+        public int CountNotifications(string userGuid)
         {
-            string username = _userUtility.GetUserName(email);
-            Guid userID = _userUtility.GetUserID(username);
-            return _notificationRepository.CountNotifications(userID);
+
+            return _notificationRepository.CountNotifications(userGuid);
         }
 
-        public ICollection<ResponseNotificationsDto> GetNotifications(string email)
+        public ICollection<ResponseNotificationsDto> GetNotifications(string userGuid)
         {
-            string username = _userUtility.GetUserName(email);
-            Guid userID = _userUtility.GetUserID(username);
-            return _notificationRepository.GetNotifications(userID);
+        
+            return _notificationRepository.GetNotifications(userGuid);
         }
 
-        public bool MarkAsRead(MarkAsOpenedDto markAsrReadDto, string email)
+        public bool MarkAsRead(MarkAsOpenedDto markAsrReadDto, string userGuid)
         {
-            string username = _userUtility.GetUserName(email);
-            Guid userID = _userUtility.GetUserID(username);
-            return _notificationRepository.MarkAsOpened(markAsrReadDto, userID);
+       
+            return _notificationRepository.MarkAsOpened(markAsrReadDto, userGuid);
         }
     }
 }

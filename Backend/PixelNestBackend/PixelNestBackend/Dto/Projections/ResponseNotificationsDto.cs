@@ -6,6 +6,7 @@
         public string Message { get; set; }
         public DateTime Date { get; set; }
         public Guid? PostID { get; set; }
+        public Guid ClientGuid { get; set; }
         public int NotificationID { get; set; }
         public ICollection<ResponseImageDto> ImagePath { get; set; }
     }

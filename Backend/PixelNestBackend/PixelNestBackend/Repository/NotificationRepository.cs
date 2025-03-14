@@ -17,11 +17,11 @@ namespace PixelNestBackend.Repository
             _tokenGenerator = tokenGenerator;
         }
 
-        public int CountNotifications(Guid userID)
+        public int CountNotifications(string userGuid)
         {
             try
             {
-                int notifications = _dataContext.Notifications.Where(u => u.ReceiverGuid == userID && u.IsNew == true).Count();
+                int notifications = _dataContext.Notifications.Where(u => (u.ReceiverGuid).ToString() == userGuid && u.IsNew == true).Count();
                 return notifications;
             }
             catch (Exception ex)
@@ -31,14 +31,14 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public ICollection<ResponseNotificationsDto> GetNotifications(Guid userID)
+        public ICollection<ResponseNotificationsDto> GetNotifications(string userGuid)
         {
             try
             {
                 ICollection<ResponseNotificationsDto>? responseNotifications = null;
 
                 responseNotifications = _dataContext.Notifications
-                    .Where(u => u.ReceiverGuid == userID)
+                    .Where(u => (u.ReceiverGuid).ToString() == userGuid)
                     .Include(u => u.ReceiverUser)
                     .Include(u => u.SenderUser)
                     .Include(u => u.Post)
@@ -58,10 +58,10 @@ namespace PixelNestBackend.Repository
                         }).ToList()
                     }).ToList();
                 responseNotifications = responseNotifications.OrderByDescending(a => a.Date).ToList();
-                foreach (var notification in responseNotifications)
-                {
-                    _tokenGenerator.appendSasToken(notification.ImagePath);
-                }
+                //foreach (var notification in responseNotifications)
+                //{
+                //    _tokenGenerator.appendSasToken(notification.ImagePath);
+                //}
                 return responseNotifications;
 
             }
@@ -72,7 +72,7 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public bool MarkAsOpened(MarkAsOpenedDto markAsRead, Guid userID)
+        public bool MarkAsOpened(MarkAsOpenedDto markAsRead, string userGuid)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace PixelNestBackend.Repository
 
 
                 var notificationsToUpdate = _dataContext.Notifications
-                        .Where(nid => notificationIDs.Contains(nid.NotificaitonID) && nid.ReceiverGuid == userID)
+                        .Where(nid => notificationIDs.Contains(nid.NotificaitonID) && (nid.ReceiverGuid).ToString() == userGuid)
                         .ToList();
                 foreach (var notification in notificationsToUpdate)
                 {

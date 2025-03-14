@@ -22,32 +22,32 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpPost("MarkAsOpened")]
-        public ActionResult<bool> MarkAsOpened([FromBody]MarkAsOpenedDto markAsRead)
+        public ActionResult<bool> MarkAsOpened([FromBody]MarkAsOpenedDto markAsOpened)
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
 
-            bool result = _notificationService.MarkAsRead(markAsRead, email);
+            bool result = _notificationService.MarkAsRead(markAsOpened, userGuid);
             return Ok(result);
         }
         [Authorize]
         [HttpGet("CountNotifications")]
         public ActionResult<int> CountNotifications()
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
 
-            int notifications = _notificationService.CountNotifications(email);
+            int notifications = _notificationService.CountNotifications(userGuid);
             return Ok(notifications);
         }
         [Authorize]
         [HttpGet("GetAllNotifications")]
         public ActionResult<ICollection<ResponseNotificationsDto>> GetAllNotifications()
         {
-            string? email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (email == null) return Unauthorized();
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
 
-            ICollection<ResponseNotificationsDto> result = _notificationService.GetNotifications(email);
+            ICollection<ResponseNotificationsDto> result = _notificationService.GetNotifications(userGuid);
            
             if (result != null) return Ok(result);
             else return NotFound();
