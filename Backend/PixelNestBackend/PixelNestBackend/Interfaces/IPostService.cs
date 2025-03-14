@@ -13,7 +13,7 @@ namespace PixelNestBackend.Interfaces
         Task<ResponsePostDto> GetSinglePost(Guid postID, string userGuid);
         bool SavePost(SavePostDto savePostDto);
         bool CacheChange(string userGuid);
-        PostResponse LikePost(LikeDto likeDto);
+        PostResponse LikePost(string postGuid, string userGuid);
         PostResponse Comment(CommentDto commentDto, string userGuid);
         Task<DeleteResponse> DeletePost(string userGuid, Guid postID);
         bool CheckIntegrity(string email, Guid postID);

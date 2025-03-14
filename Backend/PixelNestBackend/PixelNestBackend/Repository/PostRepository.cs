@@ -418,25 +418,27 @@ namespace PixelNestBackend.Repository
 
         }
         
-        public PostResponse LikePost(LikeDto likeDto, bool isLiked, Guid userID)
+        public PostResponse LikePost(string postGuid, string userGuid)
         {
 
             try
             {
                 bool doubleAction = false;
+                Guid parsedUserGuid = Guid.Parse(userGuid);
+                Guid parsedPostGuid = Guid.Parse(postGuid);
                 LikedPosts likedPost = _dataContext.LikedPosts
-                    .FirstOrDefault(lp => lp.UserGuid == userID && lp.PostGuid == likeDto.PostID);
+                    .FirstOrDefault(lp => lp.UserGuid == parsedUserGuid && lp.PostGuid == parsedPostGuid);
 
-                User user = _dataContext.Users.Where(u => u.UserGuid == userID).FirstOrDefault();
-                Post post = _dataContext.Posts.Include(u => u.User).Where(pid => pid.PostGuid == likeDto.PostID).FirstOrDefault();
-                Notification notification = _dataContext.Notifications.Where(ru => ru.ReceiverGuid == post.UserGuid && ru.SenderGuid == userID && ru.PostGuid == likeDto.PostID).FirstOrDefault();
+                User user = _dataContext.Users.Where(u => u.UserGuid == parsedUserGuid).FirstOrDefault();
+                Post post = _dataContext.Posts.Include(u => u.User).Where(pid => pid.PostGuid == parsedPostGuid).FirstOrDefault();
+                Notification notification = _dataContext.Notifications.Where(ru => ru.ReceiverGuid == post.UserGuid && ru.SenderGuid == parsedUserGuid && ru.PostGuid == parsedPostGuid).FirstOrDefault();
                 if (notification != null) _dataContext.Notifications.Remove(notification);
                 if (likedPost == null)
                 {
                     Notification newNotification = new Notification
                     {
                         Message = $"liked your photo.",
-                        SenderGuid = userID,
+                        SenderGuid = parsedUserGuid,
                         ReceiverGuid = post.User.UserGuid,
                         DateTime = DateTime.UtcNow,
                        PostGuid = post.PostGuid,
@@ -450,8 +452,8 @@ namespace PixelNestBackend.Repository
                        
                     var newLikedPost = new LikedPosts
                     {
-                        UserGuid = userID,
-                        PostGuid = likeDto.PostID,
+                        UserGuid = parsedUserGuid,
+                        PostGuid = parsedPostGuid,
                         DateLiked = DateTime.UtcNow
                     };
                   

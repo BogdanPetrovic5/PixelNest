@@ -15,7 +15,7 @@ namespace PixelNestBackend.Interfaces
         Task<ResponsePostDto> GetSinglePost(Guid postID, string currentLoggedUser);
         bool SavePost(Guid userID, SavePostDto savePostDto, bool isDuplicate);
         bool CacheChange(string username);
-        PostResponse LikePost(LikeDto likeDto, bool isLiked, Guid userID);
+        PostResponse LikePost(string postID, string userGuid);
         PostResponse Comment(Comment comment);
         Task<DeleteResponse> DeletePost(Guid postID);
         Guid ExtractUserID(Guid postID);

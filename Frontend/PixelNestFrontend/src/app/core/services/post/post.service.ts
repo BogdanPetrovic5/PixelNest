@@ -23,12 +23,9 @@ export class PostService {
     const url = `${environment.apiUrl}/api/Post/GetPosts?${parameter}&page=${currentPage}`
     return this._httpClient.get<any>(url)
   }
-  likePost(postID?:string, username?:string):Observable<any>{
-    const url = `${environment.apiUrl}/api/Post/LikePost`
-    return this._httpClient.post(url, {
-      PostID:postID,
-      Username:username
-    })
+  likePost(postGuid?:string):Observable<any>{
+    const url = `${environment.apiUrl}/api/Post/LikePost?postGuid=${postGuid}`
+    return this._httpClient.post(url,{});
   }
   deletePost(postID:string):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/DeletePost?postID=${postID}`;

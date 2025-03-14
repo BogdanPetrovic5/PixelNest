@@ -6,6 +6,7 @@ namespace PixelNestBackend.Dto.Projections
     public class ResponsePostDto
     {
         public Guid PostID { get; set; }
+        public Guid ClientGuid { get; set; }
         public bool IsDeletable { get; set; }
         public string OwnerUsername { get; set; }
 

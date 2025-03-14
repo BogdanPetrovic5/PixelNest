@@ -146,14 +146,15 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpPost("LikePost")]
-        public async Task<ActionResult> LikePost(LikeDto likeDto)
+        public async Task<ActionResult> LikePost([FromQuery]string postGuid)
         {
-            if(likeDto == null)
+            if(postGuid == null)
             {
                 return BadRequest();
             }
             PostResponse likeResponse = null;
-            likeResponse = _postService.LikePost(likeDto);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            likeResponse = _postService.LikePost(postGuid, userGuid);
             if (likeResponse != null && likeResponse.IsSuccessfull)
             {
                 WebSocketMessage webSocketMessage = new WebSocketMessage

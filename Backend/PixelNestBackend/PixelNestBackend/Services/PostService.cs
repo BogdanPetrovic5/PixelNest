@@ -76,13 +76,13 @@ namespace PixelNestBackend.Services
             return posts;
         }
 
-        public PostResponse LikePost(LikeDto likeDto)
+        public PostResponse LikePost(string postGuid, string userGuid)
         {
-            Guid userID = _userUtility.GetUserID(likeDto.Username);
-            if (userID == Guid.Empty) return null;
-            bool isLiked = _postUtility.FindDuplicate(likeDto.PostID, userID, "likedPosts");
+           
+            if (userGuid == null) return null;
+     
             
-            PostResponse result = _postRepository.LikePost(likeDto, isLiked, userID);
+            PostResponse result = _postRepository.LikePost(postGuid, userGuid);
             if (result != null) return result;
             return null;
         }
