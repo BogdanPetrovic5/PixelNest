@@ -46,14 +46,14 @@ namespace PixelNestBackend.Services
             _blobStorageUpload = blobStorageUpload;
           
         }
-        public bool SavePost(SavePostDto savePostDto)
+        public bool SavePost(string postGuid, string userGuid)
         {
-            Guid userID = _userUtility.GetUserID(savePostDto.Username);
-            if (userID == Guid.Empty) return false;
+            
+            if (userGuid == null) return false;
 
-            bool isLiked = _postUtility.FindDuplicate(savePostDto.PostID, userID, "savedPosts");
+            
 
-            bool result = _postRepository.SavePost(userID, savePostDto, isLiked);
+            bool result = _postRepository.SavePost(postGuid, userGuid);
             if (result) return true;
             return false;
         }

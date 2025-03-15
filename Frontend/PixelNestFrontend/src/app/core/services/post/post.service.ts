@@ -25,17 +25,15 @@ export class PostService {
   }
   likePost(postGuid?:string):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/LikePost?postGuid=${postGuid}`
-    return this._httpClient.post(url,{});
+    return this._httpClient.post(url,{})
   }
   deletePost(postID:string):Observable<any>{
     const url = `${environment.apiUrl}/api/Post/DeletePost?postID=${postID}`;
     return this._httpClient.delete<any>(url)
   }
-  savePost(username:string, postID:string){
-    const url = `${environment.apiUrl}/api/Post/SavePost`
+  savePost(postID:string){
+    const url = `${environment.apiUrl}/api/Post/SavePost?postGuid=${postID}`
     return this._httpClient.post<any>(url,{
-      Username:username,
-      PostID:postID
     })
   }
 

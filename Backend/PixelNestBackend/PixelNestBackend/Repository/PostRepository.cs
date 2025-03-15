@@ -42,17 +42,21 @@ namespace PixelNestBackend.Repository
         }
 
       
-        public bool SavePost(Guid userID, SavePostDto savePostDto, bool isDuplicate)
+        public bool SavePost(string postGuid, string userGuid)
         {
-            Post? post = _dataContext.Posts.Where(pid => savePostDto.PostID == pid.PostGuid).FirstOrDefault();
+            Guid parsedUserGuid = Guid.Parse(userGuid);
+            Guid parsedPostGuid = Guid.Parse(postGuid);
+            SavedPosts savedPosts = _dataContext.SavedPosts.Where(guid => guid.PostGuid == parsedPostGuid && guid.UserGuid == parsedUserGuid).FirstOrDefault();
+            
+            Post? post = _dataContext.Posts.Where(pid => Guid.Parse(postGuid) == pid.PostGuid).FirstOrDefault();
             var obj = new SavedPosts
             {
-                UserGuid = userID,
-                PostGuid = savePostDto.PostID,
+                UserGuid = parsedUserGuid,
+                PostGuid = parsedPostGuid,
                 
             };
-            var cacheKey = string.Format(PostsCacheKey);
-            if (!isDuplicate)
+            var cacheKey = string.Format(PostsCacheKey, userGuid);
+            if (savedPosts == null)
             {
                 _memoryCache.Remove(cacheKey);
                 _dataContext.SavedPosts.Add(obj);
@@ -60,16 +64,16 @@ namespace PixelNestBackend.Repository
 
                 return _dataContext.SaveChanges() > 0; 
             }
-            var existingSave = _dataContext.SavedPosts.FirstOrDefault(sp => sp.PostGuid == savePostDto.PostID && sp.UserGuid == userID);
-            if (existingSave != null) 
-            {
+      
+             
+            
               
                
-                _memoryCache.Remove(cacheKey);
-                _dataContext.SavedPosts.Remove(existingSave);
-                return _dataContext.SaveChanges() > 0;
-            }
-            return false;
+            _memoryCache.Remove(cacheKey);
+            _dataContext.SavedPosts.Remove(savedPosts);
+            return _dataContext.SaveChanges() > 0;
+            
+           
         }
         public async Task<PostResponse> PublishPost(PostDto postDto,Guid userID)
         {

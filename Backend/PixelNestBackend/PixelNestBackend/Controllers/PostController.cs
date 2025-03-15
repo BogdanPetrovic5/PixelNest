@@ -114,10 +114,12 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpPost("SavePost")]
-        public IActionResult SavePost(SavePostDto savePostDto)
+        public IActionResult SavePost([FromQuery] string postGuid)
         {
-            if (savePostDto == null) return BadRequest();
-            bool result = _postService.SavePost(savePostDto);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+            if (postGuid == null) return BadRequest();
+            bool result = _postService.SavePost(postGuid, userGuid);
             if (result) return Ok();
             return NotFound();
         }
