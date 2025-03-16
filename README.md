@@ -161,12 +161,10 @@ PixelNest is a web application currently under development, created with the pur
   ```
 
 #### POST `/api/Post/SavePost`
-- Request in form data format:
+- Request URL: `/api/Post/SavePost?postGuid={string}`
+- Request body: `none`
   ```
-    {
-      "username": "string",
-      "postID": 0
-    }
+ 
   ```
 - Responses:
   - `200 OK`, if post was saved successfully.
@@ -176,7 +174,7 @@ PixelNest is a web application currently under development, created with the pur
 #### GET `/api/Post/GetPosts`
 - Request URL format:
   - `/api/Post/GetPosts?page=1&maximumPosts=5`
-  - `/api/Post/GetPosts?username=${username}&location=${string}&page=${number}&maximumPosts=${number}`
+  - `/api/Post/GetPosts?clientGuid=${string}&location=${string}&page=${number}&maximumPosts=${number}`
 - All of these query paramters are optional. User can pass location or username only, or none. In that case all posts will be fetched.
 - Response:
    ```
@@ -216,7 +214,7 @@ PixelNest is a web application currently under development, created with the pur
 ## Story
 
 #### GET `/api/Story/GetStories`
-- Request URL: `/api/Story/GetStories?username={string}&maximum={number}`
+- Request URL: `/api/Story/GetStories?forCurrentUser={boolean}`
 - Username parameter is optional. If client does not send username with query, API will fetch stories of all user.
 If username is passed then API will fetch stories that belong to that user.
 
@@ -266,20 +264,19 @@ If username is passed then API will fetch stories that belong to that user.
 - Request body:
 ```
   {
-    username: "string",
-    storyID: 0
+     "storyID": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
   }
 ```
 - Response body:
 ```
   {
-    "isSuccessful": bool,
+    "isSuccessful": true,
     "message": "string",
-    "storyID": 0
+    "storyID": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
   }
 ```
 #### GET `api/Story/GetViewers
-- Request URL: `/api/Story/GetViewers?username={string}&storyID={number}`
+- Request URL: `/api/Story/GetViewers?storyID={string}`
 - Response body:
 ```
   [
@@ -370,7 +367,7 @@ If username is passed then API will fetch stories that belong to that user.
   ```
 
 #### GET `api/Chat/GetUserToUserMessages`
-- Request URL: `api/Chat/GetUserToUserMessages?targetClientGuid={targetClientGuid}`
+- Request URL: `api/Chat/GetUserToUserMessages?chatID={string}`
 - Response body:
   ```
   [
@@ -391,8 +388,7 @@ If username is passed then API will fetch stories that belong to that user.
   ```
     {
       "message": "string",
-      "senderUsername": "string",
-      "receiverUsername": "string"
+      "clientGuid": "string"
     }
   ```
 - Response: `bool`
