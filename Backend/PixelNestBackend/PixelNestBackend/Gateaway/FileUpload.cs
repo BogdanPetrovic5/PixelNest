@@ -68,7 +68,7 @@ namespace PixelNestBackend.Gateaway
         private async Task _storeProfileImage(Guid? userID, IFormFile profilePicture, string userFolder)
         {
            if(profilePicture != null)
-            {
+           {
                 string filePath = await _saveFileAsync(profilePicture, userFolder);
 
                
@@ -88,7 +88,7 @@ namespace PixelNestBackend.Gateaway
                     var newImagePath = new ImagePath
                     {
                         UserGuid = userID,
-                        Path = filePath,
+                        Path = relativePath,
                         PhotoDisplay = "cover"
                     };
                     await _dataContext.ImagePaths.AddAsync(newImagePath);
@@ -96,7 +96,7 @@ namespace PixelNestBackend.Gateaway
 
               
                 await _dataContext.SaveChangesAsync(); ;     
-            }
+           }
 
         }
         private async Task _storeStoryImage(StoryDto storyDto, string userFolder, Guid? folder)

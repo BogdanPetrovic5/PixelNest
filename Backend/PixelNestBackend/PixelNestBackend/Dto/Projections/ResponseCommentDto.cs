@@ -7,7 +7,7 @@ namespace PixelNestBackend.Dto.Projections
     {
         public int CommentID { get; set; }
         public int TotalLikes { get; set; }
-        public Guid UserID { get; set; }
+        public Guid ClientGuid { get; set; }
         public string CommentText { get; set; }
 
         public string Username { get; set; }

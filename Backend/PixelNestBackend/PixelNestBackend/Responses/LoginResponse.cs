@@ -3,6 +3,7 @@
     public class LoginResponse
     {
         public string Response { get; set; }
+        public string ClientGuid { get; set; }
         public string? Token { get; set; }
         public string? Username { get; set; }
         public string? Email { get; set; }

@@ -5,9 +5,9 @@ namespace PixelNestBackend.Interfaces
 {
     public interface INotificationRepository
     {
-        ICollection<ResponseNotificationsDto> GetNotifications(Guid userID);
-        int CountNotifications(Guid userID);
+        ICollection<ResponseNotificationsDto> GetNotifications(string userGuid);
+        int CountNotifications(string userGuid);
 
-        bool MarkAsOpened(MarkAsOpenedDto markAsRead, Guid userID);
+        bool MarkAsOpened(MarkAsOpenedDto markAsRead, string userGuid);
     }
 }

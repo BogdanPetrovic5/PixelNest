@@ -3,7 +3,7 @@
     public class FollowDto
     {
         public string FollowerUsername { get; set; }
-        public string FollowingUsername { get; set; }
+        public string FollowingGuid { get; set; }
         
 
     }

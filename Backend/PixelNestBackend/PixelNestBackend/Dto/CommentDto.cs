@@ -6,8 +6,7 @@ namespace PixelNestBackend.Dto
     {
         [Required]
         public string CommentText { get; set; }
-        [Required]
-        public string Username { get; set; }
+        
         [Required]
         public Guid PostID { get; set; }
        

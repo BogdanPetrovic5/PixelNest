@@ -3,6 +3,7 @@
     public class GroupedStoriesDto
     {
         public string OwnerUsername { get; set; }
+        public Guid ClientGuid { get; set; }
         public int StoriesLeft { get; set; } 
         public List<ResponseStoryDto> Stories { get; set; }
     }
