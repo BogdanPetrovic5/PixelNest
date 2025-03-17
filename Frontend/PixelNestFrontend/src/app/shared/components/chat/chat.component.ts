@@ -23,7 +23,8 @@ export class ChatComponent implements OnInit, OnDestroy{
   chatRoomID:string = ""
   reverseChatRoomID:string = ""
   private destroy$ = new Subject<void>();
-  username:string = ""
+  clientID:string = ""
+  chatID:string = ""
   message:string = ""
   messages:Message[] = []
   user:ProfileUser = {
@@ -32,13 +33,17 @@ export class ChatComponent implements OnInit, OnDestroy{
     followings: 0,
     totalPosts:0,
     name: '',
-    lastname:''
-
+    lastname:'',
+    clientGuid:'',
+    canFollow:false,
+    canEdit:false,
+    chatID:''
   }
   messageSeen:MessageSeen = {
     messageID:[]
   }
   messageData!: Message;
+  currentClientGuid:string = ""
   constructor(
     private _chatState:ChatStateService,
     private _route:ActivatedRoute,
@@ -49,7 +54,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     private _router:Router
   ){}
   ngOnDestroy(): void {
-      this._chatService.leaveRoom(this.username).subscribe({
+      this._chatService.leaveRoom(this.user.clientGuid).subscribe({
         next:response=>{
          
         }
@@ -57,6 +62,8 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
   ngOnInit(): void {
     this.messageData = this._createDefaultMessage()
+    this.currentClientGuid = this._userSession.getFromCookie("userID")
+    console.log(this.currentClientGuid)
     this._initializeComponent()
 
   }
@@ -74,20 +81,25 @@ export class ChatComponent implements OnInit, OnDestroy{
     }, 0);
   }
   sendMessage(){
-    this.messageData.receiver = this.username;
-    this.messageData.sender = this._userSession.getFromCookie("username")
+    this.messageData.receiver = this?.user?.clientGuid;
+    console.log(this.messageData.receiver)
     this.messageData.message = this.message;
    
+    if(this.messageData.message.length > 0){
+      this._chatService.sendMessage(this.messageData).subscribe({
+        next:response=>{
+          this.messageData.userID = this._userSession.getFromCookie("userID");
+          const messageCopy = { ...this.messageData };
+          
+          this.messages.push(messageCopy)
+          
+          this.messageData.message = "";
+          this.message = ""
+          this.scrollToBottom();
+        }
+      })
+    }
     
-    this._chatService.sendMessage(this.messageData).subscribe({
-      next:response=>{
-        const messageCopy = { ...this.messageData };
-        this.messages.push(messageCopy)
-        this.messageData.message = "";
-        this.message = ""
-        this.scrollToBottom();
-      }
-    })
   
   }
   private _initializeComponent(){
@@ -96,19 +108,18 @@ export class ChatComponent implements OnInit, OnDestroy{
         .pipe(
           takeUntil(this.destroy$), 
           tap(params => {
-            this.username = params.get("username") ?? ""
-          
+            this.clientID = params.get("clientID") ?? ""
+            this.chatID = params.get("chatID") ?? ""
             this._loadData();
             
           })
         ).subscribe()
     
-    this.chatRoomID = `${this._userSession.getFromCookie("username")}-${this.username}`
-    this.reverseChatRoomID = `${this.username}-${this._userSession.getFromCookie("username")}`    
+
   }
 
   private _loadData(){
-    this._userService.getUserData(this.username).subscribe({
+    this._userService.getUserData(this.clientID).subscribe({
       next:response=>{
         this.user = response;
         this._joinRoom();
@@ -125,23 +136,26 @@ export class ChatComponent implements OnInit, OnDestroy{
     return item.messageID
   } 
   isActive(): boolean{
-    const obj = this.activeUsers.find((a:any) => a.username === this.username);
+    const obj = this.activeUsers.find((a:any) => a.userID === this.clientID);
     if(obj != null && obj != undefined){
       return obj.isActive 
     } return false
   }
   private _loadMessages(){
-    this._chatService.getMessages(this.username).subscribe({
+    this._chatService.getMessages(this.chatID).subscribe({
       next:response=>{
         this.messages = response;
+        console.log(this.messages)
         this._loadSeenMessages();
         this.scrollToBottom();
       }
     })
   }
   private _subsribeToWebSocket(){
+    console.log(this.chatRoomID, this.reverseChatRoomID)
       this._chatState.chatStateMessage.subscribe({
         next:response=>{
+          
           if(response.roomID == this.chatRoomID || response.roomID == this.reverseChatRoomID){
             const messageCopy = { ...response };
             this.messages.push(messageCopy)
@@ -151,9 +165,11 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
   private _joinRoom(){
    
-    this._chatService.joinRoom(this.user.username).subscribe({
+    this._chatService.joinRoom(this.user.clientGuid).subscribe({
       next:response=>{
-       
+        this.chatRoomID = response.roomID;
+        this.reverseChatRoomID = response.reverserdRoomID
+        console.log(response)
         this._loadMessages();
         this._subsribeToWebSocket();
         
@@ -177,12 +193,12 @@ export class ChatComponent implements OnInit, OnDestroy{
     let senders = this._userSession.getFromCookie("ids");
     if(senders){
       let sendersParsed = JSON.parse(senders);
-  
-      let currentUsername = this._userSession.getFromCookie("username")
-      const matched = sendersParsed.find((a:any) => a.currentUser=== currentUsername)
+      console.log("LastSenders:", senders)
+      let currentUsername = this._userSession.getFromCookie("userID")
+      const matched = sendersParsed.find((a:any) => a.currentUser === currentUsername)
    
       if (matched) {
-        matched.senders = matched.senders.filter((sender:any) => sender !== this.username);
+        matched.senders = matched.senders.filter((sender:any) => sender !== this.clientID);
       }
     
       this._chatState.setLastIDS(sendersParsed);
@@ -227,7 +243,9 @@ export class ChatComponent implements OnInit, OnDestroy{
       dateSent: new Date(currentDate.getTime() - 3600000),
       source: '',
       isSeen: true,
-      messageID: 0
+      messageID: 0,
+      userID:'',
+      
     };
   }
 }

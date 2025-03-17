@@ -15,6 +15,7 @@ export class UserTagComponent implements OnInit{
   @Input() username?:string | any 
   @Input() date?:Date
   @Input() location?:string 
+  @Input() clientGuid!:string
   formattedDate:string = ""
   stringUrl:string | undefined = undefined
   constructor(

@@ -71,7 +71,7 @@ const routes: Routes = [
         
       },
       {
-        path:'Chat/:username',
+        path:'Chat/:clientID/:chatID',
         component:ChatComponent
       },
       {

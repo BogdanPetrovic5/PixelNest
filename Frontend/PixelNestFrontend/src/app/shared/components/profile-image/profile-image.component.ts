@@ -24,6 +24,7 @@ export class ProfileImageComponent implements OnInit{
 
   }
   ngOnChanges(changes: SimpleChanges): void {
+   
     if (changes['username']) {
       const newUsername = changes['username'].currentValue;
       if(newUsername) this._loadProfilePicture(newUsername);
@@ -34,11 +35,13 @@ export class ProfileImageComponent implements OnInit{
     this.subscription.unsubscribe();
   }
    ngOnInit(): void {
-      if(this.username == this._userSession.getFromCookie("username")){
+  
+      if(this.username == this._userSession.getFromCookie("userID")){
         this.subscription.add(
           this._profileState.currentProfileUrl$.subscribe({
             next:response =>{
               this.stringUrl = response
+           
             }
           })
         )
@@ -56,12 +59,13 @@ export class ProfileImageComponent implements OnInit{
    }
 
    private _loadProfilePicture(username:string){
-    
+    console.log(username)
     this._userService.getProfilePicture(username).subscribe({next:response=>{
       if(response.path.length > 0){
-        this.stringUrl = environment.blobStorageBaseUrl + response.path;
+        console.log(response, username)
+        this.stringUrl = "http://localhost:7157/Photos/" + response.path;
         
-      }
+      }else this.stringUrl = "/assets/images/user.png"
     }}) 
    }
 }

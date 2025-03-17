@@ -17,8 +17,8 @@ export class ChatService {
 
     return this._httpClient.get<any>(url);
   }
-  getMessages(username:string):Observable<Message[]>{
-    const url = `${environment.apiUrl}/api/Chat/GetUserToUserMessages?targetUsername=${username}`
+  getMessages(chatID:string):Observable<Message[]>{
+    const url = `${environment.apiUrl}/api/Chat/GetUserToUserMessages?chatID=${chatID}`
 
     return this._httpClient.get<Message[]>(url);
   }
@@ -27,8 +27,7 @@ export class ChatService {
 
       return this._httpClient.post(url, {
         Message:message.message,
-        SenderUsername:message.sender,
-        ReceiverUsername:message.receiver
+        ClientGuid:message.receiver
       })
   }
 
@@ -43,12 +42,12 @@ export class ChatService {
     return this._httpClient.get<Chats[]>(url)
   }
 
-  joinRoom(receiverUsername:string):Observable<any>{
-    const url = `${environment.apiUrl}/api/Chat/JoinRoom?receiverUsername=${receiverUsername}`
+  joinRoom(targetClientGuid:string):Observable<any>{
+    const url = `${environment.apiUrl}/api/Chat/JoinRoom?targetClientGuid=${targetClientGuid}`
     return this._httpClient.post(url,{})
   }
-  leaveRoom(receiverUsername:string):Observable<any>{
-    const url = `${environment.apiUrl}/api/Chat/LeaveRoom?receiverUsername=${receiverUsername}`
+  leaveRoom(targetClientGuid:string):Observable<any>{
+    const url = `${environment.apiUrl}/api/Chat/LeaveRoom?targetClientGuid=${targetClientGuid}`
     return this._httpClient.post(url,{})
   }
 }

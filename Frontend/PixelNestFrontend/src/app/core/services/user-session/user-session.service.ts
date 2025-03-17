@@ -59,6 +59,7 @@ export class UserSessionService {
         this.setToCookie("tokenExpirationAt", response.tokenExpiration)
         this.setToCookie("email", response.email)
         this.setToCookie("username", response.username)
+        this.setToCookie("userID", response.clientGuid)
         this.setTokenExpiration(response.tokenExpiration);
         console.log(response.tokenExpiration)
       }

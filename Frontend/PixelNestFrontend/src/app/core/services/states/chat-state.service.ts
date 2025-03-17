@@ -25,7 +25,11 @@ export class ChatStateService {
       followers:0,
       followings:0,
       name:'',
-      lastname:''
+      lastname:'',
+      clientGuid:'',
+      canFollow:false,
+      canEdit:false,
+      chatID:''
     }
   );
 
@@ -43,24 +47,27 @@ export class ChatStateService {
     dateSent: new Date(),
     source:'',
     isSeen: true,
-    messageID: 0
+    messageID: 0,
+    userID:''
   });
   chatStateMessage = this._chatStateMessage.asObservable()
   
   updateActiveUsers(value:any){
-    console.log(value)
+
     let users = this._activeUsers.getValue()
-    let user = users.find((a:any) => a.username === value.UserID);
+
+    let user = users.find((a:any) => a.userID === value.UserID);
     if(user){
       user.isActive = value.IsActive;
     }else{
       users.push({
-        username:value.UserID,
+        userID:value.UserID,
         isActive:value.IsActive
       });
     }
     
     this._activeUsers.next(users);
+    console.log(this._activeUsers.getValue())
   }
 
   setActiveUsers(value:ActiveUsers[]){

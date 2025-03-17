@@ -1,6 +1,7 @@
 import { Message } from "./message.dto";
 
 export interface Chats{
-    chatID:number;
+    chatID:string;
+    userID:string;
     messages:Message[];
 }

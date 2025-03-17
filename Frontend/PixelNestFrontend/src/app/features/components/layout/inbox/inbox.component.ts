@@ -32,8 +32,8 @@ export class InboxComponent implements OnInit{
     this.currentUser = this._userSession.getFromCookie("username")
     this._initializeComponent();
   }
-  chatNavigation(route:string){
-    this._router.navigate([`/Chat/${route}`])
+  chatNavigation(clientParameter:string, chatParameter:string){
+    this._router.navigate([`/Chat/${clientParameter}/${chatParameter}`])
   }
   // timeAgo(date: Date): string {
   //   const now = Date.now();
@@ -67,7 +67,7 @@ export class InboxComponent implements OnInit{
     this._router.navigate(["Dashboard"])
   }
   isActive(source:string): boolean{
-    const obj = this.activeUsers.find((a:any) => a.username === source);
+    const obj = this.activeUsers.find((a:any) => a.userID === source);
     if(obj != null && obj != undefined){
       return obj.isActive 
     } return false
@@ -75,6 +75,7 @@ export class InboxComponent implements OnInit{
   private _initializeComponent(){
     this._chatService.getChats().subscribe({
       next:response=>{
+        console.log("Chat response: ", response)
         this.chats = response;
         console.log(this.chats)
       }
@@ -82,7 +83,7 @@ export class InboxComponent implements OnInit{
     this._chatState.activeUsers$.subscribe({
       next:response=>{
         this.activeUsers = response
-       
+       console.log(this.activeUsers)
       }
     })
   }

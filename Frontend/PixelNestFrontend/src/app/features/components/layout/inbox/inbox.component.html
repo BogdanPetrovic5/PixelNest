@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="users">
-            <div class="chat-wrapper" *ngFor="let chat of chats" (click)="chatNavigation(chat.messages[0].source)">
+            <div class="chat-wrapper" *ngFor="let chat of chats" (click)="chatNavigation(chat.messages[0].userID, chat.chatID)">
                 <div class="chat-wrapper-content">
                     <app-profile-image 
                     [username]="chat.messages[0].source">
@@ -22,11 +22,11 @@
                                 {{chat.messages[0].source}}
                             </h1>
                             
-                            <div class="status" *ngIf="isActive(chat.messages[0].source)">
+                            <div class="status" *ngIf="isActive(chat.messages[0].userID)">
 
                             </div>
-                            <p *ngIf="isActive(chat.messages[0].source)">Active now</p>
-                            <p *ngIf="!isActive(chat.messages[0].source)">Not active now</p>
+                            <p *ngIf="isActive(chat.messages[0].userID)">Active now</p>
+                            <p *ngIf="!isActive(chat.messages[0].userID)">Not active now</p>
                         </div>
                         <div class="chat-data">
                             <div class="message">

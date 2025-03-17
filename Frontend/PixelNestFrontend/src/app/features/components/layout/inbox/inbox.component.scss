@@ -72,23 +72,26 @@ $HFONT: "Roboto Condensed", sans-serif;
                 background-color: #32373a8e;
             }
             .chat-wrapper{
-                width: 98%;
+                min-width: 98%;
                 height: 70px;
                 border-radius: 5px;
                 border-bottom: 1px solid;
                 border-color: $BORDERCOLOR;
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                justify-content: left;
                 flex-direction: row;
+                flex-shrink: 0;
                 cursor: pointer;
                 .chat-wrapper-content{
                     display: flex;
                     align-items: center;
                     flex-direction: row;
+                    flex-shrink: 0;
                     position: relative;
                     gap: 10px;
-                    width: 90%;
+                    min-width: 90% !important;
+                    width: 90% !important;
                     app-profile-image{
                         width: 50px;
                         height: 50px;
@@ -98,7 +101,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                         font-size: 25px;
                         font-family: $PFONT;
                         color: $PCOLOR;
+                        min-width: 75%;
                         width: 75%;
+                        flex-shrink:0;
                         display: flex;
                         flex-direction: column;
                         justify-content: center;

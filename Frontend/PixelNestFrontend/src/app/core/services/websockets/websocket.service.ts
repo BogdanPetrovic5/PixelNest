@@ -21,7 +21,8 @@ export class WebsocketService {
     dateSent:new Date(),
     source:'',
     isSeen:true,
-    messageID: 0
+    messageID: 0,
+    userID: ''
   };
   messages:Message[] = []
   lastSenderIDs:LastSendersDto[] =[]
@@ -43,11 +44,13 @@ export class WebsocketService {
     this._socket.onmessage = (event) => {
    
       var data = JSON.parse(event.data);
+      console.log(data)
       this.messageData.message = data.Content
       this.messageData.sender = data.SenderUsername
       this.messageData.receiver = data.TargetUser
       this.messageData.roomID = data.RoomID
       this.messageData.dateSent = new Date()
+      this.messageData.userID = data.SenderUser
      
       if(data.Type === "Direct"){
         this._proccessDirectMessage()
@@ -90,7 +93,7 @@ export class WebsocketService {
     this._dashboardState.setMessage(this.messageData.message)
     this._dashboardState.setSender(this.messageData.sender)
     this._dashboardState.setIsNotification(true);
-    this._processLastIDS(this.messageData.sender)
+    this._processLastIDS(this.messageData.userID)
     
 
   }
@@ -98,7 +101,7 @@ export class WebsocketService {
   private _processLastIDS(sender:string){
     this.lastSenderIDs = this._chatState.getLastIDS()
     
-    let currentUser = this._userSession.getFromCookie("username")
+    let currentUser = this._userSession.getFromCookie("userID")
     this.lastSenderIDObj.currentUser = currentUser;
     this.lastSenderIDObj.senders.push(sender);
 

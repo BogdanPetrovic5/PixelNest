@@ -1,4 +1,4 @@
 export interface ActiveUsers{
-    username:string;
+    userID:string;
     isActive:boolean;
 }
