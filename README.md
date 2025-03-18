@@ -6,7 +6,35 @@ Live chat and profile photo cropper video: https://www.youtube.com/watch?v=gNDLq
 PixelNest is a web application currently under development, created with the purpose of expanding my knowledge in Angular and ASP.NET. The application is backed by MSSQL for data storage, integrating a modern tech stack to provide a robust environment for learning and development.
 
 ## API endpoints listed down below:
+## User
 
+  #### POST `/api/User/CloseConnection`
+  - Request body: `none`
+  - Response: `status code OK`, `unauthorized`
+
+  #### GET `/api/User/GetFollowings`
+  - Request URL:  `/api/User/GetFollowings?clientGuid=${string}`
+  - Response:
+    ```
+      [
+        {
+          "followingUsername": "string",
+          "followingClientGuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        }
+      ]
+    ```
+   #### GET `/api/User/GetFollowers`
+   - Request URL:  `/api/User/GetFollowings?clientGuid=${string}`
+   - Response:
+     ```
+       [
+        {
+          "followerUsername": "string",
+          "followerClientGuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        }
+      ]
+     ```
+     
 ## Authentication
 
   #### POST `/api/Authentication/Registration`
