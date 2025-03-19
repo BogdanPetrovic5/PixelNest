@@ -8,11 +8,11 @@ PixelNest is a web application currently under development, created with the pur
 ## API endpoints listed down below:
 ## User
 
-  #### POST `/api/User/CloseConnection`
+#### POST `/api/User/CloseConnection`
   - Request body: `none`
   - Response: `status code OK`, `unauthorized`
 
-  #### GET `/api/User/GetFollowings`
+#### GET `/api/User/GetFollowings`
   - Request URL:  `/api/User/GetFollowings?clientGuid=${string}`
   - Response:
     ```
@@ -23,7 +23,7 @@ PixelNest is a web application currently under development, created with the pur
         }
       ]
     ```
-   #### GET `/api/User/GetFollowers`
+ #### GET `/api/User/GetFollowers`
    - Request URL:  `/api/User/GetFollowings?clientGuid=${string}`
    - Response:
      ```
@@ -34,7 +34,60 @@ PixelNest is a web application currently under development, created with the pur
         }
       ]
      ```
-     
+ #### POST `/api/User/Follow`
+   - Request URL:  `/api/User/GetFollowings?targetClientGuid=${string}`
+   - Response: `status code`
+
+ #### GET `/api/User/GetUserProfile`
+   - Request URL: `/api/User/GetUserProfile?targetClientGuid=${string}`
+   - Response:
+     ```
+       {
+          "followings": 0,
+          "followers": 0,
+          "totalPosts": 0,
+          "username": "string",
+          "name": "string",
+          "lastname": "string",
+          "clientGuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "canFollow": true,
+          "canEdit": true,
+          "chatID": "string",
+          "listFollowings": [
+            {
+              "followerUsername": "string",
+              "followingGuid": "string"
+            }
+          ],
+          "listFollowers": [
+            {
+              "followerUsername": "string",
+              "followingGuid": "string"
+            }
+          ]
+        }
+     ```
+ #### GET `/api/User/IsFollowing`
+ - Request URL: `/api/User/IsFollowing?targetClientGuid=${string}`
+ - Response: `boolean`
+ #### PUT `/api/User/ChangeProfilePicture`
+ - Request body:
+   ```
+     {
+        "Firstname":"string",
+        "Lastname":"string",
+        "Username":"string",
+        "ClientGuid":"string"
+        "ProfilePicture":"string($binary)"
+     }
+   ```
+  #### GET `/api/User/GetProfilePicture`
+  - Request URL: `/api/User/GetProfilePicture?clientGuid=${string}`
+  - Response: `string`
+ 
+  #### GET `/api/User/FindUser`
+  - Request URL: `/api/User/GetProfilePicture?username=${string}`
+  - Response: `string`
 ## Authentication
 
   #### POST `/api/Authentication/Registration`
