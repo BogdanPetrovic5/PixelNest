@@ -1,8 +1,9 @@
 <div class="form-wrap ">
+    <div class="g-signin2" data-onsuccess="onGoogleSignin"></div>
     <div class="form-wrap-content">
-        <img src="/assets/images/PixelNestLogo.png" alt="">
+        <img class="logo" src="/assets/images/PixelNestLogo.png" alt="">
         <div class="wrap">
-            <img src="/assets/images/aperture.png">
+            <img class="logo_2" src="/assets/images/aperture.png">
             <h1>Log in: </h1>
             <p>Let's get started</p>
             <form class="inputs" [formGroup]="loginForm" (ngSubmit)="login()">
@@ -32,10 +33,17 @@
                     <h1 *ngIf="error" class="error animate__animated animate__headShake animate__faster">{{errorMessage}}</h1>
                 </div>
                 
-                <button type="submit"><h1>LOGIN</h1></button>
-                
+                <button type="submit"><h1>Login</h1></button>
             </form>
+            <div class="google" id="google-signin-button">
+                <button (click)="signWithGoogle()">
+                    <img src="/assets/images/google-symbol.png" alt="">
+                    <h1>Continue with Google!</h1>
+                </button>
+            </div>
+
             <button class="switch" (click)="navigateToRegister()">Don't Have An Account? Register!</button>
+           
         </div>
     </div>
 </div>
