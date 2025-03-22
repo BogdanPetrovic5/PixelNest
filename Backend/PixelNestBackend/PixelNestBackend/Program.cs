@@ -19,7 +19,11 @@ using Microsoft.Extensions.Azure;
 using PixelNestBackend.Middleware;
 using System.Net.WebSockets;
 using PixelNestBackend.Services.Menagers;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.Extensions.Options;
+using PixelNestBackend.Services.Google;
+using PixelNestBackend.Utility.Google;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +49,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IStoryRepository, StoryRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
-
+builder.Services.AddScoped<IGoogleService, GoogleService>();
+builder.Services.AddScoped<IGoogleRepository, GoogleRepository>();
+builder.Services.AddScoped<GoogleUtility>();
 builder.Services.AddScoped<FolderGenerator>();
 builder.Services.AddScoped<UserUtility>();
 builder.Services.AddScoped<PostUtility>();
@@ -94,11 +100,19 @@ builder.Services.AddCors(options =>
                        .AllowCredentials();
             });
 });
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(option =>
+{
+    option.Cookie.HttpOnly = true;
+    option.Cookie.IsEssential = true;
+    option.IdleTimeout = TimeSpan.FromMinutes(30);
+});
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -115,7 +129,7 @@ builder.Services.AddAuthentication(options =>
         OnMessageReceived = context =>
         {
             var token = context.Request.Cookies["jwtToken"];
-           
+
             if (!string.IsNullOrEmpty(token))
             {
                 context.Token = token;
@@ -124,16 +138,17 @@ builder.Services.AddAuthentication(options =>
         },
         OnAuthenticationFailed = context =>
         {
-     
+
             Console.WriteLine($"Authentication failed: {context.Exception.Message}");
             return Task.CompletedTask;
         }
     };
 
 
-}).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+})
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 {
-    options.LoginPath = "/GetStarted"; 
+    options.LoginPath = "/Get Started";
     options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     options.SlidingExpiration = true;
 });
@@ -143,6 +158,12 @@ builder.Services.AddAzureClients(clientBuilder =>
     clientBuilder.AddBlobServiceClient(builder.Configuration["AzureBlobStorage:ConnectionString:blob"]!, preferMsi: true);
     clientBuilder.AddQueueServiceClient(builder.Configuration["AzureBlobStorage:ConnectionString:queue"]!, preferMsi: true);
 });
+builder.Services.AddAuthorization();
+//builder.Services.AddAzureClients(clientBuilder =>
+//{
+//    clientBuilder.AddBlobServiceClient(builder.Configuration["AzureBlobStorage:ConnectionString:blob"]!, preferMsi: true);
+//    clientBuilder.AddQueueServiceClient(builder.Configuration["AzureBlobStorage:ConnectionString:queue"]!, preferMsi: true);
+//});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -170,6 +191,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-
+app.UseSession();
 
 app.Run();

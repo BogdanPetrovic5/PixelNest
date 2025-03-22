@@ -4,11 +4,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
+using PixelNestBackend.Dto.Google;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
+using PixelNestBackend.Responses.Google;
 using PixelNestBackend.Services;
 using PixelNestBackend.Utility;
+using PixelNestBackend.Utility.Google;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
@@ -19,13 +23,92 @@ namespace PixelNestBackend.Controllers
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly UserUtility _userUtility;
+        private readonly IGoogleService _googleService;
+        private readonly GoogleUtility _googleUtility;
         public AuthenticationController(
                 IAuthenticationService authenticationService,
-                UserUtility userUtility
+                UserUtility userUtility,
+                IGoogleService googleService,
+                GoogleUtility googleUtility
+                
             )
         {
             _authenticationService = authenticationService;
             _userUtility = userUtility;
+            _googleService = googleService;
+            _googleUtility = googleUtility;
+        }
+        [HttpPost("SaveState")]
+        public IActionResult SaveState([FromQuery] string state)
+        {
+
+            HttpContext.Session.SetString("oauth_state", state);
+            return Ok();
+        }
+        [HttpGet("SigninGoogle")]
+        public async Task<IActionResult> SigninGoogle([FromQuery] string code, [FromQuery] string state)
+        {
+            if (string.IsNullOrEmpty(code))
+                return BadRequest("Authorization code is missing.");
+
+            string sessionState = HttpContext.Session.GetString("oauth_state");
+            if (state != sessionState)
+            {
+                return BadRequest("Invalid state");
+            }
+
+            GoogleTokenResponse googleToken = await _googleUtility.GetGoogleToken(code);
+            if (googleToken == null)
+            {
+                return BadRequest("Failed to retrieve Google token");
+            }
+
+            
+            GoogleAccountDto googleAccountDto = _googleUtility.GenerateGoogleAccountDto(googleToken.id_token);
+            if (!_googleService.IsUserRegistered(googleAccountDto.Email))
+            {
+                GoogleAccountResponse googleAccountResponse = await _googleService.RegisterGoogleAccount(googleAccountDto);
+            }
+
+            GoogleLoginResponse loginResponse = await _googleService.LoginWithGoogle(googleAccountDto.Email);
+
+            if (loginResponse != null && loginResponse.IsSuccessful)
+            {
+                var tokenExpirationDate = DateTime.Now.AddMinutes(30);
+                loginResponse.TokenExpiration = tokenExpirationDate;
+                HttpContext.Session.SetString(state, System.Text.Json.JsonSerializer.Serialize(loginResponse));
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.None,
+                    Secure = true,
+                    Expires = tokenExpirationDate,
+                    Path = "/"
+                };
+                Response.Cookies.Append("jwtToken", loginResponse.Token, cookieOptions);
+                return Redirect("http://localhost:4200/Authentication/Redirect-Page");
+            }
+
+
+            return BadRequest();
+            
+        }
+        [Authorize]
+        [HttpGet("GetLoginResponse")]
+        public IActionResult GetLoginResponse([FromQuery] string state)
+        {
+            if (string.IsNullOrEmpty(state))
+            {
+                return BadRequest("State is missing.");
+            }
+
+            string loginResponseJson = HttpContext.Session.GetString(state);
+            if (string.IsNullOrEmpty(loginResponseJson))
+            {
+                return BadRequest("No login response found for the given state.");
+            }
+
+            return Ok(System.Text.Json.JsonSerializer.Deserialize<GoogleLoginResponse>(loginResponseJson));
         }
         [Authorize]
         [HttpPost("RefreshToken")]
@@ -142,7 +225,7 @@ namespace PixelNestBackend.Controllers
 
         }
         [Authorize]
-        [HttpPost("IsLoggedIn")]
+        [HttpGet("IsLoggedIn")]
         public IActionResult IsLoggedIn()
         {
             return Ok(new {loggedIn = true});
