@@ -154,6 +154,17 @@ namespace PixelNestBackend.Controllers
             }else return NotFound();
         }
 
+        [Authorize]
+        [HttpGet("GetCurrentUserData")]
+        public ActionResult<UserProfileDto> GetCurrentUserData()
+        {
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+
+            UserProfileDto response = _userService.GetCurrentUserData(userGuid);
+            return Ok(response);
+        }
+
         
     } 
 }

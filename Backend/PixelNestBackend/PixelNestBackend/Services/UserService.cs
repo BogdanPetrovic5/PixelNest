@@ -135,5 +135,10 @@ namespace PixelNestBackend.Services
         {
             return _userRepository.FindUsers(username);
         }
+
+        public UserProfileDto GetCurrentUserData(string userGuid)
+        {
+            return _userRepository.GetCurrentUserData(userGuid);
+        }
     }
 }

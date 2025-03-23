@@ -6,6 +6,8 @@
         public int Followers { get; set; }
         public int TotalPosts { get; set; }
         public string Username { get; set; }
+        public string Email { get; set; }
+        public string ProfileImagePath { get; set; }
         public string Name { get; set; }
         public string Lastname { get; set; }
         public Guid ClientGuid { get; set; }

@@ -406,6 +406,25 @@ namespace PixelNestBackend.Repository
             return false;
         }
 
-    
+        public UserProfileDto GetCurrentUserData(string userGuid)
+        {
+            UserProfileDto userData = _dataContext.Users
+                .Where(u => u.UserGuid.ToString() == userGuid)
+                .Select(u => new UserProfileDto
+                {
+                    Name = u.Firstname,
+                    Lastname = u.Lastname,
+                    Email = u.Email,
+                    ClientGuid = u.ClientGuid,
+                    Username = $"{u.Firstname} {u.Lastname}",
+                    ProfileImagePath = u.ProfilePhoto.Path
+                }).FirstOrDefault();
+            return userData;
+        }
+
+        public bool CheckIfUsernameExists(string username)
+        {
+            return _dataContext.Users.Where(u => u.Username.Equals(username)).Any();
+        }
     }
 }
