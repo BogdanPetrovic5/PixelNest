@@ -133,7 +133,7 @@ export class NewPostComponent implements OnInit{
     this.objectFit = this.objectFit === 'cover' ? 'contain' : 'cover';
   }
   discard(){
-    console.log(this.imageIndex)
+  
     this.selectedFiles.splice(this.imageIndex, 1)
     this.imageUrls.splice(this.imageIndex, 1)
     if(this.imageIndex - 1 >= 0) this.imageIndex -= 1

@@ -21,7 +21,6 @@ export class PostViewComponent implements OnInit{
   postID:string = "-1";
   private destroy$ = new Subject<void>();
   ngOnInit(): void {
-    console.log("ASD")
     this._route.paramMap
        .pipe(
          takeUntil(this.destroy$), 

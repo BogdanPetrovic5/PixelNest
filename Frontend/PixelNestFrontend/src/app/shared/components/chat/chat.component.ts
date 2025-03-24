@@ -63,7 +63,6 @@ export class ChatComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.messageData = this._createDefaultMessage()
     this.currentClientGuid = this._userSession.getFromCookie("userID")
-    console.log(this.currentClientGuid)
     this._initializeComponent()
 
   }
@@ -82,7 +81,6 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
   sendMessage(){
     this.messageData.receiver = this?.user?.clientGuid;
-    console.log(this.messageData.receiver)
     this.messageData.message = this.message;
    
     if(this.messageData.message.length > 0){
@@ -145,14 +143,12 @@ export class ChatComponent implements OnInit, OnDestroy{
     this._chatService.getMessages(this.chatID).subscribe({
       next:response=>{
         this.messages = response;
-        console.log(this.messages)
         this._loadSeenMessages();
         this.scrollToBottom();
       }
     })
   }
   private _subsribeToWebSocket(){
-    console.log(this.chatRoomID, this.reverseChatRoomID)
       this._chatState.chatStateMessage.subscribe({
         next:response=>{
           
@@ -169,7 +165,6 @@ export class ChatComponent implements OnInit, OnDestroy{
       next:response=>{
         this.chatRoomID = response.roomID;
         this.reverseChatRoomID = response.reverserdRoomID
-        console.log(response)
         this._loadMessages();
         this._subsribeToWebSocket();
         
@@ -193,7 +188,6 @@ export class ChatComponent implements OnInit, OnDestroy{
     let senders = this._userSession.getFromCookie("ids");
     if(senders){
       let sendersParsed = JSON.parse(senders);
-      console.log("LastSenders:", senders)
       let currentUsername = this._userSession.getFromCookie("userID")
       const matched = sendersParsed.find((a:any) => a.currentUser === currentUsername)
    

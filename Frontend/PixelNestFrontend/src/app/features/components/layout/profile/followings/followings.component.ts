@@ -23,7 +23,6 @@ export class FollowingsComponent implements OnInit{
   private _loadFollowings(){
     this._userService.getFollowings(this.clientGuid).subscribe({
       next:response=>{
-       console.log(response)
         this.followings = response
       },
       error:error=>{

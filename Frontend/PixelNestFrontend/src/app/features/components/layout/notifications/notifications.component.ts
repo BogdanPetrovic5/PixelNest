@@ -47,7 +47,6 @@ baseUrl:string = ""
       this.notificationsID.notificationID.push(this.notifications[i].notificationID)
     }
     
-    console.log(this.notificationsID.notificationID)
     this._notificationService.markAsOpened(this.notificationsID).subscribe({
       next:response=>{
       

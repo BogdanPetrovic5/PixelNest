@@ -124,7 +124,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
 }
   getImageWidth(): number {
     const imageWrapper = document.querySelector('.user-box') as HTMLElement;
-    console.log(imageWrapper)
+    
     return imageWrapper ? imageWrapper.offsetWidth : 0;
   }
 

@@ -76,7 +76,7 @@ export class PostStateService{
     this.setLoading(true);
     this._postService.getPosts(currentPage, currentQuery).subscribe({
       next:response=>{
-        console.log(response)
+       
         this.posts = this.posts.concat(response);
         this.cache.set(this.cacheKey, {
           posts: this.posts,

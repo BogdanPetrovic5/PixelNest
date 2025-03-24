@@ -49,7 +49,7 @@ export class LoginFormComponent {
           this._router.navigate(["/Dashboard"])
           
           this._userSession.setToCookie("tokenExpirationAt", response.tokenExpiration)
-          console.log(response.tokenExpiration)
+         
         }, 1500);
        
       },(error:HttpErrorResponse)=>{

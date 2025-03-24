@@ -50,7 +50,6 @@ export class EditComponent implements OnInit, OnDestroy{
   }
   private async _applyCompression(file:any){
     try{
-      console.log("Not cropped: " ,this.compressedFile)
       this.compressedFile = await this._imageCompression.compressImage(file[0])
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {

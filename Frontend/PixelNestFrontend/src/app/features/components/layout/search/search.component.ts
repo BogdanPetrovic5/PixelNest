@@ -31,7 +31,6 @@ export class SearchComponent implements OnInit{
       ),
       tap((users)=> {
         
-        console.log(users)
       })
     ).subscribe(
       (users)=>{

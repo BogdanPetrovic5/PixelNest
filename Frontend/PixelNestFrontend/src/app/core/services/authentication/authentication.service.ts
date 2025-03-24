@@ -39,6 +39,7 @@ export class AuthenticationService {
     const url = `${environment.apiUrl}/api/Authentication/Login`;
     return this._httpClient.post<any>(url, formGroup, {withCredentials:true}).pipe(
       tap(response=> {
+        console.log(response)
         this._storeCredentials(response)
         this.isLoggedIn()
       })

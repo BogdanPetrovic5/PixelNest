@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
   }
   
   ngOnDestroy(): void {
-    console.log("Dashboard destroyed")
+  
     this.subscriptions.unsubscribe();
     this.posts = []
 
@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
       next:response=>{
  
         if(response){
-          console.log("Cache changed", response)
+        
           this.isChanged = response;
         }
         
@@ -98,7 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
       this._postState.feedPosts$.subscribe({
         next:response=>{
           this.posts = response;
-          console.log(this.posts)
+          
         
         this._cdr.detectChanges()
         },error:error=>{

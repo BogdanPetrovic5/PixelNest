@@ -75,7 +75,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
   }
 
   navigate(route:string){
-    console.log(route)
     this._router.navigate([`/Chat/${route}`])
     this._chatState.setUser(this.user);
   }

@@ -32,13 +32,13 @@ export class ViewerListComponent implements OnInit{
       })
     )
 
-    let username = this._userSession.getFromCookie("username");
-    console.log("Username: ", username);
+   
+   
     if(this.storyID != null || this.storyID != undefined){
-      this._storyService.getViewers(username, this.storyID).subscribe({
+      this._storyService.getViewers(this.storyID).subscribe({
         next:response=>{
           this.viewers = response;
-          console.log(this.viewers);
+         
         }
       })
     }
