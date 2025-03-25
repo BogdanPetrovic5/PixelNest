@@ -126,11 +126,12 @@ namespace PixelNestBackend.Controllers
 
         [Authorize]
         [HttpGet("GetPosts")]
-        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPosts(string? clientGuid,string? location, int page = 1, int maximumPosts = 5){
+        public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPosts([FromQuery]string? clientGuid, [FromQuery] string? location, int page = 1, int maximumPosts = 5){
             try
             {
                 ICollection<ResponsePostDto> posts;
                 string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                 
                 posts = await _postService.GetPosts(clientGuid,location, userGuid);
                 if (posts == null && !posts.Any()) return NotFound(new { message = "No posts found"});
                 var result = posts.OrderByDescending(a => a.PublishDate);

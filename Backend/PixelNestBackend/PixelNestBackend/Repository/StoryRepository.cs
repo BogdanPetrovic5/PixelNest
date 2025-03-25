@@ -59,6 +59,7 @@ namespace PixelNestBackend.Repository
                              {
                                  OwnerUsername = s.User.Username,
                                  SeenByUser = _dataContext.Seen.Any(a => a.UserGuid == parsedUserGuid && s.StoryGuid == a.StoryGuid),
+                                 ClientGuid = s.User.ClientGuid,
                                  ImagePaths = s.ImagePath
                                                 .Select(i => new ResponseImageDto
                                                 {
@@ -108,7 +109,7 @@ namespace PixelNestBackend.Repository
                                 Stories = group.Select(s => new ResponseStoryDto
                                 {
                                     OwnerUsername = s.User.Username,
-                                    
+                                    ClientGuid = s.User.ClientGuid,
                                     SeenByUser = _dataContext.Seen.Any(a => a.UserGuid == parsedUserGuid && s.StoryGuid == a.StoryGuid),
                                     ImagePaths = s.ImagePath
                                                 .Select(i => new ResponseImageDto

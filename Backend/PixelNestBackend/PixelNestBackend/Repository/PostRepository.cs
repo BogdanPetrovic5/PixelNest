@@ -227,7 +227,8 @@ namespace PixelNestBackend.Repository
                   
                   
                     ICollection<ResponsePostDto> posts = await _dataContext.Posts
-                        .Where(u => u.UserGuid.ToString() == clientGuid)
+                        .Include(u => u.User)
+                        .Where(u => u.User.ClientGuid.ToString() == clientGuid)
                        .Select(a => new ResponsePostDto
                        {
                            PostDescription = a.PostDescription,

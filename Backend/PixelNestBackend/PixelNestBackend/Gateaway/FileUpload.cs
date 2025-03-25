@@ -27,6 +27,10 @@ namespace PixelNestBackend.Gateaway
                 {
                     await _storeStoryImage(storyDto, userFolder, folder);
                 }
+                else if(postDto == null && storyDto == null && profileDto == null && folder == null)
+                {
+                    await _storeGooglePath(userFolder, userID);
+                }
                 else
                 {
                     await _storeProfileImage(userID, profileDto.ProfilePicture, userFolder);
@@ -41,7 +45,23 @@ namespace PixelNestBackend.Gateaway
                 return false;
             }
         }
-
+        private async Task _storeGooglePath(string userFolder, Guid? userID)
+        {
+            try
+            {
+                var newImagePath = new ImagePath
+                {
+                    UserGuid = userID,
+                    Path = userFolder,
+                    PhotoDisplay = "cover"
+                };
+                _dataContext.ImagePaths.Add(newImagePath);
+                _dataContext.SaveChanges();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         private async Task _storePostImages(PostDto postDto, string userFolder, Guid? folder)
         {
             string postFolderPath = _createFolder(userFolder, folder.ToString());
