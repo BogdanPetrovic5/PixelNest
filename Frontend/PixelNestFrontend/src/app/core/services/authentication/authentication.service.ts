@@ -34,7 +34,7 @@ export class AuthenticationService {
     const url = `${environment.apiUrl}/api/Authentication/Register`;
     return this._httpClient.post<any>(url, formGroup)
   }
-
+ 
   login(formGroup:any):Observable<any>{
     const url = `${environment.apiUrl}/api/Authentication/Login`;
     return this._httpClient.post<any>(url, formGroup, {withCredentials:true}).pipe(
@@ -47,7 +47,7 @@ export class AuthenticationService {
   }
 
   isLoggedIn():Observable<any>{
-    return this._httpClient.post<{loggedIn:boolean}>(`${environment.apiUrl}/api/Authentication/IsLoggedIn`,{},{withCredentials:true})
+    return this._httpClient.get<{loggedIn:boolean}>(`${environment.apiUrl}/api/Authentication/IsLoggedIn`,{withCredentials:true})
     .pipe(
       map((response:any) => response.loggedIn)
       ,
@@ -60,5 +60,6 @@ export class AuthenticationService {
  
     this._userSessionService.setToCookie("username",response.username)
     this._userSessionService.setToCookie("email", response.email);
+    this._userSessionService.setToCookie("userID", response.clientGuid);
   }
 }

@@ -59,11 +59,11 @@ export class ProfileImageComponent implements OnInit{
    }
 
    private _loadProfilePicture(username:string){
-    console.log(username)
     this._userService.getProfilePicture(username).subscribe({next:response=>{
       if(response.path.length > 0){
-        console.log(response, username)
-        this.stringUrl = "http://localhost:7157/Photos/" + response.path;
+        if(!response.path.includes("https")) this.stringUrl = "http://localhost:7157/Photos/" + response.path;
+        else this.stringUrl = response.path
+       
         
       }else this.stringUrl = "/assets/images/user.png"
     }}) 

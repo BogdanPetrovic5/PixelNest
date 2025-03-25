@@ -15,7 +15,7 @@ export class UnauthorizedAccessInterceptor implements HttpInterceptor {
   constructor(private _router:Router, private _routeReuse:CustomRouteReuseStrategy) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const excludedUrls = ['/api/Authentication/IsLoggedIn'];
+    const excludedUrls = ['/api/Authentication/IsLoggedIn', '/api/Authentication/GetLoginResponse'];
     if (excludedUrls.some((url) => request.url.includes(url))) {
       return next.handle(request); 
     }
