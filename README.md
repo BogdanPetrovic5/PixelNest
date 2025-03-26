@@ -4,6 +4,104 @@ Live chat and profile photo cropper video: https://www.youtube.com/watch?v=gNDLq
 ## Short Description
 
 PixelNest is a web application currently under development, created with the purpose of expanding my knowledge in Angular and ASP.NET. The application is backed by MSSQL for data storage, integrating a modern tech stack to provide a robust environment for learning and development.
+## Backend
+REST API for application and project strucuture is listed down below.
+
+- Controllers
+  - AuthenticationController.cs
+  - CommentController.cs
+  - PostController.cs
+  - UserController.cs
+  - NotificationController.cs
+  - ChatController.cs
+- Data
+  - DataContext.cs
+- Dto
+  - Projections
+  - Google
+  - Websocket
+- Gateway
+  - BlobStorageUpload.cs
+  - FileUpload.cs
+- Interfaces
+  - IAuthenticationRepository.cs
+  - IAuthenticationService.cs
+  - IChatService.cs
+  - IChatRepository.cs
+  - IGoogleService.cs
+  - IGoogleRepository.cs
+  - INotificationRepository.cs
+  - INotificationService.cs
+  - IPostRepository.cs
+  - IPostService.cs
+  - ICommentRepository.cs
+  - ICommentService.cs
+  - IFileUpload.cs
+  - IUserService.cs
+  - IUserRepository.cs
+- Middleware
+  - APICallLimiter.cs
+  - WebSocketMiddleware.cs
+- Mappers
+  - UserMapper.cs
+- Migrations
+- Models
+  - Comment.cs
+  - Follow.cs
+  - ImagePath.cs
+  - LikedComments.cs
+  - LikedPosts.cs
+  - Post.cs
+  - SavedPosts.cs
+  - SeenStory.cs
+  - SeenMessage.cs
+  - Message.cs
+  - Notification.cs
+  - Story.cs
+  - User.cs
+- Proxy
+  - ProxyController.cs
+- Repository
+  - AuthenticationRepository.cs
+  - CommentRepository.cs
+  - PostRepository.cs
+  - UserRepository.cs
+  - NotificationRepository.cs
+  - ChatRepository.cs
+  - GoogleRepository.cs
+- Responses
+  - Google
+    - GoogleAccountResponse.cs
+    - GoogleLoginResponse.cs
+  - FollowResponse.cs
+  - LoginResponse.cs
+  - PostResponse.cs
+  - RegisterResponse.cs
+- Security
+  - PasswordEncoder.cs
+  - TokenGenerator.cs
+  - SASTokenGenerator.cs
+- Services
+  - Google
+    - GoogleService.cs
+  - Menagers
+    - WebSocketConnectionMenager.cs
+  - AuthenticationService.cs
+  - CommentService.cs
+  - PostService.cs
+  - UserService.cs
+  - ChatService.cs
+  - NotificationService.cs
+  
+- Utility
+  - Google
+    - GoogleUtility.cs
+  - BobFolderGenerator.cs
+  - CommentUtility.cs
+  - FolderGenerator.cs
+  - PostUtility.cs
+  - UserUtility.cs
+
 
 ## API endpoints listed down below:
 ## User
@@ -560,74 +658,8 @@ Once registered and logged in, users have access to several features (with more 
 - Create Posts: Users can create posts that will be publicly shared across all users, including guests.
 - Post Interactions:
   - Like Posts: Available now.
-  - Comment on Posts (in development).
-  - Save Posts (in development).
-- Real-Time Chat: Users will be able to chat with other users in real-time using WebSockets (planned feature).
+  - Comment on Posts.
+  - Save Posts.
+- Real-Time Chat: Users are able to chat with other users in real-time using WebSockets.
 - Follow each others
-
----
-
-### Planned features
-- Instagram-like Stories: One of the key features to be implemented will be the ability for users to post stories, similar to Instagram’s story functionality.
-
-## Backend
-REST API for application and project strucuture is listed down below.
-
-- Controllers
-  - AuthenticationController.cs
-  - CommentController.cs
-  - PostController.cs
-  - UserController.cs
-- Data
-  - DataContext.cs
-- Dto
-- Gateway
-  - FileUpload.cs
-- Interfaces
-  - IAuthenticationRepository.cs
-  - IAuthenticationService.cs
-  - IPostRepository.cs
-  - IPostService.cs
-  - ICommentRepository.cs
-  - ICommentService.cs
-  - IFileUpload.cs
-  - IUserService.cs
-  - IUserRepository.cs
-- Mappers
-  - UserMapper.cs
-- Migrations
-- Models
-  - Comment.cs
-  - Follow.cs
-  - ImagePath.cs
-  - LikedComments.cs
-  - LikedPosts.cs
-  - Post.cs
-  - SavedPosts.cs
-  - Story.cs
-  - User.cs
-- Proxy
-  - ProxyController.cs
-- Repository
-  - AuthenticationRepository.cs
-  - CommentRepository.cs
-  - PostRepository.cs
-  - UserRepository.cs
-- Responses
-  - FollowResponse.cs
-  - LoginResponse.cs
-  - PostResponse.cs
-  - RegisterResponse.cs
-- Security
-  - PasswordEncoder.cs
-  - TokenGenerator.cs
-- Services
-  - AuthenticationService.cs
-  - CommentService.cs
-  - PostService.cs
-  - UserService.cs
-- Utility
-  - CommentUtility.cs
-  - FolderGenerator.cs
-  - PostUtility.cs
-  - UserUtility.cs
+- Upload stories: Users are able to post stories, similar to Instagram's story functionality.
