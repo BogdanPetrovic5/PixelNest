@@ -38,6 +38,7 @@ namespace PixelNestBackend.Controllers
             _googleService = googleService;
             _googleUtility = googleUtility;
         }
+
         [HttpPost("SaveState")]
         public IActionResult SaveState([FromQuery] string state)
         {
@@ -45,6 +46,7 @@ namespace PixelNestBackend.Controllers
             HttpContext.Session.SetString("oauth_state", state);
             return Ok();
         }
+
         [HttpGet("SigninGoogle")]
         public async Task<IActionResult> SigninGoogle([FromQuery] string code, [FromQuery] string state)
         {
@@ -110,12 +112,15 @@ namespace PixelNestBackend.Controllers
 
             return Ok(System.Text.Json.JsonSerializer.Deserialize<GoogleLoginResponse>(loginResponseJson));
         }
+
+
         [Authorize]
         [HttpPost("RefreshToken")]
         public ActionResult RefreshToken()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             string token = _authenticationService.ReturnToken(userGuid);
+
             string username = _userUtility.GetUserName(userGuid);
             string email = _userUtility.GetEmail(userGuid);
             string clientGuid = _userUtility.GetClientGuid(userGuid);

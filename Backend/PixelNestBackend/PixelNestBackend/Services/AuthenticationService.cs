@@ -40,7 +40,7 @@ namespace PixelNestBackend.Services
                 {
 
                     Guid userGuid = _userUtility.GetUserID(response.ClientGuid);
-                    string token = _tokenGenerator.GenerateToken(userGuid.ToString());
+                    string token = ReturnToken(userGuid.ToString());
                     response.Token = token;
                     return response;
                 }
@@ -94,9 +94,9 @@ namespace PixelNestBackend.Services
             };
         }
 
-        public string ReturnToken(string email)
+        public string ReturnToken(string userGuid)
         {
-            return _authenticationRepository.ReturnToken(email);
+            return _authenticationRepository.ReturnToken(userGuid);
         }
 
         private RegisterResponse? _validateUser(User user)

@@ -76,7 +76,7 @@ namespace PixelNestBackend.Controllers
         public async Task<ActionResult<bool>> SendMessage(MessageDto messageDto)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            Console.WriteLine("Message user guid: " + userGuid);
+           
             if (messageDto == null || userGuid == null) return BadRequest();
 
             MessageResponse response = _chatService.SaveMessage(messageDto, userGuid);

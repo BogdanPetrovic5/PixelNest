@@ -133,6 +133,7 @@ namespace PixelNestBackend.Repository
                             string? username = reader["Username"].ToString();
                             string? email = reader["Email"].ToString();
                             string? userID = reader["ClientGuid"].ToString();
+
                             bool passwordCheck = _passwordEncoder.VerifyPassword(loginDto.Password, hashedPassword);
 
                             return passwordCheck

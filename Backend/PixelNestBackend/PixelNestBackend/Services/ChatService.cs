@@ -45,7 +45,7 @@ namespace PixelNestBackend.Services
        
 
             return _chatRepository.MarkAsRead(markAsrReadDto, userGuid);
-            throw new NotImplementedException();
+           
         }
 
         public MessageResponse SaveMessage(MessageDto messageDto, string userGuid)

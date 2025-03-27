@@ -18,20 +18,22 @@ namespace PixelNestBackend.Repository
       
         private const string MessagesCache = "Messages_{0}";
         private readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10);
+        private readonly ILogger<IChatRepository> _logger;
         public ChatRepository(
             DataContext dataContext,
-            IMemoryCache memoryCache                    
+            IMemoryCache memoryCache,
+            ILogger<IChatRepository> logger
             )
         {
             _dataContext = dataContext;
             _memoryCache = memoryCache;
+            _logger = logger;
         }
 
         public int GetNumberOfNewMessages(string userGuid)
         {
             try
             {
-
                 int number = _dataContext.SeenMessages.Where(u => (u.UserGuid).ToString() == userGuid)
                     .GroupBy(u => u.SenderID)
                     .Count();
@@ -39,6 +41,7 @@ namespace PixelNestBackend.Repository
                     
             }catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return 0;
             }
         }
@@ -53,9 +56,9 @@ namespace PixelNestBackend.Repository
             }
             else cachedVersion = DateTime.MaxValue;
             var latestVersion = DateTime.UtcNow;
-            Console.WriteLine("\n\nUserID: " + userGuid + "\n\n");
+        
             if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseChatsDto> cashedChats) || cachedVersion < latestVersion) {
-                Console.WriteLine("Entered query");
+                
                 var userChats = _dataContext.Messages
                    .Where(m => (m.SenderGuid).ToString() == userGuid || (m.ReceiverGuid).ToString() == userGuid)
                    .Include(u => u.Sender)
@@ -157,10 +160,6 @@ namespace PixelNestBackend.Repository
             {
                 var messageIds = markAsrReadDto.MessageID;
 
-                foreach(var uid in markAsrReadDto.MessageID)
-                {
-                    Console.WriteLine("User" + uid);
-                }
                 var messagesToDelete = _dataContext.SeenMessages
                                                     .Where(mid => messageIds.Contains(mid.MessageID) && (mid.UserGuid).ToString() == userGuid);
 
@@ -169,7 +168,7 @@ namespace PixelNestBackend.Repository
                 return _dataContext.SaveChanges() > 0;
             }catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
                 return false;
             }
         }
