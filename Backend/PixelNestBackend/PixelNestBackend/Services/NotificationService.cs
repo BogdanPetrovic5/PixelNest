@@ -31,10 +31,10 @@ namespace PixelNestBackend.Services
             return _notificationRepository.GetNotifications(userGuid);
         }
 
-        public bool MarkAsRead(MarkAsOpenedDto markAsrReadDto, string userGuid)
+        public bool MarkAsOpened(MarkAsOpenedDto markAsOpenedDto, string userGuid)
         {
        
-            return _notificationRepository.MarkAsOpened(markAsrReadDto, userGuid);
+            return _notificationRepository.MarkAsOpened(markAsOpenedDto, userGuid);
         }
     }
 }

@@ -7,6 +7,6 @@ namespace PixelNestBackend.Interfaces
     {
         ICollection<ResponseNotificationsDto> GetNotifications(string userGuid);
         int CountNotifications(string userGuid);
-        bool MarkAsRead(MarkAsOpenedDto markAsrReadDto, string userGuid);
+        bool MarkAsOpened(MarkAsOpenedDto markAsrReadDto, string userGuid);
     }
 }

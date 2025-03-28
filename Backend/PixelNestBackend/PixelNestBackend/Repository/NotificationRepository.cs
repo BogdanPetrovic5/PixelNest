@@ -72,11 +72,11 @@ namespace PixelNestBackend.Repository
             }
         }
 
-        public bool MarkAsOpened(MarkAsOpenedDto markAsRead, string userGuid)
+        public bool MarkAsOpened(MarkAsOpenedDto markAsOpenedDto, string userGuid)
         {
             try
             {
-                var notificationIDs = markAsRead.NotificationID;
+                var notificationIDs = markAsOpenedDto.NotificationID;
 
 
                 var notificationsToUpdate = _dataContext.Notifications

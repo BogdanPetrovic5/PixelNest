@@ -27,7 +27,7 @@ namespace PixelNestBackend.Controllers
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userGuid == null) return Unauthorized();
 
-            bool result = _notificationService.MarkAsRead(markAsOpened, userGuid);
+            bool result = _notificationService.MarkAsOpened(markAsOpened, userGuid);
             return Ok(result);
         }
         [Authorize]
