@@ -19,6 +19,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
   @ViewChild('storyList', { static: false }) storyList!: ElementRef<HTMLDivElement>
   @ViewChild('storyListWrapper', { static: false }) storyListWrapper!: ElementRef<HTMLDivElement>
   @ViewChildren('userBox') userBoxes!: QueryList<ElementRef>;
+
   username:string = ""
   stringUrl:string = ""
   groupedStories:StoriesDto[] = []
@@ -42,6 +43,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
   startX:number = 0;
   currentMargin:number = 0;
   containerWidth:number = 0;
+  clientGuid:string = ""
   constructor(
     private _storyService:StoryService,
     private _cookieService:CookieService,
@@ -57,6 +59,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
   }
   ngOnInit(): void {
     this.username = this._cookieService.get("username");
+    this.clientGuid = this._cookieService.get("userID")
     this._initializeComponent();
     
   }
@@ -204,12 +207,12 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
         }
       })
     )
-    this._storyState.fetchStories(this.username, false);
+    this._storyState.fetchStories(false);
     
     this.subscription.add(
       this._storyState.stories$.subscribe({
         next:response=>{
-          
+          console.log(response)
           this.groupedStories = response
           this.groupedStories.sort((a, b) => {
             const aHasUnread = a.stories.some(story => story.seenByUser === false);
@@ -227,13 +230,13 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
         }
       })
     )
-    this._storyState.fetchCurrentUserStories(this.username, true);
+    this._storyState.fetchCurrentUserStories(true);
     this.subscription.add(
       this._storyState.storyListByUser$.subscribe({
         next:response=>{
           
             this.storiesByUser = response;
-      
+          console.log(response)
             
             this.extractFromResponse(this.storiesByUser);
             

@@ -53,7 +53,7 @@ export class NewStoryComponent {
         this._dashboardState.setIsNewStoryTabOpen(false);
         setTimeout(()=>{
           this._lottieState.setIsSuccess(false)
-          this._storyState.fetchCurrentUserStories(this._cookieService.get("username"), true);
+          this._storyState.fetchCurrentUserStories(true);
         },1400)
       },
       error:error=>{

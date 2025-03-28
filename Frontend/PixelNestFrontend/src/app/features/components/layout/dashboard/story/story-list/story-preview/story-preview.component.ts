@@ -32,6 +32,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     username:string = "";
     baseUrl:string = ""
     isViewerList:boolean = false;
+
     constructor(
       private _dashboardState:DashboardStateService,
       private _storyState:StoryStateService,
@@ -42,6 +43,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     ){}
     
     ngOnInit(): void {    
+      console.log(this.stories)
       this.baseUrl = environment.blobStorageBaseUrl;
       this.username = this._userService.getFromCookie("username")
       this.subscriptions?.add(
@@ -109,9 +111,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
         }else{
           this._resetParameters();
           this._stopAnimation();
-          
           this._storyState.setCurrentStoryState(1);
-          
         }
       }
     }
@@ -164,8 +164,8 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     }
 
     private _markStoryAsSeen(storyID:string){
-      const username = this._userService.getFromCookie("username");
-      this._storyService.marStoryAsSeen(storyID, username).subscribe({
+      
+      this._storyService.marStoryAsSeen(storyID).subscribe({
         next:response=>{
           
         }
