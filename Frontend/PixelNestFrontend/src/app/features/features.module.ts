@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { LayoutModule } from './components/layout/layout.module';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { RedirectPageComponent } from './components/authentication-page/redirect-page/redirect-page.component';
 
 
 
@@ -24,6 +25,7 @@ import { UnauthorizedComponent } from './components/unauthorized/unauthorized.co
     LoginFormComponent,
     RegisterFormComponent,
     UnauthorizedComponent,
+    RedirectPageComponent,
   ],
   imports: [
     CommonModule,
