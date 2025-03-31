@@ -45,7 +45,7 @@ export class LikeCommentComponent implements OnInit{
       this.likedByUsers = this.likedByUsers?.filter(user => user.username !== this.currentUsername)
       return;
     }
-    const object = { username:this.currentUsername }
+    const object = { username:this.currentUsername, clientGuid:this._userSession.getFromCookie("userID") }
     this.likedByUsers?.push(object);
     return;
   }

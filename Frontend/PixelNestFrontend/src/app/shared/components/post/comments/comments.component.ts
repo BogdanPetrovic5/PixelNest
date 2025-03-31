@@ -36,7 +36,7 @@ export class CommentsComponent {
       tap((response)=>{
        
 
-        this.comments.push({username:this.username, commentText:this.commentText})
+        this.comments.push({username:this.username, commentText:this.commentText, clientGuid:this._userSession.getFromCookie("userID")})
         this.commentText = ""
         inputElement.blur();
       }),

@@ -5,7 +5,7 @@ import { SavedPosts } from "./savePost.dto";
 
 export interface PostDto {
     postID: string;
-    userID: string;
+    clientGuid: string;
     ownerUsername: string;
     postDescription: string;
     totalComments: number;

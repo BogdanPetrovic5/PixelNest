@@ -1,4 +1,4 @@
-import { Component, OnInit,ChangeDetectorRef, OnDestroy, ViewChild  } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef, OnDestroy, ViewChild, Input  } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { catchError, debounceTime, filter, of, Subject, Subscription, switchMap, takeUntil, tap } from 'rxjs';
 import { PostDto } from 'src/app/core/dto/post.dto';
@@ -21,13 +21,20 @@ export class ProfileComponent implements OnInit, OnDestroy{
   @ViewChild(ProfileImageComponent) profilePicture!:ProfileImageComponent
 
   username:string = ""
+  clientGuid:string = ""
   user:ProfileUser = {
     username: this.username,
     followers: 0,
     followings: 0,
     name: '',
     lastname: '',
-    totalPosts: 0
+    totalPosts: 0,
+     clientGuid:'',
+     canFollow:false,
+     canEdit:false,
+     chatID:'',
+      email:'',
+        profileImagePath:''
   }
   private destroy$ = new Subject<void>();
   posts:PostDto[] = []
@@ -53,29 +60,39 @@ export class ProfileComponent implements OnInit, OnDestroy{
     private _chatState:ChatStateService
   ){}
   ngOnInit(): void {
+   
     this._userSessions.setUrl("Profile")
     this._postState.setPosts([]);
  
     this._initializeComponent();
+    
   }
 
   ngOnDestroy(): void {
       this.subscribe.unsubscribe();
       this._postState.setPosts([]);
       this.user = {
-        username: this.username,
+        username: '',
         followers: 0,
         followings: 0,
         name: '',
         lastname: '',
-        totalPosts: 0
+        totalPosts: 0,
+        clientGuid:'',
+        canFollow:false,
+        canEdit:false,
+        chatID:'',
+        email:'',
+        profileImagePath:''
       }
       this._postState.setQuery(undefined);
+      console.clear()
       
   }
 
-  navigate(route:string){
-    this._router.navigate([`/Chat/${route}`])
+  navigate(clientRoute:string, chatRoute:string){
+
+    this._router.navigate([`/Chat/${clientRoute}/${chatRoute}`])
     this._chatState.setUser(this.user);
   }
 
@@ -86,25 +103,31 @@ export class ProfileComponent implements OnInit, OnDestroy{
 
   follow(){
     this.isFollowing = !this.isFollowing
-    let currentUsername = this._userSessions.getFromCookie("username")
-    this.subscribe.add(
-      this._userService.follow(currentUsername, this.username).subscribe({
-        next:response=>{
-          if(!this.isFollowing) this.user.followers -= 1;
-          else this.user.followers += 1;
-          
-        }
-      })
-    )
+   
+    if(this.user){
+      this.subscribe.add(
+        this._userService.follow(this.user.clientGuid).subscribe({
+          next:response=>{
+            if(!this.isFollowing) this.user.followers -= 1;
+            else this.user.followers += 1;
+            
+          }
+        })
+      )
+    }
+    
   }
 
   checkIsFollowing(){
-    let username = this._userSessions.getFromCookie("username");
-    this._userService.isFollowing(username, this.user.username).subscribe({
+   if(this.user){
+    this._userService.isFollowing(this.user.clientGuid).subscribe({
       next:response=>{
         this.isFollowing = response
+     
       }
     })
+   }
+    
   }
 
   toggleFollowings(){
@@ -115,17 +138,15 @@ export class ProfileComponent implements OnInit, OnDestroy{
     this.followersTab = !this.followersTab;
   }
 
-  checkCurrentUser(){
-    return this._userSessions.getFromCookie("username") == this.username
-  }
 
   private _loadData(){
     this.subscribe.add(
-      this._userService.getUserData(this.username).pipe(
+      this._userService.getUserData(this.clientGuid).pipe(
         tap(response => {
           this.user = response;
+         
           this.checkIsFollowing();
-          this._postState.setQuery(`username=${this.user.username}`);
+          this._postState.setQuery(`clientGuid=${this.user.clientGuid}`);
           this._postState.loadPosts(1);
         }), 
         switchMap(() => this._postState.posts$), 
@@ -195,6 +216,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
        this.editProfile = false;
        this.followersTab = false;
        this.followingsTab = false;
+       console.clear()
        
     });
 
@@ -203,8 +225,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
       takeUntil(this.destroy$), 
       tap(params => {
        
-        this.username = params.get('username') ?? this._userSessions.getFromCookie('username');
-        
+        this.clientGuid = params.get('username') ?? this._userSessions.getFromCookie('userID');
+       
         this._resetProfileState();
         this._loadData();
       })
@@ -217,6 +239,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
     this.subscribe.add(
       this._profileState.currentProfileUrl$.subscribe({
         next:response =>{
+         
           this.stringUrl = response
         }
       })

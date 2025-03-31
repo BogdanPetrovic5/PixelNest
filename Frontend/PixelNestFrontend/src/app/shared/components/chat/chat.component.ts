@@ -37,7 +37,9 @@ export class ChatComponent implements OnInit, OnDestroy{
     clientGuid:'',
     canFollow:false,
     canEdit:false,
-    chatID:''
+    chatID:'',
+    email:'',
+    profileImagePath:''
   }
   messageSeen:MessageSeen = {
     messageID:[]

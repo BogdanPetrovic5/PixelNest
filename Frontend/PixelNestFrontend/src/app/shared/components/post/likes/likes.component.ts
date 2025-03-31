@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { LikedByUsers } from 'src/app/core/dto/likedByUsers.dto';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { DashboardStateService } from 'src/app/core/services/states/dashboard-st
 })
 export class LikesComponent implements OnInit{
 
-  @Input() likes:any
+  @Input() likes:LikedByUsers[] = []
 
   @Output() closeLikesTab: EventEmitter<void> = new EventEmitter<void>();
   constructor(

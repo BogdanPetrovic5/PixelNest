@@ -13,8 +13,8 @@ export class StoryService {
 
   constructor(private _httpClient:HttpClient) { }
 
-  getStories(username:String, forCurrentUser:boolean):Observable<StoriesDto[]>{
-    const url = `${environment.apiUrl}/api/Story/GetStories?username=${username}&forCurrentUser=${forCurrentUser}`
+  getStories(forCurrentUser:boolean):Observable<StoriesDto[]>{
+    const url = `${environment.apiUrl}/api/Story/GetStories?forCurrentUser=${forCurrentUser}`
     return this._httpClient.get<StoriesDto[]>(url);
   }
 
@@ -23,16 +23,16 @@ export class StoryService {
     return this._httpClient.post(url, formData);
   }
   
-  marStoryAsSeen(storyID:string, username:string):Observable<any>{
+  marStoryAsSeen(storyID:string):Observable<any>{
     const url = `${environment.apiUrl}/api/Story/MarkStoryAsSeen`;
     return this._httpClient.post(url, {
         StoryID:storyID,
-        Username:username
+       
     });
   }
 
-  getViewers(username:string, storyID:string):Observable<ViewersDto[]>{
-    const url = `${environment.apiUrl}/api/Story/GetViewers?username=${username}&storyID=${storyID}`;
+  getViewers(storyID:string):Observable<ViewersDto[]>{
+    const url = `${environment.apiUrl}/api/Story/GetViewers?storyID=${storyID}`;
     return this._httpClient.get<ViewersDto[]>(url);
   }
 }

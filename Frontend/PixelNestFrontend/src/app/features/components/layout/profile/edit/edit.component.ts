@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ImageCroppedEvent,base64ToFile  } from 'ngx-image-cropper';
+import { ProfileUser } from 'src/app/core/dto/profileUser.dto';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
@@ -13,6 +14,7 @@ import { ImageCompressorService } from 'src/app/uitility/image-compressor.servic
 })
 export class EditComponent implements OnInit, OnDestroy{
   @Input() name!:string
+  @Input() clientGuid!:string;
   username:string = "";
   newUsername:string = ""
   description:string = "";
@@ -22,6 +24,21 @@ export class EditComponent implements OnInit, OnDestroy{
   croppedImage:any;
   compressedFile:any;
   isOpened:boolean = false;
+
+  currentUserData:ProfileUser = {
+    followings: 0,
+    followers: 0,
+    name: '',
+    lastname: '',
+    username: '',
+    totalPosts: 0,
+    clientGuid: '',
+    canFollow: false,
+    canEdit: false,
+    chatID: '',
+    profileImagePath: '',
+    email: ''
+  }
   @Output() closeEditTab:EventEmitter<void> = new EventEmitter<void>();
   constructor(
     private _userSession:UserSessionService, 
@@ -32,12 +49,18 @@ export class EditComponent implements OnInit, OnDestroy{
     private _profileState:ProfileStateService
   ){}  
   ngOnInit(): void {
-    this.username = this._userSession.getFromCookie("username")
-    this.newUsername = this.username;
-
+    
+    this.loadCurrentData();
   }
   ngOnDestroy(): void {
     
+  }
+  loadCurrentData(){
+    this._userService.getCurrentUserData().subscribe({
+      next:response=>{
+        this.currentUserData = response;
+      }
+    })
   }
   async onFileSelected(event:any){
     const inputElement = event.target as HTMLInputElement;
@@ -75,6 +98,7 @@ export class EditComponent implements OnInit, OnDestroy{
     const FORM_DATA = new FormData();
     
     FORM_DATA.append("ProfilePicture", this.selectedFile[0])
+    FORM_DATA.append("ClientGuid",this.clientGuid )
     this._lottieState.setIsInitialized(true);
     if(this.selectedFile){
       this._userService.changeProfilePicture(FORM_DATA).subscribe({

@@ -15,6 +15,7 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
 })
 export class NavigationComponent implements OnInit{
   public selectedTab!:number
+  public clientGuid:string = this._userSessionService.getFromCookie("userID");
   public username:string = this._userSessionService.getFromCookie("username")
   subscription:Subscription = new Subscription();
   newNotification:boolean = true;
@@ -23,7 +24,7 @@ export class NavigationComponent implements OnInit{
   stringUrl = ""
   routeToTabMap: { [key: string]: number } = {
     'Dashboard/Feed': 1,
-    ["Profile/"+this.username]: 4,
+    ["Profile/"+this.clientGuid]: 4,
     'Messages': 2,
     'Notifications': 3,
     'Search': 5
@@ -42,6 +43,7 @@ export class NavigationComponent implements OnInit{
 
   }
   ngOnInit():void{
+    this.clientGuid = this._userSessionService.getFromCookie("userID");
     this.subscription.add(
       this._notification.newNotification$.subscribe({
         next:response=>{
@@ -75,7 +77,7 @@ export class NavigationComponent implements OnInit{
 
   navigateToUserProfile(){
    
-    this._router.navigate([`/Profile/${this.username}`])
+    this._router.navigate([`/Profile/${this.clientGuid}`])
   }
 
   navigate(route:string){
@@ -94,17 +96,5 @@ export class NavigationComponent implements OnInit{
   logout(){
     this._userSessionService.setLogOutDialog(true)
   }
-  private _initilize(){
-    this.username = this._userSessionService.getFromCookie("username")
-    this.cdr.detectChanges()
-
-    this.subscription.add(
-      this._profileState.currentProfileUrl$.subscribe({
-        next:response =>{
-          this.stringUrl = response
-        }
-      })
-    )
-   
-  }
+ 
 }

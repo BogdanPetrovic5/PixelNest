@@ -10,7 +10,7 @@ export interface CommentDto {
     postID?: number;
     replies?: Replies[] | [];
     totalLikes?: number;
-    userID?: number;
+    clientGuid:string
     username: string;
     totalReplies?:number;
 }

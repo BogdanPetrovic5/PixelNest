@@ -4,7 +4,7 @@
             <!-- <img src="./assets/images/user.png" alt=""> -->
             <div class="details">
                 <!-- <h1 (click)="navigateToProfile(comment.username)">{{comment.username}}</h1> -->
-                <app-user-tag [username]="comment.username"></app-user-tag>
+                <app-user-tag [username]="comment.username" [clientGuid]="comment.clientGuid"></app-user-tag>
                 <p>{{comment.commentText}} </p>
                 <span (click)="openParentReply()">Reply</span>
                <div *ngIf="isReplyBox">

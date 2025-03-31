@@ -19,6 +19,7 @@ import { NotificationComponent } from './features/components/layout/notification
 import { NotificationsComponent } from './features/components/layout/notifications/notifications.component';
 import { PostComponent } from './shared/components/post/post.component';
 import { PostViewComponent } from './features/components/layout/post-view/post-view.component';
+import { RedirectPageComponent } from './features/components/authentication-page/redirect-page/redirect-page.component';
 
 
 const routes: Routes = [
@@ -31,9 +32,10 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'Register', pathMatch: 'full' },
       { path: 'Register', component: RegisterFormComponent,canActivate:[AuthGuard] },
-      { path: 'Login', component: LoginFormComponent,canActivate:[AuthGuard] }
+      { path: 'Login', component: LoginFormComponent,canActivate:[AuthGuard] },
+      { path: 'Redirect-Page', component:RedirectPageComponent}
     ],
-    canActivate:[AuthGuard]
+    
   },
   {
     path:"",

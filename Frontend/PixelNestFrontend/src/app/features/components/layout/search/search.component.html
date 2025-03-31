@@ -11,8 +11,10 @@
         </div>
         <div class="users">
             <div class="content">
-                <div class="user-wrap animate__animated animate__fadeInLeft animate__faster" [ngClass]="user.anim ? 'animate__fadeOutRight animate__faster':''" *ngFor="let user of users" (click)="navigate(user.username)" >
-                    <app-profile-image [username]="user.username"></app-profile-image>
+                <div class="user-wrap animate__animated animate__fadeInLeft animate__faster" 
+                [ngClass]="user.anim ? 'animate__fadeOutRight animate__faster':''" *ngFor="let user of users" 
+                (click)="navigate(user.clientGuid)" >
+                    <app-profile-image [username]="user.clientGuid"></app-profile-image>
                     <h1>{{user.username}}</h1>
                 </div>
             </div>

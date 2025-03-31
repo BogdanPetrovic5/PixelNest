@@ -5,4 +5,10 @@ export interface ProfileUser{
     lastname:string;
     username:string;
     totalPosts:number;
+    clientGuid:string;
+    canFollow:boolean;
+    canEdit:boolean;
+    chatID:string,
+    profileImagePath:string,
+    email:string
 }

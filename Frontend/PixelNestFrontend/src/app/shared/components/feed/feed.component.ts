@@ -27,6 +27,7 @@ export class FeedComponent implements OnChanges, OnDestroy, OnInit{
   searchSubject: Subject<void> = new Subject<void>();
   routerSubscription:any
   postsList:any
+
   constructor(
     private _postState: PostStateService,
     private _router: Router,
@@ -87,17 +88,11 @@ export class FeedComponent implements OnChanges, OnDestroy, OnInit{
       if ((scrollElement.offsetHeight + 1) + scrollElement.scrollTop >= scrollElement.scrollHeight) {
         if (this.currentUrl === '/Dashboard/Feed') {
           this._postState.feedCurrentPage += 1;
-          if(this.currentUrl == '/Dashboard/Feed') console.log("Feed page: ", this._postState.feedCurrentPage)
-         
         }else if(this.currentUrl.includes("Profile/",0)){
           this._postState.profileCurrentPage += 1;
-      
         }else if(this.currentUrl.includes('Location',0)){
           this._postState.locationCurrentPage += 1;
- 
         }
-        if(this.currentUrl === '/Dashboard/Feed')
-     
         
         this.currentPage += 1;
         this._postState.loadMore(this.currentPage);

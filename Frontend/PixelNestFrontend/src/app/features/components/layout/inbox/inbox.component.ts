@@ -75,15 +75,12 @@ export class InboxComponent implements OnInit{
   private _initializeComponent(){
     this._chatService.getChats().subscribe({
       next:response=>{
-        console.log("Chat response: ", response)
         this.chats = response;
-        console.log(this.chats)
       }
     })
     this._chatState.activeUsers$.subscribe({
       next:response=>{
         this.activeUsers = response
-       console.log(this.activeUsers)
       }
     })
   }

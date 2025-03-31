@@ -58,16 +58,16 @@ export class StoryStateService {
     this._storyList.next([])
     this._storyListByUser.next([]);
   }
-  fetchCurrentUserStories(username:string, forCurrentUser:boolean){
-    this._storyService.getStories(username, forCurrentUser).subscribe({
+  fetchCurrentUserStories(forCurrentUser:boolean){
+    this._storyService.getStories(forCurrentUser).subscribe({
       next:response=>{
         this.storiesByUser = response;
         this._storyListByUser.next(this.storiesByUser)
       }
     })
   }
-  fetchStories(username:string, forCurrentUser:boolean){
-    this._storyService.getStories(username, forCurrentUser).subscribe({
+  fetchStories(forCurrentUser:boolean){
+    this._storyService.getStories(forCurrentUser).subscribe({
       next:response=>{
         this.stories = response;
         this._storyList.next(this.stories)

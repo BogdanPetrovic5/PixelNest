@@ -5,8 +5,8 @@
         </div>
         <div class="usernames">
             <div class="username" *ngFor="let username of likes">
-                <app-profile-image [username]="username.username"></app-profile-image>
-                <h1 (click)="navigateToProfile(username.username)">{{username.username}}</h1>
+                <app-profile-image [username]="username.clientGuid"></app-profile-image>
+                <h1 (click)="navigateToProfile(username.clientGuid)">{{username.username}}</h1>
             </div>
         </div>
         <div class="footer">

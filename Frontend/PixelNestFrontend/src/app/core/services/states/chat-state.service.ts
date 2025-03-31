@@ -29,7 +29,9 @@ export class ChatStateService {
       clientGuid:'',
       canFollow:false,
       canEdit:false,
-      chatID:''
+      chatID:'',
+       email:'',
+        profileImagePath:''
     }
   );
 

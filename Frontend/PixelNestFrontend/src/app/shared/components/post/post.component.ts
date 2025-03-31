@@ -181,7 +181,7 @@ export class PostComponent implements OnInit{
     this.deleteDialog = true;
   }
   likePost(postID:string){
-    this._postService.likePost(postID, this.username).pipe(
+    this._postService.likePost(postID).pipe(
       tap((response)=>{
         this._handleLikeArray();
       
@@ -196,7 +196,7 @@ export class PostComponent implements OnInit{
     return this.post.savedByUsers.find(a=>a.username == this.username);
   }
   savePost(){
-    this._postService.savePost(this.username, this.post.postID).subscribe({
+    this._postService.savePost(this.post.postID).subscribe({
       next:response=>{
        
         this._handleSavedArray()
@@ -232,7 +232,7 @@ export class PostComponent implements OnInit{
 
   
   private _handleLikeArray(){
-    if(!this.isLiked) this.likedByUsers.push({username: this.username})
+    if(!this.isLiked) this.likedByUsers.push({username: this.username, clientGuid:this._userSession.getFromCookie("userID")})
     else this.likedByUsers = this.likedByUsers.filter(user => user.username !== this.username)
     this.isLiked = !this.isLiked
 

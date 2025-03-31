@@ -1,8 +1,8 @@
 <div class="container">
-    <app-edit [name]="user.name + ' ' + user.lastname" *ngIf="editProfile" (closeEditTab)="toggleEdit()"></app-edit>
+    <app-edit [name]="user.name + ' ' + user.lastname" [clientGuid]="user.clientGuid" *ngIf="editProfile" (closeEditTab)="toggleEdit()"></app-edit>
 
-    <app-followers *ngIf="followersTab" [username]="username" (closeFollowersTab)="toggleFollowers()"></app-followers>
-    <app-followings *ngIf="followingsTab" [username]="username" (closeFollowingTab)="toggleFollowings()"></app-followings>
+    <app-followers *ngIf="followersTab" [clientGuid]="user.clientGuid" (closeFollowersTab)="toggleFollowers()"></app-followers>
+    <app-followings *ngIf="followingsTab" [clientGuid]="user.clientGuid" (closeFollowingTab)="toggleFollowings()"></app-followings>
     <div class="content">
         <div class="wrap">
             <div class="banner">
@@ -14,7 +14,7 @@
                         <div class="profile-image">
                             <div>
                                <!-- <img [src]="stringUrl.length > 0 ? stringUrl : '/assets/images/user.png'" [ngStyle]="stringUrl ? { transform: 'scale(1)', objectFit:'cover', width:'100%', height:'100%' } : {width:'100%', height:'100%'}"> -->
-                                <app-profile-image [stringUrl]="stringUrl" [username]="username"></app-profile-image>
+                                <app-profile-image [stringUrl]="stringUrl" [username]="clientGuid"></app-profile-image>
                             </div>
                           
                         </div>
@@ -22,7 +22,7 @@
                             <div class="info">
                                 <div class="bio">
                                     <h1>
-                                        {{username}}
+                                        {{user.username}}
                                     </h1>
                                     <h2>{{user.name}} {{user.lastname}}</h2>
                                     <p>
@@ -36,7 +36,7 @@
                                     <p (click)="toggleFollowings()"><span class="numbers">{{user.followings}}</span> <span> following</span></p>
                                 </div>
                                 <div class="buttons">
-                                    <button class="follow" (click) = 'follow()' *ngIf="!checkCurrentUser()" [ngClass]="!isFollowing ? 'follow' : 'no-follow'">
+                                    <button class="follow" (click) = 'follow()' *ngIf="user.canFollow" [ngClass]="!isFollowing ? 'follow' : 'no-follow'">
                                         
                                         
                                         
@@ -48,10 +48,10 @@
                                             <h1>Following</h1>
                                           </ng-template>
                                     </button>
-                                    <button class="edit" *ngIf="checkCurrentUser()" (click)="toggleEdit()">
+                                    <button class="edit" *ngIf="!user.canEdit" (click)="toggleEdit()">
                                        <h1>Edit profile</h1>
                                     </button>
-                                    <button class="message" *ngIf="!checkCurrentUser()" (click)="navigate(user.username)">
+                                    <button class="message" *ngIf="user.canEdit" (click)="navigate(user.clientGuid, user.chatID)">
                                         Message
                                     </button>
                                 </div>

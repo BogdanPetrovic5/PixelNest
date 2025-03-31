@@ -11,7 +11,7 @@
         <div class="picture">
             <div class="picture-wrap">
                 <div class="picture-holder">
-                    <app-profile-image [stringUrl]="imageSrc" [username]="username"></app-profile-image>
+                    <app-profile-image  [stringUrl]="imageSrc" [username]="currentUserData ? currentUserData.clientGuid : ''"></app-profile-image>
                 </div>
                 <div class="open-file">
                     <input type="file" #fileInput (change)="onFileSelected($event)">
@@ -24,11 +24,11 @@
             <div class="info">
                 <div>
                     <span>Name</span>
-                    <input [placeholder]="name" [(ngModel)]="name" disabled>
+                    <input [(ngModel)]="name" disabled>
                 </div>
                 <div>
                     <span>Username</span>
-                    <input [placeholder]="newUsername" [(ngModel)]="username" disabled>
+                    <input [(ngModel)]="currentUserData.username" disabled>
                 </div>
                 <div>
                     <span>Description</span>
