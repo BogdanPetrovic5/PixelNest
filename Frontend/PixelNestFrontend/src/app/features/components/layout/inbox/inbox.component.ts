@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { data } from '@maptiler/sdk';
+import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { ActiveUsers } from 'src/app/core/dto/activeUsers.dto';
 import { Chats } from 'src/app/core/dto/chats.dto';
 import { Message } from 'src/app/core/dto/message.dto';
@@ -14,10 +15,12 @@ import { TimeAgoPipe } from 'src/app/shared/pipes/time-ago.pipe';
   styleUrls: ['./inbox.component.scss']
 })
 export class InboxComponent implements OnInit{
+  private _searchTerms = new Subject<string>();
+
   currentUser:string = ""
   text:string =""
   receiver:string = ""
-
+  
 
 
   chats:Chats[] = []
@@ -31,6 +34,8 @@ export class InboxComponent implements OnInit{
   ngOnInit():void{
     this.currentUser = this._userSession.getFromCookie("username")
     this._initializeComponent();
+    this.searchChats();
+    
   }
   chatNavigation(clientParameter:string, chatParameter:string){
     this._router.navigate([`/Chat/${clientParameter}/${chatParameter}`])
@@ -72,6 +77,47 @@ export class InboxComponent implements OnInit{
       return obj.isActive 
     } return false
   }
+  // private _modifyUsers(chats:Chats[]){
+  //     for (let i = this.chats.length - 1; i >= 0; i--) {
+      
+  //       if (!chats.some(chats => chats. === this.chats[i].username)) {
+        
+  //         setTimeout(() => {
+  //           this.chats.splice(i, 1);
+           
+  //         }, 300);
+         
+  //       }
+  //     }
+  //     users.forEach(user => {
+  //       if (!this.users.some(existingUser => existingUser.username === user.username)) {
+  //         this.users.push({ ...user, anim: false });
+  //       }
+  //     });
+  //   }
+  searchChats(){
+    this._searchTerms.pipe(
+          debounceTime(300),
+          distinctUntilChanged(),
+          
+          switchMap((term:string)=>
+            this._chatService.findChats(term)
+          )
+        ).subscribe(
+          (chats)=>{
+            console.log(chats);
+            // if(this.chats.length > 0){
+            //   setTimeout(() => {
+               
+            //     // this._modifyChat(chats);
+            //   }, 500);
+             
+            // }else this.chats = chats;
+            
+           
+          }
+        )
+  }
   private _initializeComponent(){
     this._chatService.getChats().subscribe({
       next:response=>{
@@ -84,5 +130,13 @@ export class InboxComponent implements OnInit{
       }
     })
   }
-
+  
+  onSearch(event: Event){
+    const input = event.target as HTMLInputElement;
+    
+    if(input.value.length > 0){
+      this._searchTerms.next(input.value)
+    }
+    
+  }
 }
