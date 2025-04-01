@@ -54,6 +54,7 @@ namespace PixelNestBackend.Services
 
 
             Guid senderClientGuid = Guid.Parse(_userUtility.GetClientGuid(userGuid));
+
             Guid receiverGuid = _userUtility.GetUserID(messageDto.ClientGuid);
 
             message.MessageText = messageDto.Message;
@@ -79,6 +80,11 @@ namespace PixelNestBackend.Services
                 SenderUsername = _userUtility.GetUserName(message.SenderGuid),
                 
             };
+        }
+
+        public ICollection<ResponseChatsDto> SearchChats(string parameter, string userGuid)
+        {
+           return _chatRepository.SearchChats(parameter, userGuid);
         }
     }
 }

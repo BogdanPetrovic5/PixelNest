@@ -8,6 +8,7 @@ using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace PixelNestBackend.Repository
 {
@@ -48,18 +49,8 @@ namespace PixelNestBackend.Repository
 
         public ICollection<ResponseChatsDto> GetUserChats(string userGuid)
         {
-            var cacheKey = string.Format(MessagesCache, userGuid);
-            var versionKey = $"{cacheKey}";
-            if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
-            {
-                cachedVersion = DateTime.MinValue;
-            }
-            else cachedVersion = DateTime.MaxValue;
-            var latestVersion = DateTime.UtcNow;
-        
-            if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseChatsDto> cashedChats) || cachedVersion < latestVersion) {
-                
-                var userChats = _dataContext.Messages
+
+                ICollection<ResponseChatsDto> userChats = _dataContext.Messages
                    .Where(m => (m.SenderGuid).ToString() == userGuid || (m.ReceiverGuid).ToString() == userGuid)
                    .Include(u => u.Sender)
                    .Include(u => u.Receiver)
@@ -80,7 +71,7 @@ namespace PixelNestBackend.Repository
                                Receiver = m.Receiver.Username,
                                Message = m.MessageText,
                                DateSent = m.DateSent,
-                                Source = (m.SenderGuid).ToString() == userGuid ? m.Receiver.Username : (m.ReceiverGuid).ToString() == userGuid ? m.Sender.Username : "",
+                               Source = (m.SenderGuid).ToString() == userGuid ? m.Receiver.Username : (m.ReceiverGuid).ToString() == userGuid ? m.Sender.Username : "",
                                UserID = (m.SenderGuid).ToString() == userGuid ? (m.Receiver.ClientGuid).ToString() : (m.ReceiverGuid).ToString() == userGuid ? (m.Sender.ClientGuid).ToString() : "",
                                MessageID = m.MessageID,
                                IsSeen = !_dataContext.SeenMessages
@@ -91,20 +82,12 @@ namespace PixelNestBackend.Repository
                    })
                    .OrderByDescending(date => date.Messages.First().DateSent)
                    .ToList();
-                _memoryCache.Set(cacheKey, userChats, new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = CacheDuration
-                });
-                _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = CacheDuration
-                });
-                cashedChats = userChats;
-            }
+             
+          
 
                
             
-            return cashedChats;
+            return userChats;
         }
 
         public ICollection<ResponseMessagesDto> GetUserToUserMessages(string chatID,Guid userID)
@@ -172,7 +155,7 @@ namespace PixelNestBackend.Repository
                 return false;
             }
         }
-
+        
         public bool SaveMessage(Message message, bool isUserInRoom)
         {
 
@@ -222,6 +205,58 @@ namespace PixelNestBackend.Repository
             _memoryCache.Remove(cacheKey_4);
             return true;
 
+        }
+
+        public ICollection<ResponseChatsDto> SearchChats(string parameter, string userGuid)
+        {
+           
+            return _getChats(m => 
+            (m.SenderGuid.ToString() == userGuid || m.ReceiverGuid.ToString() == userGuid) 
+            && (m.Sender.Username.Contains(parameter) || m.Receiver.Username.Contains(parameter)), 
+            userGuid);
+        }
+        private ICollection<ResponseChatsDto> _getChats(Expression<Func<Message, bool>> filter, string userGuid)
+        {
+
+            ICollection<ResponseChatsDto> userChats = _dataContext.Messages
+               .Where(filter)
+               .Where(m => (m.SenderGuid).ToString() == userGuid || (m.ReceiverGuid).ToString() == userGuid)
+               .Include(u => u.Sender)
+               .Include(u => u.Receiver)
+               .ToList()
+              .GroupBy(m => m.ChatID)
+               .Select(group => new ResponseChatsDto
+               {
+                   ChatID = group.Key,
+                   UserID = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.ClientGuid).ToString() : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.ClientGuid).ToString() : "",
+                   Messages = group
+
+
+                       .OrderByDescending(m => m.DateSent)
+                       .Take(1)
+                       .Select(m => new ResponseMessagesDto
+                       {
+                           Sender = m.Sender.Username,
+                           Receiver = m.Receiver.Username,
+                           Message = m.MessageText,
+                           DateSent = m.DateSent,
+                           Source = (m.SenderGuid).ToString() == userGuid ? m.Receiver.Username : (m.ReceiverGuid).ToString() == userGuid ? m.Sender.Username : "",
+                           UserID = (m.SenderGuid).ToString() == userGuid ? (m.Receiver.ClientGuid).ToString() : (m.ReceiverGuid).ToString() == userGuid ? (m.Sender.ClientGuid).ToString() : "",
+                           MessageID = m.MessageID,
+                           IsSeen = !_dataContext.SeenMessages
+                           .Any(sm => (sm.UserGuid).ToString() == userGuid && sm.MessageID == m.MessageID)
+
+                       })
+                       .ToList()
+               })
+               .OrderByDescending(date => date.Messages.First().DateSent)
+               .ToList();
+
+
+
+
+
+            return userChats;
         }
     }
 }

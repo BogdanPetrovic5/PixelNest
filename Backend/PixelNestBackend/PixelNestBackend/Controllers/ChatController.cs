@@ -130,5 +130,19 @@ namespace PixelNestBackend.Controllers
                 reverserdRoomID = reverserdRoomID
             });
         }
+
+        [Authorize]
+        [HttpGet("FindChats")]
+        public ActionResult<ICollection<ResponseChatsDto>> FindChats([FromQuery] string searchParameter)
+        {
+            string userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null || string.Empty == userGuid)
+            {
+                return Unauthorized();
+            }
+            ICollection<ResponseChatsDto> searchChats = _chatService.SearchChats(searchParameter, userGuid);
+            return Ok(searchChats);
+        }
+
     }
 }

@@ -12,5 +12,6 @@ namespace PixelNestBackend.Interfaces
         ICollection<ResponseChatsDto> GetUserChats(string userGuid);
         bool MarkAsRead(MarkAsRead markAsrReadDto, string userGuid);
         int GetNumberOfNewMessages(string userGuid);
+        ICollection<ResponseChatsDto> SearchChats(string parameter, string userGuid);
     }
 }
