@@ -106,6 +106,7 @@ export class InboxComponent implements OnInit{
         ).subscribe(
           (chats)=>{
             console.log(chats);
+            this.chats = chats;
             // if(this.chats.length > 0){
             //   setTimeout(() => {
                

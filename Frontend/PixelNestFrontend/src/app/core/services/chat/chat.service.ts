@@ -50,8 +50,8 @@ export class ChatService {
     const url = `${environment.apiUrl}/api/Chat/LeaveRoom?targetClientGuid=${targetClientGuid}`
     return this._httpClient.post(url,{})
   }
-  findChats(searchParameter:string):Observable<Chats>{
+  findChats(searchParameter:string):Observable<Chats[]>{
     const url = `${environment.apiUrl}/api/Chat/FindChats?searchParameter=${searchParameter}`
-    return this._httpClient.get<Chats>(url);
+    return this._httpClient.get<Chats[]>(url);
   }
 }
