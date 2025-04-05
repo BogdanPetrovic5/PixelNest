@@ -1,4 +1,5 @@
 <div class="container">
+   
     <app-edit [name]="user.name + ' ' + user.lastname" [clientGuid]="user.clientGuid" *ngIf="editProfile" (closeEditTab)="toggleEdit()"></app-edit>
 
     <app-followers *ngIf="followersTab" [clientGuid]="user.clientGuid" (closeFollowersTab)="toggleFollowers()"></app-followers>
@@ -51,7 +52,10 @@
                                     <button class="edit" *ngIf="!user.canEdit" (click)="toggleEdit()">
                                        <h1>Edit profile</h1>
                                     </button>
-                                    <button class="message" *ngIf="user.canEdit" (click)="navigate(user.clientGuid, user.chatID)">
+                                    <button class="analytics" *ngIf="!user.canEdit" (click)="navigate('Profile', user.clientGuid, 'Analytics')">
+                                        <h1>Analytics</h1>
+                                     </button>
+                                    <button class="message" *ngIf="user.canEdit" (click)="navigate('Chat', user.clientGuid, user.chatID)">
                                         Message
                                     </button>
                                 </div>

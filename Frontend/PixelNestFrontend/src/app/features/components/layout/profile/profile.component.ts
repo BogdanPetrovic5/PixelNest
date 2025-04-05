@@ -90,9 +90,9 @@ export class ProfileComponent implements OnInit, OnDestroy{
       
   }
 
-  navigate(clientRoute:string, chatRoute:string){
+  navigate(route:string, clientRoute:string, chatRoute:string){
 
-    this._router.navigate([`/Chat/${clientRoute}/${chatRoute}`])
+    this._router.navigate([`/${route}/${clientRoute}/${chatRoute}`])
     this._chatState.setUser(this.user);
   }
 

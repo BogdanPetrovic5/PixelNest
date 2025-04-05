@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     FollowingsComponent,
     ProfileComponent,
     EditComponent,
+    AnalyticsComponent,
    
   ],
   imports: [

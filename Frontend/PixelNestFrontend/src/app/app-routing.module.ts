@@ -20,6 +20,7 @@ import { NotificationsComponent } from './features/components/layout/notificatio
 import { PostComponent } from './shared/components/post/post.component';
 import { PostViewComponent } from './features/components/layout/post-view/post-view.component';
 import { RedirectPageComponent } from './features/components/authentication-page/redirect-page/redirect-page.component';
+import { AnalyticsComponent } from './features/components/layout/profile/analytics/analytics.component';
 
 
 const routes: Routes = [
@@ -54,7 +55,12 @@ const routes: Routes = [
       {
         path:"Profile/:username",
         component:ProfileComponent,
-        canActivate:[DashboardGuard]
+        canActivate:[DashboardGuard],
+      },
+      {
+        path:"Profile/:username/Analytics",
+        component:AnalyticsComponent,
+        canActivate:[DashboardGuard],
       },
       {
         path:"Location/:location",

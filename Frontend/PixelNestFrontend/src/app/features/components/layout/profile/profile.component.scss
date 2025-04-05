@@ -202,13 +202,13 @@ $HFONT: "Roboto Condensed", sans-serif;
                                         justify-content: center;
                                       
                                     }
-                                    button.edit{
-                                        background-color: transparent !important;
-                                        border: 1px solid white;
+                                    button.analytics{
+                                        background-color: $H1COLOR;
                                         color: $PCOLOR;
+                                        border: none;
                                         width: 150px;
                                         height: 50px;
-                                        font-size: 0.65em;
+                                        font-size: 1em;
                                         font-family: $PFONT;
                                         border-radius: 5px;
                                         display: flex;
@@ -217,7 +217,28 @@ $HFONT: "Roboto Condensed", sans-serif;
                                         cursor: pointer;
                                         justify-content: center;
                                         h1{
-                                            font-size: 1em;
+                                            font-size: 17px;
+                                            align-self: center;
+                                            margin: 0;
+                                           
+                                        }
+                                    }
+                                    button.edit{
+                                        background-color: transparent !important;
+                                        border: 1px solid white;
+                                        color: $PCOLOR;
+                                        width: 150px;
+                                        height: 50px;
+                                        font-size: 1em;
+                                        font-family: $PFONT;
+                                        border-radius: 5px;
+                                        display: flex;
+                                        flex-direction: row;
+                                        align-items: center;
+                                        cursor: pointer;
+                                        justify-content: center;
+                                        h1{
+                                            font-size: 18px;
                                             align-self: center;
                                             margin: 0;
                                            
