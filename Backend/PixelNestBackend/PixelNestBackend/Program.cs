@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
 using PixelNestBackend.Services.Google;
 using PixelNestBackend.Utility.Google;
+using PixelNestBackend.Interfaces.GeoLocation;
+using PixelNestBackend.Services.GeoLocation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +53,7 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IGoogleService, GoogleService>();
 builder.Services.AddScoped<IGoogleRepository, GoogleRepository>();
+builder.Services.AddScoped<IGeoService, GeoService>();
 builder.Services.AddScoped<GoogleUtility>();
 builder.Services.AddScoped<FolderGenerator>();
 builder.Services.AddScoped<UserUtility>();
