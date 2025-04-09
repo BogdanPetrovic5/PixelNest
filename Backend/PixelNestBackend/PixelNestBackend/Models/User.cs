@@ -21,6 +21,8 @@ namespace PixelNestBackend.Models
         public int Followers { get; set; } = 0;
         public int Following { get; set; } = 0;
         public int TotalPosts { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
         public ICollection<Post>? Posts { get; set; }
         public ICollection<Story>? Stories { get; set; }
         [NotMapped]

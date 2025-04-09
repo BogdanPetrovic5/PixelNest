@@ -9,5 +9,6 @@ namespace PixelNestBackend.Interfaces
         RegisterResponse? Register(RegisterDto registerDto);
         string ReturnToken(string userGuid);
         LoginResponse Login(LoginDto loginDto);
+
     }
 }

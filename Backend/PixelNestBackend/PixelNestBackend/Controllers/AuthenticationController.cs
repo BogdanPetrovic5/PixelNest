@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Azure.Core;
 using CarWebShop.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Google;
 using PixelNestBackend.Interfaces;
+using PixelNestBackend.Interfaces.GeoLocation;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
 using PixelNestBackend.Responses.Google;
@@ -25,11 +27,14 @@ namespace PixelNestBackend.Controllers
         private readonly UserUtility _userUtility;
         private readonly IGoogleService _googleService;
         private readonly GoogleUtility _googleUtility;
+        private readonly IGeoService _geoService;
         public AuthenticationController(
                 IAuthenticationService authenticationService,
                 UserUtility userUtility,
                 IGoogleService googleService,
-                GoogleUtility googleUtility
+                GoogleUtility googleUtility,
+                IGeoService geoService
+                
                 
             )
         {
@@ -37,6 +42,7 @@ namespace PixelNestBackend.Controllers
             _userUtility = userUtility;
             _googleService = googleService;
             _googleUtility = googleUtility;
+            _geoService = geoService;
         }
 
         [HttpPost("SaveState")]
@@ -50,6 +56,13 @@ namespace PixelNestBackend.Controllers
         [HttpGet("SigninGoogle")]
         public async Task<IActionResult> SigninGoogle([FromQuery] string code, [FromQuery] string state)
         {
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+            {
+                ip = HttpContext.Request.Headers["X-Forwarded-For"];
+            }
+            Console.WriteLine("IP: " + ip);
+            string country = _geoService.GetCountryFromIP(ip);
             if (string.IsNullOrEmpty(code))
                 return BadRequest("Authorization code is missing.");
 
@@ -151,7 +164,7 @@ namespace PixelNestBackend.Controllers
         [HttpPost("Register")]
         public ActionResult<RegisterResponse> Register(RegisterDto registerDto)
         {
-
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
             if (registerDto == null)
             {
                 return BadRequest(new RegisterResponse { IsSuccess = false, Message = "Bad request" });
