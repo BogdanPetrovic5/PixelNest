@@ -9,6 +9,28 @@
             <form class="inputs" [formGroup] = "registerForm" (ngSubmit) = "register()">
                 <div class="track" [ngStyle]="{'margin-left':marginLeft+'%'}">
                     <div class="first-slide" >
+                        <div class="form-control country">
+                            <input required type="value" formControlName="Country" (focus)="openSelection()" (blur)="openSelection()">
+                            <label>
+                                <span style="transition-delay:350ms">C</span>
+                                <span style="transition-delay:300ms">o</span>
+                                <span style="transition-delay:250ms">u</span>
+                                <span style="transition-delay:200ms">n</span>
+                                <span style="transition-delay:150ms">t</span>
+                                <span style="transition-delay:100ms">r</span>
+                                <span style="transition-delay:0ms">y</span>
+                                
+                            </label>
+                            <div *ngIf="registerForm.get('Country')?.invalid && registerForm.get('Country')?.touched" class="invalid-feedback">
+                               Country is required
+                            </div>
+                            <div class="country-wrapper" [ngClass]="isSelectable ? 'country-wrapper open' : 'country-wrapper'">
+                                <div *ngFor="let country of countryList" class="country" (click)="selectCountry(country)">
+                                    {{country}}
+                                </div>
+                            </div>
+                            
+                        </div>
                         <div class="form-control">
                             <input 
                             required 
@@ -62,6 +84,9 @@
                                Username is required
                             </div>
                         </div>
+
+                       
+                       
                     </div>
                     
                     <div class="second-slide" >

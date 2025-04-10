@@ -5,6 +5,8 @@ import { AuthenticationService } from 'src/app/core/services/authentication/auth
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
+import * as countries from 'i18n-iso-countries';
+import en from 'i18n-iso-countries/langs/en.json';
 @Component({
   selector: 'app-register-form',
   templateUrl: './register-form.component.html',
@@ -19,6 +21,9 @@ export class RegisterFormComponent implements OnInit{
   marginLeft:number = 0;
   errorMessage:string = "";
   navigationText:string = this.pivot ? "< Previous" : "Next >"
+  isSelectable:boolean = false;
+  countryList:any;
+
   constructor(
     private _router:Router,
     private _formBuilder:FormBuilder,
@@ -31,15 +36,28 @@ export class RegisterFormComponent implements OnInit{
       Username: ['', Validators.required],
       Password: ['', [Validators.required, Validators.pattern(/^.{6,}$/)]],
       Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[email]+\.[a-zA-Z]{2,}$/)]],
-      
+      Country: ['',Validators.required]
     })
   }
   ngOnInit():void{
-  
+    countries.registerLocale(en);
+
+    const countryNames = countries.getNames('en');
+
+    this.countryList = Object.values(countryNames)
+    console.log(this.countryList)
 
   }
   ngDoCheck():void{
     this.navigationText = this.pivot ? "< Previous" : "Next >"
+  }
+  openSelection(){
+    this.isSelectable = !this.isSelectable;
+  }
+  selectCountry(country:string){
+    this.registerForm.patchValue({
+      Country: country
+    })
   }
   togglePivot(){
     if(!this.pivot) this.marginLeft -= 105;

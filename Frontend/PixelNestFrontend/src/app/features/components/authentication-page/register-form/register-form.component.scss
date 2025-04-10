@@ -87,14 +87,70 @@ $HFONT: "Roboto Condensed", sans-serif;
             }
             .inputs{
                 position: relative;
-                overflow: hidden;
+                overflow:hidden;
+                
                 width: 100%;
+                display: flex;
+                flex-direction: column;
+                
+                .country-wrapper{
+                  width: 100%;
+                  max-height: 0;
+                  transition: max-height 0.4s ease-out;
+                  transform-origin: top center;
+                  overflow-y: scroll;
+                  background-color: $BGCOLOR;
+                  font-size: 25px;
+                  position: absolute;
+                  
+                  display: flex;
+                  flex-direction: column;
+                  align-items: flex-start;
+                  z-index: 3;
+              
+            
+                  
+                  .country{
+                    font-size: 0.8em;
+                    font-family: $PFONT;
+                    color: $PCOLOR;
+                    margin-top: 10px;
+                    margin-left: 5px;
+                    text-align: left;
+                  }
+                  .country:last-child{
+                    margin-bottom: 10px;
+                  }
+                }  
+                .country-wrapper.open{
+                
+                  max-height: 100px; 
+                  animation: growDown 400ms ease-in-out forwards;
+                  border-bottom: 2px #fff solid;
+                }
+                @keyframes growDown {
+                  0% {
+                      transform: scaleY(0);
+                  }
+                  80% {
+                      transform: scaleY(1.1);
+                  }
+                  100% {
+                      transform: scaleY(1);
+                  }
+              }
                 .track{
+
                   display: flex;
                   flex-direction: row;
                   width: 100%;
                   gap:5%;
+                  position: relative;
                  transition: 300ms ease-in-out;
+                
+                  
+                 
+                 
                   .first-slide, .second-slide{
                     width: 100%;
                     flex-shrink: 0;
