@@ -33,7 +33,7 @@ $HFONT: "Roboto Condensed", sans-serif;
               align-self: center;
               .bar{
                 transition: 300ms;
-                width: 50%;
+                width: 33%;
                 height: 100%;
                 background-color: $H1COLOR;
                 border-radius: 25px;
@@ -46,6 +46,9 @@ $HFONT: "Roboto Condensed", sans-serif;
               font-size: 25px;
               margin-top: 20px;
               align-self: center;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
               .nav-text{
                 font-size: 0.66em;
                 color: $PCOLOR !important;
@@ -96,6 +99,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                 .country-wrapper{
                   width: 100%;
                   max-height: 0;
+                  
                   transition: max-height 0.4s ease-out;
                   transform-origin: top center;
                   overflow-y: scroll;
@@ -123,7 +127,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                   }
                 }  
                 .country-wrapper.open{
-                
+                  
                   max-height: 100px; 
                   animation: growDown 400ms ease-in-out forwards;
                   border-bottom: 2px #fff solid;
@@ -151,7 +155,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                   
                  
                  
-                  .first-slide, .second-slide{
+                  .first-slide, .second-slide, .third-slide{
                     width: 100%;
                     flex-shrink: 0;
                   }

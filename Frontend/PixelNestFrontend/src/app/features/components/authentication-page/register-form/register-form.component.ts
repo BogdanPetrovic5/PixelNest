@@ -7,6 +7,7 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import * as countries from 'i18n-iso-countries';
 import en from 'i18n-iso-countries/langs/en.json';
+import { CsvReaderService } from 'src/app/core/services/csv/csv-reader.service';
 @Component({
   selector: 'app-register-form',
   templateUrl: './register-form.component.html',
@@ -19,16 +20,23 @@ export class RegisterFormComponent implements OnInit{
   enabled:boolean = false;
   pivot?:boolean = false;
   marginLeft:number = 0;
+  barMargin:number = 0;
+  marginStep:number = 105;
   errorMessage:string = "";
   navigationText:string = this.pivot ? "< Previous" : "Next >"
-  isSelectable:boolean = false;
+  isSelectableCountry:boolean = false;
+  isSelectableCity:boolean = false;
   countryList:any;
-
+  filteredCountries:any;
+  cityList:any;
+  filteredCities:any;
+  isDisabled:boolean = true;
   constructor(
     private _router:Router,
     private _formBuilder:FormBuilder,
     private _authService:AuthenticationService,
-    private _lottieState:LottieStateService
+    private _lottieState:LottieStateService,
+    private _csvReader:CsvReaderService
   ){
     this.registerForm = this._formBuilder.group({
       Firstname: ['', Validators.required],
@@ -36,7 +44,8 @@ export class RegisterFormComponent implements OnInit{
       Username: ['', Validators.required],
       Password: ['', [Validators.required, Validators.pattern(/^.{6,}$/)]],
       Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[email]+\.[a-zA-Z]{2,}$/)]],
-      Country: ['',Validators.required]
+      Country: ['',Validators.required],
+      City: [{ value: '', disabled: this.isDisabled },Validators.required]
     })
   }
   ngOnInit():void{
@@ -44,27 +53,77 @@ export class RegisterFormComponent implements OnInit{
 
     const countryNames = countries.getNames('en');
 
-    this.countryList = Object.values(countryNames)
-    console.log(this.countryList)
+    this.countryList = Object.values(countryNames);
+    this.filteredCountries = this.countryList;
+    
 
   }
   ngDoCheck():void{
     this.navigationText = this.pivot ? "< Previous" : "Next >"
   }
-  openSelection(){
-    this.isSelectable = !this.isSelectable;
+  filterCountries(event:Event){
+    const value = (event.target as HTMLInputElement).value.toLocaleLowerCase();
+    
+    if(value == "" || value == null) this.filteredCountries = this.countryList;
+    
+    this.filteredCountries = this.countryList.filter((country:any) =>
+      country.toLowerCase().includes(value)
+    );
+  }
+  filterCities(event:Event){
+    const value = (event.target as HTMLInputElement).value.toLocaleLowerCase();
+    
+    if(value == "" || value == null) this.filteredCities = this.cityList;
+    
+    this.filteredCities = this.cityList.filter((city:any) =>
+      city.toLowerCase().includes(value)
+    );
+  }
+  openSelectionCountry(){
+    this.isSelectableCountry = !this.isSelectableCountry;
+  }
+  openSelectionCity(){
+    this.isSelectableCity = !this.isSelectableCity
+    
   }
   selectCountry(country:string){
     this.registerForm.patchValue({
       Country: country
     })
+    this.registerForm.get('City')?.enable();
+    this._csvReader.getCities(country).subscribe({
+      next:response=>{
+        
+        this.cityList = response;
+        this.filteredCities = response
+      }
+    })
   }
+
   togglePivot(){
     if(!this.pivot) this.marginLeft -= 105;
     if(this.pivot) this.marginLeft += 105;
     this.pivot = !this.pivot
 
   }
+  next(){
+    if(this.marginStep >= Math.abs(this.marginLeft)){
+      this.marginLeft -= this.marginStep;
+      this.barMargin += 33
+    }
+   
+    
+
+  }
+  previous(){
+    if(this.marginStep <= Math.abs(this.marginLeft) ){
+      this.marginLeft += this.marginStep;
+      this.barMargin -= 33;
+    }
+   
+   
+  }
+  
   navigateToLogin(){
     this._router.navigate(['/Authentication/Login'])
   }

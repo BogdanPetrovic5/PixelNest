@@ -9,28 +9,7 @@
             <form class="inputs" [formGroup] = "registerForm" (ngSubmit) = "register()">
                 <div class="track" [ngStyle]="{'margin-left':marginLeft+'%'}">
                     <div class="first-slide" >
-                        <div class="form-control country">
-                            <input required type="value" formControlName="Country" (focus)="openSelection()" (blur)="openSelection()">
-                            <label>
-                                <span style="transition-delay:350ms">C</span>
-                                <span style="transition-delay:300ms">o</span>
-                                <span style="transition-delay:250ms">u</span>
-                                <span style="transition-delay:200ms">n</span>
-                                <span style="transition-delay:150ms">t</span>
-                                <span style="transition-delay:100ms">r</span>
-                                <span style="transition-delay:0ms">y</span>
-                                
-                            </label>
-                            <div *ngIf="registerForm.get('Country')?.invalid && registerForm.get('Country')?.touched" class="invalid-feedback">
-                               Country is required
-                            </div>
-                            <div class="country-wrapper" [ngClass]="isSelectable ? 'country-wrapper open' : 'country-wrapper'">
-                                <div *ngFor="let country of countryList" class="country" (click)="selectCountry(country)">
-                                    {{country}}
-                                </div>
-                            </div>
-                            
-                        </div>
+                        
                         <div class="form-control">
                             <input 
                             required 
@@ -88,7 +67,60 @@
                        
                        
                     </div>
-                    
+                    <div class="third-slide">
+                        <div class="form-control country">
+                            <input required type="value" formControlName="Country" 
+                            (focus)="openSelectionCountry()" 
+                            (blur)="openSelectionCountry()" 
+                            (keyup)="filterCountries($event)">
+                            <label>
+                                <span style="transition-delay:350ms">C</span>
+                                <span style="transition-delay:300ms">o</span>
+                                <span style="transition-delay:250ms">u</span>
+                                <span style="transition-delay:200ms">n</span>
+                                <span style="transition-delay:150ms">t</span>
+                                <span style="transition-delay:100ms">r</span>
+                                <span style="transition-delay:0ms">y</span>
+                                
+                            </label>
+                            <div *ngIf="registerForm.get('Country')?.invalid && registerForm.get('Country')?.touched" class="invalid-feedback">
+                               Country is required
+                            </div>
+                            <div class="country-wrapper" [ngClass]="isSelectableCountry ? 'country-wrapper open' : 'country-wrapper'">
+                                <div *ngFor="let country of filteredCountries" class="country" (click)="selectCountry(country)">
+                                    {{country}}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="form-control city">
+                            <input required type="value" formControlName="City" 
+                            (focus)="openSelectionCity()"
+                            (blur)="openSelectionCity()"
+                            (keyup)="filterCities($event)"
+                            >
+                            <label>
+                                <span style="transition-delay:150ms">C</span>
+                                <span style="transition-delay:100ms">i</span>
+                                <span style="transition-delay:50ms">t</span>
+                                <span style="transition-delay:0ms">y</span>
+                              
+                                
+                            </label>
+                            <div 
+                            *ngIf="registerForm.get('City')?.invalid && registerForm.get('City')?.touched" 
+                            class="invalid-feedback">
+                               City is required
+                            </div>
+                            <div class="country-wrapper" 
+                            [ngClass]="isSelectableCity ? 'country-wrapper open' : 'country-wrapper'">
+                                <div *ngFor="let city of filteredCities" class="country">
+                                    {{city}}
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
                     <div class="second-slide" >
                         <div class="form-control">
                             <input required type="value" formControlName="Email">
@@ -143,13 +175,18 @@
            
             <button class="switch" (click)="navigateToLogin()">Already Have An Account? Log in!</button>
             <div class="progress">
-                <div class="bar" (click)="togglePivot()" [ngStyle]="{'margin-left': pivot ? '50%':'0%'} ">
+                <div class="bar"  [ngStyle]="{'margin-left': barMargin + '%'} ">
 
                 </div>
             </div>
             <div class="navigation" >
-                <div (click)="togglePivot()" class="nav-text" [ngStyle]="{'margin-left': pivot ? '50%' : '0', 'text-align': !pivot ? 'left' : 'right'
-                  }">{{navigationText}}</div>
+                <div (click)="next()" 
+                class="nav-text" 
+                >Next ></div>
+
+                <div (click)="previous()" 
+                class="nav-text" style="text-align: right !important;" 
+                > < Previous</div>
             </div>
         </div>
     </div>
