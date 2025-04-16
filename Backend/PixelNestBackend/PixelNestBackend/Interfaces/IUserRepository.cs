@@ -19,6 +19,6 @@ namespace PixelNestBackend.Interfaces
         Task<bool> ChangeProfilePicture(string userGuid, ProfileDto profileDto);
         UserProfileDto GetCurrentUserData(string userGuid);
         bool CheckIfUsernameExists(string username);
-
+        bool UpdateLocation(LocationDto locationDto, string userGuid);
     }
 }

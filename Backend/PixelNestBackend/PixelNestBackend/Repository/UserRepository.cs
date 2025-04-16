@@ -59,8 +59,7 @@ namespace PixelNestBackend.Repository
             try
             {
                 Guid targetUserGuid = _userUtility.GetUserID(targetClientGuid);
-                Console.WriteLine("\nTarget user guid: " + targetUserGuid);
-                Console.WriteLine("\nUser guid: " + userGuid);
+               
                 User followerUser = _dataContext.Users.Where(u => u.UserGuid.Equals(Guid.Parse(userGuid))).FirstOrDefault();
                 User followingUser = _dataContext.Users.Where(u => u.UserGuid.Equals(targetUserGuid)).FirstOrDefault();
 
@@ -425,6 +424,20 @@ namespace PixelNestBackend.Repository
         public bool CheckIfUsernameExists(string username)
         {
             return _dataContext.Users.Where(u => u.Username.Equals(username)).Any();
+        }
+
+        public bool UpdateLocation(LocationDto locationDto, string userGuid)
+        {
+            if(!Guid.TryParse(userGuid, out Guid parsedGuid))
+            {
+                return false;
+            }
+            User user = _dataContext.Users.Where(u => u.UserGuid == parsedGuid).FirstOrDefault();
+            if (user == null) return false;
+            user.Country = locationDto.Country;
+            user.City = locationDto.City;
+
+            return _dataContext.SaveChanges() > 0;
         }
     }
 }

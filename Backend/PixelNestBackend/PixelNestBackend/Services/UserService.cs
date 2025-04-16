@@ -140,5 +140,10 @@ namespace PixelNestBackend.Services
         {
             return _userRepository.GetCurrentUserData(userGuid);
         }
+
+        public bool UpdateLocation(LocationDto locationDto, string userGuid)
+        {
+            return _userRepository.UpdateLocation(locationDto, userGuid);
+        }
     }
 }

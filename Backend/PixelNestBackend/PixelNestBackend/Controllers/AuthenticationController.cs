@@ -15,6 +15,7 @@ using PixelNestBackend.Services;
 using PixelNestBackend.Utility;
 using PixelNestBackend.Utility.Google;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
@@ -57,11 +58,8 @@ namespace PixelNestBackend.Controllers
         public async Task<IActionResult> SigninGoogle([FromQuery] string code, [FromQuery] string state)
         {
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            if (HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
-            {
-                ip = HttpContext.Request.Headers["X-Forwarded-For"];
-            }
-            Console.WriteLine("IP: " + ip);
+            bool isNewUser = false;
+            
             string country = _geoService.GetCountryFromIP(ip);
             if (string.IsNullOrEmpty(code))
                 return BadRequest("Authorization code is missing.");
@@ -82,7 +80,9 @@ namespace PixelNestBackend.Controllers
             GoogleAccountDto googleAccountDto = _googleUtility.GenerateGoogleAccountDto(googleToken.id_token);
             if (!_googleService.IsUserRegistered(googleAccountDto.Email))
             {
+             
                 GoogleAccountResponse googleAccountResponse = await _googleService.RegisterGoogleAccount(googleAccountDto);
+                isNewUser = true;
             }
 
             GoogleLoginResponse loginResponse = await _googleService.LoginWithGoogle(googleAccountDto.Email);
@@ -101,7 +101,9 @@ namespace PixelNestBackend.Controllers
                     Path = "/"
                 };
                 Response.Cookies.Append("jwtToken", loginResponse.Token, cookieOptions);
-                return Redirect("http://localhost:4200/Authentication/Redirect-Page");
+                if(!isNewUser) return Redirect("http://localhost:4200/Authentication/Redirect-Page");
+                return Redirect("http://localhost:4200/Authentication/Save-Location");
+
             }
 
 

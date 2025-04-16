@@ -25,7 +25,27 @@ namespace PixelNestBackend.Controllers
             _webSocketConnection = webSocketConnectionMenager;
             _userUtility = userUtility;
         }
-  
+        [Authorize]
+        [HttpPatch("ShareLocation")]
+        public IActionResult ShareLocation(LocationDto locationDto)
+        {
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid is null)
+            {
+                return Unauthorized();
+            }
+            if (locationDto is not null)
+            {
+                bool response =  _userService.UpdateLocation(locationDto, userGuid);
+                return Ok(response);
+            }
+            return NotFound();
+           
+           
+
+        }
+
+
         [Authorize]
         [HttpPost("CloseConnection")]
         public async Task<ActionResult> CloseConnectionWithSocket()
@@ -33,8 +53,8 @@ namespace PixelNestBackend.Controllers
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userGuid == null) return Unauthorized();
           
-            string username = _userUtility.GetUserName(userGuid);
-            await _webSocketConnection.CloseConnection(userGuid);
+            string userClientGuid = _userUtility.GetClientGuid(userGuid);
+            await _webSocketConnection.CloseConnection(userClientGuid);
             return Ok();
         }
 

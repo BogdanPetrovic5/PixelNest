@@ -42,6 +42,7 @@ namespace PixelNestBackend.Services
                     Guid userGuid = _userUtility.GetUserID(response.ClientGuid);
                     string token = ReturnToken(userGuid.ToString());
                     response.Token = token;
+
                     return response;
                 }
                 return new LoginResponse { 
@@ -67,7 +68,8 @@ namespace PixelNestBackend.Services
             user.Password = _passwordEncoder.EncodePassword(registerDto.Password);
             user.TotalLikes = 0;
             user.TotalPosts = 0;
-
+            user.Country = registerDto.Country;
+            user.City = registerDto.City;
             var validateUser = _validateUser(user);
           
             if (validateUser == null) return null;

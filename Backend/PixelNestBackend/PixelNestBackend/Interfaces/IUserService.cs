@@ -23,5 +23,6 @@ namespace PixelNestBackend.Interfaces
         ICollection<ResponseUsersDto> FindUsers(string username);
         Guid GetUserID(string email);
         UserProfileDto GetCurrentUserData(string userGuid);
+        bool UpdateLocation(LocationDto locationDto, string userGuid);
     }
 }
