@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from './components/layout/layout.module';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { RedirectPageComponent } from './components/authentication-page/redirect-page/redirect-page.component';
+import { SaveLocationComponent } from './components/authentication-page/save-location/save-location.component';
 
 
 
@@ -26,6 +27,7 @@ import { RedirectPageComponent } from './components/authentication-page/redirect
     RegisterFormComponent,
     UnauthorizedComponent,
     RedirectPageComponent,
+    SaveLocationComponent,
   ],
   imports: [
     CommonModule,
