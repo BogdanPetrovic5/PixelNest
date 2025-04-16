@@ -1,0 +1,214 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+    width: 100%;
+    height: 100%;
+    background-color: $BGCOLOR;
+    position: absolute;
+   
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 25px;
+        .content{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            .submit{
+              width: 70%;
+              padding-top: 15px;
+              font-size: 1em;
+              font-family: $PFONT;
+              color: $PCOLOR;
+            }
+            h1{
+              font-size: 1em;
+              font-family: $PFONT;
+              color: $PCOLOR;
+            }
+            .country-wrapper{
+                width: 100%;
+                max-height: 0;
+                transition: max-height 0.4s ease-out;
+                transform-origin: top center;
+                overflow-y: scroll;
+                background-color: $BGCOLOR;
+                font-size: 25px;
+                position: absolute;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                z-index: 3;
+            
+          
+                
+                .country-option{
+                  font-size: 0.8em;
+                  font-family: $PFONT;
+                  color: $PCOLOR;
+                  margin-top: 10px;
+                  margin-left: 5px;
+                  text-align: left;
+                }
+                .country:last-child{
+                  margin-bottom: 10px;
+                }
+            }  
+            .country-wrapper.open{
+            
+                max-height: 100px; 
+                animation: growDown 400ms ease-in-out forwards;
+                border-bottom: 2px #fff solid;
+            }
+            @keyframes growDown {
+                0% {
+                    transform: scaleY(0);
+                }
+                80% {
+                    transform: scaleY(1.1);
+                }
+                100% {
+                    transform: scaleY(1);
+                }
+            }
+            .track{
+      
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                gap:5%;
+                position: relative;
+               transition: 300ms ease-in-out;
+              
+                
+               
+               
+                .first-slide, .second-slide, .third-slide{
+                  width: 100%;
+                  flex-shrink: 0;
+                }
+            }
+            .invalid-feedback{
+                color: red;
+                font-size: 0.65em;
+                font-family: $PFONT;
+                margin-top: 10px;
+                
+                position: absolute;
+            }
+            .error{
+      
+                color: red;
+                font-size: 0.65em;
+                font-family: $PFONT;
+                margin-top: 10px;
+                position: absolute;
+                
+                
+            }
+            button{
+                  width: 100%;
+                  padding-top: 15px;
+                  padding-bottom: 15px;
+                  background-color: $H1COLOR;
+                  margin-top: 40px;
+                  border-radius: 50px;
+                  border: none;
+                  outline: none;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  font-size: 25px;
+                  transition: 300ms ease-in-out;
+                  cursor: pointer;
+                  h1{
+                      margin: 0;
+                      padding: 0;
+                      font-family: $HFONT;
+                      letter-spacing: 2px;
+                      font-size: .9em;
+                      color: rgb(255, 255, 255);
+                  }
+            }
+              
+              .enabled:hover{
+                transform: scale(0.97);
+              }
+              p{
+                  cursor: pointer;
+                  font-size: 0.7em;
+                  align-self: center;
+                  text-align: center;
+                  margin-top: 25px !important;
+              }
+            
+              .form-control {
+                  position: relative;
+                  margin: 30px 0 35px;
+                  width: 70%;
+                }
+                .form-control:first-child{
+                  margin-top: 15px !important;
+                }
+                .form-control input {
+                  background-color: transparent;
+                  border: 0;
+                  border-bottom: 2px #fff solid;
+                  display: block;
+                 
+                  width: 100%;
+                  padding: 15px 0;
+                  font-size: 14px;
+                  color: #fff;
+                }
+                
+                .form-control input:focus,
+                .form-control input:valid {
+                  outline: 0;
+                  border-bottom-color: lightblue;
+                }
+                
+                .form-control label {
+                  position: absolute;
+                  font-family: $PFONT;
+                  top: 15px;
+                  left: 0;
+                  pointer-events: none;
+                }
+                
+                .form-control label span {
+                  display: inline-block;
+                  font-size: 15px;
+                  min-width: 5px;
+                  color: #fff;
+                  transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+                
+                .form-control input:focus+label span,
+                .form-control input:valid+label span {
+                  color: lightblue;
+                  transform: translateY(-30px);
+                }
+          
+        }
+   
+   
+        
+        
+  
+}

@@ -99,7 +99,14 @@ export class RegisterFormComponent implements OnInit{
       }
     })
   }
-
+  selectCity(city:string){
+    if(this.cityList != null || this.cityList.length > 0){
+      this.registerForm.patchValue({
+        City:city
+      })
+    }
+ 
+  }
   togglePivot(){
     if(!this.pivot) this.marginLeft -= 105;
     if(this.pivot) this.marginLeft += 105;

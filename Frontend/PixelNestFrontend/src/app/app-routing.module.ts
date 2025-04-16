@@ -21,6 +21,7 @@ import { PostComponent } from './shared/components/post/post.component';
 import { PostViewComponent } from './features/components/layout/post-view/post-view.component';
 import { RedirectPageComponent } from './features/components/authentication-page/redirect-page/redirect-page.component';
 import { AnalyticsComponent } from './features/components/layout/profile/analytics/analytics.component';
+import { SaveLocationComponent } from './features/components/authentication-page/save-location/save-location.component';
 
 
 const routes: Routes = [
@@ -34,7 +35,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'Register', pathMatch: 'full' },
       { path: 'Register', component: RegisterFormComponent,canActivate:[AuthGuard] },
       { path: 'Login', component: LoginFormComponent,canActivate:[AuthGuard] },
-      { path: 'Redirect-Page', component:RedirectPageComponent}
+      { path: 'Redirect-Page', component:RedirectPageComponent},
+      { path:'Save-Location', component:SaveLocationComponent}
     ],
     
   },

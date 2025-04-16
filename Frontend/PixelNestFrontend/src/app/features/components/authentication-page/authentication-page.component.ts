@@ -48,6 +48,7 @@ export class AuthenticationPageComponent implements OnInit{
         }
       })
     )
+    
   }
   close(){
     

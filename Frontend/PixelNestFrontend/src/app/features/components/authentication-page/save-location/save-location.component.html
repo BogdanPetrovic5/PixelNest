@@ -1,0 +1,68 @@
+<div class="container">
+    <form class="content" [formGroup] = "locationForm" (submit)="submit()">
+        <img src="assets/images/3d-globe.png" alt="">
+        <h1>
+            Select your location
+        </h1>
+        <div class="form-control country">
+            <input required type="value" formControlName="Country" 
+            (focus)="openSelectionCountry()" 
+            (blur)="openSelectionCountry()" 
+            (keyup)="filterCountries($event)">
+            <label>
+                <span style="transition-delay:350ms">C</span>
+                <span style="transition-delay:300ms">o</span>
+                <span style="transition-delay:250ms">u</span>
+                <span style="transition-delay:200ms">n</span>
+                <span style="transition-delay:150ms">t</span>
+                <span style="transition-delay:100ms">r</span>
+                <span style="transition-delay:0ms">y</span>
+                
+            </label>
+            <div *ngIf="locationForm.get('Country')?.invalid && locationForm.get('Country')?.touched" class="invalid-feedback">
+               Country is required
+            </div>
+            <div class="country-wrapper" [ngClass]="isSelectableCountry ? 'country-wrapper open' : 'country-wrapper'">
+                <div 
+                *ngFor="let country of filteredCountries" 
+                class="country-option" 
+                (click)="selectCountry(country)">
+                    {{country}}
+                </div>
+            </div>
+            
+        </div>
+        <div class="form-control city">
+            <input required type="value" formControlName="City" 
+            (focus)="openSelectionCity()"
+            (blur)="openSelectionCity()"
+            (keyup)="filterCities($event)"
+            >
+            <label>
+                <span style="transition-delay:150ms">C</span>
+                <span style="transition-delay:100ms">i</span>
+                <span style="transition-delay:50ms">t</span>
+                <span style="transition-delay:0ms">y</span>
+              
+                
+            </label>
+            <div 
+            *ngIf="locationForm.get('City')?.invalid && locationForm.get('City')?.touched" 
+            class="invalid-feedback">
+               City is required
+            </div>
+            <div class="country-wrapper" 
+            [ngClass]="isSelectableCity ? 'country-wrapper open' : 'country-wrapper'">
+                <div 
+                *ngFor="let city of filteredCities" 
+                class="country-option"
+                 (click)="selectCity(city)">
+                    {{city}}
+                </div>
+            </div>
+            
+        </div>
+        <button class="submit">Continue</button>
+    </form>
+   
+</div>

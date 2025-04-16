@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment.development';
 import { FollowersDto } from '../../dto/followers.dto';
 import { FollowingsDto } from '../../dto/followings.dto';
 import { Users } from '../../dto/users.dto';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,10 @@ import { Users } from '../../dto/users.dto';
 export class UserService {
 
   constructor(private _httpClient:HttpClient) { }
+  updateLocation(location:any):Observable<any>{
+    const url = `${environment.apiUrl}/api/User/ShareLocation`
+    return this._httpClient.patch(url, location);
+  }
   getUserData(clientGuid:string):Observable<any>{
     const url = `${environment.apiUrl}/api/User/GetUserProfile?clientGuid=${clientGuid}`
     return this._httpClient.get(url);

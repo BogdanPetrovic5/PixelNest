@@ -114,14 +114,17 @@
                             </div>
                             <div class="country-wrapper" 
                             [ngClass]="isSelectableCity ? 'country-wrapper open' : 'country-wrapper'">
-                                <div *ngFor="let city of filteredCities" class="country">
+                                <div 
+                                *ngFor="let city of filteredCities" 
+                                class="country"
+                                 (click)="selectCity(city)">
                                     {{city}}
                                 </div>
                             </div>
                             
                         </div>
                     </div>
-                    <div class="second-slide" >
+                    <div class="second-slide">
                         <div class="form-control">
                             <input required type="value" formControlName="Email">
                             <label>
