@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : Controller
     {
@@ -26,7 +26,7 @@ namespace PixelNestBackend.Controllers
             _userUtility = userUtility;
         }
         [Authorize]
-        [HttpPatch("ShareLocation")]
+        [HttpPatch("location")]
         public IActionResult ShareLocation(LocationDto locationDto)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -39,6 +39,7 @@ namespace PixelNestBackend.Controllers
                 bool response =  _userService.UpdateLocation(locationDto, userGuid);
                 return Ok(response);
             }
+            
             return NotFound();
            
            
@@ -47,18 +48,26 @@ namespace PixelNestBackend.Controllers
 
 
         [Authorize]
-        [HttpPost("CloseConnection")]
+        [HttpPost("close-connection")]
         public async Task<ActionResult> CloseConnectionWithSocket()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userGuid == null) return Unauthorized();
-          
-            string userClientGuid = _userUtility.GetClientGuid(userGuid);
-            await _webSocketConnection.CloseConnection(userClientGuid);
-            return Ok();
+
+            try
+            {
+                string userClientGuid = _userUtility.GetClientGuid(userGuid);
+                await _webSocketConnection.CloseConnection(userClientGuid);
+               
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error closing WebSocket connection.");
+            }
         }
 
-        [HttpGet("GetFollowings")]
+        [HttpGet("{clientGuid}/followings")]
         public ICollection<ResponseFollowingDto>? GetFollowings(string clientGuid)
         {
             ICollection<ResponseFollowingDto> users = _userService.GetFollowings(clientGuid);
@@ -68,7 +77,7 @@ namespace PixelNestBackend.Controllers
             }
             else return null;
         }
-        [HttpGet("GetFollowers")]
+        [HttpGet("{clientGuid}/followers")]
         public ICollection<ResponseFollowersDto>? GetFollowers(string clientGuid)
         {
             ICollection<ResponseFollowersDto> users = _userService.GetFollowers(clientGuid);
@@ -79,8 +88,8 @@ namespace PixelNestBackend.Controllers
             else return null;
         }
         [Authorize]
-        [HttpPost("Follow")]
-        public async Task<IActionResult> Follow([FromQuery] string targetClientGuid)
+        [HttpPost("follow/{targetClientGuid}")]
+        public async Task<IActionResult> Follow(string targetClientGuid)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (targetClientGuid == null) return BadRequest();
@@ -93,8 +102,8 @@ namespace PixelNestBackend.Controllers
             else return NotFound();
         }
         [Authorize]
-        [HttpGet("GetUserProfile")]
-        public UserProfileDto? GetUserData(string clientGuid)
+        [HttpGet("users/{clientGuid}")]
+        public ActionResult<UserProfileDto> GetUserData(string clientGuid)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             UserProfileDto user = _userService.GetUserProfileData(userGuid, clientGuid);
@@ -103,11 +112,11 @@ namespace PixelNestBackend.Controllers
             {
                 return user;
             }
-            return null;
+            return NotFound();
         }
-
-        [HttpGet("IsFollowing")]
-        public ActionResult<bool> IsFollowing([FromQuery] string targetClientGuid)
+        [Authorize]
+        [HttpGet("followings/{targetClientGuid}")]
+        public ActionResult<bool> IsFollowing(string targetClientGuid)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             FollowResponse followResponse = _userService.IsFollowing(targetClientGuid, userGuid);
@@ -121,7 +130,7 @@ namespace PixelNestBackend.Controllers
             else return NotFound();
         }
         [Authorize]
-        [HttpPut("ChangeProfilePicture")]
+        [HttpPut("profile-picture")]
         public async Task<ActionResult<bool>> ChangePicture([FromForm] ProfileDto profileDto)
         {
             
@@ -137,7 +146,7 @@ namespace PixelNestBackend.Controllers
             
         }
         [Authorize]
-        [HttpPut("ChangeUsername")]
+        [HttpPut("username")]
         public ActionResult<bool> ChangeUsername([FromForm] ProfileDto profileDto)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -150,7 +159,7 @@ namespace PixelNestBackend.Controllers
             
         }
         [Authorize]
-        [HttpGet("GetProfilePicture")]
+        [HttpGet("profile-picture/{clientGuid}")]
         public ActionResult<string> GetProfilePicture(string clientGuid)
         {
            
@@ -163,7 +172,7 @@ namespace PixelNestBackend.Controllers
             
         }
       
-        [HttpGet("FindUsers")]
+        [HttpGet("search")]
         public ActionResult<ICollection<ResponseUsersDto>> FindUsers(string username)
         {
             if(username.IsNullOrEmpty()) return BadRequest(string.Empty);
@@ -175,7 +184,7 @@ namespace PixelNestBackend.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetCurrentUserData")]
+        [HttpGet("me")]
         public ActionResult<UserProfileDto> GetCurrentUserData()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
