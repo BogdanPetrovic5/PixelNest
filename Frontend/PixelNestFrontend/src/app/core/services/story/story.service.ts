@@ -14,17 +14,17 @@ export class StoryService {
   constructor(private _httpClient:HttpClient) { }
 
   getStories(forCurrentUser:boolean):Observable<StoriesDto[]>{
-    const url = `${environment.apiUrl}/api/Story/GetStories?forCurrentUser=${forCurrentUser}`
+    const url = `${environment.apiUrl}/api/story/stories?forCurrentUser=${forCurrentUser}`
     return this._httpClient.get<StoriesDto[]>(url);
   }
 
   publishStory(formData:FormData):Observable<any>{
-    const url = `${environment.apiUrl}/api/Story/PublishStory`;
+    const url = `${environment.apiUrl}/api/story/new-story`;
     return this._httpClient.post(url, formData);
   }
   
   marStoryAsSeen(storyID:string):Observable<any>{
-    const url = `${environment.apiUrl}/api/Story/MarkStoryAsSeen`;
+    const url = `${environment.apiUrl}/api/story/seen`;
     return this._httpClient.post(url, {
         StoryID:storyID,
        
@@ -32,7 +32,7 @@ export class StoryService {
   }
 
   getViewers(storyID:string):Observable<ViewersDto[]>{
-    const url = `${environment.apiUrl}/api/Story/GetViewers?storyID=${storyID}`;
+    const url = `${environment.apiUrl}/api/story/viewers?storyID=${storyID}`;
     return this._httpClient.get<ViewersDto[]>(url);
   }
 }
