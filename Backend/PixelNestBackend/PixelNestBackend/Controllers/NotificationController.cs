@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/notification")]
     [ApiController]
     public class NotificationController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace PixelNestBackend.Controllers
 
         }
         [Authorize]
-        [HttpPost("MarkAsOpened")]
+        [HttpPost("open")]
         public ActionResult<bool> MarkAsOpened([FromBody]MarkAsOpenedDto markAsOpened)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -31,7 +31,7 @@ namespace PixelNestBackend.Controllers
             return Ok(result);
         }
         [Authorize]
-        [HttpGet("CountNotifications")]
+        [HttpGet("unread/count")]
         public ActionResult<int> CountNotifications()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -41,7 +41,7 @@ namespace PixelNestBackend.Controllers
             return Ok(notifications);
         }
         [Authorize]
-        [HttpGet("GetAllNotifications")]
+        [HttpGet("notifications")]
         public ActionResult<ICollection<ResponseNotificationsDto>> GetAllNotifications()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
