@@ -26,7 +26,7 @@ namespace PixelNestBackend.Controllers
 
         }
         [Authorize]
-        [HttpGet("CheckCache")]
+        [HttpGet("cache-state")]
         public ActionResult<bool> CacheChange()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -41,7 +41,7 @@ namespace PixelNestBackend.Controllers
 
         }
         [Authorize]
-        [HttpGet("GetPost")]
+        [HttpGet("{postID}")]
         public async Task<ActionResult<ResponsePostDto>> GetPost(Guid postID)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -51,7 +51,7 @@ namespace PixelNestBackend.Controllers
             return Ok(result);
         }
         [Authorize]
-        [HttpDelete("DeletePost")]
+        [HttpDelete("{postID}")]
         public async Task<ActionResult<DeleteResponse>> DeletePost(Guid postID)
         {
             try
@@ -88,7 +88,7 @@ namespace PixelNestBackend.Controllers
 
 
         [Authorize]
-        [HttpPost("PublishPost")]
+        [HttpPost("new-post")]
         public async Task<ActionResult<PostResponse>> PublishPost([FromForm] PostDto postDto)
         {
             if(postDto == null)
@@ -113,7 +113,7 @@ namespace PixelNestBackend.Controllers
           
         }
         [Authorize]
-        [HttpPost("SavePost")]
+        [HttpPost("{postGuid}/save")]
         public IActionResult SavePost([FromQuery] string postGuid)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -125,7 +125,7 @@ namespace PixelNestBackend.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetPosts")]
+        [HttpGet("posts")]
         public async Task<ActionResult<ICollection<ResponsePostDto>>> GetPosts([FromQuery]string? clientGuid, [FromQuery] string? location, int page = 1, int maximumPosts = 5){
             try
             {
@@ -148,7 +148,7 @@ namespace PixelNestBackend.Controllers
             }
         }
         [Authorize]
-        [HttpPost("LikePost")]
+        [HttpPost("{postGuid}/like")]
         public async Task<ActionResult> LikePost([FromQuery]string postGuid)
         {
             if(postGuid == null)
@@ -173,7 +173,7 @@ namespace PixelNestBackend.Controllers
             } else return NotFound();
         }
         [Authorize]
-        [HttpPost("Comment")]
+        [HttpPost("comment")]
         public async Task<ActionResult> Comment(CommentDto commentDto)
         {
             if (!ModelState.IsValid)
