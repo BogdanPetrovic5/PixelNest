@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/story")]
     [ApiController]
     public class StoryController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace PixelNestBackend.Controllers
             _storyService = storyService;
         }
         [Authorize]
-        [HttpGet("GetStories")]
+        [HttpGet("stories")]
         public async Task<ActionResult<GroupedStoriesDto>> GetStories(bool forCurrentUser, int currentPage, int maximum = 10)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -33,7 +33,7 @@ namespace PixelNestBackend.Controllers
             } else return NotFound();
         }
        
-        [HttpPost("PublishStory")]
+        [HttpPost("new-story")]
         public async Task<ActionResult<StoryResponse>> PublishStory([FromForm] StoryDto storyDto)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -53,7 +53,7 @@ namespace PixelNestBackend.Controllers
             else return NotFound(new StoryResponse { IsSuccessful = false, Message = "No response." });
         }
         [Authorize]
-        [HttpPost("MarkStoryAsSeen")]
+        [HttpPost("seen")]
         public ActionResult<StoryResponse> MarkStoryAsSeen(SeenDto seenDto){
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             StoryResponse storyResponse = _storyService.MarkStoryAsSeen(seenDto, userGuid);
@@ -66,7 +66,7 @@ namespace PixelNestBackend.Controllers
             
         }
         [Authorize]
-        [HttpGet("GetViewers")]
+        [HttpGet("viewers")]
         public ActionResult<ICollection<ResponseViewersDto>> GetViewers([FromQuery]ViewersDto viewersDto)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
