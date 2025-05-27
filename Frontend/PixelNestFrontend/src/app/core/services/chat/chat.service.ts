@@ -13,17 +13,17 @@ export class ChatService {
   
   constructor(private _httpClient:HttpClient) { }
   getNumberOfMessages():Observable<any>{
-    const url = `${environment.apiUrl}/api/Chat/GetNumberOfMessages`
+    const url = `${environment.apiUrl}/api/chat/unread-messages`
 
     return this._httpClient.get<any>(url);
   }
   getMessages(chatID:string):Observable<Message[]>{
-    const url = `${environment.apiUrl}/api/Chat/GetUserToUserMessages?chatID=${chatID}`
+    const url = `${environment.apiUrl}/api/chat/messages?chatID=${chatID}`
 
     return this._httpClient.get<Message[]>(url);
   }
   sendMessage(message:Message):Observable<any>{
-      const url =`${environment.apiUrl}/api/Chat/SendMessage`
+      const url =`${environment.apiUrl}/api/chat/message/send`
 
       return this._httpClient.post(url, {
         Message:message.message,
@@ -32,26 +32,26 @@ export class ChatService {
   }
 
   markAsRead(messageSeenDto:MessageSeen){
-    const url = `${environment.apiUrl}/api/Chat/MarkAsRead`
+    const url = `${environment.apiUrl}/api/chat/message/read`
     return this._httpClient.post(url, messageSeenDto)
   }
 
   getChats():Observable<Chats[]>{
-    const url = `${environment.apiUrl}/api/Chat/GetUserChats`
+    const url = `${environment.apiUrl}/api/chat/chats`
 
     return this._httpClient.get<Chats[]>(url)
   }
 
   joinRoom(targetClientGuid:string):Observable<any>{
-    const url = `${environment.apiUrl}/api/Chat/JoinRoom?targetClientGuid=${targetClientGuid}`
+    const url = `${environment.apiUrl}/api/chat/room/join/${targetClientGuid}`
     return this._httpClient.post(url,{})
   }
   leaveRoom(targetClientGuid:string):Observable<any>{
-    const url = `${environment.apiUrl}/api/Chat/LeaveRoom?targetClientGuid=${targetClientGuid}`
+    const url = `${environment.apiUrl}/api/chat/room/leave/${targetClientGuid}`
     return this._httpClient.post(url,{})
   }
   findChats(searchParameter:string):Observable<Chats[]>{
-    const url = `${environment.apiUrl}/api/Chat/FindChats?searchParameter=${searchParameter}`
+    const url = `${environment.apiUrl}/api/chat/search?searchParameter=${searchParameter}`
     return this._httpClient.get<Chats[]>(url);
   }
 }

@@ -11,11 +11,11 @@ export class GoogleAuthenticationService {
 
   }
   getGoogleResponse(state:string){
-    const url = `${environment.apiUrl}/api/Authentication/GetLoginResponse?state=${state}` 
+    const url = `${environment.apiUrl}/api/authentication/login-response?state=${state}` 
     return this._httpClient.get<any>(url);
   }
   loginWithGoogle(state:string){
-      const url = `${environment.apiUrl}/api/Authentication/SaveState?state=${state}`
+      const url = `${environment.apiUrl}/api/authentication/save?state=${state}`
       return this._httpClient.post<any>(url,{});
   }
 }

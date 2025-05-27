@@ -25,19 +25,19 @@ export class AuthenticationService {
     return this._httpClient.post<any>(url,{})
   }
   logout(email:string):Observable<any>{
-    let url = `${environment.apiUrl}/api/Authentication/Logout`
+    let url = `${environment.apiUrl}/api/authentication/logout`
     
     return this._httpClient.post<any>(url, {
       Email:email
     }, {withCredentials:true});
   }
   register(formGroup:any):Observable<any>{
-    const url = `${environment.apiUrl}/api/Authentication/Register`;
+    const url = `${environment.apiUrl}/api/authentication/register`;
     return this._httpClient.post<any>(url, formGroup)
   }
  
   login(formGroup:any):Observable<any>{
-    const url = `${environment.apiUrl}/api/Authentication/Login`;
+    const url = `${environment.apiUrl}/api/authentication/login`;
     return this._httpClient.post<any>(url, formGroup, {withCredentials:true}).pipe(
       tap(response=> {
         console.log(response)
@@ -48,7 +48,7 @@ export class AuthenticationService {
   }
 
   isLoggedIn():Observable<any>{
-    return this._httpClient.get<{loggedIn:boolean}>(`${environment.apiUrl}/api/Authentication/IsLoggedIn`,{withCredentials:true})
+    return this._httpClient.get<{loggedIn:boolean}>(`${environment.apiUrl}/api/authentication/status`,{withCredentials:true})
     .pipe(
       map((response:any) => response.loggedIn)
       ,

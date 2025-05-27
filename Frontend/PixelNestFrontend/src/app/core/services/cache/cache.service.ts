@@ -20,7 +20,7 @@ export class CacheService {
     return this._isChanged.getValue();
   }
   checkCache():Observable<boolean | null>{
-    const url = `${environment.apiUrl}/api/Post/CheckCache`;
+    const url = `${environment.apiUrl}/api/post/cache/state`;
     return this._httpClient.get<boolean |null>(url);
   }
 }

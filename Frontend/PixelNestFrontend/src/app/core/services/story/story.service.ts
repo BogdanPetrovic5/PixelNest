@@ -19,7 +19,7 @@ export class StoryService {
   }
 
   publishStory(formData:FormData):Observable<any>{
-    const url = `${environment.apiUrl}/api/story/new-story`;
+    const url = `${environment.apiUrl}/api/story/new`;
     return this._httpClient.post(url, formData);
   }
   

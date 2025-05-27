@@ -49,7 +49,7 @@ export class LoginFormComponent implements OnInit{
         window.location.href = 
           `https://accounts.google.com/o/oauth2/auth?` +
           `client_id=928125021910-7risb5280cb3776v26paipadj1vfj9gf.apps.googleusercontent.com` +
-          `&redirect_uri=http://localhost:7157/api/Authentication/SigninGoogle` +
+          `&redirect_uri=http://localhost:7157/api/authentication/google/signin` +
           `&response_type=code` +  
           `&scope=openid email profile` +
           `&access_type=offline` + 

@@ -13,16 +13,16 @@ export class NotificationService {
   constructor(private _httpClient:HttpClient) { }
   
   getNotifications():Observable<NotificationDto[]>{
-    const url = `${environment.apiUrl}/api/Notification/GetAllNotifications`
+    const url = `${environment.apiUrl}/api/notification/notifications`
 
     return this._httpClient.get<NotificationDto[]>(url);
   }
   countNotifications():Observable<number>{
-    const url = `${environment.apiUrl}/api/Notification/CountNotifications`
+    const url = `${environment.apiUrl}/api/notification/unread/count`
     return this._httpClient.get<number>(url);
   }
   markAsOpened(markAsRead:NotificationOpened):Observable<boolean>{
-    const url = `${environment.apiUrl}/api/Notification/MarkAsOpened`
+    const url = `${environment.apiUrl}/api/notification/open`
     return this._httpClient.post<boolean>(url, markAsRead)
   }
 }

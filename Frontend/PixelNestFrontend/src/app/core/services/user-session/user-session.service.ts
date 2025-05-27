@@ -53,7 +53,7 @@ export class UserSessionService {
     }
   }
   refreshToken(){
-    const url = `${environment.apiUrl}/api/Authentication/RefreshToken`
+    const url = `${environment.apiUrl}/api/authentication/token/refresh`
     this._httpClient.post<any>(url,{}).subscribe({
       next:response=>{
         this.setToCookie("tokenExpirationAt", response.tokenExpiration)
