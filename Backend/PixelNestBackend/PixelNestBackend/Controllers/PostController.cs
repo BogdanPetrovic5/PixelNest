@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/post")]
     [ApiController]
     public class PostController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace PixelNestBackend.Controllers
 
         }
         [Authorize]
-        [HttpGet("cache-state")]
+        [HttpGet("cache/state")]
         public ActionResult<bool> CacheChange()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -88,7 +88,7 @@ namespace PixelNestBackend.Controllers
 
 
         [Authorize]
-        [HttpPost("new-post")]
+        [HttpPost("new")]
         public async Task<ActionResult<PostResponse>> PublishPost([FromForm] PostDto postDto)
         {
             if(postDto == null)

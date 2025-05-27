@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/analytics")]
     [ApiController]
     public class AnalyticsController : ControllerBase
     {
@@ -16,7 +16,7 @@ namespace PixelNestBackend.Controllers
             _analyticsService = analyticsService;
         }
         [Authorize]
-        [HttpGet("AnalyticsLocation")]
+        [HttpGet("locations")]
         public ActionResult<ICollection<ResponseAnalyticsLocation>> AnalyticsLocation()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

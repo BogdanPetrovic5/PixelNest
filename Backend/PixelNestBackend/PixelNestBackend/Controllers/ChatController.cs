@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/chat")]
     [ApiController]
     public class ChatController : ControllerBase
     {
@@ -28,7 +28,7 @@ namespace PixelNestBackend.Controllers
             _userService = userService;
         }
         [Authorize]
-        [HttpGet("GetNumberOfMessages")]
+        [HttpGet("unread-messages")]
         public ActionResult<int> GetNumberOfNewMessages()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -39,7 +39,7 @@ namespace PixelNestBackend.Controllers
             });
         }
         [Authorize]
-        [HttpPost("MarkAsRead")]
+        [HttpPost("message/read")]
         public ActionResult<bool> MarkAsRead([FromBody] MarkAsRead markAsReadDto)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -50,7 +50,7 @@ namespace PixelNestBackend.Controllers
 
 
         [Authorize]
-        [HttpGet("GetUserChats")]
+        [HttpGet("chats")]
         public ActionResult<ICollection<ResponseChatsDto>> GetUserChats() {
 
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -61,7 +61,7 @@ namespace PixelNestBackend.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetUserToUserMessages")]
+        [HttpGet("messages")]
         public ActionResult<ICollection<ResponseMessagesDto>> GetUserToUserMessages(string chatID)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -72,7 +72,7 @@ namespace PixelNestBackend.Controllers
             return Ok(messages);
         }
         [Authorize]
-        [HttpPost("SendMessage")]
+        [HttpPost("message/send")]
         public async Task<ActionResult<bool>> SendMessage(MessageDto messageDto)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -92,8 +92,8 @@ namespace PixelNestBackend.Controllers
             
         }
         [Authorize]
-        [HttpPost("LeaveRoom")]
-        public ActionResult<bool> LeaveRoom([FromQuery] string targetClientGuid)
+        [HttpPost("room/leave/{targetClientGuid}")]
+        public ActionResult<bool> LeaveRoom(string targetClientGuid)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userGuid == null) return Unauthorized();
@@ -111,8 +111,8 @@ namespace PixelNestBackend.Controllers
             });
         }
         [Authorize]
-        [HttpPost("JoinRoom")]
-        public ActionResult<bool> JoinRoom([FromQuery] string targetClientGuid)
+        [HttpPost("room/join/{targetClientGuid}")]
+        public ActionResult<bool> JoinRoom(string targetClientGuid)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userGuid == null) return Unauthorized();
@@ -132,7 +132,7 @@ namespace PixelNestBackend.Controllers
         }
 
         [Authorize]
-        [HttpGet("FindChats")]
+        [HttpGet("search")]
         public ActionResult<ICollection<ResponseChatsDto>> FindChats([FromQuery] string searchParameter)
         {
             string userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

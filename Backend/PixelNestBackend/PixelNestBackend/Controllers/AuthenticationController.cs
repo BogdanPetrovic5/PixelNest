@@ -20,7 +20,7 @@ using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/authentication")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -46,7 +46,7 @@ namespace PixelNestBackend.Controllers
             _geoService = geoService;
         }
 
-        [HttpPost("SaveState")]
+        [HttpPost("save")]
         public IActionResult SaveState([FromQuery] string state)
         {
 
@@ -54,7 +54,7 @@ namespace PixelNestBackend.Controllers
             return Ok();
         }
 
-        [HttpGet("SigninGoogle")]
+        [HttpGet("google/signin")]
         public async Task<IActionResult> SigninGoogle([FromQuery] string code, [FromQuery] string state)
         {
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -111,7 +111,7 @@ namespace PixelNestBackend.Controllers
             
         }
         [Authorize]
-        [HttpGet("GetLoginResponse")]
+        [HttpGet("login-response")]
         public IActionResult GetLoginResponse([FromQuery] string state)
         {
             if (string.IsNullOrEmpty(state))
@@ -130,7 +130,7 @@ namespace PixelNestBackend.Controllers
 
 
         [Authorize]
-        [HttpPost("RefreshToken")]
+        [HttpPost("token/refresh")]
         public ActionResult RefreshToken()
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -163,7 +163,7 @@ namespace PixelNestBackend.Controllers
             });
            
         }
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public ActionResult<RegisterResponse> Register(RegisterDto registerDto)
         {
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -183,7 +183,7 @@ namespace PixelNestBackend.Controllers
             
             
         }
-        [HttpPost("Logout")]
+        [HttpPost("logout")]
         public IActionResult Logout([FromBody] LogoutDto logoutDto)
         {
             string? userGUid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -200,7 +200,7 @@ namespace PixelNestBackend.Controllers
             return Ok();
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public ActionResult<LoginResponse> Login([FromBody] LoginDto loginDto)
         {
             if(loginDto == null)
@@ -245,7 +245,7 @@ namespace PixelNestBackend.Controllers
 
         }
         [Authorize]
-        [HttpGet("IsLoggedIn")]
+        [HttpGet("status")]
         public IActionResult IsLoggedIn()
         {
             return Ok(new {loggedIn = true});

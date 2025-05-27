@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
 using PixelNestBackend.Interfaces;
+using System.Security.Claims;
 
 namespace PixelNestBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/comment")]
     [ApiController]
     public class CommentController : Controller
     {
@@ -19,7 +20,7 @@ namespace PixelNestBackend.Controllers
             _commentService = commentService;
         }
         [Authorize]
-        [HttpGet("GetReplies")]
+        [HttpGet("replies")]
         public ActionResult<ICollection<ResponseReplyCommentDto>> GetReplies(int initialParentID)
         {
             ICollection<ResponseReplyCommentDto> result = _commentService.GetReplies(initialParentID);
@@ -30,7 +31,7 @@ namespace PixelNestBackend.Controllers
             return NotFound();
         }
         [Authorize]
-        [HttpGet("GetComments")]
+        [HttpGet("comments")]
         public ActionResult<ICollection<ResponseCommentDto>?> GetComments(Guid postID)
         {
             ICollection<ResponseCommentDto> result;
@@ -42,14 +43,13 @@ namespace PixelNestBackend.Controllers
             else return NotFound();
         }
         [Authorize]
-        [HttpPost("LikeComment")]
-        public IActionResult Like(LikeCommentDto likeCommentDto)
+        [HttpPost("{commentID}/like")]
+        public IActionResult Like(int commentID)
         {
-            if(likeCommentDto == null)
-            {
-                return BadRequest();
-            }
-            bool result = _commentService.LikeComment(likeCommentDto);
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid is null) return Unauthorized();
+          
+            bool result = _commentService.LikeComment(commentID, Guid.Parse(userGuid));
             if (result)
             {
                 return Ok(new { Message = "Successfully liked comment!" });

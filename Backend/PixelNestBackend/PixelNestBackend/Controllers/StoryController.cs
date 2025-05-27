@@ -33,7 +33,7 @@ namespace PixelNestBackend.Controllers
             } else return NotFound();
         }
        
-        [HttpPost("new-story")]
+        [HttpPost("new")]
         public async Task<ActionResult<StoryResponse>> PublishStory([FromForm] StoryDto storyDto)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
