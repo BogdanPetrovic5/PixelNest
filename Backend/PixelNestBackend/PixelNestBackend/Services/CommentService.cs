@@ -34,17 +34,16 @@ namespace PixelNestBackend.Services
             result = _commentRepository.GetComments(postID);
             return result;
         }
-        public bool LikeComment(LikeCommentDto likeCommentDto)
+        public bool LikeComment(int commentID, Guid userGuid)
         {
-            Guid userID = _userUtility.GetUserID(likeCommentDto.Username);
-            Console.WriteLine(likeCommentDto.CommentID);
-            Console.WriteLine(userID);
             
-            bool isDuplicate = _commentUtility.FindDuplicates(userID, likeCommentDto.CommentID);
+           
+            
+            bool isDuplicate = _commentUtility.FindDuplicates(userGuid, commentID);
             Console.WriteLine(isDuplicate);
-            if (userID != Guid.Empty)
+            if (userGuid != Guid.Empty)
             {
-                bool result = _commentRepository.LikeComment(userID, likeCommentDto, isDuplicate);
+                bool result = _commentRepository.LikeComment(userGuid, commentID, isDuplicate);
                 if (result)
                 {
                     return true;

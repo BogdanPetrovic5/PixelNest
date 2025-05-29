@@ -8,7 +8,7 @@ namespace PixelNestBackend.Interfaces
     {
         ICollection<ResponseCommentDto> GetComments(Guid postID);
         ICollection<ResponseReplyCommentDto> GetReplies(int? initialParentID);
-        bool LikeComment(Guid userID, LikeCommentDto likeCommentDto, bool isDuplicate);
+        bool LikeComment(Guid userID, int commentID, bool isDuplicate);
 
         //Task<DeleteResponse> DeleteComment(int commentID);
         //string ExtractUsername(int commentID);

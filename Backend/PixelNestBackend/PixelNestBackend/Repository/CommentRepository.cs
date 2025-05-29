@@ -176,14 +176,14 @@ namespace PixelNestBackend.Repository
                 return null;
             }
         }
-        public bool LikeComment(Guid userID, LikeCommentDto likeCommentDto, bool isDuplicate)
+        public bool LikeComment(Guid userGuid, int commentID, bool isDuplicate)
         {
             try
             {
                 var likeObj = new LikedComments
                 {
-                    UserGuid = userID,
-                    CommentID = likeCommentDto.CommentID,
+                    UserGuid = userGuid,
+                    CommentID = commentID,
                   
 
                 };
@@ -196,7 +196,7 @@ namespace PixelNestBackend.Repository
                     return _dataContext.SaveChanges() > 0;
                 }
                 var existingLike = _dataContext.LikeComments
-                    .FirstOrDefault(l => l.UserGuid == userID && l.CommentID == likeCommentDto.CommentID);
+                    .FirstOrDefault(l => l.UserGuid == userGuid && l.CommentID == commentID);
 
                 if (existingLike != null)
                 {
