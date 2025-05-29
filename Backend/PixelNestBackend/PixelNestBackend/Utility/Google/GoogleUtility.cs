@@ -24,7 +24,7 @@ namespace PixelNestBackend.Utility.Google
                     { "code", code },
                     {"client_id", _configuration["Google:ClientId"] },
                     {"client_secret", _configuration["Google:ClientSecret"]},
-                    {"redirect_uri", "http://localhost:7157/api/Authentication/SigninGoogle"},
+                    {"redirect_uri", "http://localhost:7157/api/authentication/google/signin"},
                     {"grant_type", "authorization_code" }
 
 
