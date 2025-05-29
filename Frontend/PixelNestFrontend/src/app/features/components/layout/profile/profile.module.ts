@@ -10,7 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { AnalyticsComponent } from './analytics/analytics.component';
-
+import { NgChartsModule } from 'ng2-charts';
+import { ChartComponent } from 'src/app/shared/components/chart/chart.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,10 @@ import { AnalyticsComponent } from './analytics/analytics.component';
     
     BrowserModule,
     ImageCropperModule,
+   
+  ],
+  providers:[
+   
   ]
 })
 export class ProfileModule { }

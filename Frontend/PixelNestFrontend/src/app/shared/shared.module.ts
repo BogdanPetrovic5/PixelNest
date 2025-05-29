@@ -29,7 +29,8 @@ import { InboxIconComponent } from './components/inbox-icon/inbox-icon.component
 import { NewNotificationComponent } from './components/new-notification/new-notification.component';
 import { NotificationIconComponent } from './components/notification-icon/notification-icon.component';
 import { PixelnestLoadingComponent } from './components/pixelnest-loading/pixelnest-loading.component';
-
+import { ChartComponent } from './components/chart/chart.component';
+import { NgChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
     BannerComponent,
@@ -58,11 +59,13 @@ import { PixelnestLoadingComponent } from './components/pixelnest-loading/pixeln
     InboxIconComponent,
     NewNotificationComponent,
     NotificationIconComponent,
-    PixelnestLoadingComponent
+    PixelnestLoadingComponent,
+    ChartComponent
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    NgChartsModule
   ],
   schemas: [
     NO_ERRORS_SCHEMA,
@@ -87,7 +90,11 @@ import { PixelnestLoadingComponent } from './components/pixelnest-loading/pixeln
     TimeAgoPipe,
     LottieNotificationComponent,
     InboxIconComponent,
-    PixelnestLoadingComponent
+    PixelnestLoadingComponent,
+    ChartComponent
+  ],
+  providers:[
+
   ]
 })
 export class SharedModule { }
