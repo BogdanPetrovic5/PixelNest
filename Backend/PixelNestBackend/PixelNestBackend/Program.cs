@@ -94,7 +94,7 @@ builder.Services.AddCors(options =>
                .AllowCredentials();
     });
 
-   options.AddPolicy("AllowAll",
+   options.AddPolicy("AllowPixelnestAndLocalhost",
             builder =>
             {
                 builder.WithOrigins("https://pixelnest.netlify.app/", "http://localhost:4200")
@@ -177,7 +177,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowPixelnestAndLocalhost");
 app.UseMiddleware<APICallLimiter>();
 var webSocketOptions = new WebSocketOptions
 {
