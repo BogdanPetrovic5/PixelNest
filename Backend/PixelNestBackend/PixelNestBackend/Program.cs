@@ -54,6 +54,8 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IGoogleService, GoogleService>();
 builder.Services.AddScoped<IGoogleRepository, GoogleRepository>();
 builder.Services.AddScoped<IGeoService, GeoService>();
+builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 builder.Services.AddScoped<GoogleUtility>();
 builder.Services.AddScoped<FolderGenerator>();
 builder.Services.AddScoped<UserUtility>();
