@@ -106,12 +106,12 @@ REST API for application and project strucuture is listed down below.
 ## API endpoints listed down below:
 ## User
 
-#### POST `/api/User/CloseConnection`
+#### POST `/api/user/close-connection`
   - Request body: `none`
   - Response: `status code OK`, `unauthorized`
 
-#### GET `/api/User/GetFollowings`
-  - Request URL:  `/api/User/GetFollowings?clientGuid=${string}`
+#### GET `/api/user/{clientGuid}/followings`
+  - Request URL:  `/api/user/{clientGuid}/followings`
   - Response:
     ```
       [
@@ -121,8 +121,8 @@ REST API for application and project strucuture is listed down below.
         }
       ]
     ```
- #### GET `/api/User/GetFollowers`
-   - Request URL:  `/api/User/GetFollowings?clientGuid=${string}`
+ #### GET `/api/user/{clientGuid}/followers`
+   - Request URL:  `/api/user/{clientGuid}/followers`
    - Response:
      ```
        [
@@ -132,12 +132,12 @@ REST API for application and project strucuture is listed down below.
         }
       ]
      ```
- #### POST `/api/User/Follow`
-   - Request URL:  `/api/User/GetFollowings?targetClientGuid=${string}`
+ #### POST `/api/user/follow/{clientGuid}`
+   - Request URL:  `/api/user/follow/{clientGuid}`
    - Response: `status code`
 
- #### GET `/api/User/GetUserProfile`
-   - Request URL: `/api/User/GetUserProfile?targetClientGuid=${string}`
+ #### GET `/api/user/users/{clientGuid}`
+   - Request URL: `/api/user/users/{clientGuid}`
    - Response:
      ```
        {
@@ -165,10 +165,10 @@ REST API for application and project strucuture is listed down below.
           ]
         }
      ```
- #### GET `/api/User/IsFollowing`
- - Request URL: `/api/User/IsFollowing?targetClientGuid=${string}`
+ #### GET `/api/user/followings/{clientGuid}`
+ - Request URL: `/api/user/followings/{clientGuid}`
  - Response: `boolean`
- #### PUT `/api/User/ChangeProfilePicture`
+ #### PUT `/api/user/profile-picture`
  - Request body:
    ```
      {
@@ -179,16 +179,16 @@ REST API for application and project strucuture is listed down below.
         "ProfilePicture":"string($binary)"
      }
    ```
-  #### GET `/api/User/GetProfilePicture`
-  - Request URL: `/api/User/GetProfilePicture?clientGuid=${string}`
+  #### GET `/api/user/profile-picutre/{clientGuid}`
+  - Request URL: `/api/user/profile-picutre/{clientGuid}`
   - Response: `string`
  
-  #### GET `/api/User/FindUser`
-  - Request URL: `/api/User/GetProfilePicture?username=${string}`
+  #### GET `/api/user/search`
+  - Request URL: `/api/user/search?username=${string}`
   - Response: `string`
 ## Authentication
 
-  #### POST `/api/Authentication/Registration`
+  #### POST `/api/authentication/register`
   - Request body: 
       ```
         {
@@ -215,7 +215,7 @@ REST API for application and project strucuture is listed down below.
         }
       ```
 
- #### POST `/api/Authentication/Logout`
+ #### POST `/api/authentication/logout`
   - Request body: 
       ```
         {
@@ -224,7 +224,7 @@ REST API for application and project strucuture is listed down below.
       ```
   - Response: `200 OK`
 
- #### POST `/api/Authentication/Login`
+ #### POST `/api/authentication/login`
   - Request body: 
       ```
         {
@@ -248,9 +248,25 @@ REST API for application and project strucuture is listed down below.
       ```
      - `400 Bad Request`, `404 Not Found`
     
-#### POST `/api/Authentication/IsLoggedIn`
+#### POST `/api/authentication/status`
   - Request Header: `JWT TOKEN`
   - Responses: `401 Unauthorized` and `200 OK`
+  - 
+#### POST `/api/authentication/token/refresh`
+  - Request Header: `JWT TOKEN`
+  - Responses: `401 Unauthorized` and `200 OK`
+  - 
+#### GET `/api/authentication/login-response`
+  - Request URL: `/api/authentication/login-response?state={string}`
+  - Responses: `400 BadRequest("State is Missing")`, `400 BadRequest("No login response found for the given state.")` and `200 Ok()`
+  - 
+#### POST `/api/authentication/save`
+  - Request URL: `/api/authentication/save?state={string}`
+  - Behaviour: `https://frontend/Authentication/Redirect-Page` and `https://frontend/Authentication/Save-Location`
+#### GET `/api/authentication/google/signin`
+  - Request URL: `/api/authentication/save?state={string}`
+  - Responses: `401 Unauthorized` and `200 OK`
+
 
 ## Comment
 
