@@ -149,7 +149,7 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpPost("{postGuid}/like")]
-        public async Task<ActionResult> LikePost([FromQuery]string postGuid)
+        public async Task<ActionResult> LikePost(string postGuid)
         {
             if(postGuid == null)
             {
@@ -200,7 +200,7 @@ namespace PixelNestBackend.Controllers
                     await this._webSocketConnectionMenager.SendNotificationToUser(webSocketMessage);
                     return Ok(new PostResponse { Message = commentResponse.Message, IsSuccessfull = commentResponse.IsSuccessfull });
                 }
-                else return BadRequest(new PostResponse { Message = commentResponse.Message, IsSuccessfull = commentResponse.IsSuccessfull });
+                else return NotFound(new PostResponse { Message = commentResponse.Message, IsSuccessfull = commentResponse.IsSuccessfull });
             }catch(Exception ex)
             {
                 return StatusCode(500, new { message = ex.Message });

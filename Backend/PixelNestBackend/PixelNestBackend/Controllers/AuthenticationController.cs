@@ -49,7 +49,7 @@ namespace PixelNestBackend.Controllers
         [HttpPost("save")]
         public IActionResult SaveState([FromQuery] string state)
         {
-
+            if (string.IsNullOrEmpty(state)) return BadRequest("State empty or missing");
             HttpContext.Session.SetString("oauth_state", state);
             return Ok();
         }
