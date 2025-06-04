@@ -20,7 +20,11 @@ export class PostService {
   }
 
   getPosts(currentPage:number, parameter?:string ):Observable<any>{
-    const url = `${environment.apiUrl}/api/post/posts?${parameter}&page=${currentPage}`
+    let url = `${environment.apiUrl}/api/post/posts?page=${currentPage}`;
+    if (parameter) {
+      url = `${environment.apiUrl}/api/post/posts?${parameter}&page=${currentPage}`;
+    }
+  return this._httpClient.get<any>(url);
     return this._httpClient.get<any>(url)
   }
   likePost(postGuid?:string):Observable<any>{

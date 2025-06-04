@@ -21,7 +21,7 @@ export class AuthenticationService {
   }
   
   refreshToken():Observable<any>{
-    const url = `${environment.apiUrl}/api/`;
+    const url = `${environment.apiUrl}/api/token/refresh`;
     return this._httpClient.post<any>(url,{})
   }
   logout(email:string):Observable<any>{
