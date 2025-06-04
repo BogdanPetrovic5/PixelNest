@@ -121,7 +121,7 @@ REST API for application and project strucuture is listed down below.
         }
       ]
     ```
- #### GET `/api/user/{clientGuid}/followers`
+#### GET `/api/user/{clientGuid}/followers`
    - Request URL:  `/api/user/{clientGuid}/followers`
    - Response:
      ```
@@ -132,11 +132,11 @@ REST API for application and project strucuture is listed down below.
         }
       ]
      ```
- #### POST `/api/user/follow/{clientGuid}`
+#### POST `/api/user/follow/{clientGuid}`
    - Request URL:  `/api/user/follow/{clientGuid}`
    - Response: `status code`
 
- #### GET `/api/user/users/{clientGuid}`
+#### GET `/api/user/users/{clientGuid}`
    - Request URL: `/api/user/users/{clientGuid}`
    - Response:
      ```
@@ -165,10 +165,10 @@ REST API for application and project strucuture is listed down below.
           ]
         }
      ```
- #### GET `/api/user/followings/{clientGuid}`
+#### GET `/api/user/followings/{clientGuid}`
  - Request URL: `/api/user/followings/{clientGuid}`
  - Response: `boolean`
- #### PUT `/api/user/profile-picture`
+#### PUT `/api/user/profile-picture`
  - Request body:
    ```
      {
@@ -179,13 +179,46 @@ REST API for application and project strucuture is listed down below.
         "ProfilePicture":"string($binary)"
      }
    ```
-  #### GET `/api/user/profile-picutre/{clientGuid}`
+#### GET `/api/user/profile-picutre/{clientGuid}`
   - Request URL: `/api/user/profile-picutre/{clientGuid}`
   - Response: `string`
  
-  #### GET `/api/user/search`
+#### GET `/api/user/search`
   - Request URL: `/api/user/search?username=${string}`
   - Response: `string`
+
+
+#### GET `/api/user/me`
+  - Request URL: `/api/user/search?username=${string}`
+  - Response:
+```
+{
+  "followings": 0,
+  "followers": 0,
+  "totalPosts": 0,
+  "username": "string",
+  "email": "string",
+  "profileImagePath": "string",
+  "name": "string",
+  "lastname": "string",
+  "clientGuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "canFollow": true,
+  "canEdit": true,
+  "chatID": "string",
+  "listFollowings": [
+    {
+      "followerUsername": "string",
+      "followingGuid": "string"
+    }
+  ],
+  "listFollowers": [
+    {
+      "followerUsername": "string",
+      "followingGuid": "string"
+    }
+  ]
+}
+```
 ## Authentication
 
   #### POST `/api/authentication/register`
@@ -270,7 +303,7 @@ REST API for application and project strucuture is listed down below.
 
 ## Comment
 
- #### GET `/api/Comments/GetReplies
+ #### GET `/api/comment/replies
   - Request URL `/api/Comment/GetReplies?initialParentID=${number}`
   - Response:
     ```
@@ -297,7 +330,7 @@ REST API for application and project strucuture is listed down below.
         ]
     ```
     
-  #### GET `/api/Comments/GetComments`
+  #### GET `/api/comment/comments`
   - Request URL `/api/Comment/GetComments?postID=${number}`
   - Response:
     ```
@@ -324,7 +357,7 @@ REST API for application and project strucuture is listed down below.
         ]
     ```
 
-  #### POST `/api/Comments/LikeComment`
+  #### POST `/api/comment/like`
   - Request:
   ```
     {
@@ -335,7 +368,49 @@ REST API for application and project strucuture is listed down below.
   - Responses: `200 OK`, `400 BadRequest`, `404 NotFound`
 
 ## Post  
-#### POST `/api/Post/ShareNewPost`
+#### GET `/api/post/{postGuid}`
+- Request URL: `/api/post/{postGuid`
+- Response:
+```
+  {
+  "postID": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "clientGuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "isDeletable": true,
+  "ownerUsername": "string",
+  "postDescription": "string",
+  "totalLikes": 0,
+  "totalComments": 0,
+  "location": "string",
+  "publishDate": "2025-06-04T19:55:55.678Z",
+  "likedByUsers": [
+    {
+      "clientGuid": "string",
+      "username": "string",
+      "postID": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    }
+  ],
+  "savedByUsers": [
+    {
+      "username": "string",
+      "postID": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    }
+  ],
+  "imagePaths": [
+    {
+      "pathID": 0,
+      "postID": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "storyID": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "path": "string",
+      "photoDisplay": "string"
+    }
+  ]
+}
+```
+#### GET `/api/post/cache/state`
+- Request URL: `/api/post/cache/state`
+- Responses: `Ok(true)` or `Ok(false`
+
+#### POST `/api/post/new`
 - Request in form data format:
   ```
     {
@@ -355,8 +430,8 @@ REST API for application and project strucuture is listed down below.
     }
   ```
 
-#### POST `/api/Post/SavePost`
-- Request URL: `/api/Post/SavePost?postGuid={string}`
+#### POST `/api/post/{postGuid}/save`
+- Request URL: `/api/post/{postGuid}/save`
 - Request body: `none`
   ```
  
@@ -366,7 +441,7 @@ REST API for application and project strucuture is listed down below.
   - `400 BadRequest`, if request body is missing or its not right format.
   - `404 NotFound`, Database related error.
 
-#### GET `/api/Post/GetPosts`
+#### GET `/api/post/posts`
 - Request URL format:
   - `/api/Post/GetPosts?page=1&maximumPosts=5`
   - `/api/Post/GetPosts?clientGuid=${string}&location=${string}&page=${number}&maximumPosts=${number}`
@@ -406,10 +481,29 @@ REST API for application and project strucuture is listed down below.
     ]
    ```
    
+#### DELETE `/api/post/{postGuid}`
+- Request URL: `/api/post/{postGuid}`
+- Response:
+ ```
+     {
+        "isValid": true,
+        "isSuccess": true,
+        "message": "string"
+     }
+ ```
+
+#### POST `api/post/{postGuid}/like`
+- Request URL: `api/post/{postGuid}/like`
+- Responses: `Ok()`, `BadRequest()` and `NotFound()`
+
+#### POST `api/post/{postGuid}/comment`
+- Request URL: `api/post/{postGuid}/comment`
+- Responses: `Ok()`, `BadRequest()` and `NotFound()`
+
 ## Story
 
-#### GET `/api/Story/GetStories`
-- Request URL: `/api/Story/GetStories?forCurrentUser={boolean}`
+#### GET `/api/story/stories`
+- Request URL: `/api/story/stories?forCurrentUser={boolean}`
 - Username parameter is optional. If client does not send username with query, API will fetch stories of all user.
 If username is passed then API will fetch stories that belong to that user.
 
@@ -437,7 +531,7 @@ If username is passed then API will fetch stories that belong to that user.
 }
 ```
 
-#### POST `api/Story/PublishStory
+#### POST `api/sotry/new
 - Request body:
 ```
   {
@@ -455,7 +549,7 @@ If username is passed then API will fetch stories that belong to that user.
   }
 ```
 
-#### POST `api/Story/MarkStoryAsSeen
+#### POST `api/story/seen
 - Request body:
 ```
   {
@@ -470,8 +564,8 @@ If username is passed then API will fetch stories that belong to that user.
     "storyID": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
   }
 ```
-#### GET `api/Story/GetViewers
-- Request URL: `/api/Story/GetViewers?storyID={string}`
+#### GET `api/story/viewers
+- Request URL: `api/story/viewers?storyID={string}`
 - Response body:
 ```
   [
@@ -483,7 +577,7 @@ If username is passed then API will fetch stories that belong to that user.
 
 ## Notification
 
-#### POST `api/Notification/MarkAsOpened`
+#### POST `/api/notification/open`
 - Request body:
 ```
   {
@@ -494,12 +588,12 @@ If username is passed then API will fetch stories that belong to that user.
 ```
 - Responses: `bool`
 
-#### GET `api/Notification/CountNotifications`
-- Request URL:  `api/Notification/CountNotifications`
+#### GET `api/notification/unread/count`
+- Request URL:  `api/notification/unread/count`
 - Responses: `number`
 
-#### GET `api/Notification/GetAllNotifications`
-- Request URL:  `api/Notification/GetAllNotifications`
+#### GET `api/notification/notifications`
+- Request URL:  `api/notification/notifications`
 - Response body:
   ```
   [
@@ -524,11 +618,11 @@ If username is passed then API will fetch stories that belong to that user.
 
 ## Chat
 
-#### GET `api/Chat/GetNumberOfMessages`
-- Request URL `api/Chat/GetNumberOfMessages`
+#### GET `api/chat/unread-messages`
+- Request URL `api/chat/unread-messages`
 - Response body: `number`
 
-#### POST `api/Chat/MarkAsRead`
+#### POST `api/chat/message/read`
 - Request body:
   ```
   {
@@ -539,8 +633,8 @@ If username is passed then API will fetch stories that belong to that user.
   ```
 - Response body: `bool`
 
-#### GET `api/Chat/GetUserChats`
-- Request URL: `api/Chat/GetUserChats`
+#### GET `api/chat/chats`
+- Request URL: `api/chat/chats`
 - Response body:
   ```
   [
@@ -561,8 +655,8 @@ If username is passed then API will fetch stories that belong to that user.
   ]
   ```
 
-#### GET `api/Chat/GetUserToUserMessages`
-- Request URL: `api/Chat/GetUserToUserMessages?chatID={string}`
+#### GET `api/chat/messages`
+- Request URL: `api/chat/messages?chatID={string}`
 - Response body:
   ```
   [
@@ -578,7 +672,7 @@ If username is passed then API will fetch stories that belong to that user.
   ]
   ```
 
-#### POST `api/Chat/SendMessage`
+#### POST `api/chat/message/send`
 - Request body:
   ```
     {
@@ -588,14 +682,14 @@ If username is passed then API will fetch stories that belong to that user.
   ```
 - Response: `bool`
 
-#### POST `api/Chat/LeaveRoom`
+#### POST `api/chat/room/leave/{targetClientGuid}`
 - Request body: `none`
-- Request URL: `api/Chat/LeaveRoom?targetClientGuid={targetClientGuid}`
+- Request URL: `api/chat/room/leave/{targetClientGuid}`
 - Response: `bool`
 - 
-#### POST `api/Chat/JoinRoom`
+#### POST `api/chat/room/join/{targetClientGuid}`
 - Request body: `none`
-- Request URL: `api/Chat/JoinRoom?targetClientGuid={targetClientGuid}`
+- Request URL: `api/chat/room/join/{targetClientGuid}`
 - Response: `bool`
 ## Frontend
 
