@@ -102,7 +102,7 @@ namespace PixelNestBackend.Controllers
             else return NotFound();
         }
         [Authorize]
-        [HttpGet("users/{clientGuid}")]
+        [HttpGet("{clientGuid}")]
         public ActionResult<UserProfileDto> GetUserData(string clientGuid)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
