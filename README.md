@@ -4,109 +4,14 @@ Live chat and profile photo cropper video: https://www.youtube.com/watch?v=gNDLq
 ## Short Description
 
 PixelNest is a web application currently under development, created with the purpose of expanding my knowledge in Angular and ASP.NET. The application is backed by MSSQL for data storage, integrating a modern tech stack to provide a robust environment for learning and development.
-## Backend
+# Backend
 REST API for application and project strucuture is listed down below.
-
-- Controllers
-  - AuthenticationController.cs
-  - CommentController.cs
-  - PostController.cs
-  - UserController.cs
-  - NotificationController.cs
-  - ChatController.cs
-- Data
-  - DataContext.cs
-- Dto
-  - Projections
-  - Google
-  - Websocket
-- Gateway
-  - BlobStorageUpload.cs
-  - FileUpload.cs
-- Interfaces
-  - IAuthenticationRepository.cs
-  - IAuthenticationService.cs
-  - IChatService.cs
-  - IChatRepository.cs
-  - IGoogleService.cs
-  - IGoogleRepository.cs
-  - INotificationRepository.cs
-  - INotificationService.cs
-  - IPostRepository.cs
-  - IPostService.cs
-  - ICommentRepository.cs
-  - ICommentService.cs
-  - IFileUpload.cs
-  - IUserService.cs
-  - IUserRepository.cs
-- Middleware
-  - APICallLimiter.cs
-  - WebSocketMiddleware.cs
-- Mappers
-  - UserMapper.cs
-- Migrations
-- Models
-  - Comment.cs
-  - Follow.cs
-  - ImagePath.cs
-  - LikedComments.cs
-  - LikedPosts.cs
-  - Post.cs
-  - SavedPosts.cs
-  - SeenStory.cs
-  - SeenMessage.cs
-  - Message.cs
-  - Notification.cs
-  - Story.cs
-  - User.cs
-- Proxy
-  - ProxyController.cs
-- Repository
-  - AuthenticationRepository.cs
-  - CommentRepository.cs
-  - PostRepository.cs
-  - UserRepository.cs
-  - NotificationRepository.cs
-  - ChatRepository.cs
-  - GoogleRepository.cs
-- Responses
-  - Google
-    - GoogleAccountResponse.cs
-    - GoogleLoginResponse.cs
-  - FollowResponse.cs
-  - LoginResponse.cs
-  - PostResponse.cs
-  - RegisterResponse.cs
-- Security
-  - PasswordEncoder.cs
-  - TokenGenerator.cs
-  - SASTokenGenerator.cs
-- Services
-  - Google
-    - GoogleService.cs
-  - Menagers
-    - WebSocketConnectionMenager.cs
-  - AuthenticationService.cs
-  - CommentService.cs
-  - PostService.cs
-  - UserService.cs
-  - ChatService.cs
-  - NotificationService.cs
-  
-- Utility
-  - Google
-    - GoogleUtility.cs
-  - BobFolderGenerator.cs
-  - CommentUtility.cs
-  - FolderGenerator.cs
-  - PostUtility.cs
-  - UserUtility.cs
-
 
 ## API endpoints listed down below:
 ## User
 
 #### POST `/api/user/close-connection`
+  - Request Header: `JWT TOKEN`
   - Request body: `none`
   - Response: `status code OK`, `unauthorized`
 
@@ -303,7 +208,7 @@ REST API for application and project strucuture is listed down below.
 
 ## Comment
 
- #### GET `/api/comment/replies
+ #### GET `/api/comment/replies`
   - Request URL `/api/Comment/GetReplies?initialParentID=${number}`
   - Response:
     ```
@@ -531,7 +436,7 @@ If username is passed then API will fetch stories that belong to that user.
 }
 ```
 
-#### POST `api/sotry/new
+#### POST `api/sotry/new`
 - Request body:
 ```
   {
@@ -549,7 +454,7 @@ If username is passed then API will fetch stories that belong to that user.
   }
 ```
 
-#### POST `api/story/seen
+#### POST `api/story/seen`
 - Request body:
 ```
   {
@@ -564,7 +469,7 @@ If username is passed then API will fetch stories that belong to that user.
     "storyID": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
   }
 ```
-#### GET `api/story/viewers
+#### GET `api/story/viewers`
 - Request URL: `api/story/viewers?storyID={string}`
 - Response body:
 ```
@@ -691,7 +596,104 @@ If username is passed then API will fetch stories that belong to that user.
 - Request body: `none`
 - Request URL: `api/chat/room/join/{targetClientGuid}`
 - Response: `bool`
-## Frontend
+
+## Project structure:
+- Controllers
+  - AuthenticationController.cs
+  - CommentController.cs
+  - PostController.cs
+  - UserController.cs
+  - NotificationController.cs
+  - ChatController.cs
+- Data
+  - DataContext.cs
+- Dto
+  - Projections
+  - Google
+  - Websocket
+- Gateway
+  - BlobStorageUpload.cs
+  - FileUpload.cs
+- Interfaces
+  - IAuthenticationRepository.cs
+  - IAuthenticationService.cs
+  - IChatService.cs
+  - IChatRepository.cs
+  - IGoogleService.cs
+  - IGoogleRepository.cs
+  - INotificationRepository.cs
+  - INotificationService.cs
+  - IPostRepository.cs
+  - IPostService.cs
+  - ICommentRepository.cs
+  - ICommentService.cs
+  - IFileUpload.cs
+  - IUserService.cs
+  - IUserRepository.cs
+- Middleware
+  - APICallLimiter.cs
+  - WebSocketMiddleware.cs
+- Mappers
+  - UserMapper.cs
+- Migrations
+- Models
+  - Comment.cs
+  - Follow.cs
+  - ImagePath.cs
+  - LikedComments.cs
+  - LikedPosts.cs
+  - Post.cs
+  - SavedPosts.cs
+  - SeenStory.cs
+  - SeenMessage.cs
+  - Message.cs
+  - Notification.cs
+  - Story.cs
+  - User.cs
+- Proxy
+  - ProxyController.cs
+- Repository
+  - AuthenticationRepository.cs
+  - CommentRepository.cs
+  - PostRepository.cs
+  - UserRepository.cs
+  - NotificationRepository.cs
+  - ChatRepository.cs
+  - GoogleRepository.cs
+- Responses
+  - Google
+    - GoogleAccountResponse.cs
+    - GoogleLoginResponse.cs
+  - FollowResponse.cs
+  - LoginResponse.cs
+  - PostResponse.cs
+  - RegisterResponse.cs
+- Security
+  - PasswordEncoder.cs
+  - TokenGenerator.cs
+  - SASTokenGenerator.cs
+- Services
+  - Google
+    - GoogleService.cs
+  - Menagers
+    - WebSocketConnectionMenager.cs
+  - AuthenticationService.cs
+  - CommentService.cs
+  - PostService.cs
+  - UserService.cs
+  - ChatService.cs
+  - NotificationService.cs
+  
+- Utility
+  - Google
+    - GoogleUtility.cs
+  - BobFolderGenerator.cs
+  - CommentUtility.cs
+  - FolderGenerator.cs
+  - PostUtility.cs
+  - UserUtility.cs
+
+# Frontend
 
 For frontend part as primary and only framework I used Angular 15.
 ### Angular Project Folder Structure
