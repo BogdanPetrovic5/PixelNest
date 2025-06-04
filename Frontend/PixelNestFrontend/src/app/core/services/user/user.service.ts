@@ -18,7 +18,7 @@ export class UserService {
     return this._httpClient.patch(url, location);
   }
   getUserData(clientGuid:string):Observable<any>{
-    const url = `${environment.apiUrl}/api/user/users/${clientGuid}`
+    const url = `${environment.apiUrl}/api/user/${clientGuid}`
     return this._httpClient.get(url);
   }
 
