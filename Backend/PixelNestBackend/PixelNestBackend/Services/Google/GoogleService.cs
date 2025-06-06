@@ -14,22 +14,24 @@ namespace PixelNestBackend.Services.Google
         private readonly IFileUpload _fileUpload;
         private readonly TokenGenerator _tokenGenerator;
         private readonly UserUtility _userUtility;
-
+        
         public GoogleService(IGoogleRepository googleRepository, IFileUpload fileUpload, TokenGenerator tokenGenerator, UserUtility userUtility)
         {
             _googleRepository = googleRepository;
             _fileUpload = fileUpload;
             _tokenGenerator = tokenGenerator;
             _userUtility = userUtility;
-    }
+        }
         public bool IsUserRegistered(string email)
         {
             return _googleRepository.IsUserRegistered(email);
         }
 
-        public async Task<GoogleLoginResponse> LoginWithGoogle(string email)
+        public async Task<GoogleLoginResponse> LoginWithGoogle(GoogleAccountDto googleAccountDto)
         {
-            GoogleLoginResponse response = _googleRepository.LoginWithGoogle(email);
+            GoogleLoginResponse response = _googleRepository.LoginWithGoogle(googleAccountDto.Email);
+            
+            await _fileUpload.StoreImages(null, null, null, googleAccountDto.Picture, null, response.UserGuid);
 
             response.Token = _tokenGenerator.GenerateToken(response.UserGuid.ToString());
             response.UserGuid = null;
@@ -39,6 +41,7 @@ namespace PixelNestBackend.Services.Google
 
         public async Task<GoogleAccountResponse> RegisterGoogleAccount(GoogleAccountDto googleAccountDto)
         {
+            
             string randomUsername = _userUtility.GenerateRandomUsername();
             User user = new User
             {
