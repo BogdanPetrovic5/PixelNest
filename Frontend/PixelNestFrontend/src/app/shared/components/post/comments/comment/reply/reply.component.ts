@@ -34,7 +34,7 @@ export class ReplyComponent {
   isReplyBox:boolean = false;
 
   navigateToProfile(username?:string){
-    this._router.navigate([`Profile/${username}`])
+    this._router.navigate([`profile/${username}`])
   }
 
   trimAtSymbol(username: string): string {

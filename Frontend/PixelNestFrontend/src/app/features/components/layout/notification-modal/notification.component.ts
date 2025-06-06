@@ -33,6 +33,6 @@ export class NotificationComponent implements OnInit{
     )
   }
   navigateToChat(){
-    this._router.navigate([`/Chat/${this.sender}`])
+    this._router.navigate([`/chat/${this.sender}`])
   }
 }

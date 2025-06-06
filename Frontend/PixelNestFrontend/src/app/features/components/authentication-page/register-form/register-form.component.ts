@@ -132,7 +132,7 @@ export class RegisterFormComponent implements OnInit{
   }
   
   navigateToLogin(){
-    this._router.navigate(['/Authentication/Login'])
+    this._router.navigate(['/authentication/login'])
   }
 
   hasEmptyFields(){

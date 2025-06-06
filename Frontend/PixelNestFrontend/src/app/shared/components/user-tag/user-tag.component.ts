@@ -37,11 +37,11 @@ export class UserTagComponent implements OnInit{
   }
   navigateToUserProfile(username:string){
 
-    this._router.navigate([`/Profile/${username}`])
+    this._router.navigate([`/profile/${username}`])
   }
 
   navigate(url:string){
-    this._router.navigate([`Location/${url}`])
+    this._router.navigate([`location/${url}`])
     this._dashboardState.setNewLocation(url);
   }
 

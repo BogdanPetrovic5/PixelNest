@@ -80,6 +80,6 @@ export class SearchComponent implements OnInit{
     
   }
   navigate(username:string){
-    this._router.navigate([`Profile/${username}`])
+    this._router.navigate([`profile/${username}`])
   }
 }

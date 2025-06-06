@@ -32,7 +32,7 @@ export class AuthenticationPageComponent implements OnInit{
   ){}
 
   ngOnInit():void{
-    if(!this._router.url.includes("/Redirect-Page")) this.warning = true;
+    if(!this._router.url.includes("/redirect-page")) this.warning = true;
     this._routeReuse.destroyComponents();
     this.subscriptions.add(
       this._lottieState.isSuccess$.subscribe({

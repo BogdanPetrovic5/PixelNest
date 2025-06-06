@@ -45,7 +45,7 @@ export class CommentComponent implements OnInit{
     
   }
   navigateToProfile(username?:string){
-    this._router.navigate([`Profile/${username}`])
+    this._router.navigate([`profile/${username}`])
   }
   replyComment(parentCommentID?:number){
     

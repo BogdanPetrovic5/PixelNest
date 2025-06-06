@@ -15,7 +15,7 @@
         <div class="hr"></div>
         <div class="navigation">
           
-            <div class="feed nav-sec"(click)="changeTab(1)" [ngClass]="{'selected':selectedTab == 1}" (click)="navigate('/Dashboard')">
+            <div class="feed nav-sec"(click)="changeTab(1)" [ngClass]="{'selected':selectedTab == 1}" (click)="navigate('/dashboard')">
                 <img loading="lazy" src="./assets/images/home.png" >
                 <p>Feed</p>
             </div>
@@ -25,17 +25,17 @@
                 <p>Profile</p>
             </div>
 
-            <div class="messages nav-sec"(click)="changeTab(2)"  [ngClass]="{'selected':selectedTab == 2}" (click)="navigate('/Inbox')">
+            <div class="messages nav-sec"(click)="changeTab(2)"  [ngClass]="{'selected':selectedTab == 2}" (click)="navigate('/inbox')">
                 <app-inbox-icon></app-inbox-icon>
                 <p>Messages</p>
             </div>
 
-            <div class="notifications nav-sec" (click)="changeTab(3)" [ngClass]="{'selected':selectedTab == 3}" (click)="navigate('/Notifications')">
+            <div class="notifications nav-sec" (click)="changeTab(3)" [ngClass]="{'selected':selectedTab == 3}" (click)="navigate('/motifications')">
                 <app-new-notification *ngIf="newNotification"></app-new-notification> <app-notification-icon></app-notification-icon>
                 <p>Notifications</p>
             </div>
             
-            <div class="search nav-sec" (click)="changeTab(5)" [ngClass]="{'selected':selectedTab == 5}" (click)="navigate('/Search')">
+            <div class="search nav-sec" (click)="changeTab(5)" [ngClass]="{'selected':selectedTab == 5}" (click)="navigate('/search')">
                 <img loading="lazy" src="./assets/images/search.png">
                 <p>Search</p>
             </div>

@@ -97,7 +97,7 @@ export class SaveLocationComponent {
     if(this.locationForm.valid){
       this._userService.updateLocation(this.locationForm.value).subscribe({
         next:response=>{
-          this._router.navigate(["Authentication/Redirect-Page"])
+          this._router.navigate(["authentication/redirect-page"])
         }
       })
     }

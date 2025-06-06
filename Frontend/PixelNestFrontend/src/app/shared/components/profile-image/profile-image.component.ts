@@ -55,7 +55,7 @@ export class ProfileImageComponent implements OnInit{
    }
 
    navigateToProfile(){
-    this._router.navigate([`Profile/${this.username}`])
+    this._router.navigate([`profile/${this.username}`])
    }
 
    private _loadProfilePicture(username:string){

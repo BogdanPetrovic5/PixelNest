@@ -35,7 +35,7 @@ export class LoginFormComponent implements OnInit{
     })
   }
   navigateToRegister(){
-    this._router.navigate(['/Authentication/Register'])
+    this._router.navigate(['/authentication/register'])
   }
    ngOnInit():void{
     
@@ -82,7 +82,7 @@ login(){
           
           this._lottieState.setIsSuccess(false)
        
-          this._router.navigate(["/Dashboard"])
+          this._router.navigate(["/dashboard"])
           
           this._userSession.setToCookie("tokenExpirationAt", response.tokenExpiration)
          

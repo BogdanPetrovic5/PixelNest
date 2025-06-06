@@ -37,7 +37,7 @@ export class PostViewComponent implements OnInit{
       });
   }
   navigate(){
-    this._router.navigate(["Notifications"])
+    this._router.navigate(["notifications"])
   }
   private _getPostData(postID:string){
    

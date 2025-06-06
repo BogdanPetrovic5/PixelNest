@@ -25,18 +25,18 @@ import { SaveLocationComponent } from './features/components/authentication-page
 
 
 const routes: Routes = [
-  {path:'',redirectTo:"Unauthorized", pathMatch:'full'},
-  {path:"Unauthorized", component:UnauthorizedComponent},
-  {path:"Get Started", component:LandingPageComponent},
+  {path:'',redirectTo:"unauthorized", pathMatch:'full'},
+  {path:"unauthorized", component:UnauthorizedComponent},
+  {path:"get Started", component:LandingPageComponent},
   {
-    path:"Authentication", 
+    path:"authentication", 
     component:AuthenticationPageComponent,
     children: [
-      { path: '', redirectTo: 'Register', pathMatch: 'full' },
-      { path: 'Register', component: RegisterFormComponent,canActivate:[AuthGuard] },
-      { path: 'Login', component: LoginFormComponent,canActivate:[AuthGuard] },
-      { path: 'Redirect-Page', component:RedirectPageComponent},
-      { path:'Save-Location', component:SaveLocationComponent}
+      { path: '', redirectTo: 'register', pathMatch: 'full' },
+      { path: 'register', component: RegisterFormComponent,canActivate:[AuthGuard] },
+      { path: 'login', component: LoginFormComponent,canActivate:[AuthGuard] },
+      { path: 'redirect-page', component:RedirectPageComponent},
+      { path:'save-location', component:SaveLocationComponent}
     ],
     
   },
@@ -45,51 +45,51 @@ const routes: Routes = [
     component:LayoutComponent,
     children:[
       {
-        path:"Dashboard", 
+        path:"dashboard", 
         component:DashboardComponent,
         
         children: [
-          { path: '', redirectTo: 'Feed', pathMatch: 'full' },
-          { path: 'Feed', component: FeedComponent, canActivate:[DashboardGuard], data:{shouldReuse:true,key:'feed'}},
+          { path: '', redirectTo: 'feed', pathMatch: 'full' },
+          { path: 'feed', component: FeedComponent, canActivate:[DashboardGuard], data:{shouldReuse:true,key:'feed'}},
         ],
         
       },
       {
-        path:"Profile/:username",
+        path:"profile/:username",
         component:ProfileComponent,
         canActivate:[DashboardGuard],
       },
       {
-        path:"Profile/:username/Analytics",
+        path:"profile/:username/analytics",
         component:AnalyticsComponent,
         canActivate:[DashboardGuard],
       },
       {
-        path:"Location/:location",
+        path:"location/:location",
         component:LocationComponent,
         canActivate:[DashboardGuard]
       },
       {
-        path:"Search",
+        path:"search",
         component:SearchComponent,
         canActivate:[DashboardGuard]
       },
       {
-        path:"Inbox",
+        path:"inbox",
         component:InboxComponent,
         
         
       },
       {
-        path:'Chat/:clientID/:chatID',
+        path:'chat/:clientID/:chatID',
         component:ChatComponent
       },
       {
-        path:'Notifications',
+        path:'notifications',
         component:NotificationsComponent
       },
       {
-        path:'Post/:postID',
+        path:'post/:postID',
         component:PostViewComponent
       }
       
@@ -98,7 +98,7 @@ const routes: Routes = [
   },
   {
     path:"**", 
-    redirectTo:"/Unauthorized"
+    redirectTo:"/unauthorized"
   }
 ];
 

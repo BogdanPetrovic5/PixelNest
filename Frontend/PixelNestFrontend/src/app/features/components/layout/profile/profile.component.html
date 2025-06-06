@@ -52,10 +52,10 @@
                                     <button class="edit" *ngIf="!user.canEdit" (click)="toggleEdit()">
                                        <h1>Edit profile</h1>
                                     </button>
-                                    <button class="analytics" *ngIf="!user.canEdit" (click)="navigate('Profile', user.clientGuid, 'Analytics')">
+                                    <button class="analytics" *ngIf="!user.canEdit" (click)="navigate('profile', user.clientGuid, 'Analytics')">
                                         <h1>Analytics</h1>
                                      </button>
-                                    <button class="message" *ngIf="user.canEdit" (click)="navigate('Chat', user.clientGuid, user.chatID)">
+                                    <button class="message" *ngIf="user.canEdit" (click)="navigate('chat', user.clientGuid, user.chatID)">
                                         Message
                                     </button>
                                 </div>

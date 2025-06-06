@@ -24,6 +24,6 @@ export class LikesComponent implements OnInit{
     this.closeLikesTab.emit()
   }
   navigateToProfile(username:string){
-    this._router.navigate([`/Profile/${username}`])
+    this._router.navigate([`/profile/${username}`])
   }
 }

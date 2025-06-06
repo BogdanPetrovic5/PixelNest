@@ -77,7 +77,7 @@ export class NavigationComponent implements OnInit{
 
   navigateToUserProfile(){
    
-    this._router.navigate([`/Profile/${this.clientGuid}`])
+    this._router.navigate([`/profile/${this.clientGuid}`])
   }
 
   navigate(route:string){

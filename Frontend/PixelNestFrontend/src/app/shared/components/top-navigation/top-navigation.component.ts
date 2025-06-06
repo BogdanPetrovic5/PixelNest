@@ -21,9 +21,6 @@ export class TopNavigationComponent implements OnInit, OnDestroy{
       
     }
 
-    navigate(route:string){
-      this._router.navigate([`/${route}`])
-    }
     
     ngOnInit(): void {
       this.subscribe.add(

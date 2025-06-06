@@ -29,7 +29,7 @@ export class LogOutDialogComponent {
         this._userSession.clearStorage();
         this._userSession.setLogOutDialog(false);
          
-        this._router.navigate(["/Authentication/Login"])
+        this._router.navigate(["/authentication/login"])
       
         this._authState.setIsLoggedIn(false);
       

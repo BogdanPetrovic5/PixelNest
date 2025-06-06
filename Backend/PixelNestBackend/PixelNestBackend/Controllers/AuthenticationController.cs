@@ -101,8 +101,8 @@ namespace PixelNestBackend.Controllers
                     Path = "/"
                 };
                 Response.Cookies.Append("jwtToken", loginResponse.Token, cookieOptions);
-                if(!isNewUser) return Redirect("http://localhost:4200/Authentication/Redirect-Page");
-                return Redirect("http://localhost:4200/Authentication/Save-Location");
+                if(!isNewUser) return Redirect("http://localhost:4200/authentication/redirect-page");
+                return Redirect("http://localhost:4200/authentication/save-location");
 
             }
 

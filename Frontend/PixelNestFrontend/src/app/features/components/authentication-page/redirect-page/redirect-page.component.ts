@@ -23,7 +23,7 @@ export class RedirectPageComponent implements OnInit{
         this._userSession.setToCookie("username", response.username);
         this._userSession.setToCookie("email", response.email);
         this._userSession.setToCookie("userID", response.clientGuid);
-        this._router.navigate(['Dashboard/Feed'])
+        this._router.navigate(['dashboard/feed'])
         
       }
     })

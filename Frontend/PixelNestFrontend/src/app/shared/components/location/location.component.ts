@@ -145,7 +145,7 @@ export class LocationComponent implements OnInit, OnDestroy{
   private _getLocationName(result:any) {
     if(result && Array.isArray(result.features) && result.features.length > 0){
       this.location = result.features[3]?.text_en; 
-      this._router.navigate([`/Location/${this.location}`])
+      this._router.navigate([`/location/${this.location}`])
     }
   }
   private setMarker(center:[number, number]){

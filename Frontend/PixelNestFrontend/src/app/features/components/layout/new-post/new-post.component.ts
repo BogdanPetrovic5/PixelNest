@@ -121,7 +121,7 @@ export class NewPostComponent implements OnInit{
   }
 
   private async _resetState(){
-    this._router.navigate(['Dashboard/Feed'])
+    this._router.navigate(['dashboard/feed'])
     this._postState.setQuery(undefined)
     this._postState.resetFeed([])
     this._postState.setPosts([]);

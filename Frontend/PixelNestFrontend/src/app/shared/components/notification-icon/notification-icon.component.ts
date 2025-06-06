@@ -48,7 +48,7 @@ private routerSubscription = new Subscription()
      this.routerSubscription = this._router.events
      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
      .subscribe((event:NavigationEnd)=>{
-        if(event.url.includes('/Dashboard')){
+        if(event.url.includes('/dashboard')){
           
           this.countNotifications()
         }
