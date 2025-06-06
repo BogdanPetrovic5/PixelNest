@@ -7,7 +7,7 @@ namespace PixelNestBackend.Interfaces
     {
         bool IsUserRegistered(string email);
         Task<GoogleAccountResponse> RegisterGoogleAccount(GoogleAccountDto googleAccountDto);
-        Task<GoogleLoginResponse> LoginWithGoogle(string email);
+        Task<GoogleLoginResponse> LoginWithGoogle(GoogleAccountDto googleAccountDto);
         
     }
 }

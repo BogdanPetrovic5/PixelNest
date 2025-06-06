@@ -49,13 +49,23 @@ namespace PixelNestBackend.Gateaway
         {
             try
             {
-                var newImagePath = new ImagePath
+                var existingImagePath = await _dataContext.ImagePaths.Where(u => u.UserGuid == userID).FirstOrDefaultAsync();
+                if (existingImagePath == null)
                 {
-                    UserGuid = userID,
-                    Path = userFolder,
-                    PhotoDisplay = "cover"
-                };
-                _dataContext.ImagePaths.Add(newImagePath);
+                    var newImagePath = new ImagePath
+                    {
+                        UserGuid = userID,
+                        Path = userFolder,
+                        PhotoDisplay = "cover"
+                    };
+                    _dataContext.ImagePaths.Add(newImagePath);
+                }
+                else
+                {
+                    existingImagePath.Path = userFolder;
+                    _dataContext.ImagePaths.Update(existingImagePath);
+                }
+               
                 _dataContext.SaveChanges();
             }catch(Exception ex)
             {

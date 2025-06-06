@@ -85,7 +85,7 @@ namespace PixelNestBackend.Controllers
                 isNewUser = true;
             }
 
-            GoogleLoginResponse loginResponse = await _googleService.LoginWithGoogle(googleAccountDto.Email);
+            GoogleLoginResponse loginResponse = await _googleService.LoginWithGoogle(googleAccountDto);
 
             if (loginResponse != null && loginResponse.IsSuccessful)
             {

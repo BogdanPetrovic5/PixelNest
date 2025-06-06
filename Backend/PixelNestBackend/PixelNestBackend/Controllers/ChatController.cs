@@ -61,7 +61,7 @@ namespace PixelNestBackend.Controllers
         }
 
         [Authorize]
-        [HttpGet("messages")]
+        [HttpGet("{chatID}")]
         public ActionResult<ICollection<ResponseMessagesDto>> GetUserToUserMessages(string chatID)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
