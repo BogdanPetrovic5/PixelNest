@@ -18,7 +18,7 @@ export class DashboardGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      const excludedRoutes = ['/Authentication/Login', '/Authentication/Register']; // Add your login and register routes here
+      const excludedRoutes = ['/authentication/login', '/authentication/register']; 
       if (excludedRoutes.includes(state.url)) {
         return true; 
       }
@@ -28,12 +28,12 @@ export class DashboardGuard implements CanActivate {
             
             return true; 
           }else {
-            this._router.navigate(['/Unauthorized']); 
+            this._router.navigate(['/unauthorized']); 
             return false; 
           }
         }),
         catchError((error: HttpErrorResponse) => {
-          this._router.navigate(['/Get Started']);
+          this._router.navigate(['/get started']);
           return of(false); 
         })
       );

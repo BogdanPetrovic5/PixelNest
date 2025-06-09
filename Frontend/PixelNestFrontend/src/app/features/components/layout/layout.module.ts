@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardModule } from './dashboard/dashboard.module';
+
 import { NewPostComponent } from './new-post/new-post.component';
 import { ProfileModule } from './profile/profile.module';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -30,11 +30,14 @@ import { PostViewComponent } from './post-view/post-view.component';
   imports: [
     CommonModule,
     ProfileModule,
-    DashboardModule,
+   
     SharedModule,
     FormsModule,
     AppRoutingModule,
    
+  ],
+  providers:[
+  
   ]
 })
 export class LayoutModule { }

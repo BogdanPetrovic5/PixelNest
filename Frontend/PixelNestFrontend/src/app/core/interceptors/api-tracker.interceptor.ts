@@ -19,12 +19,12 @@ export class ApiTrackerInterceptor implements HttpInterceptor {
   ) {}
   
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if(this._router.url.includes("/Dashboard") || this._router.url.includes("/Profile")){
+    if(this._router.url.includes("/dashboard") || this._router.url.includes("/profile")){
       this._apiTracker.requestStarted();
     }
     return next.handle(request).pipe(
       finalize(() => {
-        if(this._router.url.includes("/Dashboard") || this._router.url.includes("/Profile")) {
+        if(this._router.url.includes("/dashboard") || this._router.url.includes("/profile")) {
           this._apiTracker.requestEnded(); 
         }
       })

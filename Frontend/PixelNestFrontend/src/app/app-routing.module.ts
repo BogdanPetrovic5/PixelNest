@@ -27,7 +27,7 @@ import { SaveLocationComponent } from './features/components/authentication-page
 const routes: Routes = [
   {path:'',redirectTo:"unauthorized", pathMatch:'full'},
   {path:"unauthorized", component:UnauthorizedComponent},
-  {path:"get Started", component:LandingPageComponent},
+  {path:"get started", component:LandingPageComponent},
   {
     path:"authentication", 
     component:AuthenticationPageComponent,
@@ -45,13 +45,9 @@ const routes: Routes = [
     component:LayoutComponent,
     children:[
       {
-        path:"dashboard", 
-        component:DashboardComponent,
-        
-        children: [
-          { path: '', redirectTo: 'feed', pathMatch: 'full' },
-          { path: 'feed', component: FeedComponent, canActivate:[DashboardGuard], data:{shouldReuse:true,key:'feed'}},
-        ],
+       path: 'dashboard',
+      loadChildren: () => import('./features/components/layout/dashboard/dashboard.module').then(m => m.DashboardModule),
+      
         
       },
       {

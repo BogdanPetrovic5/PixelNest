@@ -23,21 +23,28 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
       })
     }
     private getFullRouteUrl(route: ActivatedRouteSnapshot): string {
-        return route.pathFromRoot
-          .map((v) => v.routeConfig?.path)
-          .filter((path) => path)
-          .join('/');
+         let path = route.routeConfig?.path ?? '';
+  let parent = route.parent;
+
+  while (parent) {
+    const parentPath = parent.routeConfig?.path ?? '';
+   path = `${parentPath}/${path}`.replace(/\/+/g, '/');
+    parent = parent.parent;
+  }
+
+  return path;
       }
     
       shouldDetach(route: ActivatedRouteSnapshot): boolean {
         const fullPath = this.getFullRouteUrl(route);
  
-        return fullPath === 'Dashboard' || fullPath === 'Dashboard/Feed';
+        return fullPath === '/dashboard/' || fullPath === '/dashboard/feed';
       }
     
       store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle | null): void {
         const fullPath = this.getFullRouteUrl(route);
-        if (handle && (fullPath === 'Dashboard' || fullPath === 'Dashboard/Feed')) {
+        console.log(fullPath)
+        if (handle && (fullPath === '/dashboard/' || fullPath === '/dashboard/feed')) {
           this.storedRoutes.set(fullPath, handle);
     
         }
@@ -60,21 +67,23 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
       }
     
       shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-        const blockedRoutes = ['/Authentication/Login', '/Authentication/Register', '/Unauthorized'];
+        const blockedRoutes = ['/authentication/login', '/authentication/register', '/unauthorized'];
         const currUrl = '/' + curr.url.map(segment => segment.path).join('/');
-
+        
    
 
         if (blockedRoutes.includes(currUrl)) {
+          
           return false; 
         }
 
         return future.routeConfig === curr.routeConfig;
       }
     restoreScrollPosition(route: ActivatedRouteSnapshot): void {
-        const fullPath = route.routeConfig?.path!
+        const fullPath = this.getFullRouteUrl(route)
         const scrollPosition = this.scrollPositions.get(fullPath);
         if (scrollPosition !== undefined) {
+        
           window.scrollTo(0, scrollPosition); 
         }
     }

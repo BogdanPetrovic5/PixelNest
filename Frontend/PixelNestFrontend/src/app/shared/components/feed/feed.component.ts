@@ -48,7 +48,7 @@ export class FeedComponent implements OnChanges, OnDestroy, OnInit{
       else if(this.currentUrl.includes('location/', 0)) this.currentPage = this._postState.locationCurrentPage
       this._userSession.currentUrl$.subscribe({
         next:response=>{
-          if(response == "Feed") {
+          if(response == "feed") {
           
             this.restoreScrollPosition()
           }

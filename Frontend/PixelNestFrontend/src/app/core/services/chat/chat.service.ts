@@ -18,7 +18,7 @@ export class ChatService {
     return this._httpClient.get<any>(url);
   }
   getMessages(chatID:string):Observable<Message[]>{
-    const url = `${environment.apiUrl}/api/chat/messages?chatID=${chatID}`
+    const url = `${environment.apiUrl}/api/chat/${chatID}`
 
     return this._httpClient.get<Message[]>(url);
   }

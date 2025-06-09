@@ -49,7 +49,7 @@ import { ApiTrackerInterceptor } from './core/interceptors/api-tracker.intercept
       provide: HAMMER_GESTURE_CONFIG, 
       useClass: CustomHammerConfig 
     },
-   
+  
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

@@ -51,23 +51,17 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
 
   }
   ngOnInit(): void {
-   
     this._cacheService.checkCache().subscribe({
       next:response=>{
- 
         if(response){
-        
           this.isChanged = response;
         }
-        
         this._initializeComponent();
-       
       }
     })
- 
   }
   ngDoCheck(){
-    if(this._router.url == "/Dashboard/Feed") this._userSession.setUrl("Feed")
+    if(this._router.url == "/dashboard/feed") this._userSession.setUrl("feed")
   }
   loadPosts(){
     
@@ -80,7 +74,8 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
    
 
    
-    if(this._postState.feedPosts.length > 0 && !this.isChanged) this.posts = this._postState.feedPosts;
+    if(this._postState.feedPosts && this._postState.feedPosts.length > 0 && !this.isChanged) 
+      this.posts = this._postState.feedPosts;
     else{
       this._postState.resetFeed([])
       this.loadPosts()

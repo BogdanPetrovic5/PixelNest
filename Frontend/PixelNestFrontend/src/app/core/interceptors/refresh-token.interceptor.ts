@@ -21,7 +21,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError(error => {
         if (error.status === 401) {
-            this._router.navigate(['/Unauthorize'])
+            this._router.navigate(['/unauthorize'])
         }
         return throwError(error);
       })

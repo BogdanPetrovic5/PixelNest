@@ -14,6 +14,7 @@ import { StoryListComponent } from './story/story-list/story-list.component';
 import { StoryPreviewComponent } from './story/story-list/story-preview/story-preview.component';
 import { HammerModule } from '@angular/platform-browser';
 import { ViewerListComponent } from './story/story-list/story-preview/viewer-list/viewer-list.component';
+import { DashboardRoutingModule } from './dashboard-routing.module';
 
 
 @NgModule({
@@ -29,10 +30,12 @@ import { ViewerListComponent } from './story/story-list/story-preview/viewer-lis
   ],
   imports: [
     CommonModule,
+    DashboardRoutingModule,
     SharedModule,
     RouterOutlet,
     FormsModule,
-    HammerModule
+    HammerModule,
+    
   ]
   
 })

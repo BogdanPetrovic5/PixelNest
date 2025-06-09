@@ -43,6 +43,9 @@ import { SaveLocationComponent } from './components/authentication-page/save-loc
   ],
   exports:[
   
+  ],
+  providers:[
+   
   ]
 })
 export class FeaturesModule { }
