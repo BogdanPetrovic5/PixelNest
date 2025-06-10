@@ -34,8 +34,9 @@ export class WebsocketService {
     private _notificationState:NotificationStateService
   ) { }
 
-  connect(userID:string):void{
-    const wsURL = `${environment.wsUrl}?userID=${userID}`;
+  connect():void{
+    
+    const wsURL = `${environment.wsUrl}`;
     this._socket = new WebSocket(wsURL);
 
     this._socket.onopen = () => {
@@ -44,7 +45,7 @@ export class WebsocketService {
     this._socket.onmessage = (event) => {
    
       var data = JSON.parse(event.data);
-      console.log(data)
+      
       this.messageData.message = data.Content
       this.messageData.sender = data.SenderUsername
       this.messageData.receiver = data.TargetUser

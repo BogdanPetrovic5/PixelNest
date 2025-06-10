@@ -68,7 +68,7 @@ export class LayoutComponent implements OnInit, OnDestroy, AfterContentInit{
    
    
     this._initSubscriptions();
-    this._websocketService.connect(this._userSession.getFromCookie('username'))
+    this._websocketService.connect()
   }
 
   private _initSubscriptions(): void {
