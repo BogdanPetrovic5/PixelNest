@@ -69,7 +69,7 @@ export class ChatStateService {
     }
     
     this._activeUsers.next(users);
-    console.log(this._activeUsers.getValue())
+
   }
 
   setActiveUsers(value:ActiveUsers[]){

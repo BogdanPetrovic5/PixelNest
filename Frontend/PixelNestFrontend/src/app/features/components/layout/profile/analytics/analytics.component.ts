@@ -13,7 +13,7 @@ export class AnalyticsComponent implements OnInit{
   ngOnInit():void{
     this._analyticsService.getLocationAnalytics().subscribe({
       next:response=>{
-        console.log(response)
+      
         this.chartData = response;
         
       }, error: error =>{

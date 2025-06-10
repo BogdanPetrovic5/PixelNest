@@ -212,7 +212,6 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
     this.subscription.add(
       this._storyState.stories$.subscribe({
         next:response=>{
-          console.log(response)
           this.groupedStories = response
           this.groupedStories.sort((a, b) => {
             const aHasUnread = a.stories.some(story => story.seenByUser === false);
@@ -236,7 +235,6 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
         next:response=>{
           
             this.storiesByUser = response;
-          console.log(response)
             
             this.extractFromResponse(this.storiesByUser);
             

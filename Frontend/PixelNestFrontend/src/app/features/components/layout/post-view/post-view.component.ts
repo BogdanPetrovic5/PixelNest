@@ -44,8 +44,7 @@ export class PostViewComponent implements OnInit{
     this._postService.getSinglePost(postID).subscribe({
       next:response=>{
         this.post = response
-    
-        this._cdr.detectChanges()
+       
       }
     })
   }

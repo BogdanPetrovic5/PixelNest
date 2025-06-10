@@ -23,11 +23,11 @@ export class NavigationComponent implements OnInit{
   interval:any
   stringUrl = ""
   routeToTabMap: { [key: string]: number } = {
-    'Dashboard/Feed': 1,
-    ["Profile/"+this.clientGuid]: 4,
-    'Messages': 2,
-    'Notifications': 3,
-    'Search': 5
+    'dashboard/feed': 1,
+    ["profile/"+this.clientGuid]: 4,
+    'messages': 2,
+    'notifications': 3,
+    'search': 5
 
   };
   constructor(
