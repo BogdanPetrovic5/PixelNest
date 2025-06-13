@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { NotificationDto } from '../../dto/notification.dto';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +16,24 @@ export class NotificationStateService {
   private _notificationNumber = new BehaviorSubject<number>(0)
   notificationNumber$ = this._notificationNumber.asObservable()
 
-  constructor() { }
+  private _notifications = new BehaviorSubject<NotificationDto[]>([])
+  notifications$ = this._notifications.asObservable();
+  constructor(private _notificationService:NotificationService) { }
 
+  loadNotifications(){
+    this._notificationService.getNotifications().subscribe({
+      next:response=>{
+        this._notifications.next(response);
+      }
+    })
+  }
 
+  updateNotifications(notification:NotificationDto){
+    let currentState = this._notifications.getValue();
+
+    currentState = [notification, ...currentState]
+    this._notifications.next(currentState)
+  }
   setNewNotification(value:boolean){
     this._newNotifictaion.next(value)
   }

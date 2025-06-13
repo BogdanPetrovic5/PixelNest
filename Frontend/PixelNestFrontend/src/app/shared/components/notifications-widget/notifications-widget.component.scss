@@ -1,0 +1,47 @@
+$BGCOLOR:#040F16;
+$SECTIONLEFT:#062938;
+$H1COLOR:#01BAEF;
+$PCOLOR:#FBFBFF;
+$BORDERCOLOR:rgb(87, 87, 87);
+$TABCOLOR:#32373a;
+$HOVERTABCOLOR:#32373a;
+$PFONT:"Josefin Sans", sans-serif;
+$HFONT: "Roboto Condensed", sans-serif;
+.container{
+    width: 100%;
+    .notification-list{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .wrapper{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            app-profile-image{
+                width: 40px;
+                height: 40px;
+            }
+            .notification-description{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                font-size: 20px;
+                h1{
+                   font-size: 1em;
+                   font-family: $PFONT;
+                   color: $PCOLOR;
+                   margin: 0;
+                }
+                p{
+                    margin: 0;
+                    color: $PCOLOR;
+                    font-family: $PFONT;
+                    font-size: 0.8em;
+                }
+            }
+           
+        }
+    }
+}

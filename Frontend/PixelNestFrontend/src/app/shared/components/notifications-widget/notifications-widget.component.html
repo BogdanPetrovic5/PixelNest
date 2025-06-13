@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="notification-list">
+        <div class="wrapper" *ngFor="let notification of lastTwoNotifications">
+            <app-profile-image [username]="notification.username"></app-profile-image>
+            <div class="notification-description">
+                <h1>
+                    {{notification.username}}
+                </h1>
+                <p>
+                    {{notification.message}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

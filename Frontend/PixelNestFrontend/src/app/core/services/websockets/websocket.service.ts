@@ -6,6 +6,7 @@ import { DashboardStateService } from '../states/dashboard-state.service';
 import { UserSessionService } from '../user-session/user-session.service';
 import { LastSendersDto } from '../../dto/lastSenders.dto';
 import { NotificationStateService } from '../states/notification-state.service';
+import { NotificationDto } from '../../dto/notification.dto';
 
 
 @Injectable({
@@ -27,6 +28,14 @@ export class WebsocketService {
   messages:Message[] = []
   lastSenderIDs:LastSendersDto[] =[]
   lastSenderIDObj:LastSendersDto = {currentUser:'', senders:[]} 
+  newNotification:NotificationDto = {
+    username:'',
+    message:'',
+    date:new Date(),
+    notificationID:0,
+    postID:0,
+    imagePath:[]
+  }
   constructor(
     private _chatState:ChatStateService,
     private _dashboardState:DashboardStateService,
@@ -65,9 +74,8 @@ export class WebsocketService {
       }
       
       if(data.Type === "Like" || data.Type === "Comment" || data.Type === "Follow"){
-          this._notificationState.setNewNotification(true)
-          this._notificationState.setNotificationType(data.Type)
-          this._notificationState.updateNotification(1);
+          this._processNewNotification(data);
+          
       }
       this._chatState.setMessages(this.messageData)
 
@@ -89,7 +97,18 @@ export class WebsocketService {
     }
   }
   
+private _processNewNotification(data:any){
 
+  this.newNotification.message = `${data.SenderUsername} ${data.Content}`;
+  this.newNotification.username = data.SenderUsername
+
+  this._notificationState.updateNotifications(this.newNotification);
+
+  this._notificationState.setNewNotification(true)
+  this._notificationState.setNotificationType(data.Type)
+  this._notificationState.updateNotification(1);
+
+}
   private _proccessDirectMessage(){
     this._dashboardState.setMessage(this.messageData.message)
     this._dashboardState.setSender(this.messageData.sender)

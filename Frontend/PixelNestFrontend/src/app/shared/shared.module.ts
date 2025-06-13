@@ -31,6 +31,8 @@ import { NotificationIconComponent } from './components/notification-icon/notifi
 import { PixelnestLoadingComponent } from './components/pixelnest-loading/pixelnest-loading.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { NgChartsModule } from 'ng2-charts';
+import { FeaturesModule } from '../features/features.module';
+import { NotificationsWidgetComponent } from './components/notifications-widget/notifications-widget.component';
 @NgModule({
   declarations: [
     BannerComponent,
@@ -60,7 +62,8 @@ import { NgChartsModule } from 'ng2-charts';
     NewNotificationComponent,
     NotificationIconComponent,
     PixelnestLoadingComponent,
-    ChartComponent
+    ChartComponent,
+    NotificationsWidgetComponent
   ],
   imports: [
     CommonModule,
