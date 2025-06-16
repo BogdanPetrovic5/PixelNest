@@ -8,9 +8,10 @@
         <div class="audience">
             <h1>Audience &#9432;</h1> 
             <div class="charts-wrapper">
-                <div class="chart">
-                  <app-chart [chartData]="chartData"></app-chart>
-                </div>
+                
+                  <app-chart [chartData]="countriesChart" [chartDataLabel]="'countries'"></app-chart>
+                   <app-chart [chartData]="citiesChart" [chartDataLabel]="'cities'"></app-chart>  
+               
             </div>
         </div>
     </div>

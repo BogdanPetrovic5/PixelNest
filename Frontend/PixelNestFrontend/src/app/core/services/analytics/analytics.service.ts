@@ -11,7 +11,7 @@ export class AnalyticsService {
   constructor(private _httpClient:HttpClient) { }
 
   getLocationAnalytics():Observable<any>{
-    const url = `${environment.apiUrl}/api/analytics/location`
+    const url = `${environment.apiUrl}/api/analytics/locations`
      return this._httpClient.get(url);
   }
 }
