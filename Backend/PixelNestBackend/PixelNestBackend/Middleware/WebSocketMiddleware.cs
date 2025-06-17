@@ -9,6 +9,7 @@ using PixelNestBackend.Models;
 using PixelNestBackend.Data;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using PixelNestBackend.Dto.WebSockets;
 
 namespace PixelNestBackend.Middleware
 {
@@ -51,7 +52,7 @@ namespace PixelNestBackend.Middleware
                     string clientGuid = userUtility.GetClientGuid(userGuid);
 
                     await _connectionMenager.AddSocket(socket, clientGuid);
-                    Console.WriteLine($"\nWebSocket connected: {clientGuid}\n");
+                    
                     await _connectionMenager.NotifyUsers(clientGuid, true);
                     await Receive(socket, clientGuid);
                 }
@@ -86,7 +87,7 @@ namespace PixelNestBackend.Middleware
                     try
                     {
                         var messageObj = System.Text.Json.JsonSerializer.Deserialize<WebSocketMessage>(message);
-
+                        ProccessMessage(messageObj);
                     }
                     catch (Exception ex)
                     {
@@ -97,11 +98,18 @@ namespace PixelNestBackend.Middleware
             }
         }
 
-        private async Task ProccessMessage(WebSocket socket, string connectionID, string message)
+        private async Task ProccessMessage(WebSocketMessage message)
         {
             try
             {
-                var messageObj = System.Text.Json.JsonSerializer.Deserialize<WebSocketMessage>(message);
+                if(message != null && message.Type == "Typing")
+                {
+                    _connectionMenager.SendNotificationToUser(message);
+                }
+                if (message != null && message.Type == "StopTyping")
+                {
+                    _connectionMenager.SendNotificationToUser(message);
+                }
 
             }
             catch (Exception ex)
@@ -126,13 +134,7 @@ namespace PixelNestBackend.Middleware
                 return null;
             }
         }
-        private class WebSocketMessage
-        {
-            public string Type { get; set; }
-            public string RoomID { get; set; }
-            public string TargetUser { get; set; }
-            public string Content { get; set; }
-        }
+      
 
     }
 

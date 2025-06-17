@@ -131,14 +131,14 @@ namespace PixelNestBackend.Services.Menagers
         
             if (IsUserInRoom(actualRoomID, (messageResponse.ReceiverID).ToString())) 
             {
-                Console.WriteLine("\nMessage room\n");
+               
                 webSocketMessage.Type = "Room";
                 string jsonMessage = System.Text.Json.JsonSerializer.Serialize(webSocketMessage);
                 await _sendMessageToRoom(actualRoomID, (messageResponse.ReceiverID).ToString(), jsonMessage);
                 
             }else if (_connections.TryGetValue((messageResponse.ReceiverID).ToString(), out var webSocket) && webSocket.State == WebSocketState.Open)
             {
-                Console.WriteLine("\nMessage Direct\n");
+                
                 webSocketMessage.Type = "Direct";
                 string jsonMessage = System.Text.Json.JsonSerializer.Serialize(webSocketMessage);
                 var buffer = Encoding.UTF8.GetBytes(jsonMessage);
@@ -168,8 +168,7 @@ namespace PixelNestBackend.Services.Menagers
 
             foreach (var connectionID in _rooms[roomID])
             {
-                Console.WriteLine("Receiver: " + receiver);
-                Console.WriteLine("Receiver: " + connectionID);
+                
                 if (_connections.TryGetValue(connectionID, out var socket) && connectionID == receiver)
                 {
                    
@@ -213,7 +212,7 @@ namespace PixelNestBackend.Services.Menagers
             
             if (_connections.TryGetValue(message.TargetUser, out var webSocket) && webSocket.State == WebSocketState.Open)
             {
-                Console.WriteLine(message.TargetUser);
+                
                 string jsonMessage = System.Text.Json.JsonSerializer.Serialize(message);
                 var buffer = Encoding.UTF8.GetBytes(jsonMessage);
 
