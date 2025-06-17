@@ -33,6 +33,7 @@ import { ChartComponent } from './components/chart/chart.component';
 import { NgChartsModule } from 'ng2-charts';
 import { FeaturesModule } from '../features/features.module';
 import { NotificationsWidgetComponent } from './components/notifications-widget/notifications-widget.component';
+import { TypingIndicatorComponent } from './components/typing-indicator/typing-indicator.component';
 @NgModule({
   declarations: [
     BannerComponent,
@@ -63,7 +64,8 @@ import { NotificationsWidgetComponent } from './components/notifications-widget/
     NotificationIconComponent,
     PixelnestLoadingComponent,
     ChartComponent,
-    NotificationsWidgetComponent
+    NotificationsWidgetComponent,
+    TypingIndicatorComponent
   ],
   imports: [
     CommonModule,
@@ -94,7 +96,8 @@ import { NotificationsWidgetComponent } from './components/notifications-widget/
     LottieNotificationComponent,
     InboxIconComponent,
     PixelnestLoadingComponent,
-    ChartComponent
+    ChartComponent,
+    TypingIndicatorComponent
   ],
   providers:[
 

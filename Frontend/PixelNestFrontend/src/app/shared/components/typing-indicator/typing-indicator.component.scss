@@ -1,0 +1,13 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    app-profile-image{
+        width: 30px;
+        height: 30px;
+    }
+    dotlottie-player{
+        margin-left: -15px;
+    }
+}

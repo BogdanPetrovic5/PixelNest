@@ -18,6 +18,8 @@ export class ChatStateService {
   private _lastSenderIDS = new BehaviorSubject<LastSendersDto[]>([])
   lastSenderIDS = this._lastSenderIDS.asObservable()
 
+  private _isTyping = new BehaviorSubject<boolean>(false);
+  isTyping$ = this._isTyping.asObservable()
   private _chatStateUser = new BehaviorSubject<ProfileUser>(
     {
       username:'',
@@ -53,7 +55,9 @@ export class ChatStateService {
     userID:''
   });
   chatStateMessage = this._chatStateMessage.asObservable()
-  
+  setIsTyping(value:boolean){
+    this._isTyping.next(value)
+  }
   updateActiveUsers(value:any){
 
     let users = this._activeUsers.getValue()

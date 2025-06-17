@@ -10,6 +10,7 @@ import { ChatService } from 'src/app/core/services/chat/chat.service';
 import { ChatStateService } from 'src/app/core/services/states/chat-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { UserService } from 'src/app/core/services/user/user.service';
+import { WebsocketService } from 'src/app/core/services/websockets/websocket.service';
 
 @Component({
   selector: 'app-chat',
@@ -46,6 +47,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
   messageData!: Message;
   currentClientGuid:string = ""
+  isTyping:boolean = false;
   constructor(
     private _chatState:ChatStateService,
     private _route:ActivatedRoute,
@@ -53,7 +55,8 @@ export class ChatComponent implements OnInit, OnDestroy{
     private _chatService:ChatService,
     private _userSession:UserSessionService,
     private _datePipe:DatePipe,
-    private _router:Router
+    private _router:Router,
+    private _websocketService:WebsocketService
   ){}
   ngOnDestroy(): void {
       this._chatService.leaveRoom(this.user.clientGuid).subscribe({
@@ -71,6 +74,12 @@ export class ChatComponent implements OnInit, OnDestroy{
 
   ngAfterViewChecked(): void {
    
+  }
+  typing(){
+    this._websocketService.sendTypingNotification(this.user.clientGuid, this._userSession.getFromCookie("userID"), "is typing", "Typing", this.chatRoomID)
+  }
+  stopTyping(){
+     this._websocketService.sendTypingNotification(this.user.clientGuid, this._userSession.getFromCookie("userID"), "", "StopTyping", this.chatRoomID)
   }
   navigate(url:string){
     this._router.navigate([`${url}`])
@@ -114,7 +123,11 @@ export class ChatComponent implements OnInit, OnDestroy{
             
           })
         ).subscribe()
-    
+    this._chatState.isTyping$.subscribe({
+      next:response=>{
+        this.isTyping = response;
+      }
+    })
 
   }
 

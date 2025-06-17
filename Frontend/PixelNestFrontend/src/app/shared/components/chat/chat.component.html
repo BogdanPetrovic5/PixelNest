@@ -60,10 +60,10 @@
                 </div>
                
             </div>
-           
+            <app-typing-indicator *ngIf="isTyping" [clientGuid]="user.clientGuid"></app-typing-indicator>
         </div>
         <div class="input" >
-            <input type="text" placeholder="Message..." [(ngModel)]="message">
+            <input type="text" placeholder="Message..." [(ngModel)]="message" (keyup)="typing()" (blur)="stopTyping()">
             <img src="/assets/images/send.png" alt="" (click)="sendMessage()">
         </div>
     </div>

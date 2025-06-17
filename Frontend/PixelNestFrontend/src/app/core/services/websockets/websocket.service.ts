@@ -7,6 +7,7 @@ import { UserSessionService } from '../user-session/user-session.service';
 import { LastSendersDto } from '../../dto/lastSenders.dto';
 import { NotificationStateService } from '../states/notification-state.service';
 import { NotificationDto } from '../../dto/notification.dto';
+import { WebSocketMessage } from '../../dto/websocketMessage.dto';
 
 
 @Injectable({
@@ -77,6 +78,15 @@ export class WebsocketService {
           this._processNewNotification(data);
           
       }
+      if(data.Type === "Typing"){
+          this._chatState.setIsTyping(true)
+          return
+      }
+      if(data.Type === "StopTyping"){
+          this._chatState.setIsTyping(false)
+          return
+          
+      }
       this._chatState.setMessages(this.messageData)
 
     };
@@ -96,7 +106,19 @@ export class WebsocketService {
       this._socket.close();
     }
   }
-  
+sendTypingNotification(receiverClientGuid:string, senderClientGuid:string, content:string, type:string, roomID:string){
+  if(this._socket && this._socket.readyState == WebSocket.OPEN){
+    const message:WebSocketMessage = {
+      TargetUser:receiverClientGuid,
+      SenderUser:senderClientGuid,
+      Type:type,
+      Content:content,
+      SenderUsername:'',
+      RoomID:roomID
+    }
+    this._socket.send(JSON.stringify(message));
+  }
+}
 private _processNewNotification(data:any){
 
   this.newNotification.message = `${data.SenderUsername} ${data.Content}`;
