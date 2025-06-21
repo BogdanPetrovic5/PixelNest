@@ -49,7 +49,7 @@ namespace PixelNestBackend.Services.Menagers
         }
 
         
-        public void JoinRoom(string roomID,string reversedRoomID, string connectionID)
+        public async Task JoinRoom(string roomID,string reversedRoomID, string connectionID, string targetClientGuid)
         {
             string actualRoomID;
 
@@ -74,10 +74,11 @@ namespace PixelNestBackend.Services.Menagers
                 _rooms[actualRoomID].Add(connectionID);
                 
             }
-          
+
+            await this._sendSeenNotification(targetClientGuid, "Enter");
           
         }
-        public void LeaveRoom(string roomID, string reversedRoomID, string connectionID)
+        public async Task LeaveRoom(string roomID, string reversedRoomID, string connectionID, string targetClientGuid)
         {
             string actualRoomID;
 
@@ -94,6 +95,7 @@ namespace PixelNestBackend.Services.Menagers
                 actualRoomID = roomID;
             }
             _rooms[actualRoomID].Remove(connectionID);
+            await this._sendSeenNotification(targetClientGuid, "Leave");
         }
         public async Task NotifyUsers(string userID, bool isActive)
         {
@@ -135,6 +137,7 @@ namespace PixelNestBackend.Services.Menagers
                 webSocketMessage.Type = "Room";
                 string jsonMessage = System.Text.Json.JsonSerializer.Serialize(webSocketMessage);
                 await _sendMessageToRoom(actualRoomID, (messageResponse.ReceiverID).ToString(), jsonMessage);
+               
                 
             }else if (_connections.TryGetValue((messageResponse.ReceiverID).ToString(), out var webSocket) && webSocket.State == WebSocketState.Open)
             {
@@ -151,11 +154,32 @@ namespace PixelNestBackend.Services.Menagers
             if (!_rooms.ContainsKey(roomID)) { return; }
             foreach (var connectionId in _rooms[roomID])
             {
+                
+
                 if (_connections.TryGetValue(connectionId, out var socket) && socket.State == WebSocketState.Open && connectionId.Equals(targetUser))
                 {
                     var buffer = Encoding.UTF8.GetBytes(message);
                     await socket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
+            }
+        }
+        private async Task _sendSeenNotification(string targetUserGuid, string type)
+        {
+            
+            WebSocketMessage webSocketMessage = new WebSocketMessage
+            {
+                Content = "",
+                Type = type,
+                SenderUsername = "",
+                TargetUser = "",
+                RoomID = ""
+            };
+            if (_connections.TryGetValue(targetUserGuid, out var socket) && socket.State == WebSocketState.Open)
+            {
+                
+                string jsonMessage = System.Text.Json.JsonSerializer.Serialize(webSocketMessage);
+                var buffer = Encoding.UTF8.GetBytes(jsonMessage);
+                await socket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
             }
         }
         public bool IsUserInRoom(string roomID, string receiver)

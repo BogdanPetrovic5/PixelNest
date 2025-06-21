@@ -94,17 +94,9 @@ namespace PixelNestBackend.Repository
         {
             try
             {
-                var cacheKey = string.Format(MessagesCache, chatID, userID.ToString());
-                var versionKey = $"{cacheKey}_Version";
-                if (!_memoryCache.TryGetValue(versionKey, out DateTime cachedVersion))
-                {
-                    cachedVersion = DateTime.MinValue;
-                }
-                else cachedVersion = DateTime.MaxValue;
-                var latestVersion = DateTime.UtcNow;
-                if (!_memoryCache.TryGetValue(cacheKey, out ICollection<ResponseMessagesDto> cashedMessages) || cachedVersion < latestVersion)
-                {
-                    cashedMessages = _dataContext.Messages
+            
+              
+                    ICollection<ResponseMessagesDto> messages = _dataContext.Messages
                    .Where(u => u.ChatID.Equals(chatID))
                    .Select(m => new ResponseMessagesDto
                    {
@@ -115,19 +107,12 @@ namespace PixelNestBackend.Repository
                        MessageID = m.MessageID,
                        UserID = (m.Sender.ClientGuid).ToString(),
                        IsSeen = !_dataContext.SeenMessages
-                           .Any(sm => sm.UserGuid == userID && sm.MessageID == m.MessageID)
+                           .Any(sm => sm.UserGuid == m.ReceiverGuid && sm.MessageID == m.MessageID)
                    }).ToList();
-                    _memoryCache.Set(cacheKey, cashedMessages, new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = CacheDuration
-                    });
-                    _memoryCache.Set(versionKey, latestVersion, new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = CacheDuration
-                    });
-                }
                 
-                return cashedMessages;
+                
+                
+                return messages;
             }
             catch (Exception ex)
             {
@@ -194,15 +179,7 @@ namespace PixelNestBackend.Repository
                     Console.WriteLine($"Error saving seen message: {ex.Message}");
                 }
             }
-            var cacheKey = string.Format(MessagesCache, message.ChatID, message.SenderGuid);
-            var cacheKey_2 = string.Format(MessagesCache, message.ChatID, message.ReceiverGuid);
-            var cacheKey_3 = string.Format(MessagesCache, message.SenderGuid);
-            var cacheKey_4 = string.Format(MessagesCache, message.ReceiverGuid);
-           
-            _memoryCache.Remove(cacheKey);
-            _memoryCache.Remove(cacheKey_2);
-            _memoryCache.Remove(cacheKey_3);
-            _memoryCache.Remove(cacheKey_4);
+      
             return true;
 
         }

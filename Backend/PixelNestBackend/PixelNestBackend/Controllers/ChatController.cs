@@ -86,14 +86,14 @@ namespace PixelNestBackend.Controllers
        
 
                 await _websocketManager.SendMessageToUser(response);
-                return Ok(response.IsSuccessfull);
+                return Ok(response.IsUserInRoom);
             }
             return BadRequest();
             
         }
         [Authorize]
         [HttpPost("room/leave/{targetClientGuid}")]
-        public ActionResult<bool> LeaveRoom(string targetClientGuid)
+        public async Task<ActionResult<bool>> LeaveRoom(string targetClientGuid)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userGuid == null) return Unauthorized();
@@ -103,7 +103,7 @@ namespace PixelNestBackend.Controllers
             string roomID = $"{currentClientGuid}-{targetClientGuid}";
             string reverserdRoomID = $"{targetClientGuid}-{currentClientGuid}";
 
-            _websocketManager.LeaveRoom(roomID, reverserdRoomID, currentClientGuid);
+            await _websocketManager.LeaveRoom(roomID, reverserdRoomID, currentClientGuid, targetClientGuid);
 
             return Ok(new
             {
@@ -112,7 +112,7 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpPost("room/join/{targetClientGuid}")]
-        public ActionResult<bool> JoinRoom(string targetClientGuid)
+        public async Task<ActionResult<bool>> JoinRoom(string targetClientGuid)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userGuid == null) return Unauthorized();
@@ -122,7 +122,7 @@ namespace PixelNestBackend.Controllers
             string roomID = $"{currentClientGuid}-{targetClientGuid}";
             string reverserdRoomID = $"{targetClientGuid}-{currentClientGuid}";
 
-            _websocketManager.JoinRoom(roomID, reverserdRoomID, currentClientGuid);
+           await _websocketManager.JoinRoom(roomID, reverserdRoomID, currentClientGuid, targetClientGuid);
 
             return Ok(new
             {

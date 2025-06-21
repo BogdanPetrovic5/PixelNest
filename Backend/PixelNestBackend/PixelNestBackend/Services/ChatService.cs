@@ -36,7 +36,7 @@ namespace PixelNestBackend.Services
         public ICollection<ResponseMessagesDto> GetUserToUserMessages(string chatID, string userGuid)
         {
             Guid userID = Guid.Parse(userGuid);
-         
+            
             return _chatRepository.GetUserToUserMessages(chatID, userID);
         }
 
@@ -70,7 +70,7 @@ namespace PixelNestBackend.Services
 
             bool isUserInRoom = _connectionMenager.IsUserInRoom(roomID, messageDto.ClientGuid);
             bool response = _chatRepository.SaveMessage(message, isUserInRoom);
-
+            
             return new MessageResponse { 
                 IsSuccessfull = response,
                 ReceiverID = Guid.Parse(_userUtility.GetClientGuid(message.ReceiverGuid.ToString())), 
@@ -78,6 +78,7 @@ namespace PixelNestBackend.Services
                 Message = message.MessageText,
                 ReceiverUsername = _userUtility.GetUserName(message.ReceiverGuid),
                 SenderUsername = _userUtility.GetUserName(message.SenderGuid),
+                IsUserInRoom = isUserInRoom
                 
             };
         }
