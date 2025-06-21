@@ -98,8 +98,13 @@ export class ChatComponent implements OnInit, OnDestroy{
       this._chatService.sendMessage(this.messageData).subscribe({
         next:response=>{
           this.messageData.userID = this._userSession.getFromCookie("userID");
+          
+          if(response == true){
+            this.messageData.isSeen = true
+          }else this.messageData.isSeen = false;
           const messageCopy = { ...this.messageData };
           
+          console.log(messageCopy)
           this.messages.push(messageCopy)
           
           this.messageData.message = "";
@@ -136,6 +141,7 @@ export class ChatComponent implements OnInit, OnDestroy{
       next:response=>{
         this.user = response;
         this._joinRoom();
+        this._updateLastMessage()
       }
     })
     this._chatState.activeUsers$.subscribe({
@@ -144,6 +150,16 @@ export class ChatComponent implements OnInit, OnDestroy{
       }
     })
 
+  }
+  private _updateLastMessage(){
+    this._chatState.seenStatus$.subscribe({
+      next:response=>{
+        console.log(response)
+        if(response){
+          this.messages[this.messages.length - 1].isSeen = true;
+        }
+      }
+    })
   }
   trackByFn(index: number, item: any): number {
     return item.messageID
@@ -158,6 +174,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     this._chatService.getMessages(this.chatID).subscribe({
       next:response=>{
         this.messages = response;
+        
         this._loadSeenMessages();
         this.scrollToBottom();
       }
@@ -170,9 +187,11 @@ export class ChatComponent implements OnInit, OnDestroy{
           if(response.roomID == this.chatRoomID || response.roomID == this.reverseChatRoomID){
             const messageCopy = { ...response };
             this.messages.push(messageCopy)
+            console.log(this.messages)
           }
         }
       })
+     
   }
   private _joinRoom(){
    

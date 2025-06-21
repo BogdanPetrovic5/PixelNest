@@ -62,7 +62,14 @@ export class WebsocketService {
       this.messageData.roomID = data.RoomID
       this.messageData.dateSent = new Date()
       this.messageData.userID = data.SenderUser
-     
+        if(data.Type === 'Leave'){
+        this._chatState.setSeenStatus(false);
+        return
+      }
+      if(data.Type === 'Enter'){
+        this._chatState.setSeenStatus(true);
+        return
+      }
       if(data.Type === "Direct"){
         this._proccessDirectMessage()
       }
@@ -87,6 +94,7 @@ export class WebsocketService {
           return
           
       }
+    
       this._chatState.setMessages(this.messageData)
 
     };

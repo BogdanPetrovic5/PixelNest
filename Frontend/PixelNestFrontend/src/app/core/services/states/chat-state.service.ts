@@ -55,9 +55,17 @@ export class ChatStateService {
     userID:''
   });
   chatStateMessage = this._chatStateMessage.asObservable()
+  private _seenStatus = new BehaviorSubject<boolean>(false);
+  seenStatus$ = this._seenStatus.asObservable();
+
+  setSeenStatus(value:boolean){
+    this._seenStatus.next(value)
+  }
+
   setIsTyping(value:boolean){
     this._isTyping.next(value)
   }
+  
   updateActiveUsers(value:any){
 
     let users = this._activeUsers.getValue()

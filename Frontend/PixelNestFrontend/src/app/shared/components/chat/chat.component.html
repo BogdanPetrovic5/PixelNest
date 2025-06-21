@@ -54,10 +54,20 @@
                     'align-self': message.userID.toLowerCase() === currentClientGuid ? 'flex-end' : 'flex-start',
                     'flex-direction': message.userID.toLowerCase() !== currentClientGuid ? '' : 'row-reverse'
                     
-                    }"  class="time" *ngIf="(message.message && message.message.length > 0) && (messages[i+1] == undefined || messages[i].sender != messages[i+1].sender)">
+                    }"  
+                    class="time" 
+                    *ngIf="(message.message && message.message.length > 0) && (messages[i+1] == undefined || messages[i].sender != messages[i+1].sender)">
+                  
                     <span >{{formatDate(message.dateSent)}}
                     </span>
+                    <div class="separator" *ngIf="message.isSeen && currentClientGuid == message.userID.toLowerCase()">
+
+                    </div>
+                    <span *ngIf="message.isSeen && currentClientGuid == message.userID.toLowerCase()">
+                        Seen
+                    </span>
                 </div>
+                
                
             </div>
             <app-typing-indicator *ngIf="isTyping" [clientGuid]="user.clientGuid"></app-typing-indicator>
