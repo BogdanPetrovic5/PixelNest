@@ -14,12 +14,12 @@
             <div class="chat-wrapper" *ngFor="let chat of chats" (click)="chatNavigation(chat.messages[0].userID, chat.chatID)">
                 <div class="chat-wrapper-content">
                     <app-profile-image 
-                    [username]="chat.messages[0].source">
+                    [username]="chat.messages[0].userID">
                     </app-profile-image>
                     <div class="chat-info">
                         <div class="chat-status">
                             <h1>
-                                {{chat.messages[0].source}}
+                                {{chat.username}}
                             </h1>
                             
                             <div class="status" *ngIf="isActive(chat.messages[0].userID)">

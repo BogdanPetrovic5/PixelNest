@@ -8,6 +8,7 @@ import { LastSendersDto } from '../../dto/lastSenders.dto';
 import { NotificationStateService } from '../states/notification-state.service';
 import { NotificationDto } from '../../dto/notification.dto';
 import { WebSocketMessage } from '../../dto/websocketMessage.dto';
+import { InboxStateService } from '../states/inbox-state.service';
 
 
 @Injectable({
@@ -25,6 +26,7 @@ export class WebsocketService {
     isSeen:true,
     messageID: 0,
     userID: ''
+    
   };
   messages:Message[] = []
   lastSenderIDs:LastSendersDto[] =[]
@@ -41,7 +43,8 @@ export class WebsocketService {
     private _chatState:ChatStateService,
     private _dashboardState:DashboardStateService,
     private _userSession:UserSessionService,
-    private _notificationState:NotificationStateService
+    private _notificationState:NotificationStateService,
+    private _inboxState:InboxStateService
   ) { }
 
   connect():void{
@@ -59,9 +62,10 @@ export class WebsocketService {
       this.messageData.message = data.Content
       this.messageData.sender = data.SenderUsername
       this.messageData.receiver = data.TargetUser
-      this.messageData.roomID = data.RoomID
-      this.messageData.dateSent = new Date()
+      this.messageData.roomID = data.ChatID
+      this.messageData.dateSent = data.Date
       this.messageData.userID = data.SenderUser
+     
         if(data.Type === 'Leave'){
         this._chatState.setSeenStatus(false);
         return
@@ -143,6 +147,7 @@ private _processNewNotification(data:any){
     this._dashboardState.setMessage(this.messageData.message)
     this._dashboardState.setSender(this.messageData.sender)
     this._dashboardState.setIsNotification(true);
+    this._inboxState.updateInbox(this.messageData)
     this._processLastIDS(this.messageData.userID)
     
 
@@ -167,7 +172,7 @@ private _processNewNotification(data:any){
     this._userSession.setToCookie("ids", JSON.stringify(this.lastSenderIDs));
     
    
-    console.log(this.lastSenderIDs)
+
     this.lastSenderIDObj.senders = []
     
   }
