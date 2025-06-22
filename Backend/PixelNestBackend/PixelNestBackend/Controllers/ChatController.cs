@@ -73,7 +73,7 @@ namespace PixelNestBackend.Controllers
         }
         [Authorize]
         [HttpPost("message/send")]
-        public async Task<ActionResult<bool>> SendMessage(MessageDto messageDto)
+        public async Task<ActionResult<MessageResponse>> SendMessage(MessageDto messageDto)
         {
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
            
@@ -86,7 +86,7 @@ namespace PixelNestBackend.Controllers
        
 
                 await _websocketManager.SendMessageToUser(response);
-                return Ok(response.IsUserInRoom);
+                return Ok(response);
             }
             return BadRequest();
             

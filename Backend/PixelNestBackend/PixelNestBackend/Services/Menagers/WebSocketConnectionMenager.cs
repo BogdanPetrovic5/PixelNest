@@ -127,10 +127,13 @@ namespace PixelNestBackend.Services.Menagers
                 TargetUser = messageResponse.ReceiverUsername,
                 RoomID = actualRoomID,
                 Content = messageResponse.Message,
-                SenderUser = (messageResponse.SenderID).ToString()
+                SenderUser = (messageResponse.SenderID).ToString(),
+                ChatID = messageResponse.ChatID,
+                Date = DateTime.UtcNow
+
             };
          
-        
+            Console.WriteLine(webSocketMessage.Date);
             if (IsUserInRoom(actualRoomID, (messageResponse.ReceiverID).ToString())) 
             {
                

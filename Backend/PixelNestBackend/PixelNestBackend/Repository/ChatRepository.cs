@@ -60,6 +60,7 @@ namespace PixelNestBackend.Repository
                    {
                        ChatID = group.Key,
                        UserID = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.ClientGuid).ToString() : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.ClientGuid).ToString() : "",
+                       Username = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.Username) : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.Username) : "",
                        Messages = group
 
 

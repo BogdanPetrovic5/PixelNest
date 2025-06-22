@@ -78,8 +78,9 @@ namespace PixelNestBackend.Services
                 Message = message.MessageText,
                 ReceiverUsername = _userUtility.GetUserName(message.ReceiverGuid),
                 SenderUsername = _userUtility.GetUserName(message.SenderGuid),
-                IsUserInRoom = isUserInRoom
-                
+                IsUserInRoom = isUserInRoom,
+                ChatID = message.ChatID,
+                Date = DateTime.UtcNow
             };
         }
 
