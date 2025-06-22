@@ -8,16 +8,17 @@ import { LottieStateService } from 'src/app/core/services/states/lottie-state.se
 import * as countries from 'i18n-iso-countries';
 import en from 'i18n-iso-countries/langs/en.json';
 import { CsvReaderService } from 'src/app/core/services/csv/csv-reader.service';
+import { finalize } from 'rxjs';
 @Component({
   selector: 'app-register-form',
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.scss']
 })
 export class RegisterFormComponent implements OnInit{
+  
   registerForm:FormGroup;
-
   error:boolean = false
-  enabled:boolean = false;
+  isRegisterButtonDisabled:boolean = false;
   pivot?:boolean = false;
   marginLeft:number = 0;
   barMargin:number = 0;
@@ -31,6 +32,7 @@ export class RegisterFormComponent implements OnInit{
   cityList:any;
   filteredCities:any;
   isDisabled:boolean = true;
+
   constructor(
     private _router:Router,
     private _formBuilder:FormBuilder,
@@ -150,41 +152,53 @@ export class RegisterFormComponent implements OnInit{
 
 
   register(){
-    const formValues = this.registerForm.value;
-    
-    if(this.registerForm.valid){
-      this.enabled = true;
-      this._lottieState.setIsInitialized(true);
-      this._authService.register(formValues).subscribe({
-        next: (response) => {
-          this.registerForm.reset({
-            Firstname:'',
-            Lastname:'',
-            Email:'',
-            Username:'',
-            Password:'',
+   
+    if(!this.registerForm.valid){
+      this.registerForm.markAllAsTouched();
+      return;
+    }
 
-          })
-          this._lottieState.setIsInitialized(false);
-          this._lottieState.setIsSuccess(true);
-         
-          setTimeout(() => {
-            this._lottieState.setIsSuccess(false);
-            this.enabled = true;
-            this.navigateToLogin();
-          }, 1500);
-        },
-        error: (error: HttpErrorResponse) => {
-          this._lottieState.setIsInitialized(false);
-          this.error = true;
-          this.enabled = true;
-          this.errorMessage = error.error?.message || "An unexpected error occurred.";
-          setTimeout(() => {
-            this.error = false;
-          }, 2000);
-        }
-      });
-    }else this.registerForm.markAllAsTouched()
+    const registerFormValues = this.registerForm.value;
+
     
+    this._lottieState.setIsInitialized(true);
+    this.isRegisterButtonDisabled = true;
+    this._authService.register(registerFormValues).pipe(
+      finalize(()=>{
+        this._lottieState.setIsInitialized(false);
+        this.isRegisterButtonDisabled = false;
+      })
+    ).subscribe({
+      next: () => {
+        this.resetForm();
+        this._lottieState.setIsSuccess(true);
+
+        setTimeout(() => {
+          this._lottieState.setIsSuccess(false);
+          this.navigateToLogin();
+        }, 1500);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.handleRegistrationError(error);
+      }
+    });
+  }
+  private resetForm(): void {
+    this.registerForm.reset({
+      Firstname: '',
+      Lastname: '',
+      Email: '',
+      Username: '',
+      Password: ''
+    });
+  }
+
+  private handleRegistrationError(error: HttpErrorResponse): void {
+    this.error = true;
+    this.isRegisterButtonDisabled = false;
+    this.errorMessage = error.error?.message || "An unexpected error occurred.";
+    setTimeout(() => {
+      this.error = false;
+    }, 2000);
   }
 }

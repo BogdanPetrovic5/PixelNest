@@ -160,11 +160,11 @@
                             <div *ngIf="registerForm.get('Password')?.hasError('pattern')" class="invalid-feedback">
                                 Password must have minimum 6 characters!
                             </div>
-                            <div class="invalid-feedback" *ngIf="!error">
+                            <div class="invalid-feedback" *ngIf="error">
                                 {{errorMessage}}
                                 
                             </div>
-                            <button type="submit"  [disabled]="enabled"><h1>REGISTER</h1></button>
+                            <button type="submit"  [disabled]="isRegisterButtonDisabled"><h1>REGISTER</h1></button>
                         </div>
                         
                         

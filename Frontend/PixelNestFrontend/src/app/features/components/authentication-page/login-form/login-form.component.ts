@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { GoogleAuthenticationService } from 'src/app/core/services/authentication/google/google-authentication.service';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
@@ -42,7 +43,7 @@ export class LoginFormComponent implements OnInit{
    }
 
  signWithGoogle(){
-    const state = this.generateRandomString(16);
+    const state = this._generateRandomString(16);
     this._userSession.setToLocalStorage("state", state);
     this._googleAuth.loginWithGoogle(state).subscribe({
       next:response=>{
@@ -62,50 +63,56 @@ export class LoginFormComponent implements OnInit{
 
     
  } 
- generateRandomString(length: number): string {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-} 
-login(){
-    const loginFormValues = this.loginForm.value;
-    if(!this.loginForm.hasError('required')){
-      this._lottieState.setIsInitialized(true);
-      this._authService.login(loginFormValues).subscribe((response) =>{
-        this._lottieState.setIsInitialized(false);
-        this._lottieState.setIsSuccess(true)
-        setTimeout(() => {
-          
-          this._lottieState.setIsSuccess(false)
-       
-          this._router.navigate(["/dashboard"])
-          
-          this._userSession.setToCookie("tokenExpirationAt", response.tokenExpiration)
-         
-        }, 1500);
-       
-      },(error:HttpErrorResponse)=>{
-        this._lottieState.setIsInitialized(false);  
-        this.errorMessage = "";
-        setTimeout(() => {
-            this.error = true;
-            this.errorMessage = error.error?.response || "An unexpected error occurred.";
-        }, 0);
-        this.loginForm.reset({
-            Email: '',
-            Password: ''
-        });
-        setTimeout(()=>{
-            this.error = false;    
-        }, 2000)
-      }
-    
-      )
+
+  private _generateRandomString(length: number): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    
+    return result;
+  } 
+  login(){
+      if(!this.loginForm.valid) return
+
+      const loginFormValue = this.loginForm.value;
+
+      this._lottieState.setIsInitialized(true);
+      this._authService.login(loginFormValue).pipe(
+        finalize(()=>{
+          this._lottieState.setIsInitialized(false);
+        })
+      ).subscribe({
+        next:response=>{
+          this._lottieState.setIsSuccess(true);
+
+          setTimeout(() => {
+            this._lottieState.setIsSuccess(false);
+            this._router.navigate(['/dashboard']);
+            this._userSession.setToCookie('tokenExpirationAt', response.tokenExpiration);
+          }, 1500);
+        },
+        error:error=>{
+          this._handleError(error)
+        }
+      })
+      
+  }
+  private _handleError(error: any) {
+    this.errorMessage = '';
+    this.loginForm.reset({
+      Email: '',
+      Password: ''
+    });
+
+    setTimeout(() => {
+      this.error = true;
+      this.errorMessage = error.error?.response || 'An unexpected error occurred.';
+    }, 0);
+
+    setTimeout(() => {
+      this.error = false;
+    }, 2000);
   }
 }
