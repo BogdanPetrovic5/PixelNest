@@ -89,7 +89,7 @@ namespace PixelNestBackend.Controllers
 
             if (loginResponse != null && loginResponse.IsSuccessful)
             {
-                var tokenExpirationDate = DateTime.Now.AddMinutes(30);
+                var tokenExpirationDate = DateTime.Now.AddDays(1);
                 loginResponse.TokenExpiration = tokenExpirationDate;
                 HttpContext.Session.SetString(state, System.Text.Json.JsonSerializer.Serialize(loginResponse));
                 var cookieOptions = new CookieOptions
@@ -140,7 +140,7 @@ namespace PixelNestBackend.Controllers
             string email = _userUtility.GetEmail(userGuid);
             string clientGuid = _userUtility.GetClientGuid(userGuid);
 
-            var tokenExpirationDate = DateTime.Now.AddMinutes(30);
+            var tokenExpirationDate = DateTime.Now.AddDays(1);
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
@@ -219,7 +219,7 @@ namespace PixelNestBackend.Controllers
                     Response=response.Response
                 });
             }
-            var tokenExpirationDate = DateTime.Now.AddMinutes(30);
+            var tokenExpirationDate = DateTime.Now.AddDays(1);
             var tokenCookieOption = new CookieOptions
             {
                 HttpOnly = true,

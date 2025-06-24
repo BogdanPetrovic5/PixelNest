@@ -110,7 +110,7 @@ builder.Services.AddSession(option =>
 {
     option.Cookie.HttpOnly = true;
     option.Cookie.IsEssential = true;
-    option.IdleTimeout = TimeSpan.FromMinutes(30);
+    option.IdleTimeout = TimeSpan.FromHours(23);
 });
 builder.Services.AddAuthentication(options =>
 {
