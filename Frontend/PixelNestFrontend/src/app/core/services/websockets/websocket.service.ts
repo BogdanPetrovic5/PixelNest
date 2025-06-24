@@ -53,64 +53,57 @@ export class WebsocketService {
     this._socket = new WebSocket(wsURL);
 
     this._socket.onopen = () => {
-      console.log("Websocket connection established!")
     }
     this._socket.onmessage = (event) => {
-   
       var data = JSON.parse(event.data);
-      
-      this.messageData.message = data.Content
-      this.messageData.sender = data.SenderUsername
-      this.messageData.receiver = data.TargetUser
-      this.messageData.roomID = data.ChatID
-      this.messageData.dateSent = data.Date
-      this.messageData.userID = data.SenderUser
-     
-        if(data.Type === 'Leave'){
-        this._chatState.setSeenStatus(false);
-        return
-      }
-      if(data.Type === 'Enter'){
-        this._chatState.setSeenStatus(true);
-        return
-      }
-      if(data.Type === "Direct"){
-        this._proccessDirectMessage()
-      }
-      if(data.Type === "Status"){
-        this._chatState.updateActiveUsers(data);
-      }
-      if(data.Type === "ActiveUsers"){
-     
-        this._chatState.setActiveUsers(data.Users);
-      }
-      
-      if(data.Type === "Like" || data.Type === "Comment" || data.Type === "Follow"){
-          this._processNewNotification(data);
-          
-      }
-      if(data.Type === "Typing"){
-          this._chatState.setIsTyping(true)
-          return
-      }
-      if(data.Type === "StopTyping"){
-          this._chatState.setIsTyping(false)
-          return
-          
-      }
-    
-      this._chatState.setMessages(this.messageData)
-
+      this._processWebsocketMessage(data);
     };
 
     this._socket.onclose = (event) => {
-      console.log('WebSocket connection closed:', event);
     };
 
     this._socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
     };
    
+  }
+  private _processWebsocketMessage(data: any) {
+    this._formMessageData(data);
+    switch (data.Type) {
+      case "Typing":
+        this._chatState.setIsTyping(true);
+        return;
+
+      case "StopTyping":
+        this._chatState.setIsTyping(false);
+        return;
+
+      case "Leave":
+        this._chatState.setSeenStatus(false);
+        return;
+
+      case "Enter":
+        this._chatState.setSeenStatus(true);
+        return;
+
+      case "Direct":
+        this._proccessDirectMessage();
+        break;
+
+      case "Status":
+        this._chatState.updateActiveUsers(data);
+        return;
+
+      case "ActiveUsers":
+        this._chatState.setActiveUsers(data.Users);
+        return;
+
+      case "Like":
+      case "Comment":
+      case "Follow":
+        this._processNewNotification(data);
+        return;
+    }
+    this._chatState.setMessages(this.messageData)
   }
 
   close(): void {
@@ -118,39 +111,49 @@ export class WebsocketService {
       this._socket.close();
     }
   }
-sendTypingNotification(receiverClientGuid:string, senderClientGuid:string, content:string, type:string, roomID:string){
-  if(this._socket && this._socket.readyState == WebSocket.OPEN){
-    const message:WebSocketMessage = {
-      TargetUser:receiverClientGuid,
-      SenderUser:senderClientGuid,
-      Type:type,
-      Content:content,
-      SenderUsername:'',
-      RoomID:roomID
+
+  sendTypingNotification(receiverClientGuid:string, senderClientGuid:string, content:string, type:string, roomID:string){
+    if(this._socket && this._socket.readyState == WebSocket.OPEN){
+      const message:WebSocketMessage = {
+        TargetUser:receiverClientGuid,
+        SenderUser:senderClientGuid,
+        Type:type,
+        Content:content,
+        SenderUsername:'',
+        RoomID:roomID
+      }
+      this._socket.send(JSON.stringify(message));
     }
-    this._socket.send(JSON.stringify(message));
   }
-}
-private _processNewNotification(data:any){
 
-  this.newNotification.message = `${data.SenderUsername} ${data.Content}`;
-  this.newNotification.username = data.SenderUsername
+  private _formMessageData(data:any){
+    this.messageData.message = data.Content
+    this.messageData.sender = data.SenderUsername
+    this.messageData.receiver = data.TargetUser
+    this.messageData.roomID = data.ChatID
+    this.messageData.dateSent = data.Date
+    this.messageData.userID = data.SenderUser
+  }
 
-  this._notificationState.updateNotifications(this.newNotification);
+  private _processNewNotification(data:any){
 
-  this._notificationState.setNewNotification(true)
-  this._notificationState.setNotificationType(data.Type)
-  this._notificationState.updateNotification(1);
+    this.newNotification.message = `${data.SenderUsername} ${data.Content}`;
+    this.newNotification.username = data.SenderUsername
 
-}
+    this._notificationState.updateNotifications(this.newNotification);
+
+    this._notificationState.setNewNotification(true)
+    this._notificationState.setNotificationType(data.Type)
+    this._notificationState.updateNotification(1);
+
+  }
+
   private _proccessDirectMessage(){
-    this._dashboardState.setMessage(this.messageData.message)
-    this._dashboardState.setSender(this.messageData.sender)
-    this._dashboardState.setIsNotification(true);
-    this._inboxState.updateInbox(this.messageData)
-    this._processLastIDS(this.messageData.userID)
-    
-
+      this._dashboardState.setMessage(this.messageData.message)
+      this._dashboardState.setSender(this.messageData.sender)
+      this._dashboardState.setIsNotification(true);
+      this._inboxState.updateInbox(this.messageData)
+      this._processLastIDS(this.messageData.userID)
   }
 
   private _processLastIDS(sender:string){
@@ -168,11 +171,7 @@ private _processNewNotification(data:any){
       this.lastSenderIDs.push(copy);
       
     }
-
     this._userSession.setToCookie("ids", JSON.stringify(this.lastSenderIDs));
-    
-   
-
     this.lastSenderIDObj.senders = []
     
   }
