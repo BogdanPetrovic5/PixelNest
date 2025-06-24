@@ -13,7 +13,7 @@ export class UserSessionService {
   private _userActivity$ = new BehaviorSubject<boolean>(false);
   private _refreshInterval = 5 * 60 * 1000;
 
-  private _currentUrl = new BehaviorSubject<string>("/Dashboard/Feed")
+  private _currentUrl = new BehaviorSubject<string>("/dashboard/feed")
   currentUrl$ = this._currentUrl.asObservable()
 
   private _tokenExpiration: number | null = null;
@@ -40,7 +40,7 @@ export class UserSessionService {
 
     if (timeBeforeRefresh > 0) {
       timer(timeBeforeRefresh).subscribe(() => {
-        console.log(this._userActivity$.getValue());
+        
         if(this._userActivity$.getValue() == true){
           this.refreshToken();
         }else{
@@ -61,7 +61,6 @@ export class UserSessionService {
         this.setToCookie("username", response.username)
         this.setToCookie("userID", response.clientGuid)
         this.setTokenExpiration(response.tokenExpiration);
-        console.log(response.tokenExpiration)
       }
     })
   }
@@ -87,7 +86,7 @@ export class UserSessionService {
   }
   setToCookie(key:any, value:any){
     const expiryDate = new Date();
-    expiryDate.setMinutes(expiryDate.getMinutes() + 30);
+    expiryDate.setDate(expiryDate.getDay() + 1);
     this._cookieService.set(key, value,expiryDate, '/');
   }
   deleteKeyFromCookie(key:any){
