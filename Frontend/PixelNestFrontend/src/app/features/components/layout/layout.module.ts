@@ -38,6 +38,7 @@ import { PostViewComponent } from './post-view/post-view.component';
   ],
   providers:[
   
-  ]
+  ],
+ 
 })
 export class LayoutModule { }

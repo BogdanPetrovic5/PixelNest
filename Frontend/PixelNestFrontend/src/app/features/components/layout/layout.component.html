@@ -1,9 +1,9 @@
 <div class="container" >
-    <app-new-post *ngIf="newPost"></app-new-post>
-    <app-log-out-dialog *ngIf="logOutDialog"></app-log-out-dialog>
-    <app-notification *ngIf="isNotification"></app-notification>
-    <app-session-expired-dialog *ngIf="sessionExpired"></app-session-expired-dialog>
-    <app-pixelnest-loading *ngIf="isFeedInitilizing"></app-pixelnest-loading>
+    <app-new-post *ngIf="layoutState$.isNewPostTabOpened"></app-new-post>
+    <app-log-out-dialog *ngIf="layoutState$.isLogoutDialogOpened"></app-log-out-dialog>
+    <app-notification *ngIf="layoutState$.newNotification"></app-notification>
+    <app-session-expired-dialog *ngIf="layoutState$.isSessionExpired"></app-session-expired-dialog>
+    <app-pixelnest-loading *ngIf="layoutState$.isFeedInitializing"></app-pixelnest-loading>
     <div class="content">
         <div class="navigation">
             <app-navigation></app-navigation>
@@ -12,8 +12,8 @@
             <router-outlet></router-outlet>
         </div>
     </div>
-    <app-lottie-success *ngIf="isSuccess"></app-lottie-success>
-    <div class="is-initialized" *ngIf="isLoading">
+    <app-lottie-success *ngIf="layoutState$.isSuccess"></app-lottie-success>
+    <div class="is-initialized" *ngIf="layoutState$.isInitializing">
         <app-lottie-loading ></app-lottie-loading>
     </div>
   
