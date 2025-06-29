@@ -25,7 +25,7 @@ export class ReplyComponent {
   
   @Output() notifyParent: EventEmitter<{message:string}> = new EventEmitter();
 
-  postID:number = 0;
+  postID:string = '';
 
   replyText:string = "";
   username:string = "";

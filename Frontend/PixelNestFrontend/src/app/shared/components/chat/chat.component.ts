@@ -67,7 +67,8 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
   ngOnInit(): void {
     this.messageData = this._createDefaultMessage()
-    this.currentClientGuid = this._userSession.getFromCookie("userID")
+    this.currentClientGuid = this._userSession.getFromCookie("sessionID")
+    
     this._initializeComponent()
 
   }
@@ -76,10 +77,10 @@ export class ChatComponent implements OnInit, OnDestroy{
    
   }
   typing(){
-    this._websocketService.sendTypingNotification(this.user.clientGuid, this._userSession.getFromCookie("userID"), "is typing", "Typing", this.chatRoomID)
+    this._websocketService.sendTypingNotification(this.user.clientGuid, this.currentClientGuid, "is typing", "Typing", this.chatRoomID)
   }
   stopTyping(){
-     this._websocketService.sendTypingNotification(this.user.clientGuid, this._userSession.getFromCookie("userID"), "", "StopTyping", this.chatRoomID)
+     this._websocketService.sendTypingNotification(this.user.clientGuid, this.currentClientGuid, "", "StopTyping", this.chatRoomID)
   }
   navigate(url:string){
     this._router.navigate([`${url}`])
@@ -97,14 +98,17 @@ export class ChatComponent implements OnInit, OnDestroy{
     if(this.messageData.message.length > 0){
       this._chatService.sendMessage(this.messageData).subscribe({
         next:response=>{
-          this.messageData.userID = this._userSession.getFromCookie("userID");
-          
-          if(response == true){
+          this.messageData.userID = this.currentClientGuid
+          this.messageData.dateSent = response.date
+          console.log(this.messageData)
+          if(response.isUserInRoom == true){
             this.messageData.isSeen = true
+            
+            
           }else this.messageData.isSeen = false;
           const messageCopy = { ...this.messageData };
           
-          console.log(messageCopy)
+        
           this.messages.push(messageCopy)
           
           this.messageData.message = "";
@@ -131,6 +135,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     this._chatState.isTyping$.subscribe({
       next:response=>{
         this.isTyping = response;
+        if(this.isTyping) this.scrollToBottom()
       }
     })
 
@@ -154,7 +159,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   private _updateLastMessage(){
     this._chatState.seenStatus$.subscribe({
       next:response=>{
-        console.log(response)
+        
         if(response){
           this.messages[this.messages.length - 1].isSeen = true;
         }
@@ -186,8 +191,9 @@ export class ChatComponent implements OnInit, OnDestroy{
           
           if(response.roomID == this.chatRoomID || response.roomID == this.reverseChatRoomID){
             const messageCopy = { ...response };
+            
             this.messages.push(messageCopy)
-            console.log(this.messages)
+            this.scrollToBottom()
           }
         }
       })
@@ -222,7 +228,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     let senders = this._userSession.getFromCookie("ids");
     if(senders){
       let sendersParsed = JSON.parse(senders);
-      let currentUsername = this._userSession.getFromCookie("userID")
+      let currentUsername = this._userSession.getFromCookie("sessionID")
       const matched = sendersParsed.find((a:any) => a.currentUser === currentUsername)
    
       if (matched) {
@@ -237,14 +243,17 @@ export class ChatComponent implements OnInit, OnDestroy{
 
     
   }
-  formatDate(date:Date){
+  formatDate(date:Date | string){
+    
     let formattedDate = ""
- 
+    if(typeof(date) === "string"){
+      date = date.replace(/Z$/, "");
+    }
     if(date){
       const dateCopy = date;
     
       const dateObject = new Date(dateCopy)
-     
+      
       const utcDate = new Date(dateObject.getTime() - dateObject.getTimezoneOffset() * 60000);
 
     
@@ -257,9 +266,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     return formattedDate
   }
 
-  private _checkUTC(date:string){
-    return date.endsWith('Z') || date.includes('+00:00');
-  }
+
   private _createDefaultMessage(): Message {
     const currentDate = new Date();
    

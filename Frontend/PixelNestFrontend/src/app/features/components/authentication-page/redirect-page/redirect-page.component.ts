@@ -18,11 +18,12 @@ export class RedirectPageComponent implements OnInit{
   }
   ngOnInit(): void {
     const state = this._userSession.getFromLocalStorage("state");
+    
     this._googleAuth.getGoogleResponse(state).subscribe({
       next:response=>{
         this._userSession.setToCookie("username", response.username);
         this._userSession.setToCookie("email", response.email);
-        this._userSession.setToCookie("userID", response.clientGuid);
+        this._userSession.setToCookie("sessionID", response.clientGuid);
         this._router.navigate(['dashboard/feed'])
         
       }

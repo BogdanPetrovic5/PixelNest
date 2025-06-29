@@ -47,16 +47,16 @@ const routes: Routes = [
       {
        path: 'dashboard',
       loadChildren: () => import('./features/components/layout/dashboard/dashboard.module').then(m => m.DashboardModule),
-      
+      canActivate:[DashboardGuard]
         
       },
       {
-        path:"profile/:username",
+        path:"profile/:clientID",
         component:ProfileComponent,
         canActivate:[DashboardGuard],
       },
       {
-        path:"profile/:username/analytics",
+        path:"profile/:clientID/analytics",
         component:AnalyticsComponent,
         canActivate:[DashboardGuard],
       },

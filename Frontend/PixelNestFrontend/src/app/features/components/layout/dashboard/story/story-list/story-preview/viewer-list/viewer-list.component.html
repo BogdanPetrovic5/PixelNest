@@ -7,7 +7,7 @@
         <h1 class="title">Views</h1>
         <div class="list">
             <div class="user-wrapper" *ngFor="let user of viewers">
-                <app-profile-image [username]="user.username"></app-profile-image>
+                <app-profile-image [clientGuid]="user.username"></app-profile-image>
                 <h1>{{user.username}}</h1>
             </div>
         </div>

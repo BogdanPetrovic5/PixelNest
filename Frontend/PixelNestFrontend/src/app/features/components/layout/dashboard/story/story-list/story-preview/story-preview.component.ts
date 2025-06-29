@@ -1,4 +1,4 @@
-import { animate } from '@angular/animations';
+import { animate, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 
 import { Subscription } from 'rxjs';
@@ -43,7 +43,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     ){}
     
     ngOnInit(): void {    
-      console.log(this.stories)
+      
       this.baseUrl = environment.blobStorageBaseUrl;
       this.username = this._userService.getFromCookie("username")
       this.subscriptions?.add(
@@ -164,7 +164,7 @@ export class StoryPreviewComponent implements OnInit, OnDestroy{
     }
 
     private _markStoryAsSeen(storyID:string){
-      
+      this.stories![this.currentIndex].seenByUser = true;
       this._storyService.marStoryAsSeen(storyID).subscribe({
         next:response=>{
           

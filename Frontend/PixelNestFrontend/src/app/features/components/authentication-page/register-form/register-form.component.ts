@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import * as countries from 'i18n-iso-countries';
 import en from 'i18n-iso-countries/langs/en.json';
@@ -72,6 +71,7 @@ export class RegisterFormComponent implements OnInit{
       country.toLowerCase().includes(value)
     );
   }
+
   filterCities(event:Event){
     const value = (event.target as HTMLInputElement).value.toLocaleLowerCase();
     
@@ -81,9 +81,11 @@ export class RegisterFormComponent implements OnInit{
       city.toLowerCase().includes(value)
     );
   }
+
   openSelectionCountry(){
     this.isSelectableCountry = !this.isSelectableCountry;
   }
+  
   openSelectionCity(){
     this.isSelectableCity = !this.isSelectableCity
     
@@ -136,20 +138,6 @@ export class RegisterFormComponent implements OnInit{
   navigateToLogin(){
     this._router.navigate(['/authentication/login'])
   }
-
-  hasEmptyFields(){
-    let hasEmpty = false;
-
-    Object.keys(this.registerForm.controls).forEach(key =>{
-      const control = this.registerForm.get(key);
-
-      if (control && (control.value === '' || control.value === null || control.value === undefined)) {
-        hasEmpty = true;
-      }
-    })
-  }
-
-
 
   register(){
    

@@ -40,7 +40,7 @@ export class AuthenticationService {
     const url = `${environment.apiUrl}/api/authentication/login`;
     return this._httpClient.post<any>(url, formGroup, {withCredentials:true}).pipe(
       tap(response=> {
-        console.log(response)
+        
         this._storeCredentials(response)
         this.isLoggedIn()
       })
@@ -61,6 +61,6 @@ export class AuthenticationService {
  
     this._userSessionService.setToCookie("username",response.username)
     this._userSessionService.setToCookie("email", response.email);
-    this._userSessionService.setToCookie("userID", response.clientGuid);
+    this._userSessionService.setToCookie("sessionID", response.clientGuid);
   }
 }

@@ -28,15 +28,11 @@ export class SearchComponent implements OnInit{
       
       switchMap((term:string)=>
         this._userService.findUsers(term)
-      ),
-      tap((users)=> {
-        
-      })
+      )
     ).subscribe(
       (users)=>{
         if(this.users.length > 0){
           setTimeout(() => {
-           
             this._modifyUsers(users);
           }, 500);
          
@@ -45,24 +41,6 @@ export class SearchComponent implements OnInit{
        
       }
     )
-  }
-  private _modifyUsers(users:Users[]){
-    for (let i = this.users.length - 1; i >= 0; i--) {
-    
-      if (!users.some(user => user.username === this.users[i].username)) {
-        this.users[i].anim = true
-        setTimeout(() => {
-          this.users.splice(i, 1);
-          this.users[i].anim = false
-        }, 300);
-       
-      }
-    }
-    users.forEach(user => {
-      if (!this.users.some(existingUser => existingUser.username === user.username)) {
-        this.users.push({ ...user, anim: false });
-      }
-    });
   }
   onBlur() {
     this.focus = false;
@@ -81,5 +59,23 @@ export class SearchComponent implements OnInit{
   }
   navigate(username:string){
     this._router.navigate([`profile/${username}`])
+  }
+  private _modifyUsers(users:Users[]){
+    for (let i = this.users.length - 1; i >= 0; i--) {
+    
+      if (!users.some(user => user.username === this.users[i].username)) {
+        this.users[i].anim = true
+        setTimeout(() => {
+          this.users.splice(i, 1);
+          this.users[i].anim = false
+        }, 300);
+       
+      }
+    }
+    users.forEach(user => {
+      if (!this.users.some(existingUser => existingUser.username === user.username)) {
+        this.users.push({ ...user, anim: false });
+      }
+    });
   }
 }

@@ -25,7 +25,7 @@ export class PostService {
       url = `${environment.apiUrl}/api/post/posts?${parameter}&page=${currentPage}`;
     }
   return this._httpClient.get<any>(url);
-    return this._httpClient.get<any>(url)
+    
   }
   likePost(postGuid?:string):Observable<any>{
     const url = `${environment.apiUrl}/api/post/${postGuid}/like`
@@ -41,7 +41,7 @@ export class PostService {
     })
   }
 
-  addComment(commentText:string, username:string, postID:number, parentCommentID?:number):Observable<any>{
+  addComment(commentText:string, username:string, postID:string, parentCommentID?:number):Observable<any>{
     const url = `${environment.apiUrl}/api/post/comment`
     return this._httpClient.post(url, {
       CommentText:commentText,

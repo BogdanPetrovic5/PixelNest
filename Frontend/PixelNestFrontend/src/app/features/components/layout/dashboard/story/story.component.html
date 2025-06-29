@@ -13,7 +13,7 @@
                           '2px solid red' : '2px solid gray'
               }">
                
-                <app-profile-image [stringUrl]="stringUrl" [username]="clientGuid" [ngStyle]="{
+                <app-profile-image [stringUrl]="stringUrl" [clientGuid]="clientGuid" [ngStyle]="{
                     'width': extractedStories.length === 0 ? '100%' : '',
                     'height': extractedStories.length === 0 ? '100%' : ''
                   }"></app-profile-image>
@@ -31,7 +31,7 @@
                 <div class="user-box" #userBox *ngFor="let story of groupedStories; let i = index" (click)="openStories(i)">
                     
                     <div class="box" [ngStyle]="{'border': story?.stories?.[story.stories!.length - 1]?.seenByUser ? '2px solid gray':'2px solid red'} ">
-                        <app-profile-image [username]="story.ownerUsername"></app-profile-image>
+                        <app-profile-image [clientGuid]="story.ownerUsername"></app-profile-image>
                         <!-- <div class="new"></div> -->
                     </div>
                     <h1>{{story.ownerUsername}}</h1>

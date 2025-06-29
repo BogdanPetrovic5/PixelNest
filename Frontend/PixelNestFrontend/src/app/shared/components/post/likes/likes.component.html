@@ -4,9 +4,9 @@
           <h1>Likes</h1>
         </div>
         <div class="usernames">
-            <div class="username" *ngFor="let username of likes">
-                <app-profile-image [username]="username.clientGuid"></app-profile-image>
-                <h1 (click)="navigateToProfile(username.clientGuid)">{{username.username}}</h1>
+            <div class="username" *ngFor="let user of likes">
+                <app-profile-image [clientGuid]="user.clientGuid"></app-profile-image>
+                <h1 (click)="navigateToProfile(user.clientGuid)">{{user.username}}</h1>
             </div>
         </div>
         <div class="footer">

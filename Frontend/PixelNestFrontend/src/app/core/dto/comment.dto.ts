@@ -7,7 +7,7 @@ export interface CommentDto {
     commentText?: string;
     likedByUsers?: LikedByUsers[]; 
     parentCommentID?: number | null;
-    postID?: number;
+    postID?: string;
     replies?: Replies[] | [];
     totalLikes?: number;
     clientGuid:string

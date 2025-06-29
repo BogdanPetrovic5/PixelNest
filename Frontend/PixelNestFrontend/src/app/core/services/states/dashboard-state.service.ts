@@ -5,10 +5,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class DashboardStateService {
-  private NewPostTabSubject = new BehaviorSubject<boolean | null>(false);
+  private NewPostTabSubject = new BehaviorSubject<boolean>(false);
   newPostTab$ = this.NewPostTabSubject.asObservable()
 
-  private IsLikesTabSubject = new BehaviorSubject<boolean | null>(false)
+  private IsLikesTabSubject = new BehaviorSubject<boolean>(false)
   isLikesTab$ = this.IsLikesTabSubject.asObservable()
 
   private NewLocationSubject = new BehaviorSubject<string | null>(null)
@@ -65,10 +65,10 @@ export class DashboardStateService {
     this._newStoryTab.next(isSelected);
   }
 
-  setIsTabSelected(isSelected:boolean | null){
+  setIsTabSelected(isSelected:boolean){
     this.NewPostTabSubject.next(isSelected)
   }
-  setIsLikesTab(isSelected:boolean | null){
+  setIsLikesTab(isSelected:boolean){
     this.IsLikesTabSubject.next(isSelected);
   }
 

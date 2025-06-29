@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NotificationDto } from 'src/app/core/dto/notification.dto';
 import { NotificationOpened } from 'src/app/core/dto/notificationOpened.dto';
 import { NotificationService } from 'src/app/core/services/notification/notification.service';
+import { NotificationStateService } from 'src/app/core/services/states/notification-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { environment } from 'src/environments/environment.development';
 
@@ -12,7 +13,7 @@ import { environment } from 'src/environments/environment.development';
   styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit{
-baseUrl:string = ""
+  baseUrl:string = ""
   notifications:NotificationDto[] = []
   notificationsID:NotificationOpened = {
     notificationID:[]
@@ -20,7 +21,7 @@ baseUrl:string = ""
   constructor(
     private _notificationService:NotificationService,
     private _router:Router,
- 
+    private _notificationState:NotificationStateService
   ){
 
   }
@@ -28,7 +29,7 @@ baseUrl:string = ""
   ngOnInit(): void {
    
      this.baseUrl = environment.blobStorageBaseUrl;
-    this._notificationService.getNotifications().subscribe({
+    this._notificationState.notifications$.subscribe({
       next:response=>{
         this.notifications = response;
      

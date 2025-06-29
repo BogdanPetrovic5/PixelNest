@@ -59,7 +59,7 @@ export class UserSessionService {
         this.setToCookie("tokenExpirationAt", response.tokenExpiration)
         this.setToCookie("email", response.email)
         this.setToCookie("username", response.username)
-        this.setToCookie("userID", response.clientGuid)
+        this.setToCookie("sessionID", response.clientGuid)
         this.setTokenExpiration(response.tokenExpiration);
       }
     })
@@ -86,7 +86,7 @@ export class UserSessionService {
   }
   setToCookie(key:any, value:any){
     const expiryDate = new Date();
-    expiryDate.setDate(expiryDate.getDay() + 1);
+    expiryDate.setDate(expiryDate.getDate() + 1);
     this._cookieService.set(key, value,expiryDate, '/');
   }
   deleteKeyFromCookie(key:any){

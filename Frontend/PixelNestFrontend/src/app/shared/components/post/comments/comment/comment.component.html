@@ -4,11 +4,19 @@
             <!-- <img src="./assets/images/user.png" alt=""> -->
             <div class="details">
                 <!-- <h1 (click)="navigateToProfile(comment.username)">{{comment.username}}</h1> -->
-                <app-user-tag [username]="comment.username" [clientGuid]="comment.clientGuid"></app-user-tag>
+                <app-user-tag 
+                    [username]="comment.username" 
+                    [clientGuid]="comment.clientGuid"
+                >
+                </app-user-tag>
                 <p>{{comment.commentText}} </p>
                 <span (click)="openParentReply()">Reply</span>
                <div *ngIf="isReplyBox">
-                <input (keydown.enter)="replyComment(comment.commentID)" type="text" placeholder="Reply here..."  [(ngModel)]="replyText" >
+                <input 
+                (keydown.enter)="replyComment(comment.commentID)" 
+                type="text" 
+                placeholder="Reply here..."  
+                [(ngModel)]="replyText" >
                 <span class="reply-button" (click)="replyComment(comment.commentID)">
                     <img src="/assets/images/arrow.png" alt="">
                 </span>
@@ -16,7 +24,11 @@
                
             </div>
         </div>
-        <app-like-comment [commentID]="comment.commentID" [likedByUsers] = "comment.likedByUsers" [commentUsername]="comment.username"></app-like-comment>
+        <app-like-comment 
+        [commentID]="comment.commentID" 
+        [likedByUsers] = "comment.likedByUsers" 
+        [commentUsername]="comment.username"
+        ></app-like-comment>
     </div>
     <span class="view-replies" *ngIf="haveReplies()" (click)="getReplies()" (click)="toggleReplies()">View replies</span>
 
@@ -36,7 +48,10 @@
                 </div>
             </div>
             <img class="like" src="./assets/images/like.png" alt=""> -->
-            <app-reply [reply]="reply" [commentID]="reply.commentID" [parentUsername]="findUsername(reply.parentCommentID)" (notifyParent)="getReplies($event)"></app-reply>
+            <app-reply [reply]="reply" 
+            [commentID]="reply.commentID" 
+            [parentUsername]="findUsername(reply.parentCommentID)" 
+            (notifyParent)="getReplies($event)"></app-reply>
         </div>
     </div>
 </div>

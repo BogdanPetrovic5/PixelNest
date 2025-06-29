@@ -28,6 +28,7 @@ export class PostComponent implements OnInit{
   @Input() post!:PostDto;
   @Input() postIndex!:number
   @Input() postID!:string
+
   likedByUsers: LikedByUsers[] = [];
   savedByUsers:SavedPosts[] = []
 
@@ -175,11 +176,12 @@ export class PostComponent implements OnInit{
 
   showComments(){
     this.areCommentsOpened = true;
-    this._userSession.setToLocalStorage("postID",this.post.postID);
+    this._userSession.setToLocalStorage("postID", this.post.postID);
   }
   openDeleteDialog(){
     this.deleteDialog = true;
   }
+
   likePost(postID:string){
     this._postService.likePost(postID).pipe(
       tap((response)=>{
@@ -192,9 +194,11 @@ export class PostComponent implements OnInit{
       })
     ).subscribe()
   }
+
   isSavedByUser(){
     return this.post.savedByUsers.find(a=>a.username == this.username);
   }
+
   savePost(){
     this._postService.savePost(this.post.postID).subscribe({
       next:response=>{
@@ -203,6 +207,7 @@ export class PostComponent implements OnInit{
       }
     })
   }
+  
   private _initializeComponent(){
     this.username = this._userSession.getFromCookie("username");
     this.likedByUsers = this.post.likedByUsers;
@@ -232,7 +237,7 @@ export class PostComponent implements OnInit{
 
   
   private _handleLikeArray(){
-    if(!this.isLiked) this.likedByUsers.push({username: this.username, clientGuid:this._userSession.getFromCookie("userID")})
+    if(!this.isLiked) this.likedByUsers.push({username: this.username, clientGuid:this._userSession.getFromCookie("sessionID")})
     else this.likedByUsers = this.likedByUsers.filter(user => user.username !== this.username)
     this.isLiked = !this.isLiked
 

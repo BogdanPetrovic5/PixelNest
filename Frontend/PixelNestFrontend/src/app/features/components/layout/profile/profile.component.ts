@@ -86,7 +86,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
         profileImagePath:''
       }
       this._postState.setQuery(undefined);
-      console.clear()
       
   }
 
@@ -164,49 +163,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
   }
 
   private _initializeComponent(){
-    
-    // this.subscribe.add(
-    //   this._route.paramMap.subscribe(params => {
-    //     this.username = params.get("username") || this._userSessions.getFromCookie("username")
-    //     this._resetProfileState();
-    //     this._loadData()
-    //      this._userService.getProfilePicture(this.username).subscribe({next:response=>{
-    //             if(response.path.length > 0){
-    //               this.stringUrl = environment.blobStorageBaseUrl + response.path;
-    //             }
-    //      }}) 
-    //   })
-
-    // );
-
-
-    // this._route.paramMap
-    // .pipe(
-    //   takeUntil(this.destroy$),
-    //   switchMap(params => {
-    //     this.username = params.get('username') ?? this._userSessions.getFromCookie('username');
-        
-    //     this._resetProfileState();
-    //     this._loadData();
-       
-    //     return this._userService.getProfilePicture(this.username!);
-    //   })
-    // )
-    // .subscribe({
-    //   next: response => {
-    //     this.followersTab = false;
-    //     this.followingsTab = false;
-    //     this.profilePicture.username = this.username;
-    //     if (response.path?.length > 0) {
-    //       this.stringUrl = `${environment.blobStorageBaseUrl}${response.path}`;
-    //     }
-
-    //   },
-    //   error: err => {
-    //     console.error('Failed to load profile picture:', err);
-    //   }
-    // });
-
     this._router.events
       .pipe(
   
@@ -216,7 +172,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
        this.editProfile = false;
        this.followersTab = false;
        this.followingsTab = false;
-       console.clear()
+       
        
     });
 
@@ -225,7 +181,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
       takeUntil(this.destroy$), 
       tap(params => {
        
-        this.clientGuid = params.get('username') ?? this._userSessions.getFromCookie('userID');
+        this.clientGuid = params.get('clientID') ?? this._userSessions.getFromCookie('sessionID');
        
         this._resetProfileState();
         this._loadData();

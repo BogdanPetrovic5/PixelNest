@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 import { UserService } from 'src/app/core/services/user/user.service';
-import { environment } from 'src/environments/environment.development';
+
 
 @Component({
   selector: 'app-profile-image',
@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ProfileImageComponent implements OnInit{
    @Input() stringUrl:string = ""
-   @Input() username:string = ""
+   @Input() clientGuid:string = ""
   subscription:Subscription = new Subscription;
   constructor(
     private _userService:UserService,
@@ -25,9 +25,9 @@ export class ProfileImageComponent implements OnInit{
   }
   ngOnChanges(changes: SimpleChanges): void {
    
-    if (changes['username']) {
-      const newUsername = changes['username'].currentValue;
-      if(newUsername) this._loadProfilePicture(newUsername);
+    if (changes['clientGuid']) {
+      const newClientID = changes['clientGuid'].currentValue;
+      if(newClientID) this._loadProfilePicture(newClientID);
       
     }
   }
@@ -36,7 +36,7 @@ export class ProfileImageComponent implements OnInit{
   }
    ngOnInit(): void {
   
-      if(this.username == this._userSession.getFromCookie("userID")){
+      if(this.clientGuid == this._userSession.getFromCookie("sessionID")){
         this.subscription.add(
           this._profileState.currentProfileUrl$.subscribe({
             next:response =>{
@@ -46,20 +46,14 @@ export class ProfileImageComponent implements OnInit{
           })
         )
       }
-      
-      // this._userService.getProfilePicture(this.username).subscribe({next:response=>{
-      //   if(response.path.length > 0){
-      //     this.stringUrl = environment.blobStorageBaseUrl + response.path;
-      //   }
-      // }}) 
    }
 
    navigateToProfile(){
-    this._router.navigate([`profile/${this.username}`])
+    this._router.navigate([`profile/${this.clientGuid}`])
    }
 
-   private _loadProfilePicture(username:string){
-    this._userService.getProfilePicture(username).subscribe({next:response=>{
+   private _loadProfilePicture(clientGuid:string){
+    this._userService.getProfilePicture(clientGuid).subscribe({next:response=>{
       if(response.path.length > 0){
         if(!response.path.includes("https")) this.stringUrl = "http://localhost:7157/Photos/" + response.path;
         else this.stringUrl = response.path

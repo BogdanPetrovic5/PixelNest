@@ -7,7 +7,7 @@ export interface FlattenReplies {
     postID?: number;
     replies?: [];
     totalLikes?: number;
-    userID?: number;
+    clientGuid: string;
     username: string;
     isReplyBox?:boolean;
 }

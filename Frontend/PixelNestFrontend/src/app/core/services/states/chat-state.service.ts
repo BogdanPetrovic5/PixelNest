@@ -109,9 +109,10 @@ export class ChatStateService {
   }
 
   setMessages(value:Message){
-    let messages = this._chatStateMessage.getValue()
-    messages = value;
-    this._chatStateMessage.next(messages);
+    console.log("Received: ", value);
+    let message = this._chatStateMessage.getValue()
+    message = value;
+    this._chatStateMessage.next(message);
   }
   setIsUserInRoom(value:boolean){
     this._isUserInRoom.next(value);

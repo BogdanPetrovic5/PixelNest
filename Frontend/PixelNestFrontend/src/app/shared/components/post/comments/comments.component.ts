@@ -18,7 +18,7 @@ export class CommentsComponent {
   username:string = ""
   stringUrl:string | undefined = undefined
   commentText:string = ""
-  postID:number = 0;
+  postID:string = '';
   constructor(
     private _commentService:CommentService,
     private _postService:PostService,

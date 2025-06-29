@@ -1,6 +1,6 @@
 <div class="container animate__animated animate__slideInDown animate__faster" (click)="navigateToChat()">
     <div class="content">
-        <app-profile-image [username]="sender"></app-profile-image>
+        <app-profile-image [clientGuid]="sender"></app-profile-image>
         <div class="user-info">
             <h1>{{sender}}</h1>
             <p>{{message}}</p>

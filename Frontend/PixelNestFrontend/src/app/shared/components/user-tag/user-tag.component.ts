@@ -22,22 +22,14 @@ export class UserTagComponent implements OnInit{
     private _router:Router,
     private _dashboardState:DashboardStateService,
     private _datePipe:DatePipe,
-    private _userService:UserService
   ){}
-  ngOnInit(): void {
-    // this._userService.getProfilePicture(this.username).subscribe({
-    //   next:response=>{
-    //     this.stringUrl = response.path;
-        
-    //   }
-    // })
-  
+  ngOnInit(): void {  
     this._formatDate()
-    
   }
-  navigateToUserProfile(username:string){
+  
+  navigateToUserProfile(clientID:string){
 
-    this._router.navigate([`/profile/${username}`])
+    this._router.navigate([`/profile/${clientID}`])
   }
 
   navigate(url:string){

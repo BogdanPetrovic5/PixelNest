@@ -15,8 +15,8 @@ import { UserSessionService } from 'src/app/core/services/user-session/user-sess
 })
 export class NavigationComponent implements OnInit{
   public selectedTab!:number
-  public clientGuid:string = this._userSessionService.getFromCookie("userID");
-  public username:string = this._userSessionService.getFromCookie("username")
+  public clientGuid:string = '';
+  public username:string = ''
   subscription:Subscription = new Subscription();
   newNotification:boolean = true;
   
@@ -33,26 +33,18 @@ export class NavigationComponent implements OnInit{
   constructor(
     private _dashboardStateMenagment:DashboardStateService,
     private _userSessionService:UserSessionService,
-    private _authService:AuthenticationService,
     private _router:Router,
-    private cdr: ChangeDetectorRef,
-    private _route:ActivatedRoute,
-    private _profileState:ProfileStateService,
     private _notification:NotificationStateService
   ){
 
   }
   ngOnInit():void{
-    this.clientGuid = this._userSessionService.getFromCookie("userID");
+    this.clientGuid = this._userSessionService.getFromCookie("sessionID");
+    this.username = this._userSessionService.getFromCookie("username");
     this.subscription.add(
       this._notification.newNotification$.subscribe({
         next:response=>{
           this.newNotification = response
-
-        //  this.interval = setTimeout(()=>{
-        //     this._notification.setNewNotification(false);
-        //     clearTimeout(this.interval)
-        //   }, 1500)
         }
       })
     )

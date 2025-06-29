@@ -38,7 +38,7 @@ export class FeedComponent implements OnChanges, OnDestroy, OnInit{
    
   }
   ngOnInit(): void {
-
+    
       this._userSession.deleteKeyFromCookie("scrlPos")
       this.currentUrl = this._router.url; 
       if (this.currentUrl === '/dashboard/feed') {

@@ -11,7 +11,7 @@
         <div class="picture">
             <div class="picture-wrap">
                 <div class="picture-holder">
-                    <app-profile-image  [stringUrl]="imageSrc" [username]="currentUserData ? currentUserData.clientGuid : ''"></app-profile-image>
+                    <app-profile-image  [stringUrl]="imageSrc" [clientGuid]="currentUserData ? currentUserData.clientGuid : ''"></app-profile-image>
                 </div>
                 <div class="open-file">
                     <input type="file" #fileInput (change)="onFileSelected($event)">

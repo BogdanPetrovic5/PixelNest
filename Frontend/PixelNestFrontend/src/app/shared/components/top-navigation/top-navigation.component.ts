@@ -13,7 +13,6 @@ export class TopNavigationComponent implements OnInit, OnDestroy{
     subscribe:Subscription = new Subscription();
     interval:any
     constructor(
-      private _router:Router,
       private _notification:NotificationStateService
     ){}
     ngOnDestroy(): void {

@@ -20,11 +20,11 @@ export class LikeCommentComponent implements OnInit{
   @Input() commentID?:number;
 
   currentUsername:string = ""
-  
+  clientGuid:string = ""
   
   ngOnInit():void{
     this.currentUsername = this._userSession.getFromCookie("username")
- 
+    this.clientGuid = this._userSession.getFromCookie("sessionID");
   }
   isLikedByUser(){
     
@@ -45,7 +45,7 @@ export class LikeCommentComponent implements OnInit{
       this.likedByUsers = this.likedByUsers?.filter(user => user.username !== this.currentUsername)
       return;
     }
-    const object = { username:this.currentUsername, clientGuid:this._userSession.getFromCookie("userID") }
+    const object = { username:this.currentUsername, clientGuid:this.clientGuid }
     this.likedByUsers?.push(object);
     return;
   }

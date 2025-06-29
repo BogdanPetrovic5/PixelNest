@@ -3,7 +3,7 @@
         
         <div class="details">
             <!-- <h1 (click)="navigateToProfile(reply.username)">{{reply.username}}</h1> -->
-            <app-user-tag [username]="reply.username"></app-user-tag>
+            <app-user-tag [username]="reply.username" [clientGuid]="reply.clientGuid"></app-user-tag>
             <p><span (click)="navigateToProfile(trimAtSymbol(parentUsername))">{{parentUsername}}</span> {{reply.commentText}} </p>
             <span class="reply" (click)="openReplyBox()">Reply</span>
             <div *ngIf="isReplyBox">

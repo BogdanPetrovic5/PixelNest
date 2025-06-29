@@ -11,14 +11,20 @@
             </div>
         </div>
         <div class="usernames">
-            <div class="username" *ngFor="let comment of comments">
-                
-                <app-comment [comment]="comment"></app-comment>
+            <div 
+            class="username" 
+            *ngFor="let comment of comments">
+                <app-comment [comment]="comment">
+                </app-comment>
             </div>
            
         </div>
         <div class="new-comment">
-            <input type="text" #commentInput [(ngModel)]="commentText" placeholder="Comment here..." (keydown.enter)="addComment(commentInput)">
+            <input type="text" 
+            #commentInput 
+            [(ngModel)]="commentText" 
+            placeholder="Comment here..." 
+            (keydown.enter)="addComment(commentInput)">
         </div>
         
     </div>

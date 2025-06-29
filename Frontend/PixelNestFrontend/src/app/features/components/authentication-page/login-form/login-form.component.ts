@@ -1,15 +1,11 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { GoogleAuthenticationService } from 'src/app/core/services/authentication/google/google-authentication.service';
-import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
-import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { LottieStateService } from 'src/app/core/services/states/lottie-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
-declare var google: any;
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
@@ -27,7 +23,6 @@ export class LoginFormComponent implements OnInit{
     private _authService:AuthenticationService,
     private _lottieState:LottieStateService,
     private _userSession:UserSessionService,
-    private _dashboardState:DashboardStateService,
     private _googleAuth:GoogleAuthenticationService
   ){
     this.loginForm = this._formBuilder.group({
@@ -38,9 +33,10 @@ export class LoginFormComponent implements OnInit{
   navigateToRegister(){
     this._router.navigate(['/authentication/register'])
   }
-   ngOnInit():void{
+
+  ngOnInit():void{
     
-   }
+  }
 
  signWithGoogle(){
     const state = this._generateRandomString(16);
@@ -64,15 +60,8 @@ export class LoginFormComponent implements OnInit{
     
  } 
 
-  private _generateRandomString(length: number): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  } 
+
+
   login(){
       if(!this.loginForm.valid) return
 
@@ -101,6 +90,7 @@ export class LoginFormComponent implements OnInit{
   }
   private _handleError(error: any) {
     this.errorMessage = '';
+
     this.loginForm.reset({
       Email: '',
       Password: ''
@@ -115,4 +105,14 @@ export class LoginFormComponent implements OnInit{
       this.error = false;
     }, 2000);
   }
+  
+  private _generateRandomString(length: number): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  } 
 }

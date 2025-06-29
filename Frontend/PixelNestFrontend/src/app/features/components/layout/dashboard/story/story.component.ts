@@ -59,7 +59,7 @@ export class StoryComponent implements OnInit, OnDestroy, AfterViewInit{
   }
   ngOnInit(): void {
     this.username = this._cookieService.get("username");
-    this.clientGuid = this._cookieService.get("userID")
+    this.clientGuid = this._cookieService.get("sessionID")
     this._initializeComponent();
     
   }

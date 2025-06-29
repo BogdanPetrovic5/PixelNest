@@ -15,7 +15,7 @@
                         <div class="profile-image">
                             <div>
                                <!-- <img [src]="stringUrl.length > 0 ? stringUrl : '/assets/images/user.png'" [ngStyle]="stringUrl ? { transform: 'scale(1)', objectFit:'cover', width:'100%', height:'100%' } : {width:'100%', height:'100%'}"> -->
-                                <app-profile-image [stringUrl]="stringUrl" [username]="clientGuid"></app-profile-image>
+                                <app-profile-image [stringUrl]="stringUrl" [clientGuid]="clientGuid"></app-profile-image>
                             </div>
                           
                         </div>
@@ -52,7 +52,7 @@
                                     <button class="edit" *ngIf="!user.canEdit" (click)="toggleEdit()">
                                        <h1>Edit profile</h1>
                                     </button>
-                                    <button class="analytics" *ngIf="!user.canEdit" (click)="navigate('profile', user.clientGuid, 'Analytics')">
+                                    <button class="analytics" *ngIf="!user.canEdit" (click)="navigate('profile', user.clientGuid, 'analytics')">
                                         <h1>Analytics</h1>
                                      </button>
                                     <button class="message" *ngIf="user.canEdit" (click)="navigate('chat', user.clientGuid, user.chatID)">

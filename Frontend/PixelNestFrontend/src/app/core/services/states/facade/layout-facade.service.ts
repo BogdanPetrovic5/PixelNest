@@ -4,11 +4,6 @@ import { LottieStateService } from '../lottie-state.service';
 import { ApiTrackerService } from '../../api-tracker/api-tracker.service';
 import { CacheService } from '../../cache/cache.service';
 import { UserSessionService } from '../../user-session/user-session.service';
-import { WebsocketService } from '../../websockets/websocket.service';
-import { AuthStateService } from '../auth-state.service';
-import { ChatStateService } from '../chat-state.service';
-import { NotificationStateService } from '../notification-state.service';
-import { PostStateService } from '../post-state.service';
 import { combineLatest, map, tap } from 'rxjs';
 
 @Injectable({
@@ -41,13 +36,13 @@ export class LayoutFacadeService {
         [newPost, isSuccess, isInitializing, logOut, notification, sessionExpired, feedInit, cache]
       ) =>(
         {
-          isNewPostTabOpened:newPost ?? false,
+          isNewPostTabOpened: newPost ?? false,
           isSuccess,
           isInitializing,
           isLogoutDialogOpened: logOut ?? false,
-          newNotification:notification ?? false,
+          newNotification: notification ?? false,
           isSessionExpired: sessionExpired ?? false,
-          isFeedInitializing:feedInit ?? false,
+          isFeedInitializing: feedInit ?? false,
           hasCacheChanged: cache ?? false
         }
       )

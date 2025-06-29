@@ -10,7 +10,7 @@ export class CommentService {
 
   constructor(private _httpClient:HttpClient) { }
 
-  getComments(postID: number):Observable<any>{
+  getComments(postID: string):Observable<any>{
     const url = `${environment.apiUrl}/api/comment/comments?postID=${postID}`
     return this._httpClient.get<any>(url);
 

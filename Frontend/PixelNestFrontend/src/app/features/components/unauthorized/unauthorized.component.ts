@@ -11,6 +11,7 @@ export class UnauthorizedComponent {
 
   }
   navigate(route:string){
+    
     this._router.navigate([route])
   }
 }

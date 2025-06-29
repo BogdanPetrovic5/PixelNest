@@ -3,7 +3,7 @@
         <div class="nav-content">
             <div class="nav">
                 <img src="/assets/images/back.png" alt="" (click)="navigate('/inbox')">
-                <app-profile-image [username]="user.clientGuid"></app-profile-image>
+                <app-profile-image [clientGuid]="user.clientGuid"></app-profile-image>
                 <h1>{{user.username}}</h1>
             </div>
         </div>
@@ -13,7 +13,7 @@
     <div class="content">
        
         <div class="user-overview">
-            <app-profile-image [username]="user.clientGuid"></app-profile-image>
+            <app-profile-image [clientGuid]="user.clientGuid"></app-profile-image>
             <div class="user-info">
                 <h2>{{user.name}}</h2>
                 <h1>{{user.username}}</h1>
@@ -40,7 +40,7 @@
                     
                     }">
                     <div *ngIf="message.message && message.message.length > 0">
-                        <app-profile-image [username]="message.userID" *ngIf="messages[i+1] == undefined || messages[i].sender != messages[i+1].sender"></app-profile-image>
+                        <app-profile-image [clientGuid]="message.userID" *ngIf="messages[i+1] == undefined || messages[i].sender != messages[i+1].sender"></app-profile-image>
                         <div class="active-status"
                          *ngIf="message.userID.toLowerCase() !== currentClientGuid && (messages[i+1] == undefined || messages[i].sender != messages[i+1].sender)"
                          [ngStyle]="{'background-color' : isActive() ? 'green' : 'gray'}"

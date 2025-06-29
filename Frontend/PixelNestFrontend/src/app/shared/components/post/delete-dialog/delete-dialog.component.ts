@@ -14,12 +14,9 @@ export class DeleteDialogComponent {
   @Output() closeDeleteDialog: EventEmitter<void> = new EventEmitter<void>();
   anim:boolean = false;
   constructor(
-    
       private _postService:PostService,
-      
       private _postState:PostStateService,
       private _lottie:LottieStateService,
-      private _indexDB:IndexedDbService
     ){
      
     }

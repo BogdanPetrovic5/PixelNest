@@ -42,8 +42,6 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
   
     this.subscriptions.unsubscribe();
     this.posts = []
-
-
     this._postState.setPosts(this.posts);
   
   }
@@ -72,8 +70,6 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
 
  private _initializeComponent(){
    
-
-   
     if(this._postState.feedPosts && this._postState.feedPosts.length > 0 && !this.isChanged) 
       this.posts = this._postState.feedPosts;
     else{
@@ -95,7 +91,6 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
           this.posts = response;
           
         
-        this._cdr.detectChanges()
         },error:error=>{
           console.error(error.message);
         },

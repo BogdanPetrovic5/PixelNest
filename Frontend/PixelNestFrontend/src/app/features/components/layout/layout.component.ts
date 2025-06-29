@@ -65,6 +65,7 @@ export class LayoutComponent implements OnInit, OnDestroy{
     this._proccessLastSenderIDS();
     this._userSession.setTokenExpiration(this._userSession.getFromCookie("tokenExpirationAt"))
     this._userSession.monitorUserActivity();
+
     this._layoutFacade.state$.pipe(
         takeUntil(this._destroy$)
       )
@@ -72,7 +73,8 @@ export class LayoutComponent implements OnInit, OnDestroy{
         next:state=>{
           this.layoutState$ = state;
         }
-      })
+    })
+
   }
   
   private _proccessLastSenderIDS(){

@@ -43,7 +43,6 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
     
       store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle | null): void {
         const fullPath = this.getFullRouteUrl(route);
-        console.log(fullPath)
         if (handle && (fullPath === '/dashboard/' || fullPath === '/dashboard/feed')) {
           this.storedRoutes.set(fullPath, handle);
     

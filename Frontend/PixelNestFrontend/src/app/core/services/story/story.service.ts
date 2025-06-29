@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { StoryDto } from '../../dto/story.dto';
 import { environment } from 'src/environments/environment.development';
 import { StoriesDto } from '../../dto/stories.dto';
 import { ViewersDto } from '../../dto/viewers.dto';

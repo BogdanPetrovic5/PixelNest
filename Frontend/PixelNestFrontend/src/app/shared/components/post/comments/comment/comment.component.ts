@@ -32,7 +32,7 @@ export class CommentComponent implements OnInit{
   username:string = "";
   replyText:string = "";
 
-  postID:number = 0;
+  postID:string = '';
 
 
   repliesVisible:boolean = false;
@@ -44,9 +44,7 @@ export class CommentComponent implements OnInit{
     this.postID = this._userSession.getFromLocalStorage("postID");
     
   }
-  navigateToProfile(username?:string){
-    this._router.navigate([`profile/${username}`])
-  }
+  
   replyComment(parentCommentID?:number){
     
    

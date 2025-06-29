@@ -14,7 +14,6 @@ export class LikesComponent implements OnInit{
 
   @Output() closeLikesTab: EventEmitter<void> = new EventEmitter<void>();
   constructor(
-    private _dashboardState:DashboardStateService,
     private _router:Router
   ){}
   ngOnInit(): void {

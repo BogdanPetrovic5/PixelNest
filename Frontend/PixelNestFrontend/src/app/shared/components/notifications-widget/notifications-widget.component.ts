@@ -23,7 +23,7 @@ export class NotificationsWidgetComponent implements OnInit{
     this._notificationState.notifications$.subscribe({
       next:response=>{
         this.notifications = response;
-        console.log(response)
+       
         this.lastTwoNotifications = response.slice(0,2);
       }
     })
