@@ -78,11 +78,16 @@ export class WebsocketService {
         return;
 
       case "Leave":
-        this._chatState.setSeenStatus(false);
+        if(data.ChatID == this._chatState.getCurrentChatID()){
+          this._chatState.setSeenStatus(false);
+        }
+        
         return;
-
+      
       case "Enter":
-        this._chatState.setSeenStatus(true);
+        if(data.ChatID == this._chatState.getCurrentChatID()){
+          this._chatState.setSeenStatus(true);
+        }
         return;
 
       case "Direct":
@@ -139,7 +144,7 @@ export class WebsocketService {
 
     this.newNotification.message = `${data.SenderUsername} ${data.Content}`;
     this.newNotification.username = data.SenderUsername
-
+    this.newNotification.date = data.Date
     this._notificationState.updateNotifications(this.newNotification);
 
     this._notificationState.setNewNotification(true)
@@ -151,6 +156,7 @@ export class WebsocketService {
   private _proccessDirectMessage(){
       this._dashboardState.setMessage(this.messageData.message)
       this._dashboardState.setSender(this.messageData.sender)
+      this._dashboardState.setChatID(`${this.messageData.userID}/${this.messageData.roomID}`)
       this._dashboardState.setIsNotification(true);
       this._inboxState.updateInbox(this.messageData)
       this._processLastIDS(this.messageData.userID)
@@ -159,7 +165,7 @@ export class WebsocketService {
   private _processLastIDS(sender:string){
     this.lastSenderIDs = this._chatState.getLastIDS()
     
-    let currentUser = this._userSession.getFromCookie("userID")
+    let currentUser = this._userSession.getFromCookie("sessionID")
     this.lastSenderIDObj.currentUser = currentUser;
     this.lastSenderIDObj.senders.push(sender);
 

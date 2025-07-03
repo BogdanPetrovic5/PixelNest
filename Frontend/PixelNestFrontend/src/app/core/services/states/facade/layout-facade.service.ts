@@ -18,7 +18,11 @@ export class LayoutFacadeService {
     this._userSession.logOutDialog$,
     this._dashboardState.notification$.pipe((
       tap((respone)=>{
-        if(respone) this._dashboardState.setIsNotification(false);
+        if(respone){
+          setTimeout(()=>{
+            this._dashboardState.setIsNotification(false);
+          },1500)
+        }
       })
     )),
     this._dashboardState.sessionExpiredDialog$,
