@@ -61,7 +61,6 @@ export class ChatFacadeService {
         tap(user => this.user$.next(user)),
         switchMap(user => this._chatService.joinRoom(user.clientGuid)),
         tap(room => {
-          console.log("ROOM: ", room);
         }),
         tap(() => {
           const seenSubscription = this._chatState.seenStatus$.subscribe(seen => {

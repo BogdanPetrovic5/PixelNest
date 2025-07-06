@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class TypingIndicatorComponent {
     @Input() clientGuid:string = '';
+    @Input() username:string = '';
 }

@@ -42,7 +42,8 @@ export class ChatStateService {
   
   chatStateUser = this._chatStateUser.asObservable();
 
-
+  private _currentChatID = new BehaviorSubject<string>("");
+  
   private _chatStateMessage = new BehaviorSubject<Message>({
     sender:'',
     receiver:'',
@@ -57,7 +58,12 @@ export class ChatStateService {
   chatStateMessage = this._chatStateMessage.asObservable()
   private _seenStatus = new BehaviorSubject<boolean>(false);
   seenStatus$ = this._seenStatus.asObservable();
-
+  getCurrentChatID(){
+    return this._currentChatID.getValue()
+  }
+  setCurrentChatID(chatID:string){
+    this._currentChatID.next(chatID);
+  }
   setSeenStatus(value:boolean){
     this._seenStatus.next(value)
   }

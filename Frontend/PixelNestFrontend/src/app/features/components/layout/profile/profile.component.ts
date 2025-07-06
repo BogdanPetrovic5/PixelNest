@@ -51,7 +51,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
   constructor(
     private _userSessions:UserSessionService,
     private _userService:UserService,
-    private _postService:PostService,
     private _route:ActivatedRoute,
     private _router:Router,
     private _postState:PostStateService,
@@ -61,7 +60,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   ){}
   ngOnInit(): void {
    
-    this._userSessions.setUrl("Profile")
+    this._userSessions.setUrl("profile")
     this._postState.setPosts([]);
  
     this._initializeComponent();
@@ -89,9 +88,9 @@ export class ProfileComponent implements OnInit, OnDestroy{
       
   }
 
-  navigate(route:string, clientRoute:string, chatRoute:string){
+  navigate(route:string){
 
-    this._router.navigate([`/${route}/${clientRoute}/${chatRoute}`])
+    this._router.navigate([`${route}`])
     this._chatState.setUser(this.user);
   }
 
@@ -182,7 +181,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
       tap(params => {
        
         this.clientGuid = params.get('clientID') ?? this._userSessions.getFromCookie('sessionID');
-       
+        this.username = params.get('username') ?? this.user.username
         this._resetProfileState();
         this._loadData();
       })

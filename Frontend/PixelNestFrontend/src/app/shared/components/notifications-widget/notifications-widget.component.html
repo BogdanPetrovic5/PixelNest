@@ -1,7 +1,7 @@
-<div class="container">
+<div class="container ">
     <div class="notification-list">
-        <div class="wrapper" *ngFor="let notification of lastTwoNotifications">
-            <app-profile-image [username]="notification.username"></app-profile-image>
+        <div class="wrapper animate__animated animate__fadeIn" *ngFor="let notification of lastTwoNotifications" >
+            <app-profile-image [clientGuid]="notification.clientGuid" [username]="notification.username"></app-profile-image>
             <div class="notification-description">
                 <h1>
                     {{notification.username}}

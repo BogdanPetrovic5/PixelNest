@@ -4,8 +4,6 @@ import { LandingPageComponent } from './features/components/landing-page/landing
 import { AuthenticationPageComponent } from './features/components/authentication-page/authentication-page.component';
 import { LoginFormComponent } from './features/components/authentication-page/login-form/login-form.component';
 import { RegisterFormComponent } from './features/components/authentication-page/register-form/register-form.component';
-import { FeedComponent } from './shared/components/feed/feed.component';
-import { DashboardComponent } from './features/components/layout/dashboard/dashboard.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { DashboardGuard } from './core/guards/dashboard.guard';
 import { ProfileComponent } from './features/components/layout/profile/profile.component';
@@ -15,9 +13,7 @@ import { SearchComponent } from './features/components/layout/search/search.comp
 import { InboxComponent } from './features/components/layout/inbox/inbox.component';
 import { ChatComponent } from './shared/components/chat/chat.component';
 import { UnauthorizedComponent } from './features/components/unauthorized/unauthorized.component';
-import { NotificationComponent } from './features/components/layout/notification-modal/notification.component';
 import { NotificationsComponent } from './features/components/layout/notifications/notifications.component';
-import { PostComponent } from './shared/components/post/post.component';
 import { PostViewComponent } from './features/components/layout/post-view/post-view.component';
 import { RedirectPageComponent } from './features/components/authentication-page/redirect-page/redirect-page.component';
 import { AnalyticsComponent } from './features/components/layout/profile/analytics/analytics.component';
@@ -51,12 +47,12 @@ const routes: Routes = [
         
       },
       {
-        path:"profile/:clientID",
+        path:"profile/:clientID/:username",
         component:ProfileComponent,
         canActivate:[DashboardGuard],
       },
       {
-        path:"profile/:clientID/analytics",
+        path:"profile/:clientID/:username/analytics",
         component:AnalyticsComponent,
         canActivate:[DashboardGuard],
       },

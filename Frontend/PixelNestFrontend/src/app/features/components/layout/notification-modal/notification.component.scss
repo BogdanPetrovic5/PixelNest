@@ -31,6 +31,7 @@ $HFONT: "Roboto Condensed", sans-serif;
         app-profile-image{
             width: 40px;
             height: 40px;
+            pointer-events: none;
         }
         .user-info{
             font-size: 25px;

@@ -62,6 +62,7 @@ $HFONT: "Roboto Condensed", sans-serif;
 @media only screen and (min-width:0px) and (max-width:767px){
     .container{
         .wrapper{
+            height: 100%;
             app-top-navigation{
                 width: 100%;
                 display: flex;

@@ -1,5 +1,5 @@
 export interface LikedByUsers {
-    username?: string;
+    username: string;
     commentID?: number;
     postID?:number;
     clientGuid:string

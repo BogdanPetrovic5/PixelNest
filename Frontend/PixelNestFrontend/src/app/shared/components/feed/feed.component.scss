@@ -55,6 +55,9 @@ $HFONT: "Roboto Condensed", sans-serif;
                     width: 100%;
                     margin-top: 0px;
                 }
+                app-post:last-child{
+                    margin-bottom: calc(60px + 3%)
+                }
                 // app-post:first-child{
                 //     margin-top: 0px;
                 // }

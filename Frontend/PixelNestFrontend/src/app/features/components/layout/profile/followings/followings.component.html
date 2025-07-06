@@ -4,8 +4,12 @@
           <h1>Followings</h1>
         </div>
         <div class="usernames">
-            <div class="username" *ngFor="let username of followings">
-               <app-profile-image [clientGuid]="username.followingClientGuid"></app-profile-image><h1>{{username.followingUsername}}</h1>
+            <div class="username" *ngFor="let user of followings">
+               <app-profile-image 
+               [clientGuid]="user.followingClientGuid" 
+               [username]="user.followingUsername">
+            </app-profile-image>
+            <h1>{{user.followingUsername}}</h1>
             </div>
         </div>
         <div class="footer">

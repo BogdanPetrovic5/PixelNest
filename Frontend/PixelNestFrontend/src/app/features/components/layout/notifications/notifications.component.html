@@ -7,14 +7,16 @@
         <div class="notifications" >
             <div class="notification-wrap" *ngFor="let notification of notifications">
                 <div class="user-info" >   
-                    <app-profile-image [clientGuid]="notification.username"></app-profile-image>
-                    <h1 (click)="navigation('profile/'+notification.username)">{{notification.username}}</h1>
+                    <app-profile-image
+                     [clientGuid]="notification.clientGuid" 
+                     [username]="notification.username"></app-profile-image>
+                    <h1 (click)="navigation('profile/'+notification.clientGuid + '/' + notification.username)">{{notification.username}}</h1>
                     <p>{{notification.message}}</p>
                     <p>{{notification.date | timeAgo}}</p>
                 </div>
                 <div class="notification-source" *ngIf="notification.postID" (click)="navigation('post/'+notification.postID)">
                     <img *ngIf="notification.imagePath.length > 0" 
-                    src="{{baseUrl}}{{notification.imagePath[0].path}}" 
+                    src="http://localhost:7157/Photos/{{notification.imagePath[0].path}}" 
                     loading="lazy" [ngStyle]="{'object-fit':notification.imagePath[0].photoDisplay}" alt=""
                     
                     

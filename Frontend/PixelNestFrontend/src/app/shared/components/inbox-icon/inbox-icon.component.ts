@@ -26,7 +26,7 @@ export class InboxIconComponent implements OnInit{
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          
+          console.log(response)
           this.newMessages = response;
         },
         error: (err) => {

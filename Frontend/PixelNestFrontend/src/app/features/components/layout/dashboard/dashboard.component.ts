@@ -27,19 +27,14 @@ export class DashboardComponent implements OnInit, OnDestroy, OnChanges{
   searchSubject: Subject<void> = new Subject<void>();
   constructor(
     private _postState:PostStateService,
-    private _indexedDb:IndexedDbService,
-    private _cdr:ChangeDetectorRef,
     private _cacheService:CacheService,
     private _userSession:UserSessionService,
     private _router:Router,
     private _dashboardState:DashboardStateService
   ){
-
-
   }
   
   ngOnDestroy(): void {
-  
     this.subscriptions.unsubscribe();
     this.posts = []
     this._postState.setPosts(this.posts);

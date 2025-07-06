@@ -31,7 +31,6 @@ export class FeedComponent implements OnChanges, OnDestroy, OnInit{
   constructor(
     private _postState: PostStateService,
     private _router: Router,
-    private _cdr:ChangeDetectorRef,
     private _userSession:UserSessionService,
     private _feedState:DashboardStateService
   ){

@@ -28,7 +28,10 @@ export class DashboardStateService {
 
   private _notificationSender = new BehaviorSubject<string>("")
   notificationSender$ = this._notificationSender.asObservable();
-
+  
+  private _notificationChatID = new BehaviorSubject<string>("")
+  notificationChatID$ = this._notificationChatID.asObservable();
+  
   private _notificationMessage = new BehaviorSubject<string>("")
   notificationMessage$ = this._notificationMessage.asObservable();
 
@@ -90,6 +93,9 @@ export class DashboardStateService {
   }
   setSender(value:string){
     this._notificationSender.next(value);
+  }
+  setChatID(value:string){
+    this._notificationChatID.next(value);
   }
   setSessionExpiredDialog(value:boolean){
     this._sessionExpiredDialog.next(value);

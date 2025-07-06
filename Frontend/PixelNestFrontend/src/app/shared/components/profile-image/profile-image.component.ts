@@ -14,6 +14,7 @@ import { UserService } from 'src/app/core/services/user/user.service';
 export class ProfileImageComponent implements OnInit{
    @Input() stringUrl:string = ""
    @Input() clientGuid:string = ""
+   @Input() username:string = ""
   subscription:Subscription = new Subscription;
   constructor(
     private _userService:UserService,
@@ -49,7 +50,7 @@ export class ProfileImageComponent implements OnInit{
    }
 
    navigateToProfile(){
-    this._router.navigate([`profile/${this.clientGuid}`])
+    this._router.navigate([`profile/${this.clientGuid}/${this.username}`])
    }
 
    private _loadProfilePicture(clientGuid:string){

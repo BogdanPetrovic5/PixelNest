@@ -29,7 +29,7 @@ export class UserTagComponent implements OnInit{
   
   navigateToUserProfile(clientID:string){
 
-    this._router.navigate([`/profile/${clientID}`])
+    this._router.navigate([`/profile/${clientID}/${this.username}`])
   }
 
   navigate(url:string){

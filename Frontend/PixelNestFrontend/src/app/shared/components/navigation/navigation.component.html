@@ -6,7 +6,7 @@
         <div class="profile">
             <div class="profile-img">
                 <!-- <img src="./assets/images/user.png" alt="" (click)="navigate('/Profile')"> -->
-                <app-profile-image [clientGuid]="clientGuid" (click)="navigateToUserProfile()"></app-profile-image>
+                <app-profile-image [clientGuid]="clientGuid" [username]="username" (click)="navigateToUserProfile()"></app-profile-image>
             </div>
             <h1>{{username}}</h1>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur iusto laudantium </p>
@@ -21,7 +21,7 @@
             </div>
 
             <div class="feed nav-sec"(click)="changeTab(4)" [ngClass]="{'selected':selectedTab == 4}" (click)="navigateToUserProfile()">
-                <app-profile-image [stringUrl]="stringUrl" [clientGuid]="clientGuid"></app-profile-image>
+                <app-profile-image [stringUrl]="stringUrl" [clientGuid]="clientGuid" [username]="username"></app-profile-image>
                 <p>Profile</p>
             </div>
 

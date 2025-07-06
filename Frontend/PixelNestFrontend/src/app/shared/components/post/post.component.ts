@@ -58,7 +58,6 @@ export class PostComponent implements OnInit{
 
     private _postService:PostService,
     private _userSession:UserSessionService,
-    private _postState:PostStateService
   ){
    
   }
@@ -212,9 +211,6 @@ export class PostComponent implements OnInit{
     this.username = this._userSession.getFromCookie("username");
     this.likedByUsers = this.post.likedByUsers;
     this.savedByUsers = this.post.savedByUsers;
-
-   
-    
     this._checkIsLiked()
   }
 

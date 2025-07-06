@@ -2,7 +2,7 @@
     <div class="image-holder">
         <!-- <img [src]="stringUrl ? 'http://localhost:7157/Photos/'+ stringUrl : '/assets/images/user.png'" alt="" 
         [ngStyle]="stringUrl ? { transform: 'scale(1)', objectFit:'cover', width:'100%', height:'100%' } : {width:'100%', height:'100%'}"> -->
-        <app-profile-image [clientGuid] = "clientGuid"></app-profile-image>
+        <app-profile-image [clientGuid] = "clientGuid" [username]="username"></app-profile-image>
     </div>
     
     <div class="info-wrapper">

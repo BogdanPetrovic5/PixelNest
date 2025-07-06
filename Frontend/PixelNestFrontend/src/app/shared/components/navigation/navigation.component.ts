@@ -1,11 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+
+import {  Component, OnInit } from '@angular/core';
+import {  NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
 import { DashboardStateService } from 'src/app/core/services/states/dashboard-state.service';
 import { NotificationStateService } from 'src/app/core/services/states/notification-state.service';
-import { ProfileStateService } from 'src/app/core/services/states/profile-state.service';
 import { UserSessionService } from 'src/app/core/services/user-session/user-session.service';
 
 @Component({
@@ -23,12 +21,6 @@ export class NavigationComponent implements OnInit{
   interval:any
   stringUrl = ""
   routeToTabMap: { [key: string]: number } = {
-    'dashboard/feed': 1,
-    ["profile/"+this.clientGuid]: 4,
-    'messages': 2,
-    'notifications': 3,
-    'search': 5
-
   };
   constructor(
     private _dashboardStateMenagment:DashboardStateService,
@@ -41,6 +33,13 @@ export class NavigationComponent implements OnInit{
   ngOnInit():void{
     this.clientGuid = this._userSessionService.getFromCookie("sessionID");
     this.username = this._userSessionService.getFromCookie("username");
+    this.routeToTabMap = {
+      'dashboard/feed': 1,
+      [`profile/${this.clientGuid}/${this.username}`]: 4,
+      'messages': 2,
+      'notifications': 3,
+      'search': 5
+    };
     this.subscription.add(
       this._notification.newNotification$.subscribe({
         next:response=>{
@@ -55,13 +54,15 @@ export class NavigationComponent implements OnInit{
       )
       .subscribe((response:any) => {
         this.setActiveTab(this._router.url);
-      })
-      this.setActiveTab(this._router.url);
-   
+        console.log("Subscribed: ", this._router.url)
+    })
+    
+    this.setActiveTab(this._router.url);
     
   }
 
   setActiveTab(url:string){
+    console.log("set active tab: ", url);
     this.selectedTab = Object.keys(this.routeToTabMap).find(key => url.includes(key)) 
     ? this.routeToTabMap[Object.keys(this.routeToTabMap).find(key => url.includes(key))!] : 0
    
@@ -69,7 +70,7 @@ export class NavigationComponent implements OnInit{
 
   navigateToUserProfile(){
    
-    this._router.navigate([`/profile/${this.clientGuid}`])
+    this._router.navigate([`/profile/${this.clientGuid}/${this.username}`])
   }
 
   navigate(route:string){

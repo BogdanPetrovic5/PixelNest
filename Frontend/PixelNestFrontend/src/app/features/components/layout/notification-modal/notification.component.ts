@@ -11,12 +11,23 @@ import { DashboardStateService } from 'src/app/core/services/states/dashboard-st
 export class NotificationComponent implements OnInit{
   sender:string =""
   message:string =""
+  chatID:string =""
   subscription:Subscription = new Subscription();
   constructor(
     private _dashboardState:DashboardStateService,
     private _router:Router
   ){}
+  ngDestroy():void{
+    this.subscription.unsubscribe();
+  }
   ngOnInit(): void {
+    this.subscription.add(
+      this._dashboardState.notificationChatID$.subscribe({
+        next:response=>{
+          this.chatID = response
+        }
+      })
+    )
     this.subscription.add(
       this._dashboardState.notificationMessage$.subscribe({
         next:response=>{
@@ -33,6 +44,7 @@ export class NotificationComponent implements OnInit{
     )
   }
   navigateToChat(){
-    this._router.navigate([`/chat/${this.sender}`])
+    this._router.navigate([`/chat/${this.chatID}`])
+    this._dashboardState.setIsNotification(false);
   }
 }

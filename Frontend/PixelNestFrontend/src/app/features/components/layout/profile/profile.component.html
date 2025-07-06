@@ -15,7 +15,7 @@
                         <div class="profile-image">
                             <div>
                                <!-- <img [src]="stringUrl.length > 0 ? stringUrl : '/assets/images/user.png'" [ngStyle]="stringUrl ? { transform: 'scale(1)', objectFit:'cover', width:'100%', height:'100%' } : {width:'100%', height:'100%'}"> -->
-                                <app-profile-image [stringUrl]="stringUrl" [clientGuid]="clientGuid"></app-profile-image>
+                                <app-profile-image [stringUrl]="stringUrl" [clientGuid]="clientGuid" [username]="user.username"></app-profile-image>
                             </div>
                           
                         </div>
@@ -49,13 +49,22 @@
                                             <h1>Following</h1>
                                           </ng-template>
                                     </button>
-                                    <button class="edit" *ngIf="!user.canEdit" (click)="toggleEdit()">
+                                    <button 
+                                    class="edit" 
+                                    *ngIf="!user.canEdit" 
+                                    (click)="toggleEdit()">
                                        <h1>Edit profile</h1>
                                     </button>
-                                    <button class="analytics" *ngIf="!user.canEdit" (click)="navigate('profile', user.clientGuid, 'analytics')">
+                                    <button 
+                                    class="analytics" 
+                                    *ngIf="!user.canEdit" 
+                                    (click)="navigate('profile/' + user.clientGuid + '/' + 'user.username' + '/' + 'analytics' )">
                                         <h1>Analytics</h1>
                                      </button>
-                                    <button class="message" *ngIf="user.canEdit" (click)="navigate('chat', user.clientGuid, user.chatID)">
+                                    <button 
+                                    class="message" 
+                                    *ngIf="user.canEdit" 
+                                    (click)="navigate('chat/'+ user.clientGuid + '/' + user.chatID)">
                                         Message
                                     </button>
                                 </div>

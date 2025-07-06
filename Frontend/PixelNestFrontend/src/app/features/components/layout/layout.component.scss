@@ -94,15 +94,18 @@ $HFONT: "Roboto Condensed", sans-serif;
             .navigation{
                 position: fixed;
                 bottom: env(safe-area-inset-bottom);
-                width: 100%;
+                width: 95%;
                 height: 60px;
-                background-color: $BGCOLOR;
-                border-top: 1px solid $BORDERCOLOR;
+                background: rgba(4, 15, 22, 0.76);
+                border-radius: 16px;
+                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                backdrop-filter: blur(15.3px);
+                border: 1px solid $BORDERCOLOR;
                 z-index: 2;
-              
+                bottom: 2%;
                 
-                border-top-left-radius: 15px;
-                border-top-right-radius: 15px;
+                // border-radius: 15px;
+                // border-top-right-radius: 15px;
              
             }
             .components-wrap{

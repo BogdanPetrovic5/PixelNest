@@ -30,14 +30,17 @@ export class WebsocketService {
   };
   messages:Message[] = []
   lastSenderIDs:LastSendersDto[] =[]
-  lastSenderIDObj:LastSendersDto = {currentUser:'', senders:[]} 
+  lastSenderIDObj:LastSendersDto = {
+    currentUser:'', senders:[]
+  } 
   newNotification:NotificationDto = {
     username:'',
     message:'',
     date:new Date(),
     notificationID:0,
     postID:0,
-    imagePath:[]
+    imagePath:[],
+    clientGuid:''
   }
   constructor(
     private _chatState:ChatStateService,
@@ -52,19 +55,10 @@ export class WebsocketService {
     const wsURL = `${environment.wsUrl}`;
     this._socket = new WebSocket(wsURL);
 
-    this._socket.onopen = () => {
-    }
     this._socket.onmessage = (event) => {
       var data = JSON.parse(event.data);
       this._processWebsocketMessage(data);
     };
-
-    this._socket.onclose = (event) => {
-    };
-
-    this._socket.onerror = (error) => {
-    };
-   
   }
   private _processWebsocketMessage(data: any) {
     this._formMessageData(data);
@@ -142,9 +136,10 @@ export class WebsocketService {
 
   private _processNewNotification(data:any){
 
-    this.newNotification.message = `${data.SenderUsername} ${data.Content}`;
+    this.newNotification.message = `just ${data.Content}`;
     this.newNotification.username = data.SenderUsername
     this.newNotification.date = data.Date
+    this.newNotification.clientGuid = data.SenderUser
     this._notificationState.updateNotifications(this.newNotification);
 
     this._notificationState.setNewNotification(true)
