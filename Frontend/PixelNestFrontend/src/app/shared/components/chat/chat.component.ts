@@ -28,6 +28,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   clientID:string = ""
   chatID:string = ""
   message:string = ""
+  public showOptionIndex: number | null = null
   messages:Message[] = []
   user:ProfileUser = {
     username: '',
@@ -125,7 +126,16 @@ export class ChatComponent implements OnInit, OnDestroy{
       container.scrollTop = container.scrollHeight;
     }, 0);
   }
- 
+  toggleOptions(index:number){
+      if(this.showOptionIndex == null) this.showOptionIndex = index 
+      else this.showOptionIndex = null;
+      
+  }
+  hideOptions(){
+    setTimeout(() => {
+      this.showOptionIndex = null;
+    }, 200); 
+  }
   typing(){
     this._chatFacadeService.sendTypingNotification()
   }
@@ -138,7 +148,7 @@ export class ChatComponent implements OnInit, OnDestroy{
 
   
   trackByFn(index: number, item: any): number {
-    return item.messageID
+    return item.messageID || index
   } 
   isActive(): boolean{
     const obj = this.activeUsers.find((a:any) => a.userID === this.clientID);

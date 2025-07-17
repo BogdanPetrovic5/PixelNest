@@ -153,7 +153,7 @@ $HFONT: "Roboto Condensed", sans-serif;
                     max-width: 50%;
                     gap: 5px;
                     flex-shrink: 0;
-                    div{
+                    .profile-picture{
                         width: 30px;
                         height: 30px;
                         position: relative;
@@ -174,7 +174,52 @@ $HFONT: "Roboto Condensed", sans-serif;
                             flex-shrink: 0;
                         }
                     }
-                    
+                    .options-box{
+                        display: flex;
+                        flex-direction: column;
+                        justify-content:center;
+                        align-items: flex-start;
+                        gap: 10px;
+                        font-family: $PFONT;
+                        color: $PCOLOR;
+                        font-size: 25px;
+                        margin: 5px;
+                        padding: 10px 15px;
+                        background-color:#555;
+                        border-radius: 15px;
+                        width: unset !important;
+                        p{
+                            margin: 0;
+                            font-size: 0.6em;
+                            display: flex;
+                            gap: 10px;
+                            flex-direction: row;
+                            justify-content: center;
+                            align-items: center;
+                            text{
+                                
+                            }
+                            span{
+                                border-radius: 50%;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                border-color: #FB2B3A;
+                                border: 2px solid #FB2B3A;
+                                width: 20px;
+                                height: 20px;
+                            }
+                            img.bin{
+                                width: 20px;
+                                height: 20px;
+                            }
+                            img{
+                                width: 15px;
+                                height: 15px;
+                            }
+                        }
+                        
+                    }
                     app-message{
                         background-color: rgb(0, 140, 255);
                         border-radius: 25px;
