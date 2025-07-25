@@ -20,6 +20,9 @@ export class ChatStateService {
 
   private _isTyping = new BehaviorSubject<boolean>(false);
   isTyping$ = this._isTyping.asObservable()
+
+  private _unsentMessage = new BehaviorSubject<number | null>(null);
+  unsentMessage$ = this._unsentMessage.asObservable();
   private _chatStateUser = new BehaviorSubject<ProfileUser>(
     {
       username:'',
@@ -53,11 +56,16 @@ export class ChatStateService {
     source:'',
     isSeen: true,
     messageID: 0,
-    userID:''
+    userID:'',
+    canUnsend:false
   });
   chatStateMessage = this._chatStateMessage.asObservable()
   private _seenStatus = new BehaviorSubject<boolean>(false);
   seenStatus$ = this._seenStatus.asObservable();
+
+  setUnsentMessage(messageID:number | null){
+    this._unsentMessage.next(messageID);
+  }
   getCurrentChatID(){
     return this._currentChatID.getValue()
   }
@@ -113,7 +121,7 @@ export class ChatStateService {
   resetLastIDS(){
     this._lastSenderIDS.next([]);
   }
-
+  
   setMessages(value:Message){
     console.log("Received: ", value);
     let message = this._chatStateMessage.getValue()

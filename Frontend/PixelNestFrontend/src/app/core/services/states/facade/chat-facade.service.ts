@@ -16,6 +16,8 @@ import { MessageSeen } from 'src/app/core/dto/messageSeen.dto';
 export class ChatFacadeService {
   public messages$ = new BehaviorSubject<Message[]>([]);
   private _subs = new Subscription();
+  private _websocketUnsentMessageID = new BehaviorSubject<number | null>(null);
+  public websocketUnsentMessageID$ = this._websocketUnsentMessageID.asObservable();
   public user$ = new BehaviorSubject<ProfileUser>({
       username:'',
       totalPosts:0,
@@ -37,6 +39,8 @@ export class ChatFacadeService {
   private _chatRoomID = '';
   private _reverseChatRoomID = '';
   private currentClientGuid = '';
+
+  
   constructor( 
     private _chatService: ChatService,
     private _userService: UserService,
@@ -80,9 +84,18 @@ export class ChatFacadeService {
               this.messages$.next(updated);
             })
           ).subscribe();
+          const unsentSubscription = this._chatState.unsentMessage$.pipe(
+            tap((messageID)=>{
+              if(messageID != null){
+                this._websocketUnsentMessageID.next(messageID)
+              }
 
+              
+            })
+          ).subscribe();
           this._subs.add(seenSubscription);
           this._subs.add(msgSubscription);
+          this._subs.add(unsentSubscription);
         }),
         switchMap(() => this._chatService.getMessages(chatID)),
         tap(messages =>{
@@ -124,18 +137,41 @@ export class ChatFacadeService {
       tap(response => {
         message.isSeen = response.isUserInRoom;
         message.dateSent = response.date;
+        message.messageID = response.messageID
         const newMessages = [...this.messages$.getValue(), { ...message }];
         this.messages$.next(newMessages);
       })
     );
   }
 
+  deleteForMe(messageID:number){
+    this._filterMessages(messageID);
+    this._subs.add(
+      this._chatService.deleteForMe(messageID).subscribe()
+    )
+  }
+  unsend(messageID:number){
+    this._filterMessages(messageID)
+    this._subs.add(
+      this._chatService.unsend(messageID).subscribe()
+    )
+    
+  }
+
+  handleWebSocketUnsentMessage(messageID:number){
+    this._filterMessages(messageID);
+    this._chatState.setUnsentMessage(null);
+  }
   leaveRoom(clientGuid:string){
     this._subs.add(
       this._chatService.leaveRoom(clientGuid).subscribe()
     )
   }
-
+  private _filterMessages(messageID:number){
+    let messages = this.messages$.getValue();
+    const filteredArray = messages.filter(m => m.messageID !== messageID);
+    this.messages$.next(filteredArray);
+  }
   private _processLastSenders(clientID: string) {
     let senders = this._session.getFromCookie('ids');
     if (senders) {

@@ -38,11 +38,16 @@
                     'align-self': message.userID.toLowerCase() === currentClientGuid ? 'flex-end' : 'flex-start',
                     'flex-direction': message.userID.toLowerCase() !== currentClientGuid ? '' : 'row-reverse'
                     
-                    }">
+                    }"
+                    [class.animate__animated]="animatingMessageID === message.messageID"
+                    [class.animate__zoomOut]="animatingMessageID === message.messageID"
+                    [class.animate__faster]="animatingMessageID === message.messageID"
+                    (animationend)="onAnimationEnd(message.messageID)" 
+                >
                     <div *ngIf="message.message && message.message.length > 0" class="profile-picture">
                         <app-profile-image 
                         [clientGuid]="message.userID"
-                        [clientGuid]="message.sender"
+    
                          *ngIf="messages[i+1] == undefined || messages[i].sender != messages[i+1].sender"
                          ></app-profile-image>
                         <div class="active-status"
@@ -59,10 +64,10 @@
                     [senderUsername]="message.sender" >
                     </app-message>
                     <div *ngIf="showOptionIndex === i" class="options-box" >
-                        <p> 
+                        <p (click)="deleteForMe(message.messageID)"> 
                             <img class="bin" src="assets/images/message-bin.png" alt=""> Delete for yourself
                         </p>
-                        <p *ngIf="message.userID.toLowerCase() === currentClientGuid">
+                        <p *ngIf="message.canUnsend" (click)="unsend(message.messageID)">
                             <span><img src="assets/images/undo.png" alt=""></span> Unsend
                         </p>
                     </div>

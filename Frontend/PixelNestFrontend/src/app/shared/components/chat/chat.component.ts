@@ -29,6 +29,8 @@ export class ChatComponent implements OnInit, OnDestroy{
   chatID:string = ""
   message:string = ""
   public showOptionIndex: number | null = null
+  public animatingMessageID: number | null = null;
+  pendingAction: 'unsend' | 'deleteForMe' | 'websocket' |null = null;
   messages:Message[] = []
   user:ProfileUser = {
     username: '',
@@ -81,6 +83,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     ).subscribe({
       next:response=>{
         this.messages = response;
+        console.log(this.messages)
         this._scrollToBottom();
       }
     })
@@ -107,6 +110,32 @@ export class ChatComponent implements OnInit, OnDestroy{
     
       }
     })
+    this._chatFacadeService.websocketUnsentMessageID$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next:messageID=>{
+        this.animatingMessageID = messageID;
+        this.pendingAction = 'websocket'
+      }
+    })
+  }
+  unsend(messageID:number){
+    this.animatingMessageID = messageID;
+    this.pendingAction = 'unsend'
+  }
+
+  onAnimationEnd(messageID:number){
+    if(this.animatingMessageID === messageID){
+      this.animatingMessageID = null;
+      if(this.pendingAction === 'unsend') this._chatFacadeService.unsend(messageID);
+      if(this.pendingAction === 'deleteForMe') this._chatFacadeService.deleteForMe(messageID);
+      if(this.pendingAction === 'websocket') this._chatFacadeService.handleWebSocketUnsentMessage(messageID);
+    }
+    
+  }
+  deleteForMe(messageID:number){
+     this.animatingMessageID = messageID;
+     this.pendingAction = 'deleteForMe'
   }
   sendMessage() {
     if (!this.message.trim()) return;
@@ -194,7 +223,7 @@ export class ChatComponent implements OnInit, OnDestroy{
       isSeen: true,
       messageID: 0,
       userID:'',
-      
+      canUnsend:true
     };
   }
 }

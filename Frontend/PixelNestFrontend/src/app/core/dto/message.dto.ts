@@ -8,4 +8,5 @@ export interface Message{
     userID:string;
     messageID:number;
     isSeen:boolean;
+    canUnsend:boolean
 }

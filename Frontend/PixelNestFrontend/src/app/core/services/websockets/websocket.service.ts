@@ -9,6 +9,7 @@ import { NotificationStateService } from '../states/notification-state.service';
 import { NotificationDto } from '../../dto/notification.dto';
 import { WebSocketMessage } from '../../dto/websocketMessage.dto';
 import { InboxStateService } from '../states/inbox-state.service';
+import { ChatFacadeService } from '../states/facade/chat-facade.service';
 
 
 @Injectable({
@@ -25,8 +26,8 @@ export class WebsocketService {
     source:'',
     isSeen:true,
     messageID: 0,
-    userID: ''
-    
+    userID: '',
+    canUnsend:false
   };
   messages:Message[] = []
   lastSenderIDs:LastSendersDto[] =[]
@@ -47,7 +48,8 @@ export class WebsocketService {
     private _dashboardState:DashboardStateService,
     private _userSession:UserSessionService,
     private _notificationState:NotificationStateService,
-    private _inboxState:InboxStateService
+    private _inboxState:InboxStateService,
+   
   ) { }
 
   connect():void{
@@ -95,7 +97,9 @@ export class WebsocketService {
       case "ActiveUsers":
         this._chatState.setActiveUsers(data.Users);
         return;
-
+      case "Unsend":
+        this._handleUnsendMessage(data);  
+        return;
       case "Like":
       case "Comment":
       case "Follow":
@@ -124,6 +128,9 @@ export class WebsocketService {
       this._socket.send(JSON.stringify(message));
     }
   }
+  private _handleUnsendMessage(data:any){
+    this._chatState.setUnsentMessage(data.MessageID)
+  }
 
   private _formMessageData(data:any){
     this.messageData.message = data.Content
@@ -132,6 +139,7 @@ export class WebsocketService {
     this.messageData.roomID = data.ChatID
     this.messageData.dateSent = data.Date
     this.messageData.userID = data.SenderUser
+    this.messageData.messageID = data.MessageID
   }
 
   private _processNewNotification(data:any){

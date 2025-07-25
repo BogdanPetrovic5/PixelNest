@@ -8,18 +8,23 @@ $HOVERTABCOLOR:#32373a;
 $PFONT:"Josefin Sans", sans-serif;
 $HFONT: "Roboto Condensed", sans-serif;
 .container{
-    width: fit-content;
+    max-width: 100%;
     height: fit-content;
     padding-left: 15px;
     padding-right:15px;
     padding-top: 2px;
     padding-bottom: 2px;
-  
-    word-wrap: break-word;
+    
+
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+
     color: white;
     font-family: $PFONT;
     border-radius: 25px;
     font-size: 0.9em;
     display: flex;
     flex-direction: row;
+ 
 }

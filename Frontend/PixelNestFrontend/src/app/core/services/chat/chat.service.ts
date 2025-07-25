@@ -54,4 +54,12 @@ export class ChatService {
     const url = `${environment.apiUrl}/api/chat/search?searchParameter=${searchParameter}`
     return this._httpClient.get<Chats[]>(url);
   }
+  deleteForMe(messageID:number):Observable<boolean>{
+    const url = `${environment.apiUrl}/api/chat/message/${messageID}/delete-for-me`;
+    return this._httpClient.patch<boolean>(url,{});
+  }
+  unsend(messageID:number):Observable<boolean>{
+    const url = `${environment.apiUrl}/api/chat/message/${messageID}/unsend`;
+    return this._httpClient.patch<boolean>(url,{});
+  }
 }
