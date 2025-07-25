@@ -28,6 +28,26 @@ namespace PixelNestBackend.Controllers
             _userService = userService;
         }
         [Authorize]
+        [HttpPatch("message/{messageID}/delete-for-me")]
+        public ActionResult<bool> DeleteForMe(int messageID)
+        {
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+
+            bool response = _chatService.DeleteForMe(messageID, userGuid);
+            return Ok(response);
+        }
+        [HttpPatch("message/{messageID}/unsend")]
+        public async Task< ActionResult<bool>> Unsend(int messageID)
+        {
+            string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userGuid == null) return Unauthorized();
+
+            MessageResponse response = await _chatService.Unsend(messageID, userGuid);
+
+            return Ok(response);
+        }
+        [Authorize]
         [HttpGet("unread-messages")]
         public ActionResult<int> GetNumberOfNewMessages()
         {
@@ -52,7 +72,7 @@ namespace PixelNestBackend.Controllers
         [Authorize]
         [HttpGet("chats")]
         public ActionResult<ICollection<ResponseChatsDto>> GetUserChats() {
-
+            Console.WriteLine("\nPogodio me\n");
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userGuid == null) return Unauthorized();
             ICollection<ResponseChatsDto> chats = _chatService.GetUserChats(userGuid);
@@ -95,6 +115,7 @@ namespace PixelNestBackend.Controllers
         [HttpPost("room/leave/{targetClientGuid}")]
         public async Task<ActionResult<bool>> LeaveRoom(string targetClientGuid)
         {
+            Console.WriteLine("\n POGODIO ME \n");
             string? userGuid = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userGuid == null) return Unauthorized();
 
@@ -120,6 +141,7 @@ namespace PixelNestBackend.Controllers
             string currentClientGuid = _userUtility.GetClientGuid(userGuid);
             
             string roomID = $"{currentClientGuid}-{targetClientGuid}";
+
             string reverserdRoomID = $"{targetClientGuid}-{currentClientGuid}";
 
            await _websocketManager.JoinRoom(roomID, reverserdRoomID, currentClientGuid, targetClientGuid);

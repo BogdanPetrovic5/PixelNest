@@ -16,7 +16,9 @@ namespace PixelNestBackend.Models
         public Guid ReceiverGuid { get; set; } 
          
         public string MessageText { get; set; }
-     
+        public bool IsDeletedForSender { get; set; } = false;
+        public bool IsDeletedForReceiver { get; set; } = false;
+        
         public DateTime DateSent { get; set; }
         public User Sender { get; set; }
         public User Receiver { get; set; }

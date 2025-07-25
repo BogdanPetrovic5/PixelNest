@@ -51,7 +51,9 @@ namespace PixelNestBackend.Repository
         {
 
                 ICollection<ResponseChatsDto> userChats = _dataContext.Messages
-                   .Where(m => (m.SenderGuid).ToString() == userGuid || (m.ReceiverGuid).ToString() == userGuid)
+                   .Where(m => ((m.SenderGuid).ToString() == userGuid || (m.ReceiverGuid).ToString() == userGuid) &&
+                    (m.SenderGuid.Equals(Guid.Parse(userGuid)) && !m.IsDeletedForSender) || (m.ReceiverGuid.Equals(Guid.Parse(userGuid)) && !m.IsDeletedForReceiver)
+                    )
                    .Include(u => u.Sender)
                    .Include(u => u.Receiver)
                    .ToList()
@@ -62,8 +64,6 @@ namespace PixelNestBackend.Repository
                        UserID = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.ClientGuid).ToString() : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.ClientGuid).ToString() : "",
                        Username = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.Username) : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.Username) : "",
                        Messages = group
-
-
                            .OrderByDescending(m => m.DateSent)
                            .Take(1)
                            .Select(m => new ResponseMessagesDto
@@ -91,14 +91,16 @@ namespace PixelNestBackend.Repository
             return userChats;
         }
 
-        public ICollection<ResponseMessagesDto> GetUserToUserMessages(string chatID,Guid userID)
+        public ICollection<ResponseMessagesDto> GetUserToUserMessages(string chatID,Guid userGuid)
         {
             try
             {
             
               
                     ICollection<ResponseMessagesDto> messages = _dataContext.Messages
-                   .Where(u => u.ChatID.Equals(chatID))
+                   .Where(u => u.ChatID.Equals(chatID) && 
+                    (u.SenderGuid.Equals(userGuid) && !u.IsDeletedForSender) || (u.ReceiverGuid.Equals(userGuid) && !u.IsDeletedForReceiver)
+                   )
                    .Select(m => new ResponseMessagesDto
                    {
                        Sender = m.Sender.Username,
@@ -108,7 +110,8 @@ namespace PixelNestBackend.Repository
                        MessageID = m.MessageID,
                        UserID = (m.Sender.ClientGuid).ToString(),
                        IsSeen = !_dataContext.SeenMessages
-                           .Any(sm => sm.UserGuid == m.ReceiverGuid && sm.MessageID == m.MessageID)
+                           .Any(sm => sm.UserGuid == m.ReceiverGuid && sm.MessageID == m.MessageID),
+                       CanUnsend = m.SenderGuid.Equals(userGuid)
                    }).ToList();
                 
                 
@@ -142,7 +145,7 @@ namespace PixelNestBackend.Repository
             }
         }
         
-        public bool SaveMessage(Message message, bool isUserInRoom)
+        public MessageResponse SaveMessage(Message message, bool isUserInRoom)
         {
 
             message.DateSent = DateTime.UtcNow;
@@ -156,7 +159,7 @@ namespace PixelNestBackend.Repository
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving message: {ex.Message}");
-                return false; 
+                return new MessageResponse { IsSuccessfull = false}; 
             }
 
             
@@ -181,7 +184,10 @@ namespace PixelNestBackend.Repository
                 }
             }
       
-            return true;
+            return new MessageResponse { 
+                IsSuccessfull = true,
+                MessageID = message.MessageID
+            };
 
         }
 
@@ -207,6 +213,7 @@ namespace PixelNestBackend.Repository
                {
                    ChatID = group.Key,
                    UserID = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.ClientGuid).ToString() : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.ClientGuid).ToString() : "",
+                   Username = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.Username) : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.Username) : "",
                    Messages = group
 
 
@@ -222,7 +229,8 @@ namespace PixelNestBackend.Repository
                            UserID = (m.SenderGuid).ToString() == userGuid ? (m.Receiver.ClientGuid).ToString() : (m.ReceiverGuid).ToString() == userGuid ? (m.Sender.ClientGuid).ToString() : "",
                            MessageID = m.MessageID,
                            IsSeen = !_dataContext.SeenMessages
-                           .Any(sm => (sm.UserGuid).ToString() == userGuid && sm.MessageID == m.MessageID)
+                           .Any(sm => (sm.UserGuid).ToString() == userGuid && sm.MessageID == m.MessageID),
+                           
 
                        })
                        .ToList()
@@ -235,6 +243,38 @@ namespace PixelNestBackend.Repository
 
 
             return userChats;
+        }
+
+        public bool DeleteForMe(int messageID, string userGuid)
+        {
+            Message message = _dataContext.Messages.Where(m => m.MessageID == messageID).FirstOrDefault();
+
+            if (message == null) return false;
+            if(message.SenderGuid.Equals(Guid.Parse(userGuid))) message.IsDeletedForSender = true;
+            if(message.ReceiverGuid.Equals(Guid.Parse(userGuid))) message.IsDeletedForReceiver = true;
+
+            _dataContext.SaveChanges();
+            return true;
+        }
+
+        public MessageResponse Unsend(int messageID, string userGuid)
+        {
+            Message message = _dataContext.Messages.Include(u => u.Receiver).Where(m => m.MessageID == messageID).FirstOrDefault();
+
+            if (message == null) return null;
+            if (message.SenderGuid.Equals(Guid.Parse(userGuid)))
+            {
+                message.IsDeletedForSender = true;
+                message.IsDeletedForReceiver = true;
+            }
+            MessageResponse messageResponse = new MessageResponse
+            {
+                MessageID = message.MessageID,
+                ReceiverID = message.Receiver.ClientGuid
+            };
+
+            _dataContext.SaveChanges();
+            return messageResponse;
         }
     }
 }

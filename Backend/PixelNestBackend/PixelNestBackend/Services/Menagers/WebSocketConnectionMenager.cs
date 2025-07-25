@@ -75,7 +75,7 @@ namespace PixelNestBackend.Services.Menagers
                 
             }
 
-            await this._sendSeenNotification(targetClientGuid, "Enter");
+            await this._sendSeenNotification(targetClientGuid, "Enter", actualRoomID);
           
         }
         public async Task LeaveRoom(string roomID, string reversedRoomID, string connectionID, string targetClientGuid)
@@ -95,7 +95,7 @@ namespace PixelNestBackend.Services.Menagers
                 actualRoomID = roomID;
             }
             _rooms[actualRoomID].Remove(connectionID);
-            await this._sendSeenNotification(targetClientGuid, "Leave");
+            await this._sendSeenNotification(targetClientGuid, "Leave", actualRoomID);
         }
         public async Task NotifyUsers(string userID, bool isActive)
         {
@@ -116,6 +116,7 @@ namespace PixelNestBackend.Services.Menagers
                 }
             }
         }
+        
         public async Task SendMessageToUser(MessageResponse messageResponse)
         {
            
@@ -129,11 +130,12 @@ namespace PixelNestBackend.Services.Menagers
                 Content = messageResponse.Message,
                 SenderUser = (messageResponse.SenderID).ToString(),
                 ChatID = messageResponse.ChatID,
-                Date = DateTime.UtcNow
-
+                Date = DateTime.UtcNow,
+                MessageID = messageResponse.MessageID
+               
             };
          
-            Console.WriteLine(webSocketMessage.Date);
+           
             if (IsUserInRoom(actualRoomID, (messageResponse.ReceiverID).ToString())) 
             {
                
@@ -166,11 +168,12 @@ namespace PixelNestBackend.Services.Menagers
                 }
             }
         }
-        private async Task _sendSeenNotification(string targetUserGuid, string type)
+        private async Task _sendSeenNotification(string targetUserGuid, string type, string chatID)
         {
             
             WebSocketMessage webSocketMessage = new WebSocketMessage
             {
+                ChatID = chatID,
                 Content = "",
                 Type = type,
                 SenderUsername = "",

@@ -10,5 +10,6 @@
         public string Source { get; set; }
         public string UserID { get; set; }
         public DateTime DateSent { get; set; }
+        public bool CanUnsend { get; set; }
     }
 }

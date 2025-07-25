@@ -1,5 +1,6 @@
 ﻿using PixelNestBackend.Dto;
 using PixelNestBackend.Dto.Projections;
+using PixelNestBackend.Dto.WebSockets;
 using PixelNestBackend.Interfaces;
 using PixelNestBackend.Models;
 using PixelNestBackend.Responses;
@@ -18,6 +19,12 @@ namespace PixelNestBackend.Services
             _userUtility = userUtility;
             _chatRepository = chatRepository;
             _connectionMenager = webSocketConnectionMenager;
+        }
+
+        public bool DeleteForMe(int messageID, string userGuid)
+        {   
+
+            return _chatRepository.DeleteForMe(messageID, userGuid);
         }
 
         public int GetNumberOfNewMessages(string userGuid)
@@ -69,10 +76,10 @@ namespace PixelNestBackend.Services
             string roomID = _connectionMenager.FindRoom(messageDto.ClientGuid, senderClientGuid.ToString());
 
             bool isUserInRoom = _connectionMenager.IsUserInRoom(roomID, messageDto.ClientGuid);
-            bool response = _chatRepository.SaveMessage(message, isUserInRoom);
+            MessageResponse response = _chatRepository.SaveMessage(message, isUserInRoom);
             
             return new MessageResponse { 
-                IsSuccessfull = response,
+                IsSuccessfull = response.IsSuccessfull,
                 ReceiverID = Guid.Parse(_userUtility.GetClientGuid(message.ReceiverGuid.ToString())), 
                 SenderID = Guid.Parse(_userUtility.GetClientGuid(message.SenderGuid.ToString())),
                 Message = message.MessageText,
@@ -80,13 +87,29 @@ namespace PixelNestBackend.Services
                 SenderUsername = _userUtility.GetUserName(message.SenderGuid),
                 IsUserInRoom = isUserInRoom,
                 ChatID = message.ChatID,
-                Date = DateTime.UtcNow
+                Date = DateTime.UtcNow,
+                MessageID = response.MessageID
             };
         }
 
-        public ICollection<ResponseChatsDto> SearchChats(string parameter, string userGuid)
+        public  ICollection<ResponseChatsDto> SearchChats(string parameter, string userGuid)
         {
            return _chatRepository.SearchChats(parameter, userGuid);
+        }
+
+        public async Task<MessageResponse> Unsend(int messageID, string userGuid)
+        {
+            MessageResponse response =  _chatRepository.Unsend(messageID, userGuid);
+            WebSocketMessage webSocketMessage = new WebSocketMessage
+            {
+                MessageID = response.MessageID,
+                TargetUser = response.ReceiverID.ToString(),
+                Type = "Unsend"
+               
+            };
+
+            await _connectionMenager.SendNotificationToUser(webSocketMessage);
+            return response;
         }
     }
 }

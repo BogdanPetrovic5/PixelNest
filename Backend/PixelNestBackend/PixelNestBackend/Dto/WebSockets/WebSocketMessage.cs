@@ -6,6 +6,7 @@
         public string RoomID { get; set; }
         public string ChatID { get; set; }
         public string TargetUser { get; set; }
+        public int MessageID { get; set; }
         public string Content { get; set; }
         public string SenderUsername { get; set; }
         public string SenderUser { get; set; }
