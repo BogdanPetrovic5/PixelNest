@@ -131,9 +131,9 @@ namespace PixelNestBackend.Repository
             try
             {
                 var messageIds = markAsrReadDto.MessageID;
-
+                Guid guid = Guid.Parse(userGuid);
                 var messagesToDelete = _dataContext.SeenMessages
-                                                    .Where(mid => messageIds.Contains(mid.MessageID) && (mid.UserGuid).ToString() == userGuid);
+                                                    .Where(mid => messageIds.Contains(mid.MessageID) && mid.UserGuid.Equals(guid));
 
                 
                 _dataContext.SeenMessages.RemoveRange(messagesToDelete);
@@ -193,56 +193,94 @@ namespace PixelNestBackend.Repository
 
         public ICollection<ResponseChatsDto> SearchChats(string parameter, string userGuid)
         {
-           
+            Guid guid = Guid.Parse(userGuid);
             return _getChats(m => 
-            (m.SenderGuid.ToString() == userGuid || m.ReceiverGuid.ToString() == userGuid) 
+            (m.SenderGuid.Equals(guid) || m.ReceiverGuid.Equals(guid)) 
             && (m.Sender.Username.Contains(parameter) || m.Receiver.Username.Contains(parameter)), 
             userGuid);
         }
         private ICollection<ResponseChatsDto> _getChats(Expression<Func<Message, bool>> filter, string userGuid)
         {
-
-            ICollection<ResponseChatsDto> userChats = _dataContext.Messages
-               .Where(filter)
-               .Where(m => (m.SenderGuid).ToString() == userGuid || (m.ReceiverGuid).ToString() == userGuid)
-               .Include(u => u.Sender)
-               .Include(u => u.Receiver)
-               .ToList()
-              .GroupBy(m => m.ChatID)
-               .Select(group => new ResponseChatsDto
-               {
-                   ChatID = group.Key,
-                   UserID = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.ClientGuid).ToString() : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.ClientGuid).ToString() : "",
-                   Username = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.Username) : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.Username) : "",
-                   Messages = group
+            Guid guid = Guid.Parse(userGuid);
 
 
-                       .OrderByDescending(m => m.DateSent)
-                       .Take(1)
-                       .Select(m => new ResponseMessagesDto
-                       {
-                           Sender = m.Sender.Username,
-                           Receiver = m.Receiver.Username,
-                           Message = m.MessageText,
-                           DateSent = m.DateSent,
-                           Source = (m.SenderGuid).ToString() == userGuid ? m.Receiver.Username : (m.ReceiverGuid).ToString() == userGuid ? m.Sender.Username : "",
-                           UserID = (m.SenderGuid).ToString() == userGuid ? (m.Receiver.ClientGuid).ToString() : (m.ReceiverGuid).ToString() == userGuid ? (m.Sender.ClientGuid).ToString() : "",
-                           MessageID = m.MessageID,
-                           IsSeen = !_dataContext.SeenMessages
-                           .Any(sm => (sm.UserGuid).ToString() == userGuid && sm.MessageID == m.MessageID),
-                           
+            var messages = _dataContext.Messages
+                .Where(filter)
+                .Where(m => m.SenderGuid.Equals(guid) || m.ReceiverGuid.Equals(guid))
+                .Include(u => u.Sender)
+                .Include(u => u.Receiver)
+                .ToList();
+            var seenMessages = _dataContext.SeenMessages.Where(sm => sm.UserGuid.Equals(guid)).Select(m => m.MessageID).ToList();
 
-                       })
-                       .ToList()
-               })
-               .OrderByDescending(date => date.Messages.First().DateSent)
-               .ToList();
+            ICollection<ResponseChatsDto> userChats = messages
+                .GroupBy(c => c.ChatID)
+                .Select(group => {
+                    var firstMessage = group.First();
+                    var otherUser = firstMessage.SenderGuid.Equals(guid) ? firstMessage.Receiver : firstMessage.Sender;
+                    return new ResponseChatsDto
+                    {
+                        ChatID = group.Key,
+                        UserID = otherUser.ClientGuid.ToString(),
+                        Username = otherUser.Username,
+                        Messages = group
+                         .OrderByDescending(m => m.DateSent)
+                         .Take(1)
+                         .Select(m => new ResponseMessagesDto
+                         {
+                             Sender = m.Sender.Username,
+                             Receiver = m.Receiver.Username,
+                             Message = m.MessageText,
+                             DateSent = m.DateSent,
+                             Source = m.SenderGuid.Equals(guid) ? m.Receiver.Username : m.Sender.Username,
+                             UserID = m.SenderGuid.Equals(guid) ? m.Receiver.ClientGuid.ToString() : m.Sender.ClientGuid.ToString(),
+                             MessageID = m.MessageID,
+                             IsSeen = !seenMessages.Contains(m.MessageID)
+                         }).ToList()
 
-
-
-
-
+                    };
+                }).ToList();
             return userChats;
+            //ICollection<ResponseChatsDto> userChats = _dataContext.Messages
+            //   .Where(filter)
+            //   .Where(m => (m.SenderGuid).ToString() == userGuid || (m.ReceiverGuid).ToString() == userGuid)
+            //   .Include(u => u.Sender)
+            //   .Include(u => u.Receiver)
+            //   .ToList()
+            //  .GroupBy(m => m.ChatID)
+            //   .Select(group => new ResponseChatsDto
+            //   {
+            //       ChatID = group.Key,
+            //       UserID = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.ClientGuid).ToString() : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.ClientGuid).ToString() : "",
+            //       Username = group.First().SenderGuid.ToString() == userGuid ? (group.First().Receiver.Username) : (group.First().ReceiverGuid).ToString() == userGuid ? (group.First().Sender.Username) : "",
+            //       Messages = group
+
+
+            //           .OrderByDescending(m => m.DateSent)
+            //           .Take(1)
+            //           .Select(m => new ResponseMessagesDto
+            //           {
+            //               Sender = m.Sender.Username,
+            //               Receiver = m.Receiver.Username,
+            //               Message = m.MessageText,
+            //               DateSent = m.DateSent,
+            //               Source = (m.SenderGuid).ToString() == userGuid ? m.Receiver.Username : (m.ReceiverGuid).ToString() == userGuid ? m.Sender.Username : "",
+            //               UserID = (m.SenderGuid).ToString() == userGuid ? (m.Receiver.ClientGuid).ToString() : (m.ReceiverGuid).ToString() == userGuid ? (m.Sender.ClientGuid).ToString() : "",
+            //               MessageID = m.MessageID,
+            //               IsSeen = !_dataContext.SeenMessages
+            //               .Any(sm => (sm.UserGuid).ToString() == userGuid && sm.MessageID == m.MessageID),
+
+
+            //           })
+            //           .ToList()
+            //   })
+            //   .OrderByDescending(date => date.Messages.First().DateSent)
+            //   .ToList();
+
+
+
+
+
+
         }
 
         public bool DeleteForMe(int messageID, string userGuid)
